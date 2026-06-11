@@ -7,21 +7,21 @@
 
 ## Stato attuale
 
-🟢 **M1 IN CORSO** — M1.S3 completata, prossima M1.S4
+🟢 **M1 COMPLETATA** — Tutte e 4 le sessioni done. Pronti per M2.
 
 ```
 M1  M2  M3  M4  M5  M6
-🟡  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
-75% 0%  0%  0%  0%  0%
+✅  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
+100% 0% 0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**M1 — Foundation & Architettura** (3 di 4 sessioni completate)
+**M1 — Foundation & Architettura** ✅ COMPLETATA (4 di 4 sessioni)
 
-Prossima azione: **M1.S4 — Deploy preview + dominio**
+Prossima azione: **M2.S1 — Dashboard agenzia + onboarding**
 
 ---
 
@@ -52,7 +52,15 @@ Prossima azione: **M1.S4 — Deploy preview + dominio**
   - Resend integration con 6 template email (welcome+reset × IT/EN/ES)
   - Frontend: AuthProvider, ProtectedRoute, LoginPage, RegisterPage, ForgotPasswordPage, DashboardPage
   - i18n integrato in tutto auth flow
-- [ ] M1.S4 — Deploy preview + dominio
+- [x] **M1.S4 — Deploy preview + dominio** ✅ (11 Giu 2026)
+  - SEO/OG tags multi-lingua in `index.html` (title, og, twitter card, JSON-LD Organization)
+  - 4 hreflang links (it/en/es/x-default) + canonical
+  - Design north-star salvato in `/app/memory/DESIGN_NORTHSTAR.md` (palette navy/teal/viola/oro + Fraunces+Inter)
+  - DNS setup guide salvata in `/app/memory/DNS_SETUP_GUIDE.md` (apex + 4 sottodomini cloud./app./learn./api.)
+  - Resend domain verification guide salvata in `/app/memory/RESEND_DOMAIN_GUIDE.md` (skip in M1, da fare prima di M2 onboarding)
+  - `.gitignore` fix: rimosso blocking `.env*` (i file vanno committati per Emergent deploy)
+  - `CORS_ORIGINS` esteso per supportare i domini di produzione (apex + 4 sottodomini)
+  - Deploy readiness check: ✅ PASS
 
 ### M2 — ImmoWeb MVP (6 sessioni)
 - [ ] M2.S1 — Dashboard agenzia + onboarding

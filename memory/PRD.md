@@ -78,6 +78,25 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
   - Componenti condivisi: `LanguageSwitcher`, `HealthBadge`, axios client con header `Accept-Language` auto
   - Routing intelligente con redirect lingua + 404 personalizzato
   - Design distintivo per app (Landing chiaro/serif, Cloud dark, Web stone, Academy cream)
+- ✅ **M1.S3 (11 Giu 2026)** — Auth JWT + Ruoli + Multi-tenant:
+  - bcrypt + PyJWT installati
+  - 7 endpoint auth: register, login, me, refresh, logout, forgot-password, reset-password
+  - 5 ruoli: super_admin, agency_admin, agent, client, student
+  - JWT HS256 (access 15min, refresh 7gg) in cookie httpOnly+secure
+  - Brute force protection (5 tentativi = lockout 15 min)
+  - Admin auto-seeding (mcnicastro@gmail.com)
+  - Resend integration con 6 template email (welcome+reset × IT/EN/ES)
+  - Frontend: AuthProvider, ProtectedRoute, LoginPage, RegisterPage, ForgotPasswordPage, DashboardPage
+  - i18n integrato in tutto auth flow
+- ✅ **M1.S4 (11 Giu 2026)** — Deploy preview + dominio:
+  - SEO/OG tags multi-lingua in `index.html` (title, og, twitter card, JSON-LD Organization)
+  - 4 hreflang links (it/en/es/x-default) + canonical pointing to `omniarealestateecosystem.it`
+  - **Design north-star** salvato in `/app/memory/DESIGN_NORTHSTAR.md` (palette navy `#0B1E3F` / teal `#1F6B5C` / viola `#4B3D7A` / oro `#C8A653`, font Fraunces + Inter, principi anti-AI-slop)
+  - **DNS setup guide** in `/app/memory/DNS_SETUP_GUIDE.md` (apex + sottodomini cloud./app./learn./api.)
+  - **Resend domain guide** in `/app/memory/RESEND_DOMAIN_GUIDE.md` (skip in M1, da fare prima onboarding agenzie)
+  - `.gitignore` fix: rimosso `.env*` blocking
+  - `CORS_ORIGINS` esteso per produzione (apex + 4 sottodomini)
+  - Deploy readiness check: ✅ PASS
 
 ### M2 — ImmoWeb
 *Non ancora iniziata*
