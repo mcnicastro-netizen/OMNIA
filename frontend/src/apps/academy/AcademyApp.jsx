@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
 import MobileNav from "../../shared/components/MobileNav";
+import Brand from "../../shared/components/Brand";
 
 export default function AcademyApp() {
   const { t, i18n } = useTranslation();
@@ -19,8 +20,8 @@ export default function AcademyApp() {
     >
       <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 border-b border-amber-900/20">
         <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-          OMNIA<span className="text-amber-700">·</span>
-          <span className="font-light">learn</span>
+          <Brand>OMNIA</Brand><span className="text-amber-700">·</span>
+          <Brand className="font-light">learn</Brand>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-700">
           {navLinks.map((l) => (
@@ -33,7 +34,7 @@ export default function AcademyApp() {
 
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-28 max-w-5xl">
         <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-amber-800 mb-4 md:mb-6">
-          Omnia Academy — Agent Training
+          <Brand>Omnia Academy — Agent Training</Brand>
         </p>
         <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight mb-8 md:mb-10 break-words">
           {t("academy.tagline")}
@@ -47,7 +48,7 @@ export default function AcademyApp() {
       </section>
 
       <footer className="border-t border-amber-900/20 px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-600">
-        © 2026 Omnia Academy · Coming soon: M6
+        © 2026 <Brand>Omnia Academy</Brand> · Coming soon: M6
       </footer>
     </div>
   );

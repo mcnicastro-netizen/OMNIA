@@ -82,7 +82,8 @@ export default function MobileNav({ lang, links = [], theme = "light" }) {
             <Link
               to={`/${lang}`}
               onClick={() => setOpen(false)}
-              className="text-2xl tracking-tight font-medium"
+              translate="no"
+              className="notranslate text-2xl tracking-tight font-medium"
             >
               OMNIA
             </Link>
@@ -108,7 +109,7 @@ export default function MobileNav({ lang, links = [], theme = "light" }) {
             ))}
           </nav>
           <footer className={`px-5 py-6 border-t ${T.border} text-xs uppercase tracking-widest font-sans opacity-70`}>
-            omniarealestateecosystem.it
+            <span translate="no" className="notranslate">omniarealestateecosystem.it</span>
           </footer>
         </div>
       )}

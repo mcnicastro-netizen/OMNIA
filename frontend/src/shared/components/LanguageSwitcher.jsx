@@ -2,11 +2,15 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGS } from "../i18n/config";
 
-const LANG_LABELS = { it: "IT", en: "EN", es: "ES" };
+const LANG_LABELS = {
+  it: "Italiano",
+  en: "English",
+  es: "Español",
+};
 
 /**
- * Minimal language switcher: dropdown with IT / EN / ES.
- * Stores choice in localStorage via i18n config.
+ * Minimal language switcher: dropdown with native language names.
+ * Uses translate="no" to prevent Chrome/Edge auto-translate hijacking labels.
  */
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -15,7 +19,6 @@ export default function LanguageSwitcher() {
   const change = (e) => {
     const next = e.target.value;
     i18n.changeLanguage(next);
-    // Update URL prefix if present
     const segments = window.location.pathname.split("/").filter(Boolean);
     if (SUPPORTED_LANGS.includes(segments[0])) {
       segments[0] = next;
@@ -31,11 +34,12 @@ export default function LanguageSwitcher() {
       data-testid="lang-switcher"
       value={current}
       onChange={change}
-      className="bg-transparent border border-stone-400 rounded px-2 py-1 text-sm font-medium tracking-wider cursor-pointer hover:bg-stone-100 transition"
+      translate="no"
+      className="notranslate bg-transparent border border-stone-400 rounded px-2 py-1 text-sm font-medium tracking-wider cursor-pointer hover:bg-stone-100 transition"
       aria-label="Language selector"
     >
       {SUPPORTED_LANGS.map((l) => (
-        <option key={l} value={l}>
+        <option key={l} value={l} translate="no" className="notranslate">
           {LANG_LABELS[l]}
         </option>
       ))}

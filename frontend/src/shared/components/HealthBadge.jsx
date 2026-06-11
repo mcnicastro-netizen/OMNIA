@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
+import Brand from "./Brand";
 
 /**
  * HealthBadge: small UI widget that hits the backend health endpoint
  * for a specific app and shows green/red dot + label.
  *
  * Props:
- *   - app: "core" | "cloud" | "app" | "learn"
- *   - label: optional override
+ *   - app: "core" | "cloud" | "app" | "learn" | "global"
+ *   - label: optional override (treated as brand name → not translated)
  */
 export default function HealthBadge({ app, label }) {
   const { t, i18n } = useTranslation();
-  const [status, setStatus] = useState("checking"); // checking | ok | error
-  const [detail, setDetail] = useState("");
+  const [status, setStatus] = React.useState("checking");
+  const [detail, setDetail] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
     const url = app === "global" ? "/health" : `/${app}/health`;
     api
@@ -48,7 +49,7 @@ export default function HealthBadge({ app, label }) {
       className="inline-flex items-center gap-2 text-xs font-medium tracking-wide text-stone-700"
     >
       <span className={`h-2 w-2 rounded-full ${dot}`} />
-      <span>{label || app}</span>
+      <Brand>{label || app}</Brand>
       {detail && <span className="text-stone-500">— {detail}</span>}
     </div>
   );

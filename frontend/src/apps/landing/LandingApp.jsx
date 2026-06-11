@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
 import MobileNav from "../../shared/components/MobileNav";
+import Brand from "../../shared/components/Brand";
 
 /**
  * OMNIA Landing — fully responsive (mobile/tablet/desktop).
@@ -51,7 +52,7 @@ export default function LandingApp() {
       {/* Header */}
       <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 border-b border-stone-200">
         <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-          OMNIA<span className="text-stone-400">.</span>
+          <Brand>OMNIA</Brand><span className="text-stone-400">.</span>
         </Link>
 
         {/* Desktop nav */}
@@ -72,7 +73,7 @@ export default function LandingApp() {
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-28 grid md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-7">
           <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-4 md:mb-6">
-            Real estate · Ecosystem · 2026
+            <Brand>Real estate · Ecosystem · 2026</Brand>
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight mb-6 md:mb-8 break-words">
             {t("landing.hero_title")}
@@ -111,10 +112,10 @@ export default function LandingApp() {
             className="group block p-6 md:p-7 lg:p-8 bg-white border border-stone-200 hover:border-stone-900 transition"
           >
             <p className="text-xs font-sans uppercase tracking-[0.3em] text-stone-400 mb-3 md:mb-4">
-              {p.tag}
+              <Brand>{p.tag}</Brand>
             </p>
             <h2 className="text-2xl md:text-2xl lg:text-3xl tracking-tight mb-3 group-hover:translate-x-1 transition-transform">
-              {p.title}
+              <Brand>{p.title}</Brand>
             </h2>
             <p className="text-stone-600 leading-relaxed font-sans text-sm md:text-base">
               {p.desc}
@@ -127,8 +128,8 @@ export default function LandingApp() {
       </section>
 
       <footer className="border-t border-stone-200 px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
-        <span>© 2026 OMNIA Real Estate Ecosystem</span>
-        <span className="truncate">omniarealestateecosystem.it</span>
+        <span>© 2026 <Brand>OMNIA Real Estate Ecosystem</Brand></span>
+        <Brand className="truncate">omniarealestateecosystem.it</Brand>
       </footer>
     </div>
   );

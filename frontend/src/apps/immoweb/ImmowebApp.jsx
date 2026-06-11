@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
 import MobileNav from "../../shared/components/MobileNav";
+import Brand from "../../shared/components/Brand";
 
 export default function ImmowebApp() {
   const { t, i18n } = useTranslation();
@@ -22,8 +23,8 @@ export default function ImmowebApp() {
     >
       <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 border-b border-stone-300 bg-white">
         <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-          OMNIA<span className="text-stone-400">·</span>
-          <span className="font-light">app</span>
+          <Brand>OMNIA</Brand><span className="text-stone-400">·</span>
+          <Brand className="font-light">app</Brand>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
           {navLinks.map((l) =>
@@ -40,7 +41,7 @@ export default function ImmowebApp() {
 
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-28 max-w-5xl">
         <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-amber-700 mb-4 md:mb-6">
-          ImmoWeb — B2B Agency CRM
+          <Brand>ImmoWeb — B2B Agency CRM</Brand>
         </p>
         <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight mb-8 md:mb-10 text-stone-900 break-words">
           {t("immoweb.tagline")}
@@ -54,7 +55,7 @@ export default function ImmowebApp() {
       </section>
 
       <footer className="border-t border-stone-300 px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500">
-        © 2026 ImmoWeb · Coming soon: M2
+        © 2026 <Brand>ImmoWeb</Brand> · Coming soon: M2
       </footer>
     </div>
   );

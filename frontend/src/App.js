@@ -21,7 +21,8 @@ import AcademyApp from "@/apps/academy/AcademyApp";
 
 /**
  * LangGuard: syncs i18n language with the :lang URL param on every navigation.
- * If :lang is missing or unsupported it redirects to the detected default.
+ * Also updates the <html lang> attribute so browser/Chrome Translate
+ * detects the correct page language.
  */
 function LangSync({ children }) {
   const { lang } = useParams();
@@ -32,6 +33,7 @@ function LangSync({ children }) {
       if (i18n.language?.slice(0, 2) !== lang) {
         i18n.changeLanguage(lang);
       }
+      document.documentElement.lang = lang;
     }
   }, [lang, i18n]);
 
