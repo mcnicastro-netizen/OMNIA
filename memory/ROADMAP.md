@@ -7,21 +7,21 @@
 
 ## Stato attuale
 
-🟢 **M1 IN CORSO** — M1.S1 completata, prossima M1.S2
+🟢 **M1 IN CORSO** — M1.S2 completata, prossima M1.S3
 
 ```
 M1  M2  M3  M4  M5  M6
 🟡  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
-25% 0%  0%  0%  0%  0%
+50% 0%  0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**M1 — Foundation & Architettura** (1 di 4 sessioni completate)
+**M1 — Foundation & Architettura** (2 di 4 sessioni completate)
 
-Prossima azione: **M1.S2 — Setup monorepo + struttura base**
+Prossima azione: **M1.S3 — Auth JWT + Ruoli + Multi-tenant**
 
 ---
 
@@ -32,7 +32,14 @@ Prossima azione: **M1.S2 — Setup monorepo + struttura base**
   - Monorepo Turborepo
   - Sottodomini corti su omniarealestateecosystem.it
   - Shared schema MongoDB multi-tenant
-- [ ] M1.S2 — Setup monorepo + struttura base
+- [x] **M1.S2 — Setup monorepo + struttura base** ✅ (11 Giu 2026)
+  - Logical Monorepo backend (apps/ + shared/)
+  - Logical Monorepo frontend (apps/ + shared/)
+  - i18n nativa IT/EN/ES funzionante (auto-detection)
+  - MongoDB connesso con indici tenant-aware
+  - 4 endpoint health funzionanti in 3 lingue
+  - 4 app frontend navigabili (Landing, Cloud, App, Learn)
+  - Routing multi-app + multi-lingua testato
 - [ ] M1.S3 — Auth JWT + Ruoli + Multi-tenant
 - [ ] M1.S4 — Deploy preview + dominio
 

@@ -1,0 +1,11 @@
+{
+  "health.ok": "Servicio operativo",
+  "app.immocloud": "ImmobilCloud — Portal inmobiliario",
+  "app.immoweb": "ImmoWeb — Gestor de agencias",
+  "app.academy": "Omnia Academy — Formación de agentes",
+  "app.landing": "OMNIA — Ecosistema inmobiliario",
+  "error.unauthorized": "Acceso no autorizado",
+  "error.not_found": "Recurso no encontrado",
+  "error.server": "Error interno del servidor",
+  "welcome.greeting": "Bienvenido a OMNIA"
+}

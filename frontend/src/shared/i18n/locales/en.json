@@ -1,0 +1,51 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "loading": "Loading…",
+    "error": "Error",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "language": "Language"
+  },
+  "nav": {
+    "landing": "Home",
+    "immocloud": "Find a home",
+    "immoweb": "Agency",
+    "academy": "Academy",
+    "login": "Sign in",
+    "register": "Sign up"
+  },
+  "landing": {
+    "hero_title": "The integrated real estate ecosystem",
+    "hero_subtitle": "More value. More efficiency. More results.",
+    "hero_cta": "Discover OMNIA",
+    "pillar_cloud_title": "ImmobilCloud",
+    "pillar_cloud_desc": "The real estate portal for private clients.",
+    "pillar_app_title": "ImmoWeb",
+    "pillar_app_desc": "The complete management platform for agents and agencies.",
+    "pillar_learn_title": "Omnia Academy",
+    "pillar_learn_desc": "The certified training platform for real estate agents."
+  },
+  "immocloud": {
+    "title": "ImmobilCloud",
+    "tagline": "Find your dream home"
+  },
+  "immoweb": {
+    "title": "ImmoWeb",
+    "tagline": "Your digital agency"
+  },
+  "academy": {
+    "title": "Omnia Academy",
+    "tagline": "Shape your future"
+  },
+  "health": {
+    "checking": "Checking service…",
+    "ok": "Service operational",
+    "error": "Service unreachable"
+  }
+}

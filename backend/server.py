@@ -1,89 +1,133 @@
-from fastapi import FastAPI, APIRouter
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-import os
+"""OMNIA — Backend entry point.
+
+Logical Monorepo architecture (D-015):
+- 1 FastAPI app serves all OMNIA sub-apps under /api/{app}/...
+- All routes are tenant-aware via shared.db (multi-tenant pattern D-013)
+- i18n native via Accept-Language header (D-014)
+"""
 import logging
+import os
+import sys
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, APIRouter, Header, Request
+from fastapi.responses import JSONResponse
+from starlette.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+# Make backend/ importable as root for `shared` and `apps`
+ROOT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT_DIR))
+load_dotenv(ROOT_DIR / ".env")
+
+from shared.db.connection import Database, ensure_indexes, set_current_lang  # noqa: E402
+from shared.utils.i18n import normalize_lang, _load_locales, t  # noqa: E402
+from shared.models.base import HealthResponse  # noqa: E402
+
+from apps.core.routes import router as core_router  # noqa: E402
+from apps.immocloud.routes import router as immocloud_router  # noqa: E402
+from apps.immoweb.routes import router as immoweb_router  # noqa: E402
+from apps.academy.routes import router as academy_router  # noqa: E402
 
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
-
-# Create the main app without a prefix
-app = FastAPI()
-
-# Create a router with the /api prefix
-api_router = APIRouter(prefix="/api")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger("omnia")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    Database.connect()
+    await ensure_indexes()
+    _load_locales()
+    logger.info("OMNIA backend ready.")
+    yield
+    # Shutdown
+    await Database.close()
+    logger.info("OMNIA backend stopped.")
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
+app = FastAPI(
+    title="OMNIA Real Estate Ecosystem API",
+    version="0.1.0",
+    description="Backend per ImmobilCloud + ImmoWeb + Omnia Academy",
+    lifespan=lifespan,
+)
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
-
-# Include the router in the main app
-app.include_router(api_router)
-
+# CORS (allow Emergent preview + production subdomains)
+allowed = os.environ.get("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=allowed,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
+@app.middleware("http")
+async def language_middleware(request: Request, call_next):
+    """Set request language from Accept-Language or ?lang= query."""
+    lang_q = request.query_params.get("lang")
+    lang_h = request.headers.get("accept-language")
+    lang = normalize_lang(lang_q or lang_h)
+    set_current_lang(lang)
+    response = await call_next(request)
+    response.headers["X-OMNIA-Lang"] = lang
+    return response
+
+
+# Main /api router
+api_router = APIRouter(prefix="/api")
+
+
+@api_router.get("/", response_model=HealthResponse)
+async def api_root(accept_language: str = Header(None)):
+    lang = normalize_lang(accept_language)
+    return HealthResponse(
+        app="omnia",
+        lang=lang,
+        message={
+            "text": t("welcome.greeting", lang=lang),
+            "apps": ["core", "cloud", "app", "learn"],
+        },
+    )
+
+
+@api_router.get("/health", response_model=HealthResponse)
+async def global_health(accept_language: str = Header(None)):
+    lang = normalize_lang(accept_language)
+    db_status = "ok"
+    try:
+        db = Database.get()
+        await db.command("ping")
+    except Exception as e:
+        db_status = f"error: {e}"
+    return HealthResponse(
+        app="omnia",
+        lang=lang,
+        message={"text": t("health.ok", lang=lang), "db": db_status},
+    )
+
+
+# Mount sub-apps
+api_router.include_router(core_router)
+api_router.include_router(immocloud_router)
+api_router.include_router(immoweb_router)
+api_router.include_router(academy_router)
+
+app.include_router(api_router)
+
+
+@app.exception_handler(Exception)
+async def global_error_handler(request: Request, exc: Exception):
+    lang = normalize_lang(request.headers.get("accept-language"))
+    logger.exception("Unhandled exception")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": t("error.server", lang=lang)},
+    )

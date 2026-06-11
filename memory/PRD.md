@@ -69,6 +69,15 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
   - Monorepo Turborepo (D-011)
   - Sottodomini corti su omniarealestateecosystem.it (D-012)
   - Shared schema MongoDB multi-tenant (D-013)
+- ✅ **M1.S2 (11 Giu 2026)** — Setup monorepo + struttura base:
+  - i18n nativa IT/EN/ES con react-i18next + auto-detection browser (D-014)
+  - Logical Monorepo implementato (D-015): backend `apps/` + `shared/`, frontend `apps/` + `shared/`
+  - MongoDB connesso con indici tenant-aware su 6 collection
+  - Endpoint health funzionanti: `/api/`, `/api/health`, `/api/core/health`, `/api/cloud/health`, `/api/app/health`, `/api/learn/health`
+  - 4 app frontend live: Landing (`/{lang}`), ImmoCloud (`/{lang}/cloud`), ImmoWeb (`/{lang}/app`), Academy (`/{lang}/learn`)
+  - Componenti condivisi: `LanguageSwitcher`, `HealthBadge`, axios client con header `Accept-Language` auto
+  - Routing intelligente con redirect lingua + 404 personalizzato
+  - Design distintivo per app (Landing chiaro/serif, Cloud dark, Web stone, Academy cream)
 
 ### M2 — ImmoWeb
 *Non ancora iniziata*

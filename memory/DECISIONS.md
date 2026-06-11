@@ -113,6 +113,37 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Trigger migrazione DB-per-tenant**: cliente enterprise >1000 immobili o compliance specifica
 - **Stato**: ✅ Confermata
 
+### D-014 — Internazionalizzazione (i18n) NATIVA ✅
+- **Data**: 10 Giugno 2026 (M1.S2)
+- **Decisione**: i18n nativa integrata dall'inizio per supportare export internazionale
+- **Lingue di partenza**: IT (default) + EN + ES
+- **Lingue future**: DE, FR (espansione UE)
+- **Stack tecnico**:
+  - Frontend: `react-i18next` + `i18next-browser-languagedetector`
+  - Backend: header `Accept-Language` per messaggi errore, JSON locales per email/PDF
+- **Pattern URL**: Sottodirectory `/it/`, `/en/`, `/es/` (best practice SEO Google 2026)
+- **Lingua default nuovi utenti**: Detection automatica via browser language, fallback IT
+- **Schema DB**: Campi traducibili come dict `{lang_code: str}` (es. `title.it`, `title.en`)
+- **Traduzione contenuti dinamici (annunci)**: Auto-traduzione via Gemini AI al salvataggio (con conferma agente) — implementata in M5.S1
+- **SEO multilingua**: `<link rel="alternate" hreflang>` automatico per ogni pagina
+- **Email/PDF/Documenti**: Template separati per lingua (`welcome.it.html`, `welcome.en.html`, `welcome.es.html`)
+- **Razionale**: Aggiungere i18n dopo costerebbe 3-4 settimane di refactor; ora costa +30% setup ma zero costo futuro
+- **Stato**: ✅ Confermata
+
+### D-015 — Implementazione monorepo: LOGICAL MONOREPO (non Turborepo puro) ✅
+- **Data**: 10 Giugno 2026 (M1.S2)
+- **Decisione**: Implementazione monorepo come "Logical Monorepo" nei vincoli Emergent
+- **Struttura**:
+  - 1 backend FastAPI multi-app servito da `/app/backend/` con sottostruttura `apps/` + `shared/`
+  - 1 frontend React multi-app servito da `/app/frontend/` con sottostruttura `apps/` + `shared/`
+  - Routing per-app via sub-path (`/cloud/`, `/app/`, `/learn/`); in produzione Cloudflare/Nginx riscrive sottodomini → sub-path
+- **Razionale**:
+  - Turborepo puro richiede 4 processi separati incompatibili con supervisor Emergent
+  - Logical Monorepo mantiene tutti i benefici (codice condiviso, modularità) senza il costo infrastrutturale
+  - Stessa esperienza utente finale (sottodomini in produzione via reverse proxy)
+- **Migrazione futura a Turborepo puro**: 1-2 giorni di lavoro pre-exit (anno 2-3, con revenue significativa)
+- **Stato**: ✅ Confermata, è la materializzazione di D-011
+
 ---
 
 ## Decisioni rinviate (da risolvere più avanti)

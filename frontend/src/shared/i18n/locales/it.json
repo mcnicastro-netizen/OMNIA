@@ -1,0 +1,51 @@
+{
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "search": "Cerca",
+    "loading": "Caricamento…",
+    "error": "Errore",
+    "back": "Indietro",
+    "next": "Avanti",
+    "submit": "Invia",
+    "language": "Lingua"
+  },
+  "nav": {
+    "landing": "Home",
+    "immocloud": "Trova casa",
+    "immoweb": "Agenzia",
+    "academy": "Academy",
+    "login": "Accedi",
+    "register": "Registrati"
+  },
+  "landing": {
+    "hero_title": "L'ecosistema immobiliare integrato",
+    "hero_subtitle": "Più valore. Più efficienza. Più risultati.",
+    "hero_cta": "Scopri OMNIA",
+    "pillar_cloud_title": "ImmobilCloud",
+    "pillar_cloud_desc": "Il portale immobiliare per privati e clienti.",
+    "pillar_app_title": "ImmoWeb",
+    "pillar_app_desc": "Il gestionale completo per agenti e agenzie.",
+    "pillar_learn_title": "Omnia Academy",
+    "pillar_learn_desc": "La piattaforma di formazione per agenti certificati."
+  },
+  "immocloud": {
+    "title": "ImmobilCloud",
+    "tagline": "Trova la casa dei tuoi sogni"
+  },
+  "immoweb": {
+    "title": "ImmoWeb",
+    "tagline": "Il tuo studio digitale"
+  },
+  "academy": {
+    "title": "Omnia Academy",
+    "tagline": "Forma il tuo futuro"
+  },
+  "health": {
+    "checking": "Verifica del servizio in corso…",
+    "ok": "Servizio operativo",
+    "error": "Servizio non raggiungibile"
+  }
+}
