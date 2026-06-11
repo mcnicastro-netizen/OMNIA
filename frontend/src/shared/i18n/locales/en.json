@@ -47,5 +47,37 @@
     "checking": "Checking service…",
     "ok": "Service operational",
     "error": "Service unreachable"
+  },
+  "auth": {
+    "login_title": "Sign in to your account",
+    "register_title": "Create your account",
+    "forgot_title": "Forgot your password?",
+    "forgot_subtitle": "Enter your email: we'll send you a secure link to reset your password.",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full name",
+    "role": "Role",
+    "role_agent": "Real estate agent",
+    "role_agency_admin": "Agency administrator",
+    "role_client": "Private client",
+    "role_student": "Academy student",
+    "login_cta": "Sign in",
+    "register_cta": "Create account",
+    "forgot_password": "Forgot password?",
+    "send_reset_link": "Send reset link",
+    "no_account": "Don't have an account?",
+    "register_now": "Sign up now",
+    "have_account": "Already have an account?",
+    "login_now": "Sign in here",
+    "logout": "Log out",
+    "welcome_back": "Welcome back",
+    "forbidden": "You don't have permission to access this section.",
+    "reset_link_sent": "If the email exists, you will receive a reset link."
+  },
+  "dashboard": {
+    "placeholder": "From here you'll manage your properties, clients, leads and MLS collaborations. Full features coming in M2.",
+    "your_role": "Your role",
+    "agencies": "Connected agencies",
+    "system": "System"
   }
 }

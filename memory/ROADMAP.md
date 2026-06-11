@@ -7,21 +7,21 @@
 
 ## Stato attuale
 
-🟢 **M1 IN CORSO** — M1.S2 completata, prossima M1.S3
+🟢 **M1 IN CORSO** — M1.S3 completata, prossima M1.S4
 
 ```
 M1  M2  M3  M4  M5  M6
 🟡  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
-50% 0%  0%  0%  0%  0%
+75% 0%  0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**M1 — Foundation & Architettura** (2 di 4 sessioni completate)
+**M1 — Foundation & Architettura** (3 di 4 sessioni completate)
 
-Prossima azione: **M1.S3 — Auth JWT + Ruoli + Multi-tenant**
+Prossima azione: **M1.S4 — Deploy preview + dominio**
 
 ---
 
@@ -40,7 +40,18 @@ Prossima azione: **M1.S3 — Auth JWT + Ruoli + Multi-tenant**
   - 4 endpoint health funzionanti in 3 lingue
   - 4 app frontend navigabili (Landing, Cloud, App, Learn)
   - Routing multi-app + multi-lingua testato
-- [ ] M1.S3 — Auth JWT + Ruoli + Multi-tenant
+  - Responsive mobile/tablet/desktop con hamburger menu
+  - Brand names protetti da auto-translate (componente Brand)
+- [x] **M1.S3 — Auth JWT + Ruoli + Multi-tenant** ✅ (11 Giu 2026)
+  - bcrypt + PyJWT installati
+  - 7 endpoint auth: register, login, me, refresh, logout, forgot-password, reset-password
+  - 5 ruoli: super_admin, agency_admin, agent, client, student
+  - JWT HS256 (access 15min, refresh 7gg) in cookie httpOnly+secure
+  - Brute force protection (5 tentativi = lockout 15 min)
+  - Admin auto-seeding (mcnicastro@gmail.com)
+  - Resend integration con 6 template email (welcome+reset × IT/EN/ES)
+  - Frontend: AuthProvider, ProtectedRoute, LoginPage, RegisterPage, ForgotPasswordPage, DashboardPage
+  - i18n integrato in tutto auth flow
 - [ ] M1.S4 — Deploy preview + dominio
 
 ### M2 — ImmoWeb MVP (6 sessioni)

@@ -1,0 +1,91 @@
+"""OMNIA — Resend email client + transactional templates.
+
+If RESEND_API_KEY is not configured we fall back to logging the email
+(useful in dev environments without internet access to Resend).
+"""
+import os
+import asyncio
+import logging
+from pathlib import Path
+from typing import Optional
+
+import resend
+
+logger = logging.getLogger(__name__)
+
+SENDER = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
+TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
+
+
+def _configure_resend() -> bool:
+    key = os.environ.get("RESEND_API_KEY")
+    if not key:
+        return False
+    resend.api_key = key
+    return True
+
+
+def _read_template(name: str, lang: str) -> str:
+    """Read template file: e.g. 'welcome' + 'it' → welcome.it.html"""
+    if lang not in ("it", "en", "es"):
+        lang = "it"
+    path = TEMPLATES_DIR / f"{name}.{lang}.html"
+    if not path.exists():
+        path = TEMPLATES_DIR / f"{name}.it.html"
+    return path.read_text(encoding="utf-8")
+
+
+def _render(tpl: str, vars: dict) -> str:
+    for key, value in vars.items():
+        tpl = tpl.replace("{{" + key + "}}", str(value))
+    return tpl
+
+
+SUBJECTS = {
+    "welcome": {
+        "it": "Benvenuto in OMNIA",
+        "en": "Welcome to OMNIA",
+        "es": "Bienvenido a OMNIA",
+    },
+    "password_reset": {
+        "it": "Reimposta la tua password OMNIA",
+        "en": "Reset your OMNIA password",
+        "es": "Restablece tu contraseña OMNIA",
+    },
+}
+
+
+async def send_email(
+    to: str,
+    template: str,
+    lang: str = "it",
+    variables: Optional[dict] = None,
+) -> dict:
+    """Send a localized transactional email via Resend."""
+    variables = variables or {}
+    subject = SUBJECTS.get(template, {}).get(lang) or SUBJECTS.get(template, {}).get("it") or "OMNIA"
+    html = _render(_read_template(template, lang), variables)
+
+    if not _configure_resend():
+        logger.warning(
+            "[EMAIL MOCK] to=%s template=%s lang=%s subject=%s vars=%s",
+            to, template, lang, subject, variables,
+        )
+        return {"id": "mock", "status": "mock"}
+
+    params = {
+        "from": SENDER,
+        "to": [to],
+        "subject": subject,
+        "html": html,
+    }
+    try:
+        result = await asyncio.to_thread(resend.Emails.send, params)
+        logger.info(
+            "[EMAIL OK] to=%s template=%s lang=%s id=%s",
+            to, template, lang, result.get("id"),
+        )
+        return {"id": result.get("id"), "status": "sent"}
+    except Exception as e:
+        logger.error("[EMAIL ERROR] to=%s template=%s err=%s", to, template, e)
+        return {"id": None, "status": "error", "error": str(e)}

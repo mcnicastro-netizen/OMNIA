@@ -17,7 +17,8 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
   config.headers["Accept-Language"] = i18n.language || "it";
-  // Auth token will be injected in M1.S3
+  // Always send cookies (for httpOnly auth cookies)
+  config.withCredentials = true;
   return config;
 });
 

@@ -26,6 +26,8 @@ from shared.utils.i18n import normalize_lang, _load_locales, t  # noqa: E402
 from shared.models.base import HealthResponse  # noqa: E402
 
 from apps.core.routes import router as core_router  # noqa: E402
+from apps.core.auth import router as auth_router  # noqa: E402
+from apps.core.seed import seed_admin  # noqa: E402
 from apps.immocloud.routes import router as immocloud_router  # noqa: E402
 from apps.immoweb.routes import router as immoweb_router  # noqa: E402
 from apps.academy.routes import router as academy_router  # noqa: E402
@@ -44,6 +46,7 @@ async def lifespan(app: FastAPI):
     Database.connect()
     await ensure_indexes()
     _load_locales()
+    await seed_admin()
     logger.info("OMNIA backend ready.")
     yield
     # Shutdown
@@ -63,7 +66,7 @@ allowed = os.environ.get("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=allowed,
+    allow_origins=[o.strip() for o in allowed if o.strip()],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -115,6 +118,7 @@ async def global_health(accept_language: str = Header(None)):
 
 
 # Mount sub-apps
+api_router.include_router(auth_router)
 api_router.include_router(core_router)
 api_router.include_router(immocloud_router)
 api_router.include_router(immoweb_router)

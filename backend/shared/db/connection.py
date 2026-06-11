@@ -106,8 +106,14 @@ async def ensure_indexes() -> None:
     # Cross-tenant collections (no agency_id filter, but indexed by lookup field)
     try:
         await db["users"].create_index([("email", 1)], unique=True)
+        await db["users"].create_index([("id", 1)], unique=True)
         await db["agencies"].create_index([("slug", 1)], unique=True)
         await db["mls_network"].create_index([("agency_a", 1), ("agency_b", 1)])
+        await db["login_attempts"].create_index([("identifier", 1)])
+        await db["password_reset_tokens"].create_index([("token", 1)], unique=True)
+        await db["password_reset_tokens"].create_index(
+            [("expires_at", 1)], expireAfterSeconds=0
+        )
     except Exception as e:
         logger.warning(f"Cross-tenant index creation skipped: {e}")
 

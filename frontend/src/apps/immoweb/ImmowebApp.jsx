@@ -12,7 +12,7 @@ export default function ImmowebApp() {
 
   const navLinks = [
     { to: `/${lang}`, label: t("nav.landing") },
-    { to: "#login", label: t("nav.login") },
+    { to: `/${lang}/login`, label: t("nav.login") },
   ];
 
   return (
@@ -27,13 +27,9 @@ export default function ImmowebApp() {
           <Brand className="font-light">app</Brand>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
-          {navLinks.map((l) =>
-            l.to.startsWith("#") ? (
-              <a key={l.to} href={l.to} className="hover:text-stone-900">{l.label}</a>
-            ) : (
-              <Link key={l.to} to={l.to} className="hover:text-stone-900">{l.label}</Link>
-            )
-          )}
+          {navLinks.map((l) => (
+            <Link key={l.to} to={l.to} className="hover:text-stone-900">{l.label}</Link>
+          ))}
           <LanguageSwitcher />
         </nav>
         <MobileNav lang={lang} links={navLinks} theme="light" />

@@ -47,5 +47,37 @@
     "checking": "Comprobando el servicio…",
     "ok": "Servicio operativo",
     "error": "Servicio no disponible"
+  },
+  "auth": {
+    "login_title": "Inicia sesión en tu cuenta",
+    "register_title": "Crea tu cuenta",
+    "forgot_title": "¿Olvidaste tu contraseña?",
+    "forgot_subtitle": "Introduce tu correo: te enviaremos un enlace seguro para restablecerla.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre completo",
+    "role": "Rol",
+    "role_agent": "Agente inmobiliario",
+    "role_agency_admin": "Administrador de agencia",
+    "role_client": "Cliente privado",
+    "role_student": "Estudiante Academy",
+    "login_cta": "Iniciar sesión",
+    "register_cta": "Crear cuenta",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "send_reset_link": "Enviar enlace de restablecimiento",
+    "no_account": "¿No tienes cuenta?",
+    "register_now": "Regístrate ahora",
+    "have_account": "¿Ya tienes cuenta?",
+    "login_now": "Inicia sesión aquí",
+    "logout": "Cerrar sesión",
+    "welcome_back": "Bienvenido de nuevo",
+    "forbidden": "No tienes permiso para acceder a esta sección.",
+    "reset_link_sent": "Si el correo existe, recibirás un enlace para restablecerla."
+  },
+  "dashboard": {
+    "placeholder": "Desde aquí gestionarás tu cartera de inmuebles, clientes, leads y colaboraciones MLS. Funciones completas en M2.",
+    "your_role": "Tu rol",
+    "agencies": "Agencias conectadas",
+    "system": "Sistema"
   }
 }
