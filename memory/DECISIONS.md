@@ -70,34 +70,48 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale**: Non serve fino a M4 (sistema pagamenti); l'utente preferisce completare quando necessario con supporto guidato
 - **Stato**: 🟡 Registrato, da completare in M4.S3
 
----
+### D-011 — Architettura repository: MONOREPO ✅
+- **Data**: 10 Giugno 2026 (M1.S1)
+- **Decisione**: Monorepo Turborepo unico nel repo `OMNIA` con struttura:
+  - `apps/immocloud/` — Portale B2C
+  - `apps/immoweb/` — Gestionale agenzie B2B
+  - `apps/academy/` — Piattaforma formazione
+  - `apps/api/` — Backend FastAPI condiviso (single backend serve tutte le app)
+  - `packages/shared/` — Modelli Pydantic + types + utils condivisi
+  - `packages/ui/` — Component library shadcn condivisa
+- **Razionale**: Elimina drift cross-app già vissuto in IMMOWEB vs Immocloud-2.0; semplifica sviluppo singolo developer; pattern standard 2026 SaaS multi-app
+- **Tradeoff accettato**: Setup iniziale +1-2 ore in M1.S2
+- **Stato**: ✅ Confermata
 
-## Decisioni pendenti (da risolvere in M1.S1)
+### D-012 — Schema sottodomini: SOTTODOMINI CORTI ✅
+- **Data**: 10 Giugno 2026 (M1.S1)
+- **Decisione**: Schema URL con sottodomini corti su `omniarealestateecosystem.it`:
+  - `omniarealestateecosystem.it` → Landing page commerciale
+  - `cloud.omniarealestateecosystem.it` → ImmobilCloud (B2C)
+  - `app.omniarealestateecosystem.it` → ImmoWeb (B2B agenzie)
+  - `learn.omniarealestateecosystem.it` → Omnia Academy
+  - `api.omniarealestateecosystem.it` → Backend API condiviso
+  - `{agency-slug}.omniarealestateecosystem.it` → White label agenzie (M2.S6)
+- **Razionale**: SEO ottimale; standard SaaS multi-tenant per branding agenzie; isolamento auth/cookie tra app
+- **Requisito tecnico**: Certificato SSL wildcard `*.omniarealestateecosystem.it`
+- **Stato**: ✅ Confermata
 
-### D-006 — Monorepo vs multi-repo
-- **Quando**: M1.S1
-- **Opzioni**:
-  - A) Monorepo Turborepo unico `omnia` con apps/immocloud, apps/immoweb, apps/academy, packages/shared
-  - B) 3 repo separati con shared package npm
-- **Raccomandazione E1**: Opzione A (monorepo)
-- **Stato**: ⏸️ Pending
-
-### D-009 — Schema sottodomini
-- **Quando**: M1.S1
-- **Opzioni**:
-  - A) immocloud.omnia.xx / app.omnia.xx / academy.omnia.xx
-  - B) Path-based: omnia.xx/portale, omnia.xx/app, omnia.xx/academy
-  - C) Domini separati: immocloud.xx, immoweb.xx, academy.xx
-- **Stato**: ⏸️ Pending
-
-### D-010 — Database multi-tenant
-- **Quando**: M1.S1
-- **Opzioni**:
-  - A) Singolo MongoDB con campo `agency_id` su ogni collection (shared schema)
-  - B) Database separato per ogni agenzia (isolated)
-  - C) Singolo DB ma collection separate per agenzia (hybrid)
-- **Raccomandazione E1**: Opzione A all'inizio, migrazione a B se servisse per enterprise
-- **Stato**: ⏸️ Pending
+### D-013 — Database architecture: SHARED SCHEMA multi-tenant ✅
+- **Data**: 10 Giugno 2026 (M1.S1)
+- **Decisione**: Singolo MongoDB cluster con shared schema multi-tenant
+- **Pattern**:
+  - Ogni collection (eccetto dati pubblici condivisi) ha campo OBBLIGATORIO `agency_id` (UUID)
+  - Indice composto `(agency_id, ...campo_query)` su ogni collection tenant-aware
+  - Middleware FastAPI auto-inietta `agency_id` da JWT su ogni query
+  - Test automatici verificano isolamento tenant
+- **Eccezioni** (no agency_id):
+  - `omi_zones` (27.228 zone OMI, pubblico)
+  - `comuni_italia` (7.884 comuni)
+  - `users` (cross-agency, con `agency_ids: List[UUID]`)
+  - `mls_network` (relazioni inter-agenzia)
+- **Razionale**: Standard SaaS B2B 2026; costo basso; performance ottima fino a 1000+ tenant; MLS facile
+- **Trigger migrazione DB-per-tenant**: cliente enterprise >1000 immobili o compliance specifica
+- **Stato**: ✅ Confermata
 
 ---
 

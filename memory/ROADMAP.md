@@ -7,28 +7,31 @@
 
 ## Stato attuale
 
-⏸️ **NOT STARTED** — In attesa di partenza M1.S1
+🟢 **M1 IN CORSO** — M1.S1 completata, prossima M1.S2
 
 ```
 M1  M2  M3  M4  M5  M6
-⏸️  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
-0%  0%  0%  0%  0%  0%
+🟡  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
+25% 0%  0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**Nessuna ancora.**
+**M1 — Foundation & Architettura** (1 di 4 sessioni completate)
 
-Prossima azione: avviare **M1.S1 — Decisioni architetturali**.
+Prossima azione: **M1.S2 — Setup monorepo + struttura base**
 
 ---
 
 ## Backlog dettagliato per Milestone
 
 ### M1 — Foundation (4 sessioni)
-- [ ] M1.S1 — Decisioni architetturali (no codice)
+- [x] **M1.S1 — Decisioni architetturali** ✅ (10 Giu 2026)
+  - Monorepo Turborepo
+  - Sottodomini corti su omniarealestateecosystem.it
+  - Shared schema MongoDB multi-tenant
 - [ ] M1.S2 — Setup monorepo + struttura base
 - [ ] M1.S3 — Auth JWT + Ruoli + Multi-tenant
 - [ ] M1.S4 — Deploy preview + dominio

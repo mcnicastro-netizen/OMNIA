@@ -65,7 +65,10 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 - ✅ Valutatore GIS con 27.228 zone OMI (documentato, da riportare)
 
 ### M1 — Foundation
-*Non ancora iniziata*
+- ✅ **M1.S1 (10 Giu 2026)** — 3 decisioni architetturali approvate:
+  - Monorepo Turborepo (D-011)
+  - Sottodomini corti su omniarealestateecosystem.it (D-012)
+  - Shared schema MongoDB multi-tenant (D-013)
 
 ### M2 — ImmoWeb
 *Non ancora iniziata*
