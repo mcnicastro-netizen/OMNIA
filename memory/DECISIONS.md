@@ -38,6 +38,25 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale**: I 2 repo esistenti sono boilerplate quasi vuoti; la nuova architettura monorepo (o decisione contraria in M1.S1) determinerà destinazione finale GitHub
 - **Stato**: ✅ Confermata
 
+### D-006 — Repository GitHub principale
+- **Data**: 10 Giugno 2026
+- **Decisione**: Nuovo repo pubblico `mcnicastro-netizen/OMNIA` come repository ufficiale del progetto
+- **Razionale**: I repo IMMOWEB e Immocloud-2.0 sono boilerplate quasi vuoti e creavano confusione; il nuovo repo OMNIA è neutro e accoglierà il futuro monorepo
+- **Stato**: ✅ Confermata e operativa
+
+### D-007 — Dominio principale
+- **Data**: Giugno 2026
+- **Decisione**: `omniarealestateecosystem.it` come dominio principale
+- **Razionale**: Domini brevi (omnia.realestate, omnia.casa) richiesti dai broker a €4.000+. Il nome lungo è disponibile a costo standard (~€10/anno) ed è descrittivo. Eventuale dominio corto rinviato a post-M4 quando ci sarà budget marketing.
+- **Trade-off accettato**: URL lungo, ma SEO ottimo. Per uso commerciale si valuteranno alias brevi in futuro.
+- **Stato**: ✅ Confermata
+
+### D-008 — Credito Emergent LLM Key
+- **Data**: Giugno 2026
+- **Decisione**: Ricaricati 100 crediti sulla Universal Key
+- **Razionale**: Budget sufficiente per M1-M2 (Gemini economico). Da monitorare ad ogni milestone.
+- **Stato**: ✅ Confermata
+
 ---
 
 ## Decisioni pendenti (da risolvere in M1.S1)
@@ -50,12 +69,7 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Raccomandazione E1**: Opzione A (monorepo)
 - **Stato**: ⏸️ Pending
 
-### D-007 — Nome dominio principale
-- **Quando**: M1.S1
-- **Opzioni**: omnia.realestate, omnia.immobili, omnia-re.it, altro
-- **Stato**: ⏸️ Pending
-
-### D-008 — Schema sottodomini
+### D-009 — Schema sottodomini
 - **Quando**: M1.S1
 - **Opzioni**:
   - A) immocloud.omnia.xx / app.omnia.xx / academy.omnia.xx
@@ -63,7 +77,7 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - C) Domini separati: immocloud.xx, immoweb.xx, academy.xx
 - **Stato**: ⏸️ Pending
 
-### D-009 — Database multi-tenant
+### D-010 — Database multi-tenant
 - **Quando**: M1.S1
 - **Opzioni**:
   - A) Singolo MongoDB con campo `agency_id` su ogni collection (shared schema)
