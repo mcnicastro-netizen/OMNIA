@@ -17,7 +17,7 @@ export default function AcademyApp() {
       className="min-h-screen bg-[#fdf6e3] text-stone-900"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      <header className="flex items-center justify-between px-5 sm:px-8 md:px-16 py-5 md:py-6 border-b border-amber-900/20">
+      <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 border-b border-amber-900/20">
         <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
           OMNIA<span className="text-amber-700">·</span>
           <span className="font-light">learn</span>
@@ -31,11 +31,11 @@ export default function AcademyApp() {
         <MobileNav lang={lang} links={navLinks} theme="cream" />
       </header>
 
-      <section className="px-5 sm:px-8 md:px-16 py-16 md:py-32 max-w-5xl">
+      <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-28 max-w-5xl">
         <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-amber-800 mb-4 md:mb-6">
           Omnia Academy — Agent Training
         </p>
-        <h1 className="text-5xl sm:text-6xl md:text-8xl leading-none tracking-tight mb-8 md:mb-10 break-words">
+        <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl leading-none tracking-tight mb-8 md:mb-10 break-words">
           {t("academy.tagline")}
         </h1>
         <p className="text-base sm:text-lg font-sans text-stone-700 max-w-2xl mb-8 md:mb-12 leading-relaxed">
@@ -46,7 +46,7 @@ export default function AcademyApp() {
         </div>
       </section>
 
-      <footer className="border-t border-amber-900/20 px-5 sm:px-8 md:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-600">
+      <footer className="border-t border-amber-900/20 px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-600">
         © 2026 Omnia Academy · Coming soon: M6
       </footer>
     </div>

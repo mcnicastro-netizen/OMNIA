@@ -49,7 +49,7 @@ export default function LandingApp() {
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
       {/* Header */}
-      <header className="flex items-center justify-between px-5 sm:px-8 md:px-16 py-5 md:py-6 border-b border-stone-200">
+      <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 border-b border-stone-200">
         <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
           OMNIA<span className="text-stone-400">.</span>
         </Link>
@@ -69,15 +69,15 @@ export default function LandingApp() {
       </header>
 
       {/* Hero */}
-      <section className="px-5 sm:px-8 md:px-16 py-16 md:py-32 grid md:grid-cols-12 gap-10 md:gap-12">
+      <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-28 grid md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-7">
           <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-4 md:mb-6">
             Real estate · Ecosystem · 2026
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6 md:mb-8 break-words">
+          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight mb-6 md:mb-8 break-words">
             {t("landing.hero_title")}
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl font-light text-stone-600 mb-8 md:mb-12 max-w-xl">
+          <p className="text-lg sm:text-xl md:text-xl lg:text-2xl font-light text-stone-600 mb-8 md:mb-12 max-w-xl">
             {t("landing.hero_subtitle")}
           </p>
           <a
@@ -88,7 +88,7 @@ export default function LandingApp() {
             {t("landing.hero_cta")} →
           </a>
         </div>
-        <aside className="md:col-span-5 md:pt-10">
+        <aside className="md:col-span-5 md:pt-8 lg:pt-10">
           <div className="border-l border-stone-300 pl-6 space-y-3 text-sm font-sans text-stone-600">
             <p className="uppercase tracking-widest text-stone-400 text-xs mb-4">
               System status
@@ -102,18 +102,18 @@ export default function LandingApp() {
       </section>
 
       {/* Pillars */}
-      <section className="px-5 sm:px-8 md:px-16 pb-20 md:pb-32 grid md:grid-cols-3 gap-6 md:gap-12">
+      <section className="px-5 sm:px-8 md:px-12 lg:px-16 pb-20 md:pb-24 lg:pb-32 grid md:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
         {pillars.map((p) => (
           <Link
             key={p.key}
             to={p.to}
             data-testid={`pillar-${p.key}`}
-            className="group block p-6 md:p-8 bg-white border border-stone-200 hover:border-stone-900 transition"
+            className="group block p-6 md:p-7 lg:p-8 bg-white border border-stone-200 hover:border-stone-900 transition"
           >
             <p className="text-xs font-sans uppercase tracking-[0.3em] text-stone-400 mb-3 md:mb-4">
               {p.tag}
             </p>
-            <h2 className="text-2xl md:text-3xl tracking-tight mb-3 group-hover:translate-x-1 transition-transform">
+            <h2 className="text-2xl md:text-2xl lg:text-3xl tracking-tight mb-3 group-hover:translate-x-1 transition-transform">
               {p.title}
             </h2>
             <p className="text-stone-600 leading-relaxed font-sans text-sm md:text-base">
@@ -126,7 +126,7 @@ export default function LandingApp() {
         ))}
       </section>
 
-      <footer className="border-t border-stone-200 px-5 sm:px-8 md:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
+      <footer className="border-t border-stone-200 px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
         <span>© 2026 OMNIA Real Estate Ecosystem</span>
         <span className="truncate">omniarealestateecosystem.it</span>
       </footer>
