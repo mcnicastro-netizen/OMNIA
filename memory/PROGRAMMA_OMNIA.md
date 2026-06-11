@@ -1,11 +1,19 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 1.0
+**Versione**: 1.1
 **Data creazione**: Gennaio 2026
+**Ultimo aggiornamento**: 10 Giugno 2026 (post M1.S1)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: Approvato — In attesa di inizio M1.S1
+**Stato**: M1 in corso · M1.S1 ✅ completata
+
+---
+
+> ## ⚠️ SEI UN AGENTE AI CHE SUBENTRA?
+>
+> **STOP.** Prima di leggere oltre, vai a `/app/memory/AGENT_BOOTSTRAP.md` e segui il protocollo obbligatorio.
+> Le decisioni in `DECISIONS.md` sono **vincolanti** — non rimetterle in discussione.
 
 ---
 
