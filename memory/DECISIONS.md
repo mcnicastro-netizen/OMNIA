@@ -57,6 +57,19 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale**: Budget sufficiente per M1-M2 (Gemini economico). Da monitorare ad ogni milestone.
 - **Stato**: ✅ Confermata
 
+### D-009 — Email transazionale: Resend
+- **Data**: Giugno 2026
+- **Decisione**: Resend.com come provider email (anziché SendGrid)
+- **API Key**: `omnia-prod` (salvata lato user, da configurare in M1.S3)
+- **Razionale**: Free tier 3.000 email/mese, API moderna, setup 3 minuti
+- **Stato**: ✅ Confermata, chiave creata
+
+### D-010 — Stripe: registrazione in attesa
+- **Data**: Giugno 2026
+- **Decisione**: Account Stripe registrato ma configurazione completa (IBAN, dati fiscali, attivazione live) rinviata a M4.S3
+- **Razionale**: Non serve fino a M4 (sistema pagamenti); l'utente preferisce completare quando necessario con supporto guidato
+- **Stato**: 🟡 Registrato, da completare in M4.S3
+
 ---
 
 ## Decisioni pendenti (da risolvere in M1.S1)
