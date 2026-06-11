@@ -3,14 +3,20 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
+import MobileNav from "../../shared/components/MobileNav";
 
 /**
- * OMNIA Landing — minimal commercial page introducing the 3 pillars.
- * Design: editorial/serif heavy, asymmetric, low-key — no AI slop.
+ * OMNIA Landing — fully responsive (mobile/tablet/desktop).
  */
 export default function LandingApp() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
+
+  const navLinks = [
+    { to: `/${lang}/cloud`, label: t("nav.immocloud") },
+    { to: `/${lang}/app`, label: t("nav.immoweb") },
+    { to: `/${lang}/learn`, label: t("nav.academy") },
+  ];
 
   const pillars = [
     {
@@ -42,41 +48,42 @@ export default function LandingApp() {
       className="min-h-screen bg-stone-50 text-stone-900"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      {/* Top bar */}
-      <header className="flex items-center justify-between px-8 md:px-16 py-6 border-b border-stone-200">
-        <div className="text-2xl tracking-tight font-medium">
+      {/* Header */}
+      <header className="flex items-center justify-between px-5 sm:px-8 md:px-16 py-5 md:py-6 border-b border-stone-200">
+        <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
           OMNIA<span className="text-stone-400">.</span>
-        </div>
-        <nav className="flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
-          <Link to={`/${lang}/cloud`} className="hover:text-stone-900">
-            {t("nav.immocloud")}
-          </Link>
-          <Link to={`/${lang}/app`} className="hover:text-stone-900">
-            {t("nav.immoweb")}
-          </Link>
-          <Link to={`/${lang}/learn`} className="hover:text-stone-900">
-            {t("nav.academy")}
-          </Link>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
+          {navLinks.map((l) => (
+            <Link key={l.to} to={l.to} className="hover:text-stone-900">
+              {l.label}
+            </Link>
+          ))}
           <LanguageSwitcher />
         </nav>
+
+        {/* Mobile nav */}
+        <MobileNav lang={lang} links={navLinks} theme="light" />
       </header>
 
       {/* Hero */}
-      <section className="px-8 md:px-16 py-24 md:py-32 grid md:grid-cols-12 gap-12">
+      <section className="px-5 sm:px-8 md:px-16 py-16 md:py-32 grid md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-7">
-          <p className="text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-6">
+          <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-4 md:mb-6">
             Real estate · Ecosystem · 2026
           </p>
-          <h1 className="text-5xl md:text-7xl leading-[1.05] tracking-tight mb-8">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl leading-[1.05] tracking-tight mb-6 md:mb-8 break-words">
             {t("landing.hero_title")}
           </h1>
-          <p className="text-xl md:text-2xl font-light text-stone-600 mb-12 max-w-xl">
+          <p className="text-lg sm:text-xl md:text-2xl font-light text-stone-600 mb-8 md:mb-12 max-w-xl">
             {t("landing.hero_subtitle")}
           </p>
           <a
             data-testid="landing-cta"
             href={`/${lang}/cloud`}
-            className="inline-block bg-stone-900 text-stone-50 px-8 py-4 text-sm font-sans uppercase tracking-widest hover:bg-stone-700 transition"
+            className="inline-block bg-stone-900 text-stone-50 px-6 md:px-8 py-3 md:py-4 text-xs sm:text-sm font-sans uppercase tracking-widest hover:bg-stone-700 transition"
           >
             {t("landing.hero_cta")} →
           </a>
@@ -95,33 +102,33 @@ export default function LandingApp() {
       </section>
 
       {/* Pillars */}
-      <section className="px-8 md:px-16 pb-32 grid md:grid-cols-3 gap-8 md:gap-12">
+      <section className="px-5 sm:px-8 md:px-16 pb-20 md:pb-32 grid md:grid-cols-3 gap-6 md:gap-12">
         {pillars.map((p) => (
           <Link
             key={p.key}
             to={p.to}
             data-testid={`pillar-${p.key}`}
-            className="group block p-8 bg-white border border-stone-200 hover:border-stone-900 transition"
+            className="group block p-6 md:p-8 bg-white border border-stone-200 hover:border-stone-900 transition"
           >
-            <p className="text-xs font-sans uppercase tracking-[0.3em] text-stone-400 mb-4">
+            <p className="text-xs font-sans uppercase tracking-[0.3em] text-stone-400 mb-3 md:mb-4">
               {p.tag}
             </p>
-            <h2 className="text-3xl tracking-tight mb-3 group-hover:translate-x-1 transition-transform">
+            <h2 className="text-2xl md:text-3xl tracking-tight mb-3 group-hover:translate-x-1 transition-transform">
               {p.title}
             </h2>
-            <p className="text-stone-600 leading-relaxed font-sans text-base">
+            <p className="text-stone-600 leading-relaxed font-sans text-sm md:text-base">
               {p.desc}
             </p>
-            <span className="inline-block mt-6 text-sm font-sans uppercase tracking-widest text-stone-900">
+            <span className="inline-block mt-5 md:mt-6 text-xs sm:text-sm font-sans uppercase tracking-widest text-stone-900">
               {t("common.next")} →
             </span>
           </Link>
         ))}
       </section>
 
-      <footer className="border-t border-stone-200 px-8 md:px-16 py-8 text-xs font-sans uppercase tracking-widest text-stone-500 flex justify-between">
+      <footer className="border-t border-stone-200 px-5 sm:px-8 md:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
         <span>© 2026 OMNIA Real Estate Ecosystem</span>
-        <span>omniarealestateecosystem.it</span>
+        <span className="truncate">omniarealestateecosystem.it</span>
       </footer>
     </div>
   );
