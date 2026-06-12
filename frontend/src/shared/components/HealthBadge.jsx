@@ -46,11 +46,11 @@ export default function HealthBadge({ app, label }) {
   return (
     <div
       data-testid={`health-badge-${app}`}
-      className="inline-flex items-center gap-2 text-xs font-medium tracking-wide text-stone-700"
+      className="flex items-center gap-2 text-xs font-medium tracking-wide text-stone-700 min-w-0"
     >
-      <span className={`h-2 w-2 rounded-full ${dot}`} />
-      <Brand>{label || app}</Brand>
-      {detail && <span className="text-stone-500">— {detail}</span>}
+      <span className={`h-2 w-2 rounded-full flex-shrink-0 ${dot}`} />
+      <Brand className="flex-shrink-0">{label || app}</Brand>
+      {detail && <span className="text-stone-500 truncate">— {detail}</span>}
     </div>
   );
 }
