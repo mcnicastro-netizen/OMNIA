@@ -65,6 +65,15 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 - ✅ Valutatore GIS con 27.228 zone OMI (documentato, da riportare)
 
 ### M2 — ImmoWeb MVP (Agency CRM)
+- ✅ **M2.S2 (12 Giu 2026)** — CRUD Immobili + Import CSV/XML:
+  - Backend `Property` model (16 tipi, 25 boolean features, 6 stati, energy class, owner riservato, photos, geo)
+  - 9 endpoint REST CRUD + CSV template download + POST /import/csv + POST /import/xml
+  - Bulk import audit log (`ImportJob` con errori per riga)
+  - XML feed parsing flessibile (alias Italian: titolo/prezzo/mq/vani + Immobiliare.it/Idealista compatible)
+  - Frontend: `PropertiesPage` (grid card + filtri + search), `PropertyFormPage` (form 8 sezioni con 25 feature checkboxes), `PropertyImportPage` (CSV+XML wizard amichevole 3-step)
+  - i18n IT: 90+ chiavi (16 tipi, 25 features, condizioni, ecc.)
+  - KPI dashboard "properties_active" ora REALE
+  - Sidebar Immobili sbloccata
 - ✅ **M2.S1 (12 Giu 2026)** — Dashboard agenzia + onboarding:
   - Backend `Agency` model (fiscal/address/contact/branding) + `AgencyInvite` (magic-link)
   - 9 endpoint REST `/api/app/agencies/*`, `/api/app/invites/*`, `/api/app/dashboard/kpis`

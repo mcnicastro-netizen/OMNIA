@@ -22,6 +22,9 @@ import DashboardPage from "@/apps/immoweb/DashboardPage";
 import OnboardingWizard from "@/apps/immoweb/OnboardingWizard";
 import MembersPage from "@/apps/immoweb/MembersPage";
 import SettingsPage from "@/apps/immoweb/SettingsPage";
+import PropertiesPage from "@/apps/immoweb/PropertiesPage";
+import PropertyFormPage from "@/apps/immoweb/PropertyFormPage";
+import PropertyImportPage from "@/apps/immoweb/PropertyImportPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
@@ -126,6 +129,38 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
                         <SettingsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/properties"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <PropertiesPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/properties/import"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <PropertyImportPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/properties/new"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <PropertyFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/properties/:id"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <PropertyFormPage />
                       </ProtectedRoute>
                     }
                   />

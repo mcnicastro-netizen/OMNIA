@@ -52,7 +52,7 @@ export default function AgencyShell({ children, current = "dashboard" }) {
 
   const navItems = [
     { key: "dashboard", to: `/${lang}/app/dashboard`, label: t("immoweb_app.nav_dashboard"), icon: "▦" },
-    { key: "properties", to: `/${lang}/app/dashboard`, label: t("immoweb_app.nav_properties"), icon: "🏠", locked: true },
+    { key: "properties", to: `/${lang}/app/properties`, label: t("immoweb_app.nav_properties"), icon: "🏠" },
     { key: "clients", to: `/${lang}/app/dashboard`, label: t("immoweb_app.nav_clients"), icon: "👥", locked: true },
     { key: "matches", to: `/${lang}/app/dashboard`, label: t("immoweb_app.nav_matches"), icon: "✦", locked: true },
     { key: "members", to: `/${lang}/app/members`, label: t("immoweb_app.nav_members"), icon: "✉" },
@@ -137,7 +137,7 @@ export default function AgencyShell({ children, current = "dashboard" }) {
                 </span>
                 {item.locked && (
                   <span className="text-[9px] uppercase tracking-widest text-amber-500">
-                    M2.S{item.key === "properties" ? "2" : item.key === "clients" ? "3" : "4"}
+                    {item.key === "clients" ? "M2.S3" : "M2.S4"}
                   </span>
                 )}
               </Link>

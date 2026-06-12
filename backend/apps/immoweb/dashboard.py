@@ -32,13 +32,20 @@ async def get_kpis(user: dict = Depends(get_current_user)):
             {"agency_id": agency_id, "status": "pending"}
         )
 
+    # Real KPI: active properties (M2.S2)
+    properties_active = 0
+    if agency_id:
+        properties_active = await db.properties.count_documents(
+            {"agency_id": agency_id, "status": "active"}
+        )
+
     kpis: List[DashboardKPI] = [
         DashboardKPI(
             key="properties_active",
             label="Immobili attivi",
-            value=0,
+            value=properties_active,
             icon="home",
-            locked=True,
+            locked=False,
         ),
         DashboardKPI(
             key="leads_open",

@@ -7,21 +7,21 @@
 
 ## Stato attuale
 
-🟡 **M2 IN CORSO** — M2.S1 done, prossima M2.S2 (CRUD Immobili 16 tipi)
+🟡 **M2 IN CORSO** — M2.S1+S2 done (33%), prossima M2.S3 (CRM clienti)
 
 ```
 M1  M2  M3  M4  M5  M6
 ✅  🟡  ⏸️  ⏸️  ⏸️  ⏸️
-100% 17% 0%  0%  0%  0%
+100% 33% 0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**M2 — ImmoWeb MVP (Agency CRM)** (1 di 6 sessioni completate)
+**M2 — ImmoWeb MVP (Agency CRM)** (2 di 6 sessioni completate)
 
-Prossima azione: **M2.S2 — CRUD Immobili completo (16 tipologie)**
+Prossima azione: **M2.S3 — CRM clienti + matching engine**
 
 ---
 
@@ -74,7 +74,12 @@ Prossima azione: **M2.S2 — CRUD Immobili completo (16 tipologie)**
   - 5 nuovi data-testid namespaces (`onb-*`, `kpi-*`, `sidebar-nav-*`, `invite-*`, `accept-*`)
   - i18n IT/EN/ES esteso (75+ chiavi nuove)
   - Routing: redirect automatico `agency_admin` senza agency → `/app/onboarding`
-- [ ] M2.S2 — CRUD Immobili completo
+- [x] **M2.S2 — CRUD Immobili + Import CSV/XML** ✅ (12 Giu 2026)
+  - Backend `Property` model (16 tipi, 25 features, 6 stati), `ImportJob` audit
+  - 9 endpoint REST + CSV template + bulk CSV/XML import
+  - XML feed parsing Italian-friendly (Immobiliare.it/Idealista/generico)
+  - Frontend: PropertiesPage, PropertyFormPage (8 sezioni, 25 feature checkboxes), PropertyImportPage (CSV+XML wizard amichevole)
+  - i18n 90+ chiavi nuove, KPI properties_active reale, sidebar Immobili sbloccata
 - [ ] M2.S3 — CRM clienti + Richieste
 - [ ] M2.S4 — Matching engine
 - [ ] M2.S5 — Multiposting XML portali
