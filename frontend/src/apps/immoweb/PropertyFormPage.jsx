@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import AgencyShell from "./components/AgencyShell";
+import PhotoUploader from "./components/PhotoUploader";
 import { api } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 
@@ -36,6 +37,7 @@ const empty = {
   energy: { energy_class: "", energy_value: "", heating: "" },
   features: Object.fromEntries(FEATURES.map((k) => [k, false])),
   owner: { name: "", phone: "", email: "" },
+  photos: [],
 };
 
 export default function PropertyFormPage() {
@@ -85,6 +87,7 @@ export default function PropertyFormPage() {
       if (!Object.keys(payload.energy).length) delete payload.energy;
       payload.owner = cleanGroup(form.owner);
       if (!Object.keys(payload.owner).length) delete payload.owner;
+      payload.photos = form.photos || [];
 
       if (isEdit) {
         await api.patch(`/app/properties/${id}`, payload);
@@ -268,6 +271,11 @@ export default function PropertyFormPage() {
                 </select>
               </Field>
             </div>
+          </Section>
+
+          {/* Photos */}
+          <Section label="Foto immobile">
+            <PhotoUploader photos={form.photos || []} onChange={(photos) => upd("photos", photos)} max={15} />
           </Section>
 
           {/* Owner (reserved) */}

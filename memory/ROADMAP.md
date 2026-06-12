@@ -74,6 +74,9 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
   - 5 nuovi data-testid namespaces (`onb-*`, `kpi-*`, `sidebar-nav-*`, `invite-*`, `accept-*`)
   - i18n IT/EN/ES esteso (75+ chiavi nuove)
   - Routing: redirect automatico `agency_admin` senza agency → `/app/onboarding`
+- [x] **M2.S2bis — Upload foto immobili** ✅ (12 Giu 2026)
+  - PhotoUploader: drag&drop, resize client-side 1600px, JPEG 82%, max 15 foto, set cover, riordino, delete
+  - Integrato in PropertyFormPage (new + edit), stoccaggio base64 nel doc Mongo (migrazione S3 in M3)
 - [x] **M2.S2 — CRUD Immobili + Import CSV/XML** ✅ (12 Giu 2026)
   - Backend `Property` model (16 tipi, 25 features, 6 stati), `ImportJob` audit
   - 9 endpoint REST + CSV template + bulk CSV/XML import

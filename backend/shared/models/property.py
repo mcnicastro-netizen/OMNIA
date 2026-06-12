@@ -174,6 +174,7 @@ class PropertyCreate(OmniaBaseModel):
     commission_pct: Optional[float] = None
     visibility: Literal["public", "mls_only", "private"] = "public"
     virtual_tour_url: Optional[str] = None
+    photos: Optional[List[PropertyPhoto]] = None
 
 
 class PropertyUpdate(OmniaBaseModel):

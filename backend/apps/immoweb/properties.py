@@ -131,6 +131,8 @@ async def create_property(
         data["energy"] = PropertyEnergy().model_dump()
     if data.get("owner") is None:
         data["owner"] = PropertyOwner().model_dump()
+    if data.get("photos") is None:
+        data["photos"] = []
 
     prop = PropertyInDB(
         agency_id=agency_id,
