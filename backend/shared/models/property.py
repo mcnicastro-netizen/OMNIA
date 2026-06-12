@@ -264,4 +264,5 @@ class CSVImportPayload(OmniaBaseModel):
 
 
 class XMLImportPayload(OmniaBaseModel):
-    feed_url: str = Field(min_length=10, max_length=500)
+    feed_url: Optional[str] = Field(default=None, max_length=500)
+    xml_content: Optional[str] = Field(default=None, max_length=10_000_000)  # up to 10MB pasted

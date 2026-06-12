@@ -36,7 +36,9 @@ export default function PropertyImportPage() {
   const [csvError, setCsvError] = useState("");
 
   // XML state
+  const [xmlMode, setXmlMode] = useState("url"); // "url" or "paste"
   const [xmlUrl, setXmlUrl] = useState("");
+  const [xmlContent, setXmlContent] = useState("");
   const [xmlImporting, setXmlImporting] = useState(false);
   const [xmlResult, setXmlResult] = useState(null);
   const [xmlError, setXmlError] = useState("");
@@ -91,7 +93,10 @@ export default function PropertyImportPage() {
     setXmlImporting(true);
     setXmlError("");
     try {
-      const { data } = await api.post("/app/properties/import/xml", { feed_url: xmlUrl.trim() });
+      const payload = xmlMode === "url"
+        ? { feed_url: xmlUrl.trim() }
+        : { xml_content: xmlContent };
+      const { data } = await api.post("/app/properties/import/xml", payload);
       setXmlResult(data);
     } catch (err) {
       setXmlError(formatApiErrorDetail(err?.response?.data?.detail) || t("common.error"));
@@ -223,26 +228,67 @@ export default function PropertyImportPage() {
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
               <h2 className="font-semibold text-amber-900 mb-1">{t("import.xml_intro_title")}</h2>
               <p className="text-sm text-amber-800">{t("import.xml_intro_text")}</p>
+              <p className="text-xs text-amber-900 mt-2">
+                ✨ <strong>Formato Agestanet riconosciuto automaticamente.</strong> Se il tuo XML proviene da Agestanet, i 51 codici tipologia, le classi energetiche e i campi di sistema saranno mappati senza intervento.
+              </p>
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-xs uppercase tracking-widest text-stone-600">{t("import.xml_url_label")}</label>
-              <input
-                data-testid="xml-url-input"
-                value={xmlUrl}
-                onChange={(e) => setXmlUrl(e.target.value)}
-                placeholder={t("import.xml_url_placeholder")}
-                className="w-full px-3 py-2.5 border border-stone-300 rounded-md text-sm focus:outline-none focus:border-stone-900"
-              />
-              <p className="text-xs text-stone-500">{t("import.xml_url_hint")}</p>
+            {/* Sub-mode toggle */}
+            <div className="inline-flex border border-stone-300 rounded-md overflow-hidden text-xs uppercase tracking-widest">
+              <button
+                data-testid="xml-mode-url"
+                onClick={() => setXmlMode("url")}
+                className={`px-4 py-2 ${xmlMode === "url" ? "bg-stone-900 text-stone-50" : "bg-white text-stone-600 hover:bg-stone-50"}`}
+              >
+                URL feed
+              </button>
+              <button
+                data-testid="xml-mode-paste"
+                onClick={() => setXmlMode("paste")}
+                className={`px-4 py-2 border-l border-stone-300 ${xmlMode === "paste" ? "bg-stone-900 text-stone-50" : "bg-white text-stone-600 hover:bg-stone-50"}`}
+              >
+                Incolla XML
+              </button>
             </div>
+
+            {xmlMode === "url" && (
+              <div className="space-y-3">
+                <label className="block text-xs uppercase tracking-widest text-stone-600">{t("import.xml_url_label")}</label>
+                <input
+                  data-testid="xml-url-input"
+                  value={xmlUrl}
+                  onChange={(e) => setXmlUrl(e.target.value)}
+                  placeholder={t("import.xml_url_placeholder")}
+                  className="w-full px-3 py-2.5 border border-stone-300 rounded-md text-sm focus:outline-none focus:border-stone-900"
+                />
+                <p className="text-xs text-stone-500">{t("import.xml_url_hint")}</p>
+              </div>
+            )}
+
+            {xmlMode === "paste" && (
+              <div className="space-y-3">
+                <label className="block text-xs uppercase tracking-widest text-stone-600">
+                  Contenuto XML
+                </label>
+                <textarea
+                  data-testid="xml-content-input"
+                  value={xmlContent}
+                  onChange={(e) => setXmlContent(e.target.value)}
+                  placeholder={"<?xml version='1.0'?>\n<immobili>\n  <immobile>\n    <rif>...</rif>\n    ...\n  </immobile>\n</immobili>"}
+                  className="w-full px-3 py-3 border border-stone-300 rounded-md text-xs font-mono h-64 focus:outline-none focus:border-stone-900"
+                />
+                <p className="text-xs text-stone-500">
+                  Apri il file XML in un editor di testo (Blocco note, TextEdit), copia <strong>tutto il contenuto</strong> e incollalo qui sopra. Riconosciamo automaticamente il formato Agestanet.
+                </p>
+              </div>
+            )}
 
             {xmlError && <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">{xmlError}</p>}
 
             <button
               data-testid="xml-import-btn"
               onClick={importXml}
-              disabled={xmlImporting || !xmlUrl}
+              disabled={xmlImporting || (xmlMode === "url" ? !xmlUrl : !xmlContent)}
               className="px-6 py-3 bg-emerald-700 text-stone-50 text-xs uppercase tracking-widest font-medium rounded-md hover:bg-emerald-800 disabled:opacity-50"
             >
               {xmlImporting ? t("import.csv_importing") : t("import.xml_import_btn")}
@@ -250,13 +296,25 @@ export default function PropertyImportPage() {
 
             {xmlResult && (
               <div data-testid="xml-result" className="bg-emerald-50 border border-emerald-200 rounded-lg p-5">
-                <h3 className="font-semibold text-emerald-900 mb-2">✓ {t("import.csv_done_title")}</h3>
+                <h3 className="font-semibold text-emerald-900 mb-2">
+                  ✓ {t("import.csv_done_title")}
+                  {xmlResult.format_detected === "agestanet" && (
+                    <span className="ml-2 text-xs uppercase tracking-widest bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
+                      Agestanet
+                    </span>
+                  )}
+                </h3>
                 <p className="text-sm text-emerald-800">
                   {t("import.csv_done_imported", { imported: xmlResult.imported })}
                 </p>
                 {xmlResult.errors?.length > 0 && (
                   <details className="text-sm text-amber-900 mt-2">
                     <summary className="cursor-pointer font-medium">⚠ {t("import.csv_done_errors", { count: xmlResult.errors.length })}</summary>
+                    <ul className="mt-2 ml-4 list-disc">
+                      {xmlResult.errors.slice(0, 10).map((e, i) => (
+                        <li key={i}>{t("import.csv_error_row", { row: e.row, message: e.message })}</li>
+                      ))}
+                    </ul>
                   </details>
                 )}
                 <button onClick={() => nav(`/${lang}/app/properties`)} className="mt-4 px-5 py-2.5 bg-stone-900 text-stone-50 text-xs uppercase tracking-widest rounded-md hover:bg-stone-700">

@@ -78,8 +78,10 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
   - Backend `Property` model (16 tipi, 25 features, 6 stati), `ImportJob` audit
   - 9 endpoint REST + CSV template + bulk CSV/XML import
   - XML feed parsing Italian-friendly (Immobiliare.it/Idealista/generico)
-  - Frontend: PropertiesPage, PropertyFormPage (8 sezioni, 25 feature checkboxes), PropertyImportPage (CSV+XML wizard amichevole)
+  - **Parser DEDICATO Agestanet** (`import_agestanet.py`): mappatura 51 codici tipologia, classi energetiche DL 192/DL 90/2013, condizioni, riscaldamento, fino a 15 foto. Auto-detection: se XML contiene `cod_tipologia` o `id_agenzia` → parser Agestanet attivato automaticamente.
+  - Frontend: PropertiesPage, PropertyFormPage (8 sezioni, 25 feature checkboxes), PropertyImportPage (CSV+XML wizard + **modalità "Incolla XML"** per casi in cui non è disponibile URL pubblico)
   - i18n 90+ chiavi nuove, KPI properties_active reale, sidebar Immobili sbloccata
+  - Testato E2E con XML formato Agestanet reale (Villa Mascalucia, App. Acireale, App. Catania) → 3/3 importati senza errori
 - [ ] M2.S3 — CRM clienti + Richieste
 - [ ] M2.S4 — Matching engine
 - [ ] M2.S5 — Multiposting XML portali

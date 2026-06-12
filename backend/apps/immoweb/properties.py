@@ -25,6 +25,7 @@ from shared.models.property import (
     CSVImportPayload,
     XMLImportPayload,
 )
+from apps.immoweb.import_agestanet import detect_and_parse as detect_agestanet
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/properties", tags=["properties"])
@@ -406,21 +407,73 @@ async def import_xml_feed(
     payload: XMLImportPayload,
     user: dict = Depends(require_roles("agency_admin", "agent", "super_admin")),
 ):
-    """Import properties from a public XML feed URL.
+    """Import properties from a public XML feed URL or pasted XML content.
 
-    Supports common Italian portal feed formats (Immobiliare.it, Idealista, generic).
+    Auto-detects Agestanet schema and uses dedicated parser if found.
+    Otherwise falls back to generic Italian portal XML parsing.
     """
     agency_id = await _require_agency(user)
     db = Database.get()
 
-    try:
-        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-            r = await client.get(payload.feed_url)
-            r.raise_for_status()
-            xml_text = r.text
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"feed_fetch_error: {e}")
+    if not payload.feed_url and not payload.xml_content:
+        raise HTTPException(status_code=400, detail="feed_url_or_xml_required")
 
+    source_label = payload.feed_url or "pasted-xml"
+
+    # Fetch XML content
+    if payload.xml_content:
+        xml_text = payload.xml_content
+    else:
+        try:
+            async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+                r = await client.get(payload.feed_url)
+                r.raise_for_status()
+                xml_text = r.text
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"feed_fetch_error: {e}")
+
+    # Try Agestanet dedicated parser first
+    is_agestanet, agestanet_props, agestanet_errors = detect_agestanet(xml_text, agency_id, user["id"])
+
+    if is_agestanet:
+        # Use Agestanet-parsed properties
+        job = ImportJob(
+            agency_id=agency_id,
+            source="xml_feed",
+            source_label=f"[Agestanet] {source_label}",
+            status="processing",
+            total_rows=len(agestanet_props) + len(agestanet_errors),
+            initiated_by=user["id"],
+        )
+        await db.import_jobs.insert_one(job.model_dump())
+        docs = [p.model_dump() for p in agestanet_props]
+        if docs:
+            await db.properties.insert_many(docs)
+        final_status = (
+            "completed_with_errors" if agestanet_errors and docs else
+            "failed" if agestanet_errors and not docs else
+            "completed"
+        )
+        await db.import_jobs.update_one(
+            {"id": job.id},
+            {"$set": {
+                "imported_count": len(docs),
+                "error_count": len(agestanet_errors),
+                "errors": agestanet_errors[:200],
+                "status": final_status,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }},
+        )
+        return {
+            "job_id": job.id,
+            "imported": len(docs),
+            "total_rows": len(agestanet_props) + len(agestanet_errors),
+            "errors": agestanet_errors,
+            "status": final_status,
+            "format_detected": "agestanet",
+        }
+
+    # Generic XML fallback
     try:
         root = ET.fromstring(xml_text)
     except ET.ParseError as e:
