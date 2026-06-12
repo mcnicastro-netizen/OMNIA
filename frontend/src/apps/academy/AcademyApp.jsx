@@ -1,16 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
-import MobileNav from "../../shared/components/MobileNav";
+import TopNav from "../../shared/components/TopNav";
 import Brand from "../../shared/components/Brand";
 
 export default function AcademyApp() {
-  const { t, i18n } = useTranslation();
-  const lang = (i18n.language || "it").slice(0, 2);
-
-  const navLinks = [{ to: `/${lang}`, label: t("nav.landing") }];
+  const { t } = useTranslation();
 
   return (
     <div
@@ -18,21 +13,7 @@ export default function AcademyApp() {
       className="min-h-screen bg-[#fdf6e3] text-stone-900 overflow-x-hidden"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      <header className="border-b border-amber-900/20">
-        <div className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 max-w-screen-2xl mx-auto">
-          <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-            <Brand>OMNIA</Brand><span className="text-amber-700">·</span>
-            <Brand className="font-light">learn</Brand>
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-700">
-            {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} className="hover:text-amber-700">{l.label}</Link>
-            ))}
-            <LanguageSwitcher />
-          </nav>
-          <MobileNav lang={lang} links={navLinks} theme="cream" />
-        </div>
-      </header>
+      <TopNav current="learn" theme="cream" suffix="learn" />
 
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto">
         <div className="max-w-5xl">

@@ -1,16 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
-import MobileNav from "../../shared/components/MobileNav";
+import TopNav from "../../shared/components/TopNav";
 import Brand from "../../shared/components/Brand";
 
 export default function ImmocloudApp() {
-  const { t, i18n } = useTranslation();
-  const lang = (i18n.language || "it").slice(0, 2);
-
-  const navLinks = [{ to: `/${lang}`, label: t("nav.landing") }];
+  const { t } = useTranslation();
 
   return (
     <div
@@ -18,21 +13,7 @@ export default function ImmocloudApp() {
       className="min-h-screen bg-[#0e1419] text-stone-100 overflow-x-hidden"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      <header className="border-b border-stone-800">
-        <div className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 max-w-screen-2xl mx-auto">
-          <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-            <Brand>OMNIA</Brand><span className="text-stone-500">·</span>
-            <Brand className="font-light">cloud</Brand>
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-400">
-            {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} className="hover:text-stone-100">{l.label}</Link>
-            ))}
-            <LanguageSwitcher />
-          </nav>
-          <MobileNav lang={lang} links={navLinks} theme="dark" />
-        </div>
-      </header>
+      <TopNav current="cloud" theme="dark" suffix="cloud" />
 
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto">
         <div className="max-w-5xl">

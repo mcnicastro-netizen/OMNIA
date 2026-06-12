@@ -15,10 +15,11 @@
   "nav": {
     "landing": "Inicio",
     "immocloud": "Buscar casa",
-    "immoweb": "Agencia",
-    "academy": "Academia",
+    "immoweb": "Para agencias",
+    "academy": "Formación",
     "login": "Iniciar sesión",
-    "register": "Registrarse"
+    "register": "Registrarse",
+    "back_to_home": "Volver a OMNIA"
   },
   "landing": {
     "hero_title": "El ecosistema inmobiliario integrado",

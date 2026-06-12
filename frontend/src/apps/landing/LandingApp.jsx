@@ -1,9 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
-import MobileNav from "../../shared/components/MobileNav";
+import TopNav from "../../shared/components/TopNav";
 import Brand from "../../shared/components/Brand";
 
 /**
@@ -12,12 +11,6 @@ import Brand from "../../shared/components/Brand";
 export default function LandingApp() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
-
-  const navLinks = [
-    { to: `/${lang}/cloud`, label: t("nav.immocloud") },
-    { to: `/${lang}/app`, label: t("nav.immoweb") },
-    { to: `/${lang}/learn`, label: t("nav.academy") },
-  ];
 
   const pillars = [
     {
@@ -49,27 +42,7 @@ export default function LandingApp() {
       className="min-h-screen bg-stone-50 text-stone-900 overflow-x-hidden"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      {/* Header */}
-      <header className="border-b border-stone-200">
-        <div className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 max-w-screen-2xl mx-auto">
-          <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-            <Brand>OMNIA</Brand><span className="text-stone-400">.</span>
-          </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
-            {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} className="hover:text-stone-900">
-                {l.label}
-              </Link>
-            ))}
-            <LanguageSwitcher />
-          </nav>
-
-          {/* Mobile nav */}
-          <MobileNav lang={lang} links={navLinks} theme="light" />
-        </div>
-      </header>
+      <TopNav current="landing" theme="light" />
 
       {/* Hero */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto grid md:grid-cols-12 gap-10 md:gap-12">

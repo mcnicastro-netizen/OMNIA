@@ -15,10 +15,11 @@
   "nav": {
     "landing": "Home",
     "immocloud": "Find a home",
-    "immoweb": "Agency",
-    "academy": "Academy",
+    "immoweb": "For agencies",
+    "academy": "Training",
     "login": "Sign in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "back_to_home": "Back to OMNIA"
   },
   "landing": {
     "hero_title": "The integrated real estate ecosystem",

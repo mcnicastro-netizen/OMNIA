@@ -1,19 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import HealthBadge from "../../shared/components/HealthBadge";
-import MobileNav from "../../shared/components/MobileNav";
+import TopNav from "../../shared/components/TopNav";
 import Brand from "../../shared/components/Brand";
 
 export default function ImmowebApp() {
-  const { t, i18n } = useTranslation();
-  const lang = (i18n.language || "it").slice(0, 2);
-
-  const navLinks = [
-    { to: `/${lang}`, label: t("nav.landing") },
-    { to: `/${lang}/login`, label: t("nav.login") },
-  ];
+  const { t } = useTranslation();
 
   return (
     <div
@@ -21,21 +13,7 @@ export default function ImmowebApp() {
       className="min-h-screen bg-stone-100 text-stone-900 overflow-x-hidden"
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
-      <header className="border-b border-stone-300 bg-white">
-        <div className="flex items-center justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 md:py-6 max-w-screen-2xl mx-auto">
-          <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-            <Brand>OMNIA</Brand><span className="text-stone-400">·</span>
-            <Brand className="font-light">app</Brand>
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-sans uppercase tracking-widest text-stone-600">
-            {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} className="hover:text-stone-900">{l.label}</Link>
-            ))}
-            <LanguageSwitcher />
-          </nav>
-          <MobileNav lang={lang} links={navLinks} theme="light" />
-        </div>
-      </header>
+      <TopNav current="app" theme="light" suffix="app" />
 
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto">
         <div className="max-w-5xl">
