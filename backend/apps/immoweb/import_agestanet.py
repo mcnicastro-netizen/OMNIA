@@ -128,6 +128,15 @@ def parse_agestanet_item(elem: ET.Element, agency_id: str, user_id: str) -> tupl
         operation = CONTRATTO_MAP.get(contratto, "sale")
 
         title = _t(elem, "titolo") or _t(elem, "rif") or "Immobile"
+        # If title is too short (e.g. placeholder like "01", "w1"), build one from data
+        if len(title.strip()) < 3:
+            tipo_label = _t(elem, "tipologia") or "Immobile"
+            city = _t(elem, "comune") or ""
+            ref = _t(elem, "rif") or ""
+            built = f"{tipo_label} {city}".strip()
+            if ref:
+                built = f"{built} ({ref})".strip()
+            title = built if len(built) >= 3 else f"Immobile rif. {ref or 'sconosciuto'}"
         city = _t(elem, "comune") or _t(elem, "localita") or "Sconosciuto"
 
         # Build features from boolean fields
