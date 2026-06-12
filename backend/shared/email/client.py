@@ -52,6 +52,11 @@ SUBJECTS = {
         "en": "Reset your OMNIA password",
         "es": "Restablece tu contraseña OMNIA",
     },
+    "agency_invite": {
+        "it": "Sei stato invitato a unirti a {{agency_name}} su OMNIA",
+        "en": "You have been invited to join {{agency_name}} on OMNIA",
+        "es": "Has sido invitado a unirte a {{agency_name}} en OMNIA",
+    },
 }
 
 
@@ -63,7 +68,8 @@ async def send_email(
 ) -> dict:
     """Send a localized transactional email via Resend."""
     variables = variables or {}
-    subject = SUBJECTS.get(template, {}).get(lang) or SUBJECTS.get(template, {}).get("it") or "OMNIA"
+    subject_raw = SUBJECTS.get(template, {}).get(lang) or SUBJECTS.get(template, {}).get("it") or "OMNIA"
+    subject = _render(subject_raw, variables)
     html = _render(_read_template(template, lang), variables)
 
     if not _configure_resend():

@@ -19,11 +19,15 @@ import LandingApp from "@/apps/landing/LandingApp";
 import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
 import ImmowebApp from "@/apps/immoweb/ImmowebApp";
 import DashboardPage from "@/apps/immoweb/DashboardPage";
+import OnboardingWizard from "@/apps/immoweb/OnboardingWizard";
+import MembersPage from "@/apps/immoweb/MembersPage";
+import SettingsPage from "@/apps/immoweb/SettingsPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
 import RegisterPage from "@/apps/auth/RegisterPage";
 import ForgotPasswordPage from "@/apps/auth/ForgotPasswordPage";
+import AcceptInvitePage from "@/apps/auth/AcceptInvitePage";
 import ProtectedRoute from "@/shared/components/ProtectedRoute";
 
 function LangSync({ children }) {
@@ -86,6 +90,7 @@ function App() {
                   <Route path="login" element={<LoginPage />} />
                   <Route path="register" element={<RegisterPage />} />
                   <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="accept-invite" element={<AcceptInvitePage />} />
 
                   {/* B2C portal */}
                   <Route path="cloud/*" element={<ImmocloudApp />} />
@@ -93,10 +98,34 @@ function App() {
                   {/* B2B agency app */}
                   <Route path="app" element={<ImmowebApp />} />
                   <Route
+                    path="app/onboarding"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
+                        <OnboardingWizard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
                     path="app/dashboard"
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <DashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/members"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <MembersPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/settings"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
+                        <SettingsPage />
                       </ProtectedRoute>
                     }
                   />

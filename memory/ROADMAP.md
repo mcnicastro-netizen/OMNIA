@@ -7,21 +7,21 @@
 
 ## Stato attuale
 
-🟢 **M1 COMPLETATA** — Tutte e 4 le sessioni done. Pronti per M2.
+🟡 **M2 IN CORSO** — M2.S1 done, prossima M2.S2 (CRUD Immobili 16 tipi)
 
 ```
 M1  M2  M3  M4  M5  M6
-✅  ⏸️  ⏸️  ⏸️  ⏸️  ⏸️
-100% 0% 0%  0%  0%  0%
+✅  🟡  ⏸️  ⏸️  ⏸️  ⏸️
+100% 17% 0%  0%  0%  0%
 ```
 
 ---
 
 ## Milestone in corso
 
-**M1 — Foundation & Architettura** ✅ COMPLETATA (4 di 4 sessioni)
+**M2 — ImmoWeb MVP (Agency CRM)** (1 di 6 sessioni completate)
 
-Prossima azione: **M2.S1 — Dashboard agenzia + onboarding**
+Prossima azione: **M2.S2 — CRUD Immobili completo (16 tipologie)**
 
 ---
 
@@ -63,7 +63,17 @@ Prossima azione: **M2.S1 — Dashboard agenzia + onboarding**
   - Deploy readiness check: ✅ PASS
 
 ### M2 — ImmoWeb MVP (6 sessioni)
-- [ ] M2.S1 — Dashboard agenzia + onboarding
+- [x] **M2.S1 — Dashboard agenzia + onboarding** ✅ (12 Giu 2026)
+  - Backend: `Agency` model (fiscal/address/contact/branding) + `AgencyInvite` model con magic-link token
+  - 9 endpoint nuovi: POST/GET/PATCH `/app/agencies`, POST/GET/DELETE `/app/agencies/me/invites`, GET `/app/agencies/me/members`, GET `/app/invites/verify`, POST `/app/invites/accept`, GET `/app/dashboard/kpis`
+  - Magic-link flow completo: invito → email Resend → verify pubblico → accept (set password) → auto-login
+  - Slug auto-generato per agenzia (con dedup)
+  - Indici Mongo: `agencies.slug` (unique), `agency_invites.token` (unique), compound `(agency_id, status)`, `(agency_id, email)`
+  - Template email IT/EN/ES per invito agenzia (Resend)
+  - Frontend: `OnboardingWizard` 4-step (Identity → Fiscal → Branding → Done), `AgencyShell` con sidebar navy + topbar, `DashboardPage` con 6 KPI cards (2 reali: members/invites; 4 locked M2.S2/S3/S4), `MembersPage` con tab Attivi/Inviti + invite modal + revoca, `SettingsPage` per edit agenzia, `AcceptInvitePage` pubblica
+  - 5 nuovi data-testid namespaces (`onb-*`, `kpi-*`, `sidebar-nav-*`, `invite-*`, `accept-*`)
+  - i18n IT/EN/ES esteso (75+ chiavi nuove)
+  - Routing: redirect automatico `agency_admin` senza agency → `/app/onboarding`
 - [ ] M2.S2 — CRUD Immobili completo
 - [ ] M2.S3 — CRM clienti + Richieste
 - [ ] M2.S4 — Matching engine

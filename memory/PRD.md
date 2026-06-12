@@ -64,6 +64,17 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 - ✅ Workflow collaborazione 5gg (documentato, da riportare)
 - ✅ Valutatore GIS con 27.228 zone OMI (documentato, da riportare)
 
+### M2 — ImmoWeb MVP (Agency CRM)
+- ✅ **M2.S1 (12 Giu 2026)** — Dashboard agenzia + onboarding:
+  - Backend `Agency` model (fiscal/address/contact/branding) + `AgencyInvite` (magic-link)
+  - 9 endpoint REST `/api/app/agencies/*`, `/api/app/invites/*`, `/api/app/dashboard/kpis`
+  - Magic-link flow E2E: invito → email Resend → verify → set password → auto-login
+  - Frontend: `OnboardingWizard` 4-step, `AgencyShell` (sidebar navy + topbar), `DashboardPage` con KPI grid, `MembersPage` (tab Attivi/Inviti + modal invito + revoca), `SettingsPage`, `AcceptInvitePage`
+  - 3 template email IT/EN/ES per invito agenzia
+  - Indici DB ottimizzati (slug unique, token unique, compound agency_id+status)
+  - 75+ chiavi i18n aggiunte
+  - Tested via curl end-to-end + Playwright UI flow
+
 ### M1 — Foundation
 - ✅ **M1.S1 (10 Giu 2026)** — 3 decisioni architetturali approvate:
   - Monorepo Turborepo (D-011)
