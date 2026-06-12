@@ -7,19 +7,34 @@
 
 ## Stato attuale
 
-🟡 **M2 IN CORSO** — M2.S1+S2 done (33%), prossima M2.S3 (CRM clienti)
+🟡 **M2 IN CORSO** — M2.S1 + S2 + S2bis done (~38%), prossima M2.S3 (CRM clienti)
 
 ```
 M1  M2  M3  M4  M5  M6
 ✅  🟡  ⏸️  ⏸️  ⏸️  ⏸️
-100% 33% 0%  0%  0%  0%
+100% 38% 0%  0%  0%  0%
 ```
+
+### ⏸️ SESSIONE INTERROTTA il 12 Giu 2026 — Ripresa da qui:
+
+**Cosa è pronto da testare/caricare sul Founder PREVIEW**:
+- Preview URL: https://audit-tool-12.preview.emergentagent.com/it/login
+- Login: `mcnicastro@gmail.com` / `Forzainter2026.`
+- Flusso da testare: Login → Onboarding → Crea Agenzia → Properties → Nuovo Immobile (con foto JPEG drag&drop)
+- DB locale è stato **pulito** alla fine sessione → pronto per primo onboarding pulito
+
+**Cosa il Founder deve ancora fare (in ordine, senza fretta)**:
+1. Caricare 1-6 immobili reali sul PREVIEW con foto per validare UX
+2. Quando soddisfatto: Save to GitHub + **UN SOLO Deploy** (M2.S1+S2+S2bis tutto insieme — risparmia crediti)
+3. Tornare per **M2.S3 — CRM clienti + lead**
+
+**Vincolo importante del Founder**: usare deploy con parsimonia (consuma crediti).
 
 ---
 
 ## Milestone in corso
 
-**M2 — ImmoWeb MVP (Agency CRM)** (2 di 6 sessioni completate)
+**M2 — ImmoWeb MVP (Agency CRM)** (3 di 6 sessioni)
 
 Prossima azione: **M2.S3 — CRM clienti + matching engine**
 
