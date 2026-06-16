@@ -15,7 +15,16 @@ export default function SettingsPage() {
     api
       .get("/app/agencies/me")
       .then((r) => setForm(r.data))
-      .catch(() => setForm({ display_name: "", fiscal: {}, contact: {}, address: {}, branding: {} }));
+      .catch(() =>
+        setForm({
+          display_name: "",
+          fiscal: {},
+          contact: {},
+          address: {},
+          branding: {},
+          website: { mode: null, external_url: "", template_id: "" },
+        }),
+      );
   }, []);
 
   if (!form) {
@@ -31,6 +40,12 @@ export default function SettingsPage() {
     else setForm({ ...form, [group]: { ...form[group], [key]: value } });
   };
 
+  const setWebsiteMode = (mode) => {
+    // toggle off if clicked again
+    const next = form.website?.mode === mode ? null : mode;
+    setForm({ ...form, website: { ...(form.website || {}), mode: next } });
+  };
+
   const save = async (e) => {
     e.preventDefault();
     setError("");
@@ -40,16 +55,27 @@ export default function SettingsPage() {
         const out = {};
         for (const [k, v] of Object.entries(obj || {})) {
           if (typeof v === "string" && v.trim() === "") continue;
+          if (v === null || v === undefined) continue;
           out[k] = v;
         }
         return out;
       };
+      const website = { ...(form.website || {}) };
+      // strip empty
+      const websiteClean = cleanGroup(website);
+      // keep `mode` even when null? It must be explicit so backend can save null.
+      if (website.mode === null || website.mode === undefined) {
+        websiteClean.mode = null;
+      } else {
+        websiteClean.mode = website.mode;
+      }
       const payload = {
         display_name: form.display_name,
         fiscal: cleanGroup(form.fiscal),
         address: cleanGroup(form.address),
         contact: cleanGroup(form.contact),
         branding: cleanGroup(form.branding),
+        website: websiteClean,
       };
       const { data } = await api.patch("/app/agencies/me", payload);
       setForm(data);
@@ -61,6 +87,8 @@ export default function SettingsPage() {
       setSaving(false);
     }
   };
+
+  const websiteMode = form.website?.mode || null;
 
   return (
     <AgencyShell current="settings">
@@ -85,12 +113,13 @@ export default function SettingsPage() {
                 className="form-input"
               />
             </FieldRow>
-            <FieldRow label={t("onboarding.tagline")}>
+            <FieldRow label={t("settings.tagline")}>
               <input
                 data-testid="settings-tagline"
                 value={form.branding?.tagline || ""}
                 onChange={(e) => update("branding", "tagline", e.target.value)}
                 className="form-input"
+                placeholder={t("settings.tagline_placeholder")}
               />
             </FieldRow>
           </Section>
@@ -153,32 +182,115 @@ export default function SettingsPage() {
             </div>
           </Section>
 
-          <Section label={t("onboarding.step_branding")}>
-            <FieldRow label={t("onboarding.logo_url")}>
-              <input
-                value={form.branding?.logo_url || ""}
-                onChange={(e) => update("branding", "logo_url", e.target.value)}
-                className="form-input"
-              />
-            </FieldRow>
-            <div className="grid grid-cols-2 gap-4">
-              <FieldRow label={t("onboarding.primary_color")}>
+          <Section label={t("settings.contact_label")}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FieldRow label={t("onboarding.contact_email")}>
                 <input
-                  type="color"
-                  value={form.branding?.primary_color || "#0B1E3F"}
-                  onChange={(e) => update("branding", "primary_color", e.target.value)}
-                  className="h-10 w-full border border-stone-300 rounded cursor-pointer"
+                  type="email"
+                  value={form.contact?.email || ""}
+                  onChange={(e) => update("contact", "email", e.target.value)}
+                  className="form-input"
                 />
               </FieldRow>
-              <FieldRow label={t("onboarding.accent_color")}>
+              <FieldRow label={t("onboarding.contact_phone")}>
                 <input
-                  type="color"
-                  value={form.branding?.accent_color || "#1F6B5C"}
-                  onChange={(e) => update("branding", "accent_color", e.target.value)}
-                  className="h-10 w-full border border-stone-300 rounded cursor-pointer"
+                  value={form.contact?.phone || ""}
+                  onChange={(e) => update("contact", "phone", e.target.value)}
+                  className="form-input"
                 />
               </FieldRow>
             </div>
+          </Section>
+
+          {/* WEBSITE — the new simplified section */}
+          <Section label={t("settings.website_label")}>
+            <p className="text-sm text-stone-600 mb-4">
+              {t("settings.website_intro")}
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button
+                type="button"
+                data-testid="website-mode-external"
+                onClick={() => setWebsiteMode("external")}
+                className={`text-left p-5 border rounded-lg transition ${
+                  websiteMode === "external"
+                    ? "border-emerald-700 bg-emerald-50/60 ring-2 ring-emerald-100"
+                    : "border-stone-300 bg-white hover:border-stone-500"
+                }`}
+              >
+                <p className="text-xs uppercase tracking-widest text-stone-500 mb-1">
+                  {t("settings.website_external_tag")}
+                </p>
+                <p className="font-semibold text-stone-900 mb-1">
+                  {t("settings.website_external_title")}
+                </p>
+                <p className="text-sm text-stone-600">
+                  {t("settings.website_external_desc")}
+                </p>
+              </button>
+
+              <button
+                type="button"
+                data-testid="website-mode-template"
+                onClick={() => setWebsiteMode("omnia_template")}
+                className={`text-left p-5 border rounded-lg transition ${
+                  websiteMode === "omnia_template"
+                    ? "border-emerald-700 bg-emerald-50/60 ring-2 ring-emerald-100"
+                    : "border-stone-300 bg-white hover:border-stone-500"
+                }`}
+              >
+                <p className="text-xs uppercase tracking-widest text-stone-500 mb-1">
+                  {t("settings.website_template_tag")}
+                </p>
+                <p className="font-semibold text-stone-900 mb-1">
+                  {t("settings.website_template_title")}
+                </p>
+                <p className="text-sm text-stone-600">
+                  {t("settings.website_template_desc")}
+                </p>
+              </button>
+            </div>
+
+            {websiteMode === "external" && (
+              <div data-testid="website-external-pane" className="mt-5 space-y-3 bg-stone-50 border border-stone-200 rounded-lg p-5">
+                <FieldRow label={t("settings.website_external_url_label")}>
+                  <input
+                    data-testid="website-external-url"
+                    type="url"
+                    value={form.website?.external_url || ""}
+                    onChange={(e) => update("website", "external_url", e.target.value)}
+                    placeholder="https://www.tuoagenzia.it"
+                    className="form-input"
+                  />
+                </FieldRow>
+                <p className="text-xs text-stone-600">
+                  {t("settings.website_external_feed_hint")}
+                </p>
+              </div>
+            )}
+
+            {websiteMode === "omnia_template" && (
+              <div data-testid="website-template-pane" className="mt-5 space-y-3 bg-stone-50 border border-stone-200 rounded-lg p-5">
+                <p className="text-sm text-stone-700">
+                  {t("settings.website_template_pane_text")}
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+                  {["minimal", "elegant", "bold"].map((tpl) => (
+                    <div
+                      key={tpl}
+                      className="aspect-[4/3] border border-stone-300 rounded-md bg-white flex items-center justify-center text-xs uppercase tracking-widest text-stone-400"
+                    >
+                      {tpl}
+                      <span className="ml-2 text-[9px] text-amber-700">{t("settings.website_template_soon")}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-stone-500 mt-2">
+                  {t("settings.website_template_soon_full")}
+                </p>
+              </div>
+            )}
           </Section>
 
           {error && (

@@ -25,6 +25,8 @@ import SettingsPage from "@/apps/immoweb/SettingsPage";
 import PropertiesPage from "@/apps/immoweb/PropertiesPage";
 import PropertyFormPage from "@/apps/immoweb/PropertyFormPage";
 import PropertyImportPage from "@/apps/immoweb/PropertyImportPage";
+import ClientsPage from "@/apps/immoweb/ClientsPage";
+import ClientFormPage from "@/apps/immoweb/ClientFormPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
@@ -161,6 +163,32 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <PropertyFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  {/* Clients (CRM) */}
+                  <Route
+                    path="app/clients"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <ClientsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/clients/new"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <ClientFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/clients/:id"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <ClientFormPage />
                       </ProtectedRoute>
                     }
                   />

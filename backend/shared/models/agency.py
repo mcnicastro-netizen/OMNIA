@@ -45,11 +45,24 @@ class AgencyContact(OmniaBaseModel):
 
 
 class AgencyBranding(OmniaBaseModel):
-    """Visual branding for white-label (full white-label arrives in M2.S6)."""
+    """Visual branding (logo/colors arrive properly in M2.S6 white-label)."""
     logo_url: Optional[str] = Field(default=None, max_length=500)
     primary_color: str = Field(default="#0B1E3F", pattern=r"^#[0-9a-fA-F]{6}$")
     accent_color: str = Field(default="#1F6B5C", pattern=r"^#[0-9a-fA-F]{6}$")
     tagline: Optional[str] = Field(default=None, max_length=200)
+
+
+# Website strategy: agencies either already have a site (we feed it via XML)
+# or they want one built by OMNIA (template gallery, custom domain — M2.S6).
+WebsiteMode = Literal["external", "omnia_template"]
+
+
+class AgencyWebsite(OmniaBaseModel):
+    """How the agency wants its public website handled."""
+    mode: Optional[WebsiteMode] = None
+    external_url: Optional[str] = Field(default=None, max_length=300)
+    template_id: Optional[str] = Field(default=None, max_length=60)
+    custom_domain: Optional[str] = Field(default=None, max_length=120)
 
 
 class AgencyInDB(TimestampedModel):
@@ -61,6 +74,7 @@ class AgencyInDB(TimestampedModel):
     address: AgencyAddress = Field(default_factory=AgencyAddress)
     contact: AgencyContact = Field(default_factory=AgencyContact)
     branding: AgencyBranding = Field(default_factory=AgencyBranding)
+    website: AgencyWebsite = Field(default_factory=AgencyWebsite)
     plan: AgencyPlan = "free"
     owner_id: str  # user_id of the agency_admin who created it
     is_active: bool = True
@@ -76,6 +90,7 @@ class AgencyPublic(OmniaBaseModel):
     address: AgencyAddress
     contact: AgencyContact
     branding: AgencyBranding
+    website: AgencyWebsite = Field(default_factory=AgencyWebsite)
     plan: AgencyPlan
     owner_id: str
     is_active: bool
@@ -98,6 +113,7 @@ class AgencyUpdate(OmniaBaseModel):
     address: Optional[AgencyAddress] = None
     contact: Optional[AgencyContact] = None
     branding: Optional[AgencyBranding] = None
+    website: Optional[AgencyWebsite] = None
     onboarding_completed: Optional[bool] = None
 
 

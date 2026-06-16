@@ -1,0 +1,40 @@
+{
+  "summary": "Tested M2.S3 CRM Clients module (backend CRUD/filters/CSV) + Settings page Sito web agenzia section (external vs OMNIA template). 15/15 backend pytest tests PASSED. All 7 UI flows PASSED (login, clients list, create with full preferences, open+update status, search+filters, delete, settings persistence on reload). One minor fix applied: added missing data-testid='client-delete-btn' to the delete button in ClientFormPage.jsx.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_clients_crm.py",
+    "/app/test_reports/pytest/clients_crm.xml"
+  ],
+  "action_items": [
+    "Minor: ClientFormPage renders inputs with value={null} when a saved client has null numeric fields (e.g. price_max, surface_max). Console warning: \"`value` prop on input should not be null. Consider using an empty string\". Coerce null -> '' on hydration in setForm() for SearchPreferences fields. Non-blocking.",
+    "Optional: Add data-testid on filter 'Cerca' button and on 'Esci' (logout) link for future regression coverage."
+  ],
+  "critical_code_review_comments": [
+    "clients.py:103 — `update_client` uses model_dump(exclude_unset=True) but then iterates and skips None values; this means clients cannot explicitly clear a field by sending null. Acceptable for PATCH semantics but worth documenting.",
+    "clients.py:215 — `db.clients.insert_many(docs)` is not wrapped in try/except; on duplicate-key or partial failure, the whole batch aborts but the API still returns imported=0 errors=[]. Consider per-doc insert_one to give granular error reporting for the CSV importer.",
+    "ClientFormPage.jsx is 473 lines — close to the 700-line guideline but contains static constants (PROPERTY_TYPES, FEATURES, etc.) that could be extracted to /shared/constants/clientPreferences.js for reuse by future Match (M2.S4) module.",
+    "_strip() correctly excludes _id from all client responses. agency_id enforced on every query — multi-tenant isolation verified."
+  ],
+  "updated_files": [
+    "/app/frontend/src/apps/immoweb/ClientFormPage.jsx",
+    "/app/backend/tests/test_clients_crm.py"
+  ],
+  "success_rate": {
+    "backend": "100%",
+    "frontend": "100%"
+  },
+  "test_credentials": "mcnicastro@gmail.com / Forzainter2026. (super_admin, linked to Test OMNIA Agency)",
+  "seed_data_creation": "Created and then deleted TEST_UIMarco via UI; created/cleaned up TEST_Marco, TEST_Anna, TEST_Luca via pytest. Cleanup test removes all TEST_ prefixed clients. After run: list shows Giulia Verdi (seller) and Luca Bianchi (buyer/Idealista) which were pre-existing.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest file at /app/backend/tests/test_clients_crm.py is reusable as regression suite (15 tests, ~2s). It self-cleans TEST_ prefixed data. Agency website mode is left as 'external' with URL https://www.testagenzia.it after test run — restore if needed. Sidebar has 'Match' locked (intentional for M2.S4). The 'matches' route is reserved.",
+  "rca of the issue": "Single minor finding (already fixed): the delete button in ClientFormPage was missing data-testid='client-delete-btn'. Functionality worked via text selector; added testid for stable automation."
+}
