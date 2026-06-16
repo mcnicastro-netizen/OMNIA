@@ -17,10 +17,24 @@ M1  M2  M3  M4  M5  M6
 
 ### ⏸️ SESSIONE INTERROTTA il 12 Giu 2026 — Ripresa da qui:
 
-**🚨 P0 PRIMA COSA AL RIENTRO**: Founder ha segnalato labels strani in Settings + sidebar (es. "Unione" invece di "Immobili", "Consiglio" invece di "Clienti", "Dati quadrati" invece di "Dati fiscali", "Invece cibi" invece di "Colore primario"). Probabile Chrome auto-translate (già visto con Aruba). Azione:
-1. Chiedere al Founder di provare "Mostra originale" sulla pagina
-2. Se persiste → audit completo `/app/frontend/src/shared/i18n/locales/it.json` per chiavi mancanti/duplicati e fix labels
-3. URL preview pagina Settings da ispezionare: `https://audit-tool-12.preview.emergentagent.com/it/app/settings`
+**🚨 P0 PRIMA COSA AL RIENTRO**:
+
+1. **Auto-translate Chrome confermato**: la maggior parte dei labels strani era Chrome (Founder ha provato "Mostra originale" e si è risolto da solo per Sidebar+Settings).
+
+2. **REVISIONE STRATEGICA SETTINGS (feedback Founder 12 Giu)**:
+
+   ❌ **RIMUOVERE da Settings**: color picker "Colore primario/d'accento". Sono confusi per agenzie non-grafiche.
+
+   ✅ **NUOVA LOGICA WHITE LABEL** (impatta M2.S6):
+   - **Caso A — Agenzia con sito esistente** (es. nicastroimmobiliare.it): OMNIA spinge gli immobili via **feed XML generato** (come Agestanet oggi). Settings deve solo gestire dati fiscali + URL del sito + eventuali credenziali. Niente branding/colori.
+   - **Caso B — Agenzia senza sito**: OMNIA offre **galleria di template completi pronti** (5-10 design professionali con layout+colori+font+sezioni+form contatti già curati). L'agenzia ne sceglie uno, niente color picker.
+
+   📋 **Da definire con Founder al rientro**:
+   - Per caso A: solo feed XML generato (M2.S5) o anche plugin WordPress / embed code?
+   - Per caso B: sottodominio omnia o dominio proprio collegabile?
+   - Template: design_agent_full_stack li genera tutti o partiamo con 1-2 e ne aggiungiamo?
+
+3. **Logo upload**: probabilmente NON serve nemmeno (se sito già esistente → logo è già lì; se template OMNIA → logo viene caricato come parte del template editor). Da confermare.
 
 **Cosa è pronto da testare/caricare sul Founder PREVIEW**:
 - Preview URL: https://audit-tool-12.preview.emergentagent.com/it/login
