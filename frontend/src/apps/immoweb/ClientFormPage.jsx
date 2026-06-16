@@ -83,10 +83,20 @@ export default function ClientFormPage() {
     setLoading(true);
     api.get(`/app/clients/${id}`).then((r) => {
       const d = r.data;
+      const incomingPrefs = d.preferences || {};
+      // Coerce null numerics → "" so controlled inputs don't warn.
+      const numKeys = [
+        "price_min", "price_max", "surface_min", "surface_max",
+        "rooms_min", "rooms_max", "bedrooms_min", "bathrooms_min",
+      ];
+      const safePrefs = { ...emptyPrefs, ...incomingPrefs };
+      numKeys.forEach((k) => {
+        if (safePrefs[k] == null) safePrefs[k] = "";
+      });
       setForm({
         ...empty,
         ...d,
-        preferences: { ...emptyPrefs, ...(d.preferences || {}) },
+        preferences: safePrefs,
       });
       setLoading(false);
     });
