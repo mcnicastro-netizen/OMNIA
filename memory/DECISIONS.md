@@ -205,6 +205,80 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Implicazione futura M2.S4**: lo score di match diventa visibile (es. "92% match — manca solo l'ascensore") sia nella scheda cliente che nella lista immobili.
 - **Stato**: ✅ Confermata, implementata 16/06/2026
 
+### D-022 — Architecture: HEADLESS OMNIA per 1000+ siti white-label ✅
+- **Data**: 16 Giugno 2026 (post analisi competitiva)
+- **Contesto**: Il Founder ha corretto la mia visione: non 50 siti agenzia (modello "tema") ma **1000+ siti** completamente unici. L'unica cosa comune è il backend OMNIA + le app integrate.
+- **Decisione**: Architettura **Headless OMNIA**:
+  - OMNIA Backend = unica source of truth (proprietà, leads, AI, pagamenti, MLS) esposto via API REST + GraphQL
+  - Ogni agenzia ha il **suo bundle frontend** indipendente (Next.js static-rendered) deployato su infrastruttura OMNIA condivisa (CDN edge)
+  - Il bundle può venire da: clone-from-URL (D-023), template gallery (D-019), oppure custom dev (premium service)
+  - Routing: dominio agenzia → CNAME → infra OMNIA → bundle agenzia → API OMNIA
+  - Theme registry per-agenzia che memorizza il bundle versioned in storage
+- **Razionale**: A scala 1000+ siti, ogni tentativo di "tema unificato" diventa anti-pattern. La via giusta è isolamento totale per sito + backend condiviso. Pattern già validato da Shopify (themes), Webflow CMS, Vercel multi-tenant.
+- **Implicazione tecnica**: server Node.js / edge runtime per CDN; storage S3 per bundles; CI per build automatico bundle al deploy theme.
+- **Stato**: ✅ Confermata. Supersedes D-018 limitato (rimane valido il principio "dominio agenzia, non sottodominio OMNIA").
+
+### D-023 — Migrazione "Clone-from-URL" (idea originale del Founder) ✅
+- **Data**: 16 Giugno 2026 (rivelata dal Founder + validata)
+- **Contesto**: Il Founder ha portato l'idea di permettere alle agenzie di fornire l'URL del loro sito attuale → OMNIA lo ricrea identico. Inizialmente avevo proposto una versione attenuata ("clone visivo + template OMNIA"), ma con D-022 (architettura headless) il clone pixel-perfect diventa fattibile e mantenibile a scala 1000+.
+- **Decisione**: Implementare clone identico end-to-end:
+  - Step 1: agenzia inserisce URL del proprio sito esistente
+  - Step 2: Playwright headless crawla pagine chiave (home, lista immobili, scheda immobile, contatti) → screenshot + HTML/CSS estratti
+  - Step 3: Gemini Vision (via Emergent LLM Key) analizza screenshot + estrae: palette, tipografia, struttura header/footer, stile card immobile, micro-componenti
+  - Step 4: generazione bundle Next.js statico con look identico, ma alimentato dalle API OMNIA (proprietà, contatti, valutazione, ecc.)
+  - Step 5: preview al cliente entro 60 secondi → "Ecco il tuo sito ricostruito"
+  - Step 6: deploy automatico su dominio agenzia (CNAME)
+- **Tiers di servizio**:
+  - **Free**: clone automatico via AI (best-effort)
+  - **Premium**: revisione designer in 2-3 giorni per pixel perfection (€XX una tantum)
+- **Razionale**: Migration friction → ZERO. Demo killer in fase commerciale ("Inserisci URL → 60 sec → ecco il tuo sito dentro OMNIA"). Eradica completamente la resistenza al cambio gestionale.
+- **Quando**: M2.S5 (anticipa la fase di multiposting con questa feature distintiva).
+- **Stato**: ✅ Confermata.
+
+### D-024 — Pricing aggressivo fase lancio + listino trasparente ✅
+- **Data**: 16 Giugno 2026 (post analisi competitiva)
+- **Contesto**: Idealista sta aumentando i prezzi del Founder da €149 a ~€200/anno e ha già tolto 2 annunci premium gratuiti su 15. Mercato è frustrato. Lo stack tradizionale agenzia media costa **€10.000-12.000/anno** (Immobiliare.it + Idealista + Getrix/Gestim). Tutti i competitor hanno pricing **opaco** ("Contattaci").
+- **Decisione**:
+  - **Listino PUBBLICO in homepage OMNIA** (anti-Idealista/Immobiliare)
+  - **Fase lancio** (primi 12 mesi):
+    - Starter (1 agente, 20 immobili): **GRATIS** primi 3 mesi, poi €19/mese
+    - Pro (3 agenti, 100 immobili): **€29/mese**
+    - Agency (illimitato + MLS + AI): **€79/mese**
+    - Enterprise (network/franchising): da €299/mese
+  - **Fase post-traction** (dopo 100 agenzie paganti):
+    - Starter €19, Pro €49, Agency €149, Enterprise €299-499
+  - **Zero setup fee. Zero formazione a pagamento. Zero vincoli contrattuali (mese per mese). Migrazione dati gratuita**.
+- **Razionale**: Aggressivo abbastanza per spostare il mercato, sostenibile abbastanza per non bruciare cassa (con Emergent LLM Key + infra Emergent il costo per agenzia è < €5/mese all'inizio).
+- **Messaging killer**: *"Risparmia il 95%. Da €12.000/anno a €348/anno per la maggior parte delle agenzie."*
+- **Stato**: ✅ Confermata. Supersedes D-003 (vecchio pricing €29/€49/€149 ancora valido ma diventa "target post-traction").
+
+### D-025 — M2.S4: Matching Engine include Lead Scoring AI ✅
+- **Data**: 16 Giugno 2026 (post analisi competitiva)
+- **Contesto**: La lamentela #1 degli agenti nel mercato italiano è **"lead poco qualificati"** (cliccano e spariscono). Idealista/Immobiliare.it riempiono di lead, ma nessuno aiuta a capire QUALI sono caldi.
+- **Decisione**: Il Matching Engine M2.S4 esce DOPPIO:
+  1. **Property↔Client match score** (es. 92% match — algoritmo punteggio su preferenze)
+  2. **Lead Score AI** (0-100, classifica freddo/tiepido/caldo/rovente) basato su:
+     - Engagement (visite scheda, contatti diretti, ritorni)
+     - Coerenza budget vs immobile (verifica realistica)
+     - Storico interazioni con l'agenzia
+     - Velocità risposta alle proposte
+     - Completezza profilo (telefono verificato, etc.)
+  3. Score visibili sia in scheda cliente che in scheda immobile e in lista
+- **Stack AI**: Gemini-3 Flash via Emergent LLM Key per scoring (economico, fast)
+- **Razionale**: Risolve direttamente la frustrazione #1 del mercato. Diventa l'argomento commerciale principale: *"Smetti di rincorrere lead morti. OMNIA ti dice chi vale la pena chiamare oggi"*.
+- **Stato**: ✅ Confermata. Da implementare in M2.S4.
+
+### D-026 — Property.seller_client_id: link bidirezionale Property↔Client venditore ✅
+- **Data**: 16 Giugno 2026
+- **Contesto**: Il Founder ha individuato un gap critico: oggi `Property` non sa chi è il proprietario/venditore. Senza questo collegamento il CRM è zoppo.
+- **Decisione**: Aggiungere `Property.seller_client_id: Optional[str]` (FK al modello Client). UI:
+  - In form immobile: dropdown "Proprietario / Venditore" (autocomplete da clienti con `client_type ∈ {seller, landlord}`)
+  - In scheda cliente seller: tab "Immobili in carico" che lista i suoi immobili
+  - In scheda immobile: pannello "Contatti proprietario" con link al Client
+- **Quando**: M2.S3.5 (mini-sprint, mezza giornata) **PRIMA** di M2.S4
+- **Razionale**: Il Matching Engine M2.S4 ha senso solo se Property ha un proprietario tracciato. È prerequisito.
+- **Stato**: ✅ Confermata. NEXT TASK.
+
 ---
 
 ## Decisioni rinviate (da risolvere più avanti)
