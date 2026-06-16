@@ -17,6 +17,11 @@ M1  M2  M3  M4  M5  M6
 
 ### ⏸️ SESSIONE INTERROTTA il 12 Giu 2026 — Ripresa da qui:
 
+**🚨 P0 PRIMA COSA AL RIENTRO**: Founder ha segnalato labels strani in Settings + sidebar (es. "Unione" invece di "Immobili", "Consiglio" invece di "Clienti", "Dati quadrati" invece di "Dati fiscali", "Invece cibi" invece di "Colore primario"). Probabile Chrome auto-translate (già visto con Aruba). Azione:
+1. Chiedere al Founder di provare "Mostra originale" sulla pagina
+2. Se persiste → audit completo `/app/frontend/src/shared/i18n/locales/it.json` per chiavi mancanti/duplicati e fix labels
+3. URL preview pagina Settings da ispezionare: `https://audit-tool-12.preview.emergentagent.com/it/app/settings`
+
 **Cosa è pronto da testare/caricare sul Founder PREVIEW**:
 - Preview URL: https://audit-tool-12.preview.emergentagent.com/it/login
 - Login: `mcnicastro@gmail.com` / `Forzainter2026.`
