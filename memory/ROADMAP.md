@@ -21,20 +21,39 @@ M1  M2  M3  M4  M5  M6
 
 1. **Auto-translate Chrome confermato**: la maggior parte dei labels strani era Chrome (Founder ha provato "Mostra originale" e si è risolto da solo per Sidebar+Settings).
 
-2. **REVISIONE STRATEGICA SETTINGS (feedback Founder 12 Giu)**:
+2. **DECISIONI STRATEGICHE WHITE LABEL — APPROVATE DAL FOUNDER (12 Giu 2026)**:
 
-   ❌ **RIMUOVERE da Settings**: color picker "Colore primario/d'accento". Sono confusi per agenzie non-grafiche.
+   ❌ **RIMUOVERE da Settings**: color picker "Colore primario/d'accento" (confusi per non-grafici).
 
-   ✅ **NUOVA LOGICA WHITE LABEL** (impatta M2.S6):
-   - **Caso A — Agenzia con sito esistente** (es. nicastroimmobiliare.it): OMNIA spinge gli immobili via **feed XML generato** (come Agestanet oggi). Settings deve solo gestire dati fiscali + URL del sito + eventuali credenziali. Niente branding/colori.
-   - **Caso B — Agenzia senza sito**: OMNIA offre **galleria di template completi pronti** (5-10 design professionali con layout+colori+font+sezioni+form contatti già curati). L'agenzia ne sceglie uno, niente color picker.
+   ✅ **D-016 — Strategia migrazione "Sostituisci un pezzo alla volta"**:
+   - Fase 1: OMNIA in parallelo (1-2 mesi, zero rischio)
+   - Fase 2: OMNIA sostituisce gestionale (Agestanet o simili) → disdici gestionale
+   - Fase 3 (opzionale): OMNIA sostituisce anche il sito
+   - Pricing target: €19-29/mese small, €79-129/mese large (da definire)
 
-   📋 **Da definire con Founder al rientro**:
-   - Per caso A: solo feed XML generato (M2.S5) o anche plugin WordPress / embed code?
-   - Per caso B: sottodominio omnia o dominio proprio collegabile?
-   - Template: design_agent_full_stack li genera tutti o partiamo con 1-2 e ne aggiungiamo?
+   ✅ **D-017 — Per caso A (agenzia ha già sito)**:
+   - Partiamo con **feed XML compatibile** (M2.S5) che alimenta il sito esistente come fa Agestanet
+   - In futuro estendiamo con plugin WordPress / embed code
+   - **NOTA**: Founder ha un'idea aggiuntiva potenzialmente vincente che condividerà a tempo debito → CHIEDERGLIELA al rientro o quando appropriato
 
-3. **Logo upload**: probabilmente NON serve nemmeno (se sito già esistente → logo è già lì; se template OMNIA → logo viene caricato come parte del template editor). Da confermare.
+   ✅ **D-018 — Per caso B (template OMNIA)**:
+   - **Ogni agenzia col SUO dominio** (es. nicastroimmobiliare.it), non sottodominio OMNIA
+   - Agenzia compra e rinnova il dominio in autonomia (come fa già con il provider tipo Basic Soft)
+   - OMNIA ospita il sito generato dal template e l'agenzia punta i DNS
+
+   ✅ **D-019 — Template design strategy**:
+   - **Li facciamo NOI** con `design_agent_full_stack`
+   - 5-10 template di qualità "**i migliori del mercato**"
+   - **Possiamo clonare/ispirarci a siti specifici esistenti** se necessario per raggiungere quality bar
+   - Da fare in M2.S6 o M3 (decidere quando al rientro)
+
+3. **Settings page semplificata** (P0 al rientro):
+   - Rimuovere color picker
+   - Rimuovere "URL del logo" (sarà gestito nei template, non qui)
+   - Lasciare: identità + dati fiscali + indirizzo + contatti
+   - Aggiungere sezione "Sito web" con 2 modalità:
+     - 🅰️ "Ho già il mio sito" → URL + (futuro) feed XML
+     - 🅱️ "Crea sito con OMNIA" → galleria template (placeholder per ora)
 
 **Cosa è pronto da testare/caricare sul Founder PREVIEW**:
 - Preview URL: https://audit-tool-12.preview.emergentagent.com/it/login
