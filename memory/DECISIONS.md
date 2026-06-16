@@ -144,6 +144,67 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Migrazione futura a Turborepo puro**: 1-2 giorni di lavoro pre-exit (anno 2-3, con revenue significativa)
 - **Stato**: ✅ Confermata, è la materializzazione di D-011
 
+### D-016 — Strategia migrazione "Sostituisci un pezzo alla volta" ✅
+- **Data**: 12 Giugno 2026 (M2.S2bis review)
+- **Contesto**: Il Founder paga €786/anno per il gestionale legacy (Agestanet) e il sito agenzia. Va capito come migrare le agenzie esistenti senza rischio.
+- **Decisione**: Migrazione a 3 fasi non distruttive:
+  - **Fase 1 — Parallel run** (1-2 mesi): OMNIA gira accanto al gestionale esistente, zero rischio. L'agente sperimenta in tranquillità.
+  - **Fase 2 — Sostituzione gestionale**: quando OMNIA è validata, l'agenzia disdice Agestanet/simili. OMNIA prende il ruolo di CRM + publishing.
+  - **Fase 3 (opzionale) — Sostituzione sito**: OMNIA genera anche il sito tramite template (vedi D-018).
+- **Pricing target**: €19-29/mese piccole, €79-129/mese grandi (da rifinire in M4.S3)
+- **Razionale**: Eliminare la friction del cambio: l'agente non perde nulla, prova, decide. Migration risk → 0.
+- **Stato**: ✅ Confermata
+
+### D-017 — Caso A: "Agenzia ha già il proprio sito" ✅
+- **Data**: 12 Giugno 2026 (M2.S2bis review)
+- **Decisione**: Se l'agenzia ha già un sito (caso A in Settings → "Sito web agenzia"), OMNIA fornisce un **feed XML compatibile** in uscita (M2.S5) che alimenta il sito esistente come fa oggi Agestanet.
+- **Estensioni future** (post-M2): plugin WordPress dedicato + embed-code JavaScript per inserire il portafoglio in qualunque sito.
+- **🔒 Idea segreta vincente del Founder**: il Founder ha un'idea aggiuntiva sul tema M2.S5 che condividerà a tempo debito. **L'agente DEVE chiedergliela quando si arriva all'implementazione di M2.S5**, prima di scrivere codice.
+- **Razionale**: Massima compatibilità + sostituzione 1:1 di Agestanet senza forzare cambio di sito.
+- **Stato**: ✅ Confermata, UI esposta in Settings dal 16 Giugno 2026 (D-020)
+
+### D-018 — Caso B: "Voglio un sito creato da OMNIA" ✅
+- **Data**: 12 Giugno 2026 (M2.S2bis review)
+- **Decisione**: Se l'agenzia non ha un sito (o lo vuole rifare), OMNIA pubblica il sito generato dal template **sul dominio dell'agenzia** (es. `nicastroimmobiliare.it`), NON su un sottodominio OMNIA.
+- **Modello operativo**:
+  - L'agenzia possiede e rinnova il dominio in autonomia (come già fa con provider tipo Basic Soft)
+  - OMNIA ospita il sito generato dal template
+  - L'agenzia punta i DNS al nostro endpoint (CNAME / A record documentato)
+- **Razionale**: Brand ownership al cliente (asset suo) → riduce churn percepito. Niente lock-in opaco su sottodomini white-label.
+- **Differenza vs D-012**: i sottodomini `{agency-slug}.omniarealestateecosystem.it` restano disponibili come fallback / staging, ma il modello primario è custom domain.
+- **Stato**: ✅ Confermata, materializzazione in M2.S6
+
+### D-019 — Template strategy: "I migliori del mercato" ✅
+- **Data**: 12 Giugno 2026 (M2.S2bis review)
+- **Decisione**: I template per i siti agenzie (D-018) sono progettati **internamente** con `design_agent_full_stack`, non delegati a marketplace generici.
+- **Quantità**: 5-10 template di altissima qualità, non un catalogo gonfio
+- **Quality bar**: "i migliori del mercato real estate" — ammesso clonare/ispirarsi a siti esistenti specifici (anche di competitor o agenzie premium) per raggiungere il livello richiesto
+- **Quando**: M2.S6 (preferito) oppure M3 (se serve più contesto sul portale B2C prima)
+- **Razionale**: Il sito agenzia è il principale punto di contatto del cliente finale → la qualità visiva è una leva di conversione e di pricing power. Template generici farebbero perdere credibilità.
+- **Stato**: ✅ Confermata, implementazione M2.S6
+
+### D-020 — Settings UI: rimossi color picker e logo URL ✅
+- **Data**: 16 Giugno 2026 (M2.S3 session)
+- **Contesto**: Il Founder ha trovato confusi i campi "URL logo" + "Colore primario/d'accento" in Settings (target agenti non tecnici).
+- **Decisione**: SettingsPage.jsx semplificata:
+  - **Rimossi**: campo URL logo, color picker primario, color picker d'accento
+  - **Mantenuti**: identità (nome commerciale, tagline), dati fiscali, indirizzo, contatti pubblici
+  - **Aggiunti**: sezione "Sito web agenzia" con 2 card mutuamente esclusive (D-017 / D-018):
+    - Opzione A "Ho già il mio sito" → URL + descrizione feed XML M2.S5
+    - Opzione B "Voglio un sito creato da OMNIA" → galleria template placeholder M2.S6
+- **Backend**: nuovo blocco `AgencyWebsite` (mode/external_url/template_id/custom_domain) su `AgencyInDB`
+- **Razionale**: I non-grafici non devono prendere decisioni di branding visuale dentro al CRM. Il branding visuale arriva nei template (M2.S6) o non arriva affatto (caso A).
+- **Stato**: ✅ Confermata e LIVE
+
+### D-021 — CRM Clienti: preferenze ricerca rispecchiano filtri idealista ✅
+- **Data**: 16 Giugno 2026 (M2.S3 session)
+- **Contesto**: Per il Matching Engine M2.S4 servono preferenze ricerca cliente compatibili con i filtri usati realmente dai privati.
+- **Decisione**: Il modello `SearchPreferences` replica i filtri idealista.it visti dal cliente finale:
+  - operation, property_types[], cities[], zones[], price_min/max, surface_min/max, rooms_min/max, bedrooms_min, bathrooms_min, conditions[] (nuovo/buone/ristrutturato/da_ristrutturare), floor_preferences[] (terra/intermedi/ultimo), must_have_features[] (subset di PropertyFeatures), energy_min_class, needs_photos, needs_virtual_tour, notes
+- **Razionale**: Le preferenze cliente devono essere già "matchabili" 1:1 con i criteri di ricerca del portale B2C M3 → il match engine M2.S4 sarà uno scoring diretto, senza traduzioni di campo.
+- **Implicazione futura M2.S4**: lo score di match diventa visibile (es. "92% match — manca solo l'ascensore") sia nella scheda cliente che nella lista immobili.
+- **Stato**: ✅ Confermata, implementata 16/06/2026
+
 ---
 
 ## Decisioni rinviate (da risolvere più avanti)
