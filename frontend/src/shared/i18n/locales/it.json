@@ -260,6 +260,7 @@
     "nav_properties": "Immobili",
     "nav_clients": "Clienti",
     "nav_matches": "Match",
+    "nav_portals": "Portali",
     "nav_members": "Collaboratori",
     "nav_settings": "Impostazioni",
     "nav_logout": "Esci",
@@ -453,6 +454,12 @@
     "next_action": "Azione consigliata",
     "why": "Perché",
     "match_detail": "Dettaglio match deterministico"
+  },
+  "portals": {
+    "title": "Portali pubblicitari",
+    "subtitle": "Pubblica i tuoi annunci automaticamente sui portali immobiliari. Le credenziali sono cifrate end-to-end.",
+    "empty": "Nessun portale ancora attivato. Scegli un portale qui sotto per iniziare.",
+    "available": "Portali disponibili"
   },
   "accept_invite": {
     "title": "Accetta invito",

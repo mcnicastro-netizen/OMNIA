@@ -313,3 +313,42 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - Preparare uno screenshot showcase in layout marketing (mobile + desktop) della MatchLeadScorePage, da usare in pitch/demo con agenzie e nella landing page commerciale
 - **Quando**: post-M2.S5 o quando partiamo con la fase di acquisition (M4)
 - **Stato**: in memoria, da fare dopo
+
+### D-027 — Modello commerciale a 3 tier: Base / Pro / Enterprise ✅
+- **Data**: 18 Giugno 2026 (post analisi Agestanet)
+- **Decisione**: nomi commerciali OMNIA = **Base · Pro · Enterprise** (sostituisce le precedenti Starter/Pro/Agency/Enterprise).
+  - **Base**: portale pubblicitario OMNIA + clone-from-URL del sito + multiposting top portali + tools privati base
+  - **Pro**: Base + CRM completo + Matching + Lead Scoring AI + crediti AI + MLS OMNIA
+  - **Enterprise**: Pro + multi-sede + subagenzie + Academy + analytics avanzate + dedicated success manager
+- **Prezzi**: il Founder li deciderà a prodotto ultimato. D-024 resta come "riferimento massimo" non vincolante.
+- **Razionale**: 3 tier sono più memorizzabili, e non confondono con "Listing" che è in realtà incluso in Base.
+- **Stato**: ✅ confermata
+
+### D-028 — XML Feed schema: OMNIA Standard Feed (OSF), schema proprio non Agestanet-clone ✅
+- **Data**: 18 Giugno 2026
+- **Decisione**: NON copiare lo schema Agestanet 1:1. Creiamo **OMNIA Standard Feed (OSF)** con DNA distintivo:
+  - **Dual format**: XML (compat portali legacy) + JSON (compat portali moderni / API)
+  - **Schema pulito**: stringhe leggibili invece di codici numerici (es. `<property_type>appartamento</property_type>` non `<cod_tipologia>3</cod_tipologia>`)
+  - **AI-extended namespace** (opzionale): `<omnia:lead_score>`, `<omnia:ai_description>`, `<omnia:virtual_tour_url>`, `<omnia:match_count>` — questi tag valorizzano l'integrazione OMNIA presso i portali che li supportano
+  - **Versionato**: `<feed version="1.0">` con backward-compat su future versioni
+  - **JSON Schema pubblico**: pubblichiamo `omniarealestateecosystem.it/schema/osf-v1.json` → diventa standard adottabile da chiunque (mossa di "OMNIA = standard di settore")
+  - **3 lingue native**: IT/EN/ES (estensibile su richiesta a DE/FR/RU/PT)
+- **Endpoint pubblici per-agenzia**:
+  - XML: `https://feed.omniarealestateecosystem.it/{agency-slug}.xml`
+  - JSON: `https://feed.omniarealestateecosystem.it/{agency-slug}.json`
+- **Razionale del Founder**: *"creiamo una nostra skill, quella che ti viene più semplice ma ci renda unici"*. OSF è la nostra "USP tecnica" — i portali che vogliono integrarsi con OMNIA-powered agencies hanno una sola spec pulita da implementare. Lo schema pulito è ANCHE più veloce da implementare di un clone Agestanet (che ha 100+ campi disordinati).
+- **Stato**: ✅ confermata
+
+### D-029 — Portali da supportare in fase 1 (Layer A) ✅
+- **Data**: 18 Giugno 2026
+- **Decisione**: M2.S5 Layer A parte con **7 portali catalogati**, architettura predisposta per espansione fino a 92 (Agestanet parity):
+  1. **Idealista** (pull XML da URL)
+  2. **Immobiliare.it** (modello "Pro" + ImmobiliarePro/Getrix, pull XML)
+  3. **Casa.it** (pull XML)
+  4. **Wikicasa** (pull XML)
+  5. **Subito.it** (push XML/API)
+  6. **Facebook Catalog** (push via Marketing API)
+  7. **LinkedIn** ← *aggiunto dal Founder* (Showcase Pages / posts automatici tramite LinkedIn Marketing API)
+- **Modello**: ogni portale è un "PortalAdapter" registrato a backend. Aggiungere il 92esimo = creare nuovo adapter, no schema migration.
+- **MLS Bridge Agestanet**: ❌ NON facciamo bridge. OMNIA avrà **il proprio MLS** in M4 (D-001).
+- **Stato**: ✅ confermata
