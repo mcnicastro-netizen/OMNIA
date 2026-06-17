@@ -305,3 +305,11 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale**: appena avremo lead scoring (M2.S4), esporlo direttamente nella lista massimizza l'impatto. Trasforma il primo touchpoint quotidiano dell'agente in una to-do list intelligente.
 - **Quando**: subito dopo M2.S4 (mini-sprint M2.S4.5 o inserito in M2.S4 stesso se rimane tempo)
 - **Stato**: in memoria, da fare dopo M2.S4
+
+### D-FUTURE-05 — Marketing Showcase Screenshot (post-traction) ⏳
+- **Idea del Founder** (17 Giu 2026, post M2.S4)
+- **Cosa**: usare il Lead Score AI live come asse principale di posizionamento commerciale OMNIA.
+  - Messaging: *"L'unico CRM italiano che ti dice quale lead chiamare PRIMA, non DOPO"*
+  - Preparare uno screenshot showcase in layout marketing (mobile + desktop) della MatchLeadScorePage, da usare in pitch/demo con agenzie e nella landing page commerciale
+- **Quando**: post-M2.S5 o quando partiamo con la fase di acquisition (M4)
+- **Stato**: in memoria, da fare dopo
