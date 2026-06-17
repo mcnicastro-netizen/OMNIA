@@ -172,8 +172,12 @@ async def update_property(
 
     data = payload.model_dump(exclude_unset=True)
     update_doc = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    # Fields that the client can EXPLICITLY clear by sending null (vs omitted).
+    NULLABLE_FIELDS = {"seller_client_id"}
     for k, v in data.items():
         if v is None:
+            if k in NULLABLE_FIELDS:
+                update_doc[k] = None  # explicit clear
             continue
         if hasattr(v, "model_dump"):
             update_doc[k] = v.model_dump()

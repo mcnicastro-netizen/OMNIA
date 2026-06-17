@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-**Stato progetto**: M1 ✅ DONE • M2.S1 ✅ • M2.S2 ✅ • M2.S3 ✅ (CRM Clienti) • M2.S4 next (Matching Engine)
+- **Stato progetto**: M1 ✅ DONE • M2.S1 ✅ • M2.S2 ✅ • M2.S3 ✅ (CRM Clienti) • M2.S3.5 ✅ (Property↔Seller link) • M2.S4 next (Matching + Lead Scoring AI)
 
 ---
 
@@ -145,7 +145,8 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 - **M2.S2bis** ✅ Cross-app unified TopNav + Desktop UI overflow fixes
 - **Settings UI refactor** ✅ (16/06/2026) — Rimossi logo URL + color picker. Aggiunta sezione "Sito web agenzia" con 2 modalità: external (URL + futuro feed XML M2.S5) | omnia_template (galleria M2.S6).
 - **M2.S3** ✅ (16/06/2026) — **CRM Clienti completo**: backend CRUD `/api/app/clients` con filtri (q/status/client_type/operation/city) + paginazione + CSV import + CSV template. Frontend `ClientsPage` (lista con tabella + filtri) + `ClientFormPage` (anagrafica + preferenze ricerca idealista-style: operation, property_types[], cities[], zones[], price/surface/rooms/bathrooms ranges, conditions[], floor_preferences[], must_have_features[], energy_min_class, needs_photos/virtual_tour, GDPR consent). Sidebar `Clienti` sbloccata. 15/15 pytest backend + 7/7 flussi UI passed.
-- **M2.S4** ⏳ Matching Engine (Properties ↔ Client preferences) — *next P0*
+- **M2.S3.5** ✅ (17/06/2026, D-026) — **Property↔Seller bidirectional link**: aggiunto `Property.seller_client_id`, endpoint `/clients/sellers` (autocomplete), `/clients/{id}/properties` (immobili in carico). UI SellerPicker combobox nel form immobile + sezione "Immobili in carico" nella scheda Cliente seller/landlord. PATCH null-clear supportato. 10/10 pytest backend + flussi UI passed.
+- **M2.S4** ⏳ Matching Engine + **Lead Scoring AI** (D-025) — *next P0*
 - **M2.S5** ⏳ XML Multiposting/Feed Output — *user has "secret idea" to discuss prima del coding*
 - **M2.S6** ⏳ White Label + Template Gallery
 

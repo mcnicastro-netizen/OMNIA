@@ -94,20 +94,25 @@ export default function ClientFormPage() {
     api.get(`/app/clients/${id}`).then((r) => {
       const d = r.data;
       const incomingPrefs = d.preferences || {};
-      // Coerce null numerics → "" so controlled inputs don't warn.
-      const numKeys = [
-        "price_min", "price_max", "surface_min", "surface_max",
-        "rooms_min", "rooms_max", "bedrooms_min", "bathrooms_min",
-      ];
+      // Coerce null → "" for all string/number fields used as controlled inputs.
       const safePrefs = { ...emptyPrefs, ...incomingPrefs };
-      numKeys.forEach((k) => {
-        if (safePrefs[k] == null) safePrefs[k] = "";
+      Object.keys(emptyPrefs).forEach((k) => {
+        const defVal = emptyPrefs[k];
+        if (safePrefs[k] == null) {
+          // arrays default to []; booleans to false; strings/numbers to ""
+          safePrefs[k] = Array.isArray(defVal) ? [] : typeof defVal === "boolean" ? false : "";
+        }
       });
-      setForm({
-        ...empty,
-        ...d,
-        preferences: safePrefs,
+      // Same for top-level scalar fields
+      const safeTop = { ...empty, ...d };
+      Object.keys(empty).forEach((k) => {
+        if (k === "preferences") return;
+        const defVal = empty[k];
+        if (safeTop[k] == null) {
+          safeTop[k] = Array.isArray(defVal) ? [] : typeof defVal === "boolean" ? false : "";
+        }
       });
+      setForm({ ...safeTop, preferences: safePrefs });
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -259,37 +264,40 @@ export default function ClientFormPage() {
               ) : (
                 <ul data-testid="carried-list" className="space-y-2">
                   {carriedProperties.map((p) => (
-                    <li
-                      key={p.id}
-                      data-testid={`carried-prop-${p.id}`}
-                      className="flex items-center justify-between gap-3 border border-stone-200 rounded-md p-3 hover:bg-stone-50 cursor-pointer"
-                      onClick={() => window.open(`/${lang}/app/properties/${p.id}`, "_blank")}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        {p.cover_photo_url ? (
-                          <img src={p.cover_photo_url} alt="" className="w-16 h-12 object-cover rounded border border-stone-200" />
-                        ) : (
-                          <div className="w-16 h-12 bg-stone-100 border border-stone-200 rounded flex items-center justify-center text-[9px] text-stone-400 uppercase tracking-widest">no photo</div>
-                        )}
-                        <div className="min-w-0">
-                          <div className="font-medium text-stone-900 truncate">{p.title}</div>
-                          <div className="text-xs text-stone-500 truncate">
-                            {t(`properties.type_${p.property_type}`)} · {t(`properties.op_${p.operation}`)} · {p.city}
-                            {p.rooms ? ` · ${p.rooms} ${t("clients.pref_rooms_min").includes("Locali") ? "locali" : "rooms"}` : ""}
-                            {p.surface_sqm ? ` · ${p.surface_sqm} m²` : ""}
+                    <li key={p.id}>
+                      <a
+                        href={`/${lang}/app/properties/${p.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-testid={`carried-prop-${p.id}`}
+                        className="flex items-center justify-between gap-3 border border-stone-200 rounded-md p-3 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-900/10"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          {p.cover_photo_url ? (
+                            <img src={p.cover_photo_url} alt="" className="w-16 h-12 object-cover rounded border border-stone-200" />
+                          ) : (
+                            <div className="w-16 h-12 bg-stone-100 border border-stone-200 rounded flex items-center justify-center text-[9px] text-stone-400 uppercase tracking-widest">no photo</div>
+                          )}
+                          <div className="min-w-0">
+                            <div className="font-medium text-stone-900 truncate">{p.title}</div>
+                            <div className="text-xs text-stone-500 truncate">
+                              {t(`properties.type_${p.property_type}`)} · {t(`properties.op_${p.operation}`)} · {p.city}
+                              {p.rooms ? ` · ${p.rooms} ${t("clients.pref_rooms_min").includes("Locali") ? "locali" : "rooms"}` : ""}
+                              {p.surface_sqm ? ` · ${p.surface_sqm} m²` : ""}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <div className="text-sm font-medium text-stone-900">
-                          {p.price ? new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.price)
-                            : p.rent_monthly ? `${new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.rent_monthly)}/mese`
-                            : "—"}
+                        <div className="text-right shrink-0">
+                          <div className="text-sm font-medium text-stone-900">
+                            {p.price ? new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.price)
+                              : p.rent_monthly ? `${new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.rent_monthly)}/mese`
+                              : "—"}
+                          </div>
+                          <div className="text-[10px] uppercase tracking-widest text-stone-500">
+                            {t(`properties.status_${p.status}`) || p.status}
+                          </div>
                         </div>
-                        <div className="text-[10px] uppercase tracking-widest text-stone-500">
-                          {t(`properties.status_${p.status}`) || p.status}
-                        </div>
-                      </div>
+                      </a>
                     </li>
                   ))}
                 </ul>
