@@ -434,6 +434,26 @@
     "section_carried_properties": "Immobili in carico",
     "carried_empty": "Questo cliente non ha ancora immobili in carico. Vai in Immobili → Nuovo e selezionalo come proprietario."
   },
+  "matches": {
+    "title": "Match",
+    "subtitle": "Cross-reference automatico tra i tuoi immobili e i tuoi clienti, con Lead Score AI.",
+    "min_score": "Score minimo",
+    "warm": "tiepidi",
+    "good": "buoni",
+    "hot": "caldi",
+    "blazing": "roventi",
+    "empty_title": "Nessun match al momento",
+    "empty_subtitle": "Aggiungi più immobili e clienti — i match si calcolano automaticamente in base alle preferenze di ricerca.",
+    "property": "Immobile",
+    "client": "Cliente",
+    "missing": "Mancano",
+    "ai_score_btn": "Calcola Lead Score AI",
+    "back_to_list": "Torna ai match",
+    "lead_temp": "Temperatura lead",
+    "next_action": "Azione consigliata",
+    "why": "Perché",
+    "match_detail": "Dettaglio match deterministico"
+  },
   "accept_invite": {
     "title": "Accetta invito",
     "subtitle": "Stai per unirti a {{agency_name}} come {{role}}.",

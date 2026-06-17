@@ -294,3 +294,14 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 ### D-FUTURE-03 — Accreditamento FIAIP/FIMAA Academy
 - **Quando**: M6.S5
 - **Note**: Contattare ordini professionali, capire requisiti
+
+### D-FUTURE-04 — Smart Clients List (post-M2.S4) ⏳
+- **Idea del Founder** (17 Giu 2026)
+- **Cosa**: trasformare la lista clienti da "rubrica" a *cruscotto azione*:
+  - Ordinamento default per **lead score** (più caldo in alto)
+  - Micro-indicatori inline: "🔥 3 match attivi", "⚠️ inattivo da 14 giorni", "📞 da richiamare"
+  - Filtro rapido "Solo lead caldi" (score > 70)
+  - Quick action su row: "Chiama subito", "Manda WhatsApp", "Vedi match"
+- **Razionale**: appena avremo lead scoring (M2.S4), esporlo direttamente nella lista massimizza l'impatto. Trasforma il primo touchpoint quotidiano dell'agente in una to-do list intelligente.
+- **Quando**: subito dopo M2.S4 (mini-sprint M2.S4.5 o inserito in M2.S4 stesso se rimane tempo)
+- **Stato**: in memoria, da fare dopo M2.S4
