@@ -137,6 +137,7 @@
     "field_energy_value": "Consumo (kWh/m²·anno)",
     "field_heating": "Riscaldamento",
     "field_owner_name": "Nome proprietario",
+    "field_rooms_short": "loc.",
     "field_owner_phone": "Telefono proprietario",
     "field_owner_email": "Email proprietario",
     "field_seller_client": "Cliente venditore / proprietario (collega anagrafica)",

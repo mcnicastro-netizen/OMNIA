@@ -175,8 +175,18 @@ export default function ClientFormPage() {
 
   const onDelete = async () => {
     if (!window.confirm(t("clients.delete_confirm"))) return;
-    await api.delete(`/app/clients/${id}`);
-    nav(`/${lang}/app/clients`, { replace: true });
+    try {
+      await api.delete(`/app/clients/${id}`);
+      nav(`/${lang}/app/clients`, { replace: true });
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      const msg = (detail && typeof detail === "object" && detail.message)
+        ? detail.message
+        : (typeof detail === "string" ? detail : t("common.error"));
+      setError(msg);
+      // Scroll up so user sees the error
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   if (loading) {
@@ -282,7 +292,7 @@ export default function ClientFormPage() {
                             <div className="font-medium text-stone-900 truncate">{p.title}</div>
                             <div className="text-xs text-stone-500 truncate">
                               {t(`properties.type_${p.property_type}`)} · {t(`properties.op_${p.operation}`)} · {p.city}
-                              {p.rooms ? ` · ${p.rooms} ${t("clients.pref_rooms_min").includes("Locali") ? "locali" : "rooms"}` : ""}
+                              {p.rooms ? ` · ${p.rooms} ${t("properties.field_rooms_short") || "loc."}` : ""}
                               {p.surface_sqm ? ` · ${p.surface_sqm} m²` : ""}
                             </div>
                           </div>

@@ -151,9 +151,23 @@ export default function ClientsPage() {
                       <div className="text-xs text-stone-400">{c.phone || ""}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs px-2 py-0.5 rounded bg-stone-100 text-stone-700">
-                        {t(`clients.type_${c.client_type}`)}
-                      </span>
+                      {(() => {
+                        const tone = (() => {
+                          switch (c.client_type) {
+                            case "buyer": return "bg-blue-50 text-blue-700 border-blue-100";
+                            case "tenant": return "bg-violet-50 text-violet-700 border-violet-100";
+                            case "seller": return "bg-emerald-50 text-emerald-700 border-emerald-100";
+                            case "landlord": return "bg-teal-50 text-teal-700 border-teal-100";
+                            case "investor": return "bg-amber-50 text-amber-700 border-amber-100";
+                            default: return "bg-stone-100 text-stone-700 border-stone-200";
+                          }
+                        })();
+                        return (
+                          <span className={`text-[10px] uppercase tracking-widest px-2 py-1 rounded border ${tone}`}>
+                            {t(`clients.type_${c.client_type}`)}
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded uppercase tracking-wide ${

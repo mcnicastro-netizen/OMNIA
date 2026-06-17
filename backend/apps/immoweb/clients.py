@@ -138,6 +138,22 @@ async def update_client(
 async def delete_client(cid: str, user: dict = Depends(require_roles("agency_admin", "super_admin"))):
     agency_id = await _agency(user)
     db = Database.get()
+    # Refuse deletion if the client has properties in carico (avoid orphan seller_client_id)
+    linked_count = await db.properties.count_documents(
+        {"agency_id": agency_id, "seller_client_id": cid}
+    )
+    if linked_count > 0:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "error": "client_has_linked_properties",
+                "linked_properties": linked_count,
+                "message": (
+                    "Impossibile eliminare: questo cliente ha "
+                    f"{linked_count} immobile/i in carico. Riassegna o elimina prima quegli immobili."
+                ),
+            },
+        )
     result = await db.clients.delete_one({"id": cid, "agency_id": agency_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="client_not_found")
