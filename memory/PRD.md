@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: M1 ✅ DONE • M2.S1 ✅ • M2.S2 ✅ • M2.S3 ✅ (CRM Clienti) • M2.S3.5 ✅ (Property↔Seller link) • M2.S4 next (Matching + Lead Scoring AI)
+- **Stato progetto**: M1 ✅ DONE • M2.S1 ✅ • M2.S2 ✅ • M2.S3 ✅ (CRM Clienti) • M2.S3.5 ✅ (Property↔Seller link) • **M2.S4 ✅ (Matching + Lead Scoring AI)** • M2.S5 next (Multiposting + Clone-from-URL)
 
 ---
 
@@ -146,7 +146,8 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 - **Settings UI refactor** ✅ (16/06/2026) — Rimossi logo URL + color picker. Aggiunta sezione "Sito web agenzia" con 2 modalità: external (URL + futuro feed XML M2.S5) | omnia_template (galleria M2.S6).
 - **M2.S3** ✅ (16/06/2026) — **CRM Clienti completo**: backend CRUD `/api/app/clients` con filtri (q/status/client_type/operation/city) + paginazione + CSV import + CSV template. Frontend `ClientsPage` (lista con tabella + filtri) + `ClientFormPage` (anagrafica + preferenze ricerca idealista-style: operation, property_types[], cities[], zones[], price/surface/rooms/bathrooms ranges, conditions[], floor_preferences[], must_have_features[], energy_min_class, needs_photos/virtual_tour, GDPR consent). Sidebar `Clienti` sbloccata. 15/15 pytest backend + 7/7 flussi UI passed.
 - **M2.S3.5** ✅ (17/06/2026, D-026) — **Property↔Seller bidirectional link**: aggiunto `Property.seller_client_id`, endpoint `/clients/sellers` (autocomplete), `/clients/{id}/properties` (immobili in carico). UI SellerPicker combobox nel form immobile + sezione "Immobili in carico" nella scheda Cliente seller/landlord. PATCH null-clear supportato. 10/10 pytest backend + flussi UI passed.
-- **M2.S4** ⏳ Matching Engine + **Lead Scoring AI** (D-025) — *next P0*
+- **M2.S4** ✅ (17/06/2026, D-025) — **Matching Engine + Lead Scoring AI**: algoritmo deterministico 14 criteri/100pt (`matching.py`), 4 endpoint REST (`/matches`, `/matches/property/{pid}`, `/matches/client/{cid}`, POST `/matches/lead-score`). **Lead Scoring AI con Gemini-3-flash-preview via Emergent LLM Key + fallback rule-based.** Output AI in italiano naturale: score 0-100 + temperatura (freddo/tiepido/caldo/rovente) + reasons[] + action_hint commerciale. Frontend MatchesPage (card colorate per temperatura + filtro min_score) + MatchLeadScorePage (banner + action card + reasons + breakdown). Sidebar `Match` sbloccata. 17/17 pytest backend + flussi UI passed. Costo medio Gemini per call: ~$0.001.
+- **M2.S5** ⏳ Multiposting XML + **Clone-from-URL** (D-023) — *next P0, da discutere la tua idea segreta in dettaglio prima del coding*
 - **M2.S5** ⏳ XML Multiposting/Feed Output — *user has "secret idea" to discuss prima del coding*
 - **M2.S6** ⏳ White Label + Template Gallery
 

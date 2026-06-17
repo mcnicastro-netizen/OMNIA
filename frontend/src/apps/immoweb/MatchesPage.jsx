@@ -61,10 +61,10 @@ export default function MatchesPage() {
               onChange={(e) => { const v = parseInt(e.target.value, 10); setMinScore(v); load(v); }}
               className="px-3 py-2 border border-stone-300 rounded-md text-sm"
             >
-              <option value={40}>40+ {t("matches.warm") || "tiepidi"}</option>
-              <option value={50}>50+ {t("matches.good") || "buoni"}</option>
-              <option value={65}>65+ {t("matches.hot") || "caldi"}</option>
-              <option value={85}>85+ {t("matches.blazing") || "roventi"}</option>
+              <option value={40}>{`40+ ${t("matches.warm") || "tiepidi"}`}</option>
+              <option value={50}>{`50+ ${t("matches.good") || "buoni"}`}</option>
+              <option value={65}>{`65+ ${t("matches.hot") || "caldi"}`}</option>
+              <option value={85}>{`85+ ${t("matches.blazing") || "roventi"}`}</option>
             </select>
           </div>
         </div>
