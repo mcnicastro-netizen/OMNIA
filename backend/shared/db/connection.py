@@ -103,6 +103,12 @@ async def ensure_indexes() -> None:
         except Exception as e:
             logger.warning(f"Index creation skipped for {coll_name}: {e}")
 
+    # Extra index on properties for seller lookup (M2.S3.5, D-026)
+    try:
+        await db["properties"].create_index([("agency_id", 1), ("seller_client_id", 1)])
+    except Exception as e:
+        logger.warning(f"properties.seller_client_id index skipped: {e}")
+
     # Cross-tenant collections (no agency_id filter, but indexed by lookup field)
     try:
         await db["users"].create_index([("email", 1)], unique=True)

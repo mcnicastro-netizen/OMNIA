@@ -75,6 +75,35 @@ async def create_client(
     return _strip(doc)
 
 
+@router.get("/sellers")
+async def list_sellers_for_autocomplete(
+    q: Optional[str] = None,
+    limit: int = Query(20, ge=1, le=100),
+    user: dict = Depends(get_current_user),
+):
+    """Lightweight client list for the Property form 'Owner / Seller' dropdown.
+    Returns only clients of type seller or landlord, minimal fields.
+    M2.S3.5 (D-026).
+    """
+    agency_id = await _agency(user)
+    db = Database.get()
+    query = {
+        "agency_id": agency_id,
+        "client_type": {"$in": ["seller", "landlord"]},
+    }
+    if q:
+        query["$or"] = [
+            {"name": {"$regex": q, "$options": "i"}},
+            {"surname": {"$regex": q, "$options": "i"}},
+            {"email": {"$regex": q, "$options": "i"}},
+            {"phone": {"$regex": q, "$options": "i"}},
+        ]
+    docs = await db.clients.find(
+        query, {"_id": 0, "id": 1, "name": 1, "surname": 1, "email": 1, "phone": 1, "client_type": 1},
+    ).sort("name", 1).limit(limit).to_list(limit)
+    return {"items": docs, "total": len(docs)}
+
+
 @router.get("/{cid}")
 async def get_client(cid: str, user: dict = Depends(get_current_user)):
     agency_id = await _agency(user)
@@ -113,6 +142,30 @@ async def delete_client(cid: str, user: dict = Depends(require_roles("agency_adm
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="client_not_found")
     return {"status": "ok"}
+
+
+@router.get("/{cid}/properties")
+async def list_properties_for_client(cid: str, user: dict = Depends(get_current_user)):
+    """List properties where this client is the seller/landlord. M2.S3.5 (D-026)."""
+    agency_id = await _agency(user)
+    db = Database.get()
+    # ensure client exists in tenant
+    if not await db.clients.find_one({"id": cid, "agency_id": agency_id}, {"_id": 0, "id": 1}):
+        raise HTTPException(status_code=404, detail="client_not_found")
+    cursor = db.properties.find(
+        {"agency_id": agency_id, "seller_client_id": cid},
+        {"_id": 0, "id": 1, "title": 1, "property_type": 1, "operation": 1,
+         "status": 1, "city": 1, "price": 1, "rent_monthly": 1,
+         "surface_sqm": 1, "rooms": 1, "reference_code": 1,
+         "created_at": 1, "photos": 1},
+    ).sort("created_at", -1)
+    docs = await cursor.to_list(length=200)
+    # collapse photo array to first/cover URL only
+    for d in docs:
+        photos = d.pop("photos", []) or []
+        cover = next((p for p in photos if p.get("is_cover")), photos[0] if photos else None)
+        d["cover_photo_url"] = (cover or {}).get("url")
+    return {"items": docs, "total": len(docs)}
 
 
 # CSV TEMPLATE + IMPORT

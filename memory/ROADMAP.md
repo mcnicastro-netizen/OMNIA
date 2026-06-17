@@ -1,21 +1,37 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: Gennaio 2026
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md`
+**Ultimo aggiornamento**: 17 Giugno 2026
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.0) e `COMPETITIVE_ANALYSIS_IDEALISTA.md`
 
 ---
 
 ## Stato attuale
 
-🟡 **M2 IN CORSO** — M2.S1 + S2 + S2bis done (~38%), prossima M2.S3 (CRM clienti)
+🟡 **M2 IN CORSO** — M2.S1 + S2 + S3 ✅ (~50%), prossima M2.S3.5 + S4 + S5 + S6
 
 ```
 M1  M2  M3  M4  M5  M6
 ✅  🟡  ⏸️  ⏸️  ⏸️  ⏸️
-100% 38% 0%  0%  0%  0%
+100% 50% 0%  0%  0%  0%
 ```
 
-### ⏸️ SESSIONE INTERROTTA il 12 Giu 2026 — Ripresa da qui:
+### 🔥 Revisione strategica 16-17 Giu 2026 (post analisi competitiva)
+
+Dopo aver studiato Idealista (IT+ES), Immobiliare.it (Getrix-based, prezzi opachi €500+/mese), Casa.it e il forum agenti italiani, sono state prese le decisioni **D-022→D-026** (vedi `DECISIONS.md`). Riassunto:
+
+- **D-022** — Architettura **Headless OMNIA**: 1000+ siti agenzia unici, un solo backend
+- **D-023** — **Clone-from-URL** del sito esistente (idea originale del Founder) ora pilastro M2.S5
+- **D-024** — Pricing **aggressivo** lancio (€19/€29/€79 vs €10.000/anno stack tradizionale) + listino pubblico
+- **D-025** — **Lead Scoring AI** anticipato in M2.S4 (risolve lamentela #1 del mercato)
+- **D-026** — `Property.seller_client_id` mini-sprint M2.S3.5 prima di M2.S4
+
+---
+
+## Milestone in corso
+
+**M2 — ImmoWeb MVP (Agency CRM)** (3 di 7 sessioni — S3.5 aggiunta)
+
+Prossima azione: **M2.S3.5 — Property↔Seller link** (mini-sprint, mezza giornata)
 
 **🚨 P0 PRIMA COSA AL RIENTRO**:
 
@@ -115,33 +131,34 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
   - `CORS_ORIGINS` esteso per supportare i domini di produzione (apex + 4 sottodomini)
   - Deploy readiness check: ✅ PASS
 
-### M2 — ImmoWeb MVP (6 sessioni)
+### M2 — ImmoWeb MVP (7 sessioni — S3.5 aggiunta per gap "chi vende")
 - [x] **M2.S1 — Dashboard agenzia + onboarding** ✅ (12 Giu 2026)
-  - Backend: `Agency` model (fiscal/address/contact/branding) + `AgencyInvite` model con magic-link token
-  - 9 endpoint nuovi: POST/GET/PATCH `/app/agencies`, POST/GET/DELETE `/app/agencies/me/invites`, GET `/app/agencies/me/members`, GET `/app/invites/verify`, POST `/app/invites/accept`, GET `/app/dashboard/kpis`
-  - Magic-link flow completo: invito → email Resend → verify pubblico → accept (set password) → auto-login
-  - Slug auto-generato per agenzia (con dedup)
-  - Indici Mongo: `agencies.slug` (unique), `agency_invites.token` (unique), compound `(agency_id, status)`, `(agency_id, email)`
-  - Template email IT/EN/ES per invito agenzia (Resend)
-  - Frontend: `OnboardingWizard` 4-step (Identity → Fiscal → Branding → Done), `AgencyShell` con sidebar navy + topbar, `DashboardPage` con 6 KPI cards (2 reali: members/invites; 4 locked M2.S2/S3/S4), `MembersPage` con tab Attivi/Inviti + invite modal + revoca, `SettingsPage` per edit agenzia, `AcceptInvitePage` pubblica
-  - 5 nuovi data-testid namespaces (`onb-*`, `kpi-*`, `sidebar-nav-*`, `invite-*`, `accept-*`)
-  - i18n IT/EN/ES esteso (75+ chiavi nuove)
-  - Routing: redirect automatico `agency_admin` senza agency → `/app/onboarding`
 - [x] **M2.S2bis — Upload foto immobili** ✅ (12 Giu 2026)
-  - PhotoUploader: drag&drop, resize client-side 1600px, JPEG 82%, max 15 foto, set cover, riordino, delete
-  - Integrato in PropertyFormPage (new + edit), stoccaggio base64 nel doc Mongo (migrazione S3 in M3)
 - [x] **M2.S2 — CRUD Immobili + Import CSV/XML** ✅ (12 Giu 2026)
-  - Backend `Property` model (16 tipi, 25 features, 6 stati), `ImportJob` audit
-  - 9 endpoint REST + CSV template + bulk CSV/XML import
-  - XML feed parsing Italian-friendly (Immobiliare.it/Idealista/generico)
-  - **Parser DEDICATO Agestanet** (`import_agestanet.py`): mappatura 51 codici tipologia, classi energetiche DL 192/DL 90/2013, condizioni, riscaldamento, fino a 15 foto. Auto-detection: se XML contiene `cod_tipologia` o `id_agenzia` → parser Agestanet attivato automaticamente.
-  - Frontend: PropertiesPage, PropertyFormPage (8 sezioni, 25 feature checkboxes), PropertyImportPage (CSV+XML wizard + **modalità "Incolla XML"** per casi in cui non è disponibile URL pubblico)
-  - i18n 90+ chiavi nuove, KPI properties_active reale, sidebar Immobili sbloccata
-  - Testato E2E con XML formato Agestanet reale (Villa Mascalucia, App. Acireale, App. Catania) → 3/3 importati senza errori
-- [ ] M2.S3 — CRM clienti + Richieste
-- [ ] M2.S4 — Matching engine
-- [ ] M2.S5 — Multiposting XML portali
-- [ ] M2.S6 — White Label base
+  - + Parser Agestanet dedicato testato su 65 immobili reali
+- [x] **Settings UI refactor** ✅ (16 Giu 2026)
+  - Rimossi logo URL + color picker. Aggiunta sezione "Sito web agenzia" con 2 modalità (external/template).
+- [x] **M2.S3 — CRM Clienti + Preferenze ricerca (idealista-style)** ✅ (16 Giu 2026)
+  - Backend `/api/app/clients` CRUD + filtri + CSV import
+  - Frontend ClientsPage + ClientFormPage con preferenze replica Idealista
+  - Test: 15/15 pytest backend + 7/7 flussi UI passed
+- [ ] 🆕 **M2.S3.5 — Property↔Seller link** (mini-sprint, mezza giornata) [D-026]
+  - `Property.seller_client_id` con dropdown autocomplete in form immobile
+  - Tab "Immobili in carico" nella scheda Cliente seller
+  - Pannello "Contatti proprietario" nella scheda immobile
+  - **Razionale**: prerequisito M2.S4 (matching deve sapere chi vende cosa)
+- [ ] 🔥 **M2.S4 — Matching Engine + Lead Scoring AI** [D-025]
+  - Layer 1: Property↔Client match score deterministico
+  - Layer 2: Lead Scoring AI (Gemini-3 Flash via Emergent LLM Key)
+  - Layer 3: Vista Match per immobile/cliente + notifica email
+- [ ] 🔥 **M2.S5 — Multiposting XML + Clone-from-URL** [D-023]
+  - Feed XML in uscita verso portali (Idealista, Immobiliare.it, Casa.it, Wikicasa)
+  - Feed XML compatibile sito esistente (anti-Agestanet, D-017)
+  - **Clone-from-URL**: Playwright + Gemini Vision → bundle Next.js statico identico
+- [ ] **M2.S6 — Theme registry + White Label headless** [D-022]
+  - Theme registry per agenzia (S3 versioned bundles)
+  - Editor visuale base + custom domain CNAME
+  - CI per build automatico
 
 ### M3 — ImmobilCloud MVP (5 sessioni)
 - [ ] M3.S1 — Home pubblica + design system

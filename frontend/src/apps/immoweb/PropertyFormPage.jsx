@@ -37,6 +37,7 @@ const empty = {
   energy: { energy_class: "", energy_value: "", heating: "" },
   features: Object.fromEntries(FEATURES.map((k) => [k, false])),
   owner: { name: "", phone: "", email: "" },
+  seller_client_id: "",
   photos: [],
 };
 
@@ -87,6 +88,7 @@ export default function PropertyFormPage() {
       if (!Object.keys(payload.energy).length) delete payload.energy;
       payload.owner = cleanGroup(form.owner);
       if (!Object.keys(payload.owner).length) delete payload.owner;
+      payload.seller_client_id = form.seller_client_id || null;
       payload.photos = form.photos || [];
 
       if (isEdit) {
@@ -283,6 +285,29 @@ export default function PropertyFormPage() {
             <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded">
               🔒 Questi dati sono riservati: non vengono mai mostrati pubblicamente o nei portali esterni.
             </p>
+
+            <Field label={t("properties.field_seller_client") || "Cliente venditore / proprietario"}>
+              <SellerPicker
+                value={form.seller_client_id}
+                onChange={(cid, picked) => {
+                  setForm((f) => {
+                    // Auto-fill owner snapshot when picking, to keep public-portal owner-name aligned
+                    const next = { ...f, seller_client_id: cid || "" };
+                    if (cid && picked) {
+                      next.owner = {
+                        name: [picked.name, picked.surname].filter(Boolean).join(" "),
+                        phone: picked.phone || f.owner.phone || "",
+                        email: picked.email || f.owner.email || "",
+                      };
+                    }
+                    return next;
+                  });
+                }}
+                t={t}
+                lang={lang}
+              />
+            </Field>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Field label={t("properties.field_owner_name")}>
                 <input value={form.owner.name || ""} onChange={(e) => updNested("owner", "name", e.target.value)} className="form-input" />
@@ -353,6 +378,142 @@ function Field({ label, required, children }) {
         {label}{required && <span className="text-red-600 ml-1">*</span>}
       </label>
       {children}
+    </div>
+  );
+}
+
+function SellerPicker({ value, onChange, t, lang }) {
+  const [picked, setPicked] = useState(null);  // { id, name, surname, email, phone, client_type }
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [loadingPicked, setLoadingPicked] = useState(false);
+
+  // Hydrate when editing: fetch the existing seller client details
+  useEffect(() => {
+    if (!value) { setPicked(null); return; }
+    if (picked && picked.id === value) return;
+    setLoadingPicked(true);
+    api.get(`/app/clients/${value}`).then((r) => {
+      setPicked({
+        id: r.data.id,
+        name: r.data.name,
+        surname: r.data.surname,
+        email: r.data.email,
+        phone: r.data.phone,
+        client_type: r.data.client_type,
+      });
+    }).catch(() => setPicked(null)).finally(() => setLoadingPicked(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  // Debounced search
+  useEffect(() => {
+    if (!open) return;
+    const handle = setTimeout(async () => {
+      try {
+        const { data } = await api.get(`/app/clients/sellers`, { params: { q: q || undefined, limit: 15 } });
+        setResults(data.items || []);
+      } catch {
+        setResults([]);
+      }
+    }, 250);
+    return () => clearTimeout(handle);
+  }, [q, open]);
+
+  const select = (item) => {
+    setPicked(item);
+    setOpen(false);
+    setQ("");
+    onChange(item.id, item);
+  };
+  const clear = () => {
+    setPicked(null);
+    setQ("");
+    onChange(null, null);
+  };
+
+  if (picked && !open) {
+    const label = `${picked.name || ""} ${picked.surname || ""}`.trim();
+    return (
+      <div data-testid="seller-picked" className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-md px-3 py-2.5">
+        <div className="flex items-center gap-3">
+          <span className="text-xs uppercase tracking-widest text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-300">
+            {t(`clients.type_${picked.client_type}`) || picked.client_type}
+          </span>
+          <div>
+            <div className="text-sm font-medium text-stone-900">{label || picked.email || picked.id}</div>
+            <div className="text-xs text-stone-500">{picked.email}{picked.phone ? ` · ${picked.phone}` : ""}</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          <a
+            href={`/${lang}/app/clients/${picked.id}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-emerald-800 hover:underline"
+            data-testid="seller-open-card"
+          >
+            {t("properties.seller_open_card") || "Apri scheda ↗"}
+          </a>
+          <button type="button" onClick={() => setOpen(true)} className="text-stone-600 hover:text-stone-900" data-testid="seller-change">
+            {t("properties.seller_change") || "Cambia"}
+          </button>
+          <button type="button" onClick={clear} className="text-red-700 hover:text-red-900" data-testid="seller-clear">
+            {t("properties.seller_clear") || "Rimuovi"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <input
+        data-testid="seller-search"
+        value={q}
+        onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        placeholder={t("properties.seller_search_placeholder") || "Cerca un cliente venditore o proprietario…"}
+        className="form-input"
+      />
+      {open && (
+        <div className="absolute z-10 mt-1 w-full bg-white border border-stone-300 rounded-md shadow-lg max-h-64 overflow-y-auto">
+          {loadingPicked && <div className="p-3 text-xs text-stone-500">{t("common.loading")}</div>}
+          {results.length === 0 ? (
+            <div className="p-3 text-xs text-stone-500">
+              {t("properties.seller_empty") || "Nessun cliente venditore/proprietario trovato. Crealo prima nella sezione Clienti."}
+              <a href={`/${lang}/app/clients/new`} target="_blank" rel="noreferrer" className="block mt-2 text-stone-900 underline">
+                + {t("clients.new_btn")}
+              </a>
+            </div>
+          ) : (
+            results.map((it) => {
+              const label = `${it.name || ""} ${it.surname || ""}`.trim();
+              return (
+                <button
+                  type="button"
+                  key={it.id}
+                  data-testid={`seller-opt-${it.id}`}
+                  onClick={() => select(it)}
+                  className="w-full text-left px-3 py-2 hover:bg-stone-50 border-b border-stone-100 last:border-b-0"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-stone-900">{label || it.email || it.id}</span>
+                    <span className="text-xs uppercase tracking-widest text-stone-500">{t(`clients.type_${it.client_type}`)}</span>
+                  </div>
+                  <div className="text-xs text-stone-500">{it.email}{it.phone ? ` · ${it.phone}` : ""}</div>
+                </button>
+              );
+            })
+          )}
+          <div className="p-2 border-t border-stone-100 text-right">
+            <button type="button" onClick={() => setOpen(false)} className="text-xs text-stone-500 hover:text-stone-900">
+              {t("common.close") || "Chiudi"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -77,6 +77,16 @@ export default function ClientFormPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(isEdit);
+  const [carriedProperties, setCarriedProperties] = useState([]);
+  const isSellerType = form.client_type === "seller" || form.client_type === "landlord";
+
+  useEffect(() => {
+    if (!isEdit || !id) return;
+    if (!isSellerType) { setCarriedProperties([]); return; }
+    api.get(`/app/clients/${id}/properties`)
+      .then((r) => setCarriedProperties(r.data.items || []))
+      .catch(() => setCarriedProperties([]));
+  }, [id, isEdit, isSellerType]);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -238,6 +248,54 @@ export default function ClientFormPage() {
               <span>{t("clients.field_gdpr")}</span>
             </label>
           </Section>
+
+          {/* Immobili in carico — only for seller/landlord (M2.S3.5, D-026) */}
+          {isEdit && isSellerType && (
+            <Section label={t("clients.section_carried_properties") || "Immobili in carico"}>
+              {carriedProperties.length === 0 ? (
+                <p data-testid="carried-empty" className="text-sm text-stone-500 bg-stone-50 border border-stone-200 rounded-md px-4 py-6 text-center">
+                  {t("clients.carried_empty") || "Questo cliente non ha ancora immobili in carico. Vai in Immobili → Nuovo e selezionalo come proprietario."}
+                </p>
+              ) : (
+                <ul data-testid="carried-list" className="space-y-2">
+                  {carriedProperties.map((p) => (
+                    <li
+                      key={p.id}
+                      data-testid={`carried-prop-${p.id}`}
+                      className="flex items-center justify-between gap-3 border border-stone-200 rounded-md p-3 hover:bg-stone-50 cursor-pointer"
+                      onClick={() => window.open(`/${lang}/app/properties/${p.id}`, "_blank")}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {p.cover_photo_url ? (
+                          <img src={p.cover_photo_url} alt="" className="w-16 h-12 object-cover rounded border border-stone-200" />
+                        ) : (
+                          <div className="w-16 h-12 bg-stone-100 border border-stone-200 rounded flex items-center justify-center text-[9px] text-stone-400 uppercase tracking-widest">no photo</div>
+                        )}
+                        <div className="min-w-0">
+                          <div className="font-medium text-stone-900 truncate">{p.title}</div>
+                          <div className="text-xs text-stone-500 truncate">
+                            {t(`properties.type_${p.property_type}`)} · {t(`properties.op_${p.operation}`)} · {p.city}
+                            {p.rooms ? ` · ${p.rooms} ${t("clients.pref_rooms_min").includes("Locali") ? "locali" : "rooms"}` : ""}
+                            {p.surface_sqm ? ` · ${p.surface_sqm} m²` : ""}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="text-sm font-medium text-stone-900">
+                          {p.price ? new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.price)
+                            : p.rent_monthly ? `${new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.rent_monthly)}/mese`
+                            : "—"}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-widest text-stone-500">
+                          {t(`properties.status_${p.status}`) || p.status}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Section>
+          )}
 
           {/* Preferenze di ricerca (mirror idealista filters) */}
           <Section label={t("clients.section_preferences")}>

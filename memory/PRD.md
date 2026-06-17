@@ -17,12 +17,33 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 
 **Vision**: "Più valore, più efficienza, più risultati."
 
-**Differenziale competitivo** (vs Idealista):
-- Sistema MLS con Privacy Dinamica 4 livelli (PUBLIC/MLS_MEMBER/ACCEPTED/OWNER)
-- White Label totale + sottodomini SEO per agenzie
-- AI nativa Gemini integrata in tutti i pilastri
-- Sistema crediti pay-as-you-go + abbonamenti scalabili
-- Academy integrata = lock-in agenzie
+**Differenziale competitivo** (vs Idealista / Immobiliare.it / Casa.it — analisi 16 Giu 2026):
+
+📊 **Stack tradizionale agenzia italiana = €10.000-12.000/anno**:
+- Immobiliare.it (30 spazi): ~€500/mese = €6.000/anno (fonte: forum immobilio.it Dic 2025)
+- Idealista (30 annunci): ~€250/mese = €3.000/anno
+- Gestionale tipo Gestim/Getrix: €80-150/mese = €1.500/anno
+
+💰 **OMNIA fase lancio = €348-948/anno (-95%)** — Starter €29, Pro €29, Agency €79
+
+🎯 **Gap del mercato che OMNIA chiude**:
+| Feature | Idealista | Immobiliare.it | Wikicasa | Getrix | OMNIA |
+|---|:-:|:-:|:-:|:-:|:-:|
+| Pricing trasparente in homepage | ❌ | ❌ | ❌ | ❌ | ✅ |
+| AI nativa nel CRM | ❌ | ⚠️ | ❌ | ❌ | ✅ |
+| White-label sito agenzia su dominio proprio | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Academy integrata | ⚠️ | ❌ | ❌ | ❌ | ✅ |
+| MLS aperto (no franchising) | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Lead scoring AI (qualità lead) | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Migrazione "clone del vecchio sito" | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Privacy 4 livelli dinamica | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Nessun setup fee / nessun lock-in | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+🔥 **Scoperte chiave** (vedi `COMPETITIVE_ANALYSIS_IDEALISTA.md` per dettagli):
+- **Immobiliare.it Pro = Getrix rebrand** (acquisizione, 16.000 installazioni legacy → pool migrabile)
+- **Idealista NON ha CRM proprio**: rivende Miogest/Gestim/Casa.it (debolezza strategica)
+- **Lamentela #1 mercato**: lead poco qualificati → risolta da Lead Scoring AI (D-025)
+- **Tutti hanno pricing opaco** ("Contattaci") → OMNIA mette listino in homepage
 
 ---
 

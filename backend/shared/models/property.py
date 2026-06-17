@@ -129,6 +129,7 @@ class PropertyInDB(TenantModel):
 
     # Internal / privacy
     owner: PropertyOwner = Field(default_factory=PropertyOwner)
+    seller_client_id: Optional[str] = None  # FK to Client (seller/landlord) — M2.S3.5 D-026
     is_exclusive: bool = False  # esclusiva agenzia
     commission_pct: Optional[float] = None  # provvigione
     visibility: Literal["public", "mls_only", "private"] = "public"
@@ -170,6 +171,7 @@ class PropertyCreate(OmniaBaseModel):
     reference_code: Optional[str] = None
     status: PropertyStatus = "draft"
     owner: Optional[PropertyOwner] = None
+    seller_client_id: Optional[str] = None
     is_exclusive: bool = False
     commission_pct: Optional[float] = None
     visibility: Literal["public", "mls_only", "private"] = "public"
@@ -207,6 +209,7 @@ class PropertyUpdate(OmniaBaseModel):
     photos: Optional[List[PropertyPhoto]] = None
     virtual_tour_url: Optional[str] = None
     owner: Optional[PropertyOwner] = None
+    seller_client_id: Optional[str] = None
     is_exclusive: Optional[bool] = None
     commission_pct: Optional[float] = None
     visibility: Optional[Literal["public", "mls_only", "private"]] = None

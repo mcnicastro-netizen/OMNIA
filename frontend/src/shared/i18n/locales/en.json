@@ -260,7 +260,9 @@
     "save": "Save client",
     "saved": "Client saved",
     "delete": "Delete client",
-    "delete_confirm": "Permanently delete this client? This cannot be undone."
+    "delete_confirm": "Permanently delete this client? This cannot be undone.",
+    "section_carried_properties": "Properties under management",
+    "carried_empty": "This client has no properties yet. Go to Properties → New and pick them as the owner."
   },
   "accept_invite": {
     "title": "Accept invitation",

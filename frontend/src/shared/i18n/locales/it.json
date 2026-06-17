@@ -139,6 +139,12 @@
     "field_owner_name": "Nome proprietario",
     "field_owner_phone": "Telefono proprietario",
     "field_owner_email": "Email proprietario",
+    "field_seller_client": "Cliente venditore / proprietario (collega anagrafica)",
+    "seller_search_placeholder": "Cerca un cliente venditore o proprietario…",
+    "seller_empty": "Nessun cliente venditore/proprietario trovato. Crealo prima nella sezione Clienti.",
+    "seller_change": "Cambia",
+    "seller_clear": "Rimuovi",
+    "seller_open_card": "Apri scheda ↗",
     "save": "Salva immobile",
     "saved": "Immobile salvato",
     "delete": "Elimina",
@@ -423,7 +429,9 @@
     "save": "Salva cliente",
     "saved": "Cliente salvato",
     "delete": "Elimina cliente",
-    "delete_confirm": "Eliminare definitivamente questo cliente? L'operazione è irreversibile."
+    "delete_confirm": "Eliminare definitivamente questo cliente? L'operazione è irreversibile.",
+    "section_carried_properties": "Immobili in carico",
+    "carried_empty": "Questo cliente non ha ancora immobili in carico. Vai in Immobili → Nuovo e selezionalo come proprietario."
   },
   "accept_invite": {
     "title": "Accetta invito",

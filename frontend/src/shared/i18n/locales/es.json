@@ -260,7 +260,9 @@
     "save": "Guardar cliente",
     "saved": "Cliente guardado",
     "delete": "Eliminar cliente",
-    "delete_confirm": "¿Eliminar este cliente definitivamente? La acción es irreversible."
+    "delete_confirm": "¿Eliminar este cliente definitivamente? La acción es irreversible.",
+    "section_carried_properties": "Inmuebles en cartera",
+    "carried_empty": "Este cliente aún no tiene inmuebles. Ve a Inmuebles → Nuevo y selecciónalo como propietario."
   },
   "accept_invite": {
     "title": "Aceptar invitación",
