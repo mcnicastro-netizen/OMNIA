@@ -171,7 +171,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - **Completato**: 16 Giu 2026
 - **Test**: 15/15 pytest backend + 7/7 flussi UI
 
-### M2.S3.5 ⏳ — 🆕 Link Property↔Seller Client (mini-sprint, mezza giornata)
+### M2.S3.5 ✅ (17/06/2026, D-026) — Link Property↔Seller Client
 - Aggiungere `Property.seller_client_id: Optional[str]` (D-026)
 - UI form immobile: dropdown autocomplete "Proprietario / Venditore" (filtra Client.client_type ∈ {seller, landlord})
 - UI scheda Cliente seller: tab "Immobili in carico" che lista i suoi immobili
@@ -180,7 +180,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - **Razionale**: prerequisito per M2.S4 (il matching deve sapere chi vende cosa)
 - **Tuo compito**: validare UX dropdown
 
-### M2.S4 ⏳ — 🔥 Matching Engine + Lead Scoring AI (D-025)
+### M2.S4 ✅ (17/06/2026, D-025) — Matching Engine + Lead Scoring AI
 **Era**: solo matching su criteri statici (city 20 + zone 10 + type 15 + op 15 + price 20 + surface 10 + rooms 5 + beds 5)
 **Diventa**:
 - **Layer 1 — Property↔Client match score** (algoritmo deterministico già scoping in v1.1)
@@ -196,7 +196,15 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - **Killer feature commerciale**: *"OMNIA ti dice quale lead chiamare oggi"* — risolve lamentela #1 mercato
 - **Tuo compito**: validare match con criterio umano su 20-30 casi
 
-### M2.S5 ⏳ — 🔥 Multiposting XML + Clone-from-URL (D-023)
+### M2.S5 🟡 IN CORSO — 🔥 Multiposting + Clone-from-URL (D-023, D-028, D-029)
+
+**Stato sotto-sprint**:
+- ✅ **Layer A — Portal Manager** (18/06/2026): backend CRUD `/api/app/portals` con Fernet encryption + 7 portali catalogati (Idealista, Immobiliare.it, Casa.it, Wikicasa, Subito.it, Facebook Catalog, LinkedIn). UI tabella + modale subscribe. Sidebar Portali attiva.
+- ✅ **Hardening 18/06** (post-M2.S4): Lead Score caching 24h (55× speedup), Match preview inline in PropertyFormPage, ErrorBoundary globale.
+- ✅ **Layer B — XML Feed Generator (OSF v1.0)** (18/06/2026): endpoint pubblici `feed.../{slug}.xml|.json` + JSON Schema documentation. Dual XML+JSON, namespace OMNIA AI-extended.
+- ✅ **Layer C — Site-as-Feed (HTML SEO)** (18/06/2026): 4 endpoint pubblici (`/p/{slug}/`, `/p/{slug}/{pid}`, sitemap.xml, photo binary). Schema.org RealEstateListing JSON-LD + OG tags + Idealista crawlable.
+- ⏳ **Layer D — Clone-from-URL**: Playwright + Gemini Vision ← NEXT
+- ⏳ **Layer A++**: cron worker reale push portali push_api
 **Era**: solo feed XML in uscita verso portali
 **Diventa** 3 layer:
 1. **Feed XML in uscita** verso portali (Idealista, Immobiliare.it, Casa.it, Wikicasa, Subito.it)

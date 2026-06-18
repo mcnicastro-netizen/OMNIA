@@ -124,6 +124,14 @@ api_router.include_router(immocloud_router)
 api_router.include_router(immoweb_router)
 api_router.include_router(academy_router)
 
+# Public Feed (OSF v1.0) — M2.S5 Layer B (no auth, portals pull anonymously)
+from apps.immoweb.feed import router as public_feed_router  # noqa: E402
+api_router.include_router(public_feed_router)
+
+# Public Site (Layer C) — HTML pages crawlable by portals + photo binary serving
+from apps.immoweb.site import router as public_site_router  # noqa: E402
+api_router.include_router(public_site_router)
+
 app.include_router(api_router)
 
 
