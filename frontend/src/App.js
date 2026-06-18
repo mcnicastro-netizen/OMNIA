@@ -28,6 +28,7 @@ import PropertyFormPage from "@/apps/immoweb/PropertyFormPage";
 import PropertyImportPage from "@/apps/immoweb/PropertyImportPage";
 import ClientsPage from "@/apps/immoweb/ClientsPage";
 import ClientFormPage from "@/apps/immoweb/ClientFormPage";
+import ClientImportPage from "@/apps/immoweb/ClientImportPage";
 import MatchesPage from "@/apps/immoweb/MatchesPage";
 import MatchLeadScorePage from "@/apps/immoweb/MatchLeadScorePage";
 import PortalsPage from "@/apps/immoweb/PortalsPage";
@@ -187,6 +188,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <ClientFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/clients/import"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <ClientImportPage />
                       </ProtectedRoute>
                     }
                   />

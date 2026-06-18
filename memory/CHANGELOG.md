@@ -1,5 +1,19 @@
 # OMNIA — Changelog
 
+## 2026-06-18 — Quick-Win Wrap-up ✅ (Click-to-Call/WA + CSV Client Import UI)
+
+- **Frontend Smart Clients List**: bottoni inline **📞 tel:** e **💬 WhatsApp** su ogni row.
+  - Click sui bottoni NON apre la scheda (stopPropagation).
+  - Numeri puliti (`/[^\d+]/g`) per `tel:` href; `wa.me` URL senza il `+`.
+  - Messaggio WhatsApp precompilato con `action_hint` dell'AI (`Buongiorno {nome}, {hint}`).
+  - Outlined disabled state se phone/whatsapp mancante.
+- **Frontend Client Import Page** (`/it/app/clients/import`): nuova pagina UI editorial-sober,
+  3 step (Template → Drop CSV → Preview & Import), banner ◆, gestione errori.
+  - Backend endpoints già esistenti (`GET /clients/_template/csv` + `POST /clients/import/csv`).
+- **Bottone "⬆ Importa CSV"** aggiunto sul header della Smart Clients List.
+- **Test**: 4 nuovi backend pytest (`test_client_csv_import.py`) — template + import + reject missing name.
+  Totale 30/30 tests passati nella suite OMNIA.
+
 ## 2026-06-18 — D-FUTURE-04 Smart Clients List ✅ (editorial sober variant)
 
 - **Backend** `apps/immoweb/clients_smart.py`:
