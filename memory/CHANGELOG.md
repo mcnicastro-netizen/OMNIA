@@ -1,0 +1,37 @@
+# OMNIA — Changelog
+
+## 2026-06-18 — M2.S5 Layer D Phase 2 ✅ Theme Registry & Site Generation
+
+- **Backend** `apps/immoweb/themes.py` — 4 temi headless (`minimal`, `classic`, `bold`, `luxury`)
+  consumano il `brand_profile` estratto in Phase 1 e renderizzano il sito pubblico con la brand identity dell'agenzia.
+- **Endpoints** sotto `/api/app/website/`:
+  - `GET /themes` — catalogo 4 temi
+  - `GET /theme` — config corrente + extracted_profile + resolved + public_url
+  - `POST /theme/apply` — applica tema + overrides palette/typography/logo/tagline
+  - `POST /theme/auto-configure` — auto-mapping da brand_profile (`auto_pick_theme` heuristica) + applica palette estratta
+  - `GET /preview/{theme_id}` — render transient (no persist) per anteprima
+- **Modello** `AgencyWebsite` ora ha `extracted_profile` e `theme_config`.
+- **Refactor** `site.py` ora delega l'HTML a `themes.render_index` / `themes.render_property`.
+  Il sito pubblico `/api/p/{slug}/` riflette il tema salvato (CSS variables + struttura).
+- **Frontend** `WebsitePage.jsx` — nuova pagina `/it/app/website` con:
+  - Brand Extractor (input URL → IA estrae palette/tono/struttura)
+  - Theme Picker 4 card con palette preview
+  - Bottone "Configura sito automaticamente" (auto-mapping)
+  - Iframe Live Preview del sito pubblico con cache-busting
+- **Sidebar** aggiunta voce "Sito web" 🎨
+- **i18n** namespace `website` per IT/EN/ES
+- **Testing** 14/14 backend tests passed (`/app/backend/tests/test_themes.py`), tutti i flow frontend OK
+- Fix lint `E741` in `brand_extractor.py` (rename `l` → `link`)
+
+## 2026-06-18 — M2.S5 Layer D Phase 1 ✅ Brand Profile Extractor
+- BeautifulSoup + Gemini-3-flash extraction da URL → JSON brand_profile
+
+## 2026-06-17 — M2.S5 Layer A/B/C ✅
+- Portal Manager (AES-256 Fernet encryption)
+- XML/JSON OSF Public Feed `/api/feed/{slug}.xml`
+- Public SEO HTML pages `/api/p/{slug}/` con schema.org JSON-LD
+
+## Pre-2026-06-17
+- M1 (Architecture/Core auth/i18n/multi-tenancy), M2.S1 (Onboarding), M2.S2 (Property CRUD + XML import)
+- M2.S3 (CRM Clienti + Search Preferences), M2.S3.5 (Property↔Seller linking)
+- M2.S4 (Matching Engine + Gemini AI Lead Scoring + 24h cache)

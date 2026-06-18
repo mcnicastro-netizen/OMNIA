@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: M1 ✅ DONE • M2.S1-S4 ✅ • **M2.S5 Layer A ✅ (Portal Manager)** • Layer B/C/D ⏳ (XML Feed Generator + Site-as-Feed + Clone-from-URL)
+- **Stato progetto**: M1 ✅ DONE • M2.S1-S4 ✅ • **M2.S5 Layer A/B/C ✅** • **M2.S5 Layer D ✅ Phase 1 + Phase 2 (Brand Extractor + Theme Registry)** • M2.S6 ⏳ (Custom domain)
 
 ---
 

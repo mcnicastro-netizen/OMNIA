@@ -32,7 +32,7 @@ export default function WebsitePage() {
 
   const iframeRef = useRef(null);
 
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 3000); };
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 4500); };
 
   const loadAll = async () => {
     setLoading(true);
@@ -296,7 +296,7 @@ export default function WebsitePage() {
               src={previewSrc}
               title="Site preview"
               className="w-full h-full bg-white"
-              sandbox="allow-same-origin"
+              sandbox="allow-same-origin allow-scripts"
             />
           </div>
 
