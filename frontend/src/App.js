@@ -31,6 +31,7 @@ import ClientFormPage from "@/apps/immoweb/ClientFormPage";
 import MatchesPage from "@/apps/immoweb/MatchesPage";
 import MatchLeadScorePage from "@/apps/immoweb/MatchLeadScorePage";
 import PortalsPage from "@/apps/immoweb/PortalsPage";
+import WebsitePage from "@/apps/immoweb/WebsitePage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
@@ -222,6 +223,16 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
                         <PortalsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  {/* Website / Brand Studio (M2.S5 Layer D) */}
+                  <Route
+                    path="app/website"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
+                        <WebsitePage />
                       </ProtectedRoute>
                     }
                   />

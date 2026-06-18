@@ -56,6 +56,7 @@ export default function AgencyShell({ children, current = "dashboard" }) {
     { key: "clients", to: `/${lang}/app/clients`, label: t("immoweb_app.nav_clients"), icon: "👥" },
     { key: "matches", to: `/${lang}/app/matches`, label: t("immoweb_app.nav_matches"), icon: "✦" },
     { key: "portals", to: `/${lang}/app/portals`, label: t("immoweb_app.nav_portals") || "Portali", icon: "📡" },
+    { key: "website", to: `/${lang}/app/website`, label: t("immoweb_app.nav_website") || "Sito web", icon: "🎨" },
     { key: "members", to: `/${lang}/app/members`, label: t("immoweb_app.nav_members"), icon: "✉" },
     { key: "settings", to: `/${lang}/app/settings`, label: t("immoweb_app.nav_settings"), icon: "⚙" },
   ];

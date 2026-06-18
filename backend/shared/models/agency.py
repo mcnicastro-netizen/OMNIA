@@ -63,6 +63,10 @@ class AgencyWebsite(OmniaBaseModel):
     external_url: Optional[str] = Field(default=None, max_length=300)
     template_id: Optional[str] = Field(default=None, max_length=60)
     custom_domain: Optional[str] = Field(default=None, max_length=120)
+    # M2.S5 Layer D Phase 1 — raw extracted brand profile (output of /website/extract-from-url)
+    extracted_profile: Optional[dict] = None
+    # M2.S5 Layer D Phase 2 — active theme configuration applied to the public site
+    theme_config: Optional[dict] = None
 
 
 class AgencyInDB(TimestampedModel):

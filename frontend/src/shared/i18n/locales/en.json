@@ -93,7 +93,8 @@
     "nav_members": "Team",
     "nav_settings": "Settings",
     "nav_logout": "Sign out",
-    "agency_label": "Agency"
+    "agency_label": "Agency",
+    "nav_website": "Website"
   },
   "onboarding": {
     "title": "Set up your agency",
@@ -274,5 +275,30 @@
     "loading": "Verifying invitation…",
     "invalid": "This invitation is no longer valid or has expired.",
     "success": "Account created. Taking you to the dashboard…"
+  },
+  "website": {
+    "title": "Website & Brand Studio",
+    "subtitle": "Extract your existing brand identity, pick an OMNIA theme, and publish your listings in a few clicks.",
+    "section_extractor": "1. Extract brand from existing site",
+    "extractor_intro": "Enter your current agency website URL — OMNIA will use AI to extract palette, tone and style.",
+    "extract_btn": "Extract brand",
+    "extracting": "Extracting…",
+    "extract_success": "Brand extracted successfully",
+    "extracted_confidence": "Confidence",
+    "extracted_logo": "Logo found",
+    "field_tone": "Tone of voice",
+    "field_header": "Header",
+    "field_card": "Card style",
+    "auto_configure_btn": "Auto-configure website",
+    "auto_success": "Theme {{theme}} applied automatically from extracted brand",
+    "section_theme": "2. Pick a theme",
+    "theme_intro": "Pick an OMNIA theme — we'll apply it immediately to your public site.",
+    "active": "Active",
+    "apply_success": "Theme {{theme}} applied",
+    "section_preview": "3. Live preview",
+    "preview_intro": "Live preview of your site with the chosen theme — this is exactly what visitors see.",
+    "refresh": "Refresh",
+    "open_public": "Open public site",
+    "show_resolved": "Show applied theme config (JSON)"
   }
 }

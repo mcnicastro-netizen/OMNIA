@@ -264,7 +264,8 @@
     "nav_members": "Collaboratori",
     "nav_settings": "Impostazioni",
     "nav_logout": "Esci",
-    "agency_label": "Agenzia"
+    "agency_label": "Agenzia",
+    "nav_website": "Sito web"
   },
   "onboarding": {
     "title": "Configura la tua agenzia",
@@ -475,5 +476,30 @@
     "loading": "Verifica invito…",
     "invalid": "Questo invito non è più valido o è scaduto.",
     "success": "Account creato. Ti stiamo portando alla dashboard…"
+  },
+  "website": {
+    "title": "Sito web & Brand Studio",
+    "subtitle": "Estrai il brand del tuo sito attuale, scegli un tema OMNIA e pubblica il tuo portafoglio in pochi clic.",
+    "section_extractor": "1. Estrai il brand dal tuo sito attuale",
+    "extractor_intro": "Inserisci l'URL del sito attuale dell'agenzia: OMNIA estrarrà palette, tono di voce e stile usando l'IA.",
+    "extract_btn": "Estrai brand",
+    "extracting": "Estrazione in corso…",
+    "extract_success": "Brand estratto con successo",
+    "extracted_confidence": "Confidenza",
+    "extracted_logo": "Logo individuato",
+    "field_tone": "Tono di voce",
+    "field_header": "Header",
+    "field_card": "Stile card",
+    "auto_configure_btn": "Configura sito automaticamente",
+    "auto_success": "Tema {{theme}} applicato automaticamente dal brand estratto",
+    "section_theme": "2. Scegli un tema",
+    "theme_intro": "Seleziona un tema OMNIA: lo applichiamo immediatamente al tuo sito pubblico.",
+    "active": "Attivo",
+    "apply_success": "Tema {{theme}} applicato",
+    "section_preview": "3. Anteprima live",
+    "preview_intro": "Anteprima del sito con il tema selezionato — questo è esattamente quello che vedono i visitatori.",
+    "refresh": "Aggiorna",
+    "open_public": "Apri sito pubblico",
+    "show_resolved": "Mostra configurazione tema applicata (JSON)"
   }
 }
