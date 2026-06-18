@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import "@/shared/i18n/config";
 import { SUPPORTED_LANGS, DEFAULT_LANG } from "@/shared/i18n/config";
 import { AuthProvider } from "@/shared/lib/auth";
+import ErrorBoundary from "@/shared/components/ErrorBoundary";
 
 import LandingApp from "@/apps/landing/LandingApp";
 import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
@@ -85,6 +86,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<RootRedirect />} />
           <Route
@@ -234,6 +236,7 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
     </AuthProvider>
   );

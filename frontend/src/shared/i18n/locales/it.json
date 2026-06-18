@@ -453,7 +453,11 @@
     "lead_temp": "Temperatura lead",
     "next_action": "Azione consigliata",
     "why": "Perché",
-    "match_detail": "Dettaglio match deterministico"
+    "match_detail": "Dettaglio match deterministico",
+    "section_title": "✨ Lead caldi per questo immobile",
+    "top_clients_for_property": "Top clienti compatibili",
+    "see_all": "Vedi tutti",
+    "no_matches_for_property": "Nessun cliente compatibile al momento. Aggiungi clienti con preferenze coerenti per vedere i match qui."
   },
   "portals": {
     "title": "Portali pubblicitari",

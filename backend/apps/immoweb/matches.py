@@ -168,10 +168,12 @@ async def matches_for_client(
 async def compute_lead_score(
     property_id: str,
     client_id: str,
+    force_refresh: bool = False,
     user: dict = Depends(get_current_user),
 ):
     """Compute AI Lead Score for a specific (property, client) pair.
     Combines deterministic match + Gemini-3 Flash classification.
+    24h cache by default (force_refresh=true to bypass).
     Always returns a valid response (falls back to rule-based on AI failure).
     """
     agency_id = await _agency(user)
@@ -183,10 +185,33 @@ async def compute_lead_score(
     if not c:
         raise HTTPException(status_code=404, detail="client_not_found")
     match = compute_match(p, c)
+
+    cache_key = {"agency_id": agency_id, "property_id": property_id, "client_id": client_id}
+    if not force_refresh:
+        hit = await db.lead_score_cache.find_one(cache_key, {"_id": 0})
+        if hit:
+            # Keep cached AI; the deterministic match is always recomputed (cheap and fresh)
+            return {
+                "property": _trim_property(p),
+                "client": _trim_client(c),
+                "match": match,
+                "lead_score": hit["lead_score"],
+                "cached": True,
+                "cached_at": hit.get("cached_at"),
+            }
+
     ai = await score_lead(c, p, match)
+    # Persist (atomic upsert)
+    from datetime import datetime, timezone
+    await db.lead_score_cache.update_one(
+        cache_key,
+        {"$set": {**cache_key, "lead_score": ai, "cached_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
     return {
         "property": _trim_property(p),
         "client": _trim_client(c),
         "match": match,
         "lead_score": ai,
+        "cached": False,
     }

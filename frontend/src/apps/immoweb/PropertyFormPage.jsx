@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import AgencyShell from "./components/AgencyShell";
 import PhotoUploader from "./components/PhotoUploader";
+import PropertyMatchesPreview from "./components/PropertyMatchesPreview";
 import { api } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 
@@ -279,6 +280,13 @@ export default function PropertyFormPage() {
           <Section label="Foto immobile">
             <PhotoUploader photos={form.photos || []} onChange={(photos) => upd("photos", photos)} max={15} />
           </Section>
+
+          {/* AI Match preview — only in edit mode */}
+          {isEdit && id && (
+            <Section label={t("matches.section_title") || "✨ Lead caldi per questo immobile"}>
+              <PropertyMatchesPreview propertyId={id} lang={lang} />
+            </Section>
+          )}
 
           {/* Owner (reserved) */}
           <Section label={t("properties.section_owner")}>

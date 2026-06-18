@@ -109,6 +109,17 @@ async def ensure_indexes() -> None:
     except Exception as e:
         logger.warning(f"properties.seller_client_id index skipped: {e}")
 
+    # Lead score cache: TTL index on cached_at — entries expire after 24h
+    try:
+        await db["lead_score_cache"].create_index(
+            [("agency_id", 1), ("property_id", 1), ("client_id", 1)], unique=True
+        )
+        await db["lead_score_cache"].create_index(
+            "cached_at", expireAfterSeconds=86400  # 24h
+        )
+    except Exception as e:
+        logger.warning(f"lead_score_cache indexes skipped: {e}")
+
     # Cross-tenant collections (no agency_id filter, but indexed by lookup field)
     try:
         await db["users"].create_index([("email", 1)], unique=True)
