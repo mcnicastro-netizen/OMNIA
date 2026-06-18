@@ -352,3 +352,15 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Modello**: ogni portale è un "PortalAdapter" registrato a backend. Aggiungere il 92esimo = creare nuovo adapter, no schema migration.
 - **MLS Bridge Agestanet**: ❌ NON facciamo bridge. OMNIA avrà **il proprio MLS** in M4 (D-001).
 - **Stato**: ✅ confermata
+
+### D-FUTURE-06 — Demo Flow Guidato pubblico (/it/demo) ⏳
+- **Idea agent + Founder** (18 Giu 2026, post M2.S5 Layer A)
+- **Cosa**: pagina pubblica `/it/demo` (senza login) che simula in 60 secondi l'esperienza killer OMNIA con dati fittizi:
+  1. Step 1 — "Inserisci un immobile" (form compatto, 5 campi: titolo, città, prezzo, mq, tipologia)
+  2. Step 2 — "Lo pubblico su 7 portali" (animazione live: Idealista ✓, Immobiliare.it ✓, Casa.it ✓, …)
+  3. Step 3 — "Ti mostro chi è il lead più caldo nei tuoi clienti CRM" (3-5 lead fittizi pre-popolati, Lead Score AI calcolato live via Gemini)
+  4. Step 4 — Call-to-action: "Vuoi tutto questo per la tua agenzia? Inizia con OMNIA" → registrazione
+- **Razionale**: strumento principale per chiudere abbonamenti con poco sforzo commerciale. Trasforma il sito da brochure a esperienza interattiva. Conversion rate atteso 5-15× rispetto a una landing tradizionale.
+- **Quando**: post-M2.S5 completo (Layer B/C/D) o anche prima se serve materiale commerciale. Idealmente prima del lancio commerciale M4.
+- **Stack**: usa Lead Scoring AI già live (M2.S4) con session anonima + dati seed pre-caricati in memoria (no scrittura DB).
+- **Stato**: in memoria, da fare quando arriva il momento commerciale.
