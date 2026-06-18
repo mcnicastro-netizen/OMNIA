@@ -11,6 +11,7 @@ from apps.immoweb.invites import router as invites_router
 from apps.immoweb.dashboard import router as dashboard_router
 from apps.immoweb.properties import router as properties_router
 from apps.immoweb.clients import router as clients_router
+from apps.immoweb.clients_smart import router as clients_smart_router
 from apps.immoweb.matches import router as matches_router
 from apps.immoweb.portals import router as portals_router
 from apps.immoweb.brand_extractor import router as brand_router
@@ -35,6 +36,7 @@ router.include_router(agencies_router)
 router.include_router(invites_router)
 router.include_router(dashboard_router)
 router.include_router(properties_router)
+router.include_router(clients_smart_router)
 router.include_router(clients_router)
 router.include_router(matches_router)
 router.include_router(portals_router)

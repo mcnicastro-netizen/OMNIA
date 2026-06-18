@@ -263,7 +263,9 @@
     "delete": "Eliminar cliente",
     "delete_confirm": "¿Eliminar este cliente definitivamente? La acción es irreversible.",
     "section_carried_properties": "Inmuebles en cartera",
-    "carried_empty": "Este cliente aún no tiene inmuebles. Ve a Inmuebles → Nuevo y selecciónalo como propietario."
+    "carried_empty": "Este cliente aún no tiene inmuebles. Ve a Inmuebles → Nuevo y selecciónalo como propietario.",
+    "op_sale": "Venta",
+    "op_rent": "Alquiler"
   },
   "accept_invite": {
     "title": "Aceptar invitación",
@@ -300,5 +302,35 @@
     "refresh": "Actualizar",
     "open_public": "Abrir sitio público",
     "show_resolved": "Mostrar configuración del tema (JSON)"
+  },
+  "clients_smart": {
+    "subtitle": "Ordenados por prioridad de acción — los leads más calientes primero.",
+    "banner_text": "Smart Sorting activo: los clientes están ordenados por AI Lead Score cuando está disponible, si no por match determinístico. Haz click en un cliente para abrir su ficha.",
+    "no_matches": "0 match",
+    "match_singular": "match",
+    "match_plural": "match",
+    "no_prefs_set": "Sin preferencias configuradas",
+    "seller_no_prefs": "Vendedor — no genera matching",
+    "temp_rovente": "Ardiente",
+    "temp_caldo": "Caliente",
+    "temp_tiepido": "Tibio",
+    "temp_freddo": "Frío",
+    "bucket_all": "Todos",
+    "bucket_to_call_today": "Llamar hoy",
+    "bucket_rovente": "Ardientes",
+    "bucket_caldo": "Calientes",
+    "bucket_tiepido": "Tibios",
+    "bucket_freddo": "Fríos",
+    "bucket_searchers": "Compradores",
+    "bucket_sellers": "Vendedores",
+    "sort_score_desc": "Score más alto",
+    "sort_score_asc": "Score más bajo",
+    "sort_created_desc": "Más recientes",
+    "sort_name_asc": "Nombre A→Z",
+    "refresh_ai_btn": "⚡ Refrescar IA ({{n}})",
+    "refreshing": "Calculando IA…",
+    "refresh_done": "AI Lead Score actualizado para {{n}} clientes",
+    "refresh_error": "Error actualizando scores IA",
+    "refresh_hint": "{{n}} clientes sin score IA"
   }
 }

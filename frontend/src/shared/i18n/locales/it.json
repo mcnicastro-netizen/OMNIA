@@ -434,7 +434,9 @@
     "delete": "Elimina cliente",
     "delete_confirm": "Eliminare definitivamente questo cliente? L'operazione è irreversibile.",
     "section_carried_properties": "Immobili in carico",
-    "carried_empty": "Questo cliente non ha ancora immobili in carico. Vai in Immobili → Nuovo e selezionalo come proprietario."
+    "carried_empty": "Questo cliente non ha ancora immobili in carico. Vai in Immobili → Nuovo e selezionalo come proprietario.",
+    "op_sale": "Vendita",
+    "op_rent": "Affitto"
   },
   "matches": {
     "title": "Match",
@@ -501,5 +503,35 @@
     "refresh": "Aggiorna",
     "open_public": "Apri sito pubblico",
     "show_resolved": "Mostra configurazione tema applicata (JSON)"
+  },
+  "clients_smart": {
+    "subtitle": "Ordinati per priorità d'azione. In alto i lead più caldi.",
+    "banner_text": "Smart Sorting attivo: i clienti sono ordinati per AI Lead Score quando disponibile, altrimenti per match deterministico. Clicca su un cliente per aprire la sua scheda completa.",
+    "no_matches": "0 match",
+    "match_singular": "match",
+    "match_plural": "match",
+    "no_prefs_set": "Nessuna preferenza impostata",
+    "seller_no_prefs": "Venditore — non genera match automatico",
+    "temp_rovente": "Rovente",
+    "temp_caldo": "Caldo",
+    "temp_tiepido": "Tiepido",
+    "temp_freddo": "Freddo",
+    "bucket_all": "Tutti",
+    "bucket_to_call_today": "Da chiamare oggi",
+    "bucket_rovente": "Roventi",
+    "bucket_caldo": "Caldi",
+    "bucket_tiepido": "Tiepidi",
+    "bucket_freddo": "Freddi",
+    "bucket_searchers": "Acquirenti",
+    "bucket_sellers": "Venditori",
+    "sort_score_desc": "Score più alto",
+    "sort_score_asc": "Score più basso",
+    "sort_created_desc": "Più recenti",
+    "sort_name_asc": "Nome A→Z",
+    "refresh_ai_btn": "⚡ Aggiorna AI ({{n}})",
+    "refreshing": "Calcolo AI in corso…",
+    "refresh_done": "AI Lead Score aggiornato per {{n}} clienti",
+    "refresh_error": "Errore durante l'aggiornamento AI",
+    "refresh_hint": "{{n}} clienti senza punteggio AI"
   }
 }

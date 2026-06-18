@@ -263,7 +263,9 @@
     "delete": "Delete client",
     "delete_confirm": "Permanently delete this client? This cannot be undone.",
     "section_carried_properties": "Properties under management",
-    "carried_empty": "This client has no properties yet. Go to Properties → New and pick them as the owner."
+    "carried_empty": "This client has no properties yet. Go to Properties → New and pick them as the owner.",
+    "op_sale": "Sale",
+    "op_rent": "Rent"
   },
   "accept_invite": {
     "title": "Accept invitation",
@@ -300,5 +302,35 @@
     "refresh": "Refresh",
     "open_public": "Open public site",
     "show_resolved": "Show applied theme config (JSON)"
+  },
+  "clients_smart": {
+    "subtitle": "Sorted by action priority — hottest leads first.",
+    "banner_text": "Smart Sorting on: clients are sorted by AI Lead Score when available, otherwise by deterministic match. Click any client to open the full profile.",
+    "no_matches": "0 matches",
+    "match_singular": "match",
+    "match_plural": "matches",
+    "no_prefs_set": "No search preferences set",
+    "seller_no_prefs": "Seller — does not generate matches",
+    "temp_rovente": "Burning",
+    "temp_caldo": "Hot",
+    "temp_tiepido": "Warm",
+    "temp_freddo": "Cold",
+    "bucket_all": "All",
+    "bucket_to_call_today": "Call today",
+    "bucket_rovente": "Burning",
+    "bucket_caldo": "Hot",
+    "bucket_tiepido": "Warm",
+    "bucket_freddo": "Cold",
+    "bucket_searchers": "Buyers",
+    "bucket_sellers": "Sellers",
+    "sort_score_desc": "Highest score",
+    "sort_score_asc": "Lowest score",
+    "sort_created_desc": "Newest first",
+    "sort_name_asc": "Name A→Z",
+    "refresh_ai_btn": "⚡ Refresh AI ({{n}})",
+    "refreshing": "Computing AI…",
+    "refresh_done": "AI Lead Score refreshed for {{n}} clients",
+    "refresh_error": "Error refreshing AI scores",
+    "refresh_hint": "{{n}} clients without AI score yet"
   }
 }
