@@ -199,32 +199,10 @@ async def smart_clients(
         (d["property_id"], d["client_id"]): d for d in cache_docs
     }
 
-    # 4. Enrich
-    enriched = [_enrich_client(c, properties, cache_index) for c in clients]
-
-    # 5. Bucket filter
-    if bucket == "to_call_today":
-        enriched = [e for e in enriched if (e.get("temperature") in ("rovente", "caldo")) and (e.get("matches_count") or 0) > 0]
-    elif bucket in ("rovente", "caldo", "tiepido", "freddo"):
-        enriched = [e for e in enriched if e.get("temperature") == bucket]
-    elif bucket == "searchers":
-        enriched = [e for e in enriched if e.get("client_type") in SEARCHER_TYPES]
-    elif bucket == "sellers":
-        enriched = [e for e in enriched if e.get("client_type") not in SEARCHER_TYPES]
-    # else "all" or None → no filter
-
-    # 6. Sort
-    if sort == "score_desc":
-        enriched.sort(key=lambda e: (e.get("lead_score") or -1, e.get("matches_count") or 0), reverse=True)
-    elif sort == "score_asc":
-        enriched.sort(key=lambda e: (e.get("lead_score") or 9999, e.get("matches_count") or 0))
-    elif sort == "created_desc":
-        enriched.sort(key=lambda e: e.get("created_at") or "", reverse=True)
-    elif sort == "name_asc":
-        enriched.sort(key=lambda e: ((e.get("name") or "").lower(), (e.get("surname") or "").lower()))
-
-    # 7. Counts for the UI pills (computed on the full set, pre-bucket)
+    # 4. Enrich once (used for both counts and filtered output)
     full_enriched = [_enrich_client(c, properties, cache_index) for c in clients]
+
+    # 5. Counts for the UI pills (computed on the full set, pre-bucket)
     counts = {
         "all": len(full_enriched),
         "to_call_today": sum(1 for e in full_enriched if e.get("temperature") in ("rovente", "caldo") and (e.get("matches_count") or 0) > 0),
@@ -242,6 +220,28 @@ async def smart_clients(
             and (e.get("matches_count") or 0) > 0
         ),
     }
+
+    # 6. Bucket filter (applied to a copy so counts remain global)
+    enriched = list(full_enriched)
+    if bucket == "to_call_today":
+        enriched = [e for e in enriched if (e.get("temperature") in ("rovente", "caldo")) and (e.get("matches_count") or 0) > 0]
+    elif bucket in ("rovente", "caldo", "tiepido", "freddo"):
+        enriched = [e for e in enriched if e.get("temperature") == bucket]
+    elif bucket == "searchers":
+        enriched = [e for e in enriched if e.get("client_type") in SEARCHER_TYPES]
+    elif bucket == "sellers":
+        enriched = [e for e in enriched if e.get("client_type") not in SEARCHER_TYPES]
+    # else "all" or None → no filter
+
+    # 7. Sort
+    if sort == "score_desc":
+        enriched.sort(key=lambda e: (e.get("lead_score") or -1, e.get("matches_count") or 0), reverse=True)
+    elif sort == "score_asc":
+        enriched.sort(key=lambda e: (e.get("lead_score") or 9999, e.get("matches_count") or 0))
+    elif sort == "created_desc":
+        enriched.sort(key=lambda e: e.get("created_at") or "", reverse=True)
+    elif sort == "name_asc":
+        enriched.sort(key=lambda e: ((e.get("name") or "").lower(), (e.get("surname") or "").lower()))
 
     return {
         "items": enriched,

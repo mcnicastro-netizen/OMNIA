@@ -1,5 +1,25 @@
 # OMNIA — Changelog
 
+## 2026-06-18 — D-FUTURE-04 Smart Clients List ✅ (editorial sober variant)
+
+- **Backend** `apps/immoweb/clients_smart.py`:
+  - `GET /api/app/clients/smart` — lista clienti arricchita con `lead_score`, `temperature`,
+    `matches_count`, `best_match_score`, `top_property`, `action_hint`, `ai_cached`.
+    Ordinamento default `score_desc`. Filtri `bucket` (all/to_call_today/rovente/caldo/tiepido/freddo/
+    searchers/sellers) + `q` search + `sort` (score_desc/asc, created_desc, name_asc).
+  - `POST /api/app/clients/smart/refresh` — batch AI scoring in parallelo (asyncio.gather)
+    via Gemini-3-flash + 24h cache, fino a 10 clienti uncached per chiamata, idempotente.
+  - Route ordering fix: `clients_smart_router` montato **prima** di `clients_router`
+    in `routes.py` per evitare collision con `/clients/{cid}` dinamico.
+- **Frontend** `ClientsPage.jsx` riscritto editorial-sober:
+  - ScoreBox in Fraunces serif, TempPill monocroma (puntino stone-900/700/400/300 + label),
+    MatchesPill stone-100, action hint italic stone-500, banner stone-100, filter pills stone-only.
+  - Sort dropdown, search input, bucket filters, refresh-AI button condizionato a uncached>0.
+  - 23+ data-testids su tutti gli elementi interattivi.
+- **i18n** namespace `clients_smart` per IT/EN/ES.
+- **Testing** 10/10 pytest passati (`/app/backend/tests/test_clients_smart.py`) + frontend full pass.
+  Regressione vanilla GET /clients OK.
+
 ## 2026-06-18 — Social Share su property pubblica ✅ (Layer D Enhancement)
 
 - **Backend** `themes.py` — aggiunto `_share_block()` con 4 pulsanti (WhatsApp · Facebook · Email · Copy Link)
