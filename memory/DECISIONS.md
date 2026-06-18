@@ -295,16 +295,19 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Quando**: M6.S5
 - **Note**: Contattare ordini professionali, capire requisiti
 
-### D-FUTURE-04 — Smart Clients List (post-M2.S4) ⏳
+### D-FUTURE-04 — Smart Clients List ✅ DONE (18 Giu 2026)
 - **Idea del Founder** (17 Giu 2026)
 - **Cosa**: trasformare la lista clienti da "rubrica" a *cruscotto azione*:
   - Ordinamento default per **lead score** (più caldo in alto)
-  - Micro-indicatori inline: "🔥 3 match attivi", "⚠️ inattivo da 14 giorni", "📞 da richiamare"
-  - Filtro rapido "Solo lead caldi" (score > 70)
-  - Quick action su row: "Chiama subito", "Manda WhatsApp", "Vedi match"
-- **Razionale**: appena avremo lead scoring (M2.S4), esporlo direttamente nella lista massimizza l'impatto. Trasforma il primo touchpoint quotidiano dell'agente in una to-do list intelligente.
-- **Quando**: subito dopo M2.S4 (mini-sprint M2.S4.5 o inserito in M2.S4 stesso se rimane tempo)
-- **Stato**: in memoria, da fare dopo M2.S4
+  - Micro-indicatori inline: "🔥 3 match attivi", "⚠️ inattivo da 14 giorni"
+  - Filtro rapido bucket pills
+  - Quick action su row: 📞 chiama / 💬 WhatsApp deep-link con messaggio AI-precompilato
+- **Variante scelta**: editorial-sober (option C) — palette stone-only, temperature solo testo, no colori vivi.
+- **Implementato**:
+  - Backend `apps/immoweb/clients_smart.py`: `GET /smart` enriched + bucket filters + `POST /smart/refresh` batch AI parallel.
+  - Frontend `ClientsPage.jsx` riscritto con ScoreBox Fraunces serif, TempPill monocroma, MatchesPill, inline 📞/💬 buttons.
+- **Test**: 10/10 pytest passed (`test_clients_smart.py`)
+- **Stato**: ✅ DONE
 
 ### D-FUTURE-05 — Marketing Showcase Screenshot (post-traction) ⏳
 - **Idea del Founder** (17 Giu 2026, post M2.S4)
@@ -363,4 +366,29 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale**: strumento principale per chiudere abbonamenti con poco sforzo commerciale. Trasforma il sito da brochure a esperienza interattiva. Conversion rate atteso 5-15× rispetto a una landing tradizionale.
 - **Quando**: post-M2.S5 completo (Layer B/C/D) o anche prima se serve materiale commerciale. Idealmente prima del lancio commerciale M4.
 - **Stack**: usa Lead Scoring AI già live (M2.S4) con session anonima + dati seed pre-caricati in memoria (no scrittura DB).
-- **Stato**: in memoria, da fare quando arriva il momento commerciale.
+- **Stato**: in memoria, da fare quando arriva il momento commerciale. **NOTA Founder (18 Giu)**: "no pitch parziale" — rinviato a dopo il completamento di tutta la Milestone 2 + AI Smart Import.
+
+### D-FUTURE-07 — AI Smart Import Clienti 🔴 P0 NEXT (18 Giu 2026)
+- **Osservazione del Founder** (18 Giu 2026): «Una agenzia con oltre 100 clienti, quanto tempo impiegherebbe a compilare il template? Non si può utilizzare un sistema simile a quello pensato per foto e descrizioni del portafoglio immobili?»
+- **Problema**: il CSV template ha 18 colonne, compilare 100 clienti manualmente richiede 5-13 ore. Nessun agente lo farà → la Smart Clients List (M2.S4 + D-FUTURE-04) resta vuota → tutto il lavoro AI Lead Scoring vale zero per mancanza di dati.
+- **Cosa**: applicare il **pattern del Brand Extractor** (input non strutturato + Gemini → schema OMNIA) alla migrazione clienti:
+  - Input accettati: Excel arbitrario (qualsiasi nome colonna), vCard (.vcf), export contatti Gmail/Outlook, lista testo libero con note ("Marco Bianchi 333... cerca trilocale Roma <300k"), anche PDF o screenshot di tabelle.
+  - Gemini-3-flash parsa il file → propone righe già mappate al nostro schema (`name`, `client_type`, `pref_cities`, `pref_price_max`, ecc.) con confidence per riga.
+  - **Preview side-by-side**: file originale (sinistra) vs schema OMNIA (destra), con highlight celle dubbie.
+  - Bulk-edit inline + conferma → import in batch.
+- **Endpoint previsto**: `POST /api/app/clients/import/ai` (multipart file upload, ritorna draft preview con ID temporaneo), `POST /api/app/clients/import/ai/{draft_id}/commit` (esegue inserimento dopo conferma).
+- **Costo Gemini**: trascurabile (~€0.02-0.10 per file da 100 righe, una tantum).
+- **Privacy GDPR**: no caching permanente del file originale, log scrubbed, draft ha TTL 1h.
+- **Fallback**: il CSV template resta come "modalità avanzata" per chi vuole controllo totale.
+- **Sblocca**: adoption reale dell'ecosistema (è la differenza tra "passo a OMNIA in 5 min" e "passo quando avrò un weekend").
+- **Pattern coerente**: stesso paradigma usato per `brand_extractor.py` (URL → Gemini → JSON strutturato) e `import_agestanet.py` (XML legacy → schema OMNIA).
+- **Stato**: 🔴 **PROSSIMA SESSIONE** (P0)
+
+### D-FUTURE-08 — Social Share su property pubblica ✅ DONE (18 Giu 2026)
+- **Idea agent + Founder** (18 Giu 2026, post M2.S5 Layer D Phase 2)
+- **Cosa**: 4 pulsanti share sotto ogni immobile pubblico (`/api/p/{slug}/{pid}`): WhatsApp, Facebook, Email, Copy Link.
+- **Decisione critica scartata** (con spirito critico del Founder): LinkedIn, Telegram, X — ROI quasi nullo su residenziale IT. Solo i 4 core, no menu "altri canali".
+- **Razionale**: WhatsApp #1 in IT per immobiliare residenziale, Facebook ottimo per gruppi locali + Marketplace, Email/Copy fallback essenziali.
+- **Implementato**: `_share_block()` in `themes.py` + absolute URLs (FRONTEND_URL env) + JS inline copy-to-clipboard, no librerie esterne.
+- **Test**: 2 pytest dedicati (`test_themes.py::TestSocialShare`)
+- **Stato**: ✅ DONE

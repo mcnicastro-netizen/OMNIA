@@ -1,37 +1,41 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 17 Giugno 2026
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.0) e `COMPETITIVE_ANALYSIS_IDEALISTA.md`
+**Ultimo aggiornamento**: 18 Giugno 2026
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.1) e `COMPETITIVE_ANALYSIS_IDEALISTA.md`
 
 ---
 
 ## Stato attuale
 
-🟡 **M2 IN CORSO** — M2.S1 + S2 + S3 ✅ (~50%), prossima M2.S3.5 + S4 + S5 + S6
+🟢 **M2.S1→S5 ✅ DONE (95%)** — resta solo M2.S6 (Custom Domain) + 🔴 nuova P0 D-FUTURE-07 (AI Smart Import Clienti).
 
 ```
-M1  M2  M3  M4  M5  M6
-✅  🟡  ⏸️  ⏸️  ⏸️  ⏸️
-100% 50% 0%  0%  0%  0%
+M1   M2    M3  M4  M5  M6
+✅   🟢    ⏸️  ⏸️  ⏸️  ⏸️
+100% 95%  0%  0%  0%  0%
 ```
 
-### 🔥 Revisione strategica 16-17 Giu 2026 (post analisi competitiva)
+### 🔥 Sessione 18 Giugno 2026 — Riassunto
 
-Dopo aver studiato Idealista (IT+ES), Immobiliare.it (Getrix-based, prezzi opachi €500+/mese), Casa.it e il forum agenti italiani, sono state prese le decisioni **D-022→D-026** (vedi `DECISIONS.md`). Riassunto:
+Completato in un giorno:
+- **M2.S5 Layer D Phase 2** — Theme Registry & Site Generation (4 temi headless consumano brand_profile estratto)
+- **Social Share** su property pubblica (WA · FB · Email · Copy)
+- **D-FUTURE-04 Smart Clients List** — editorial-sober (AI Lead Score sort, bucket pills, temperature monocroma, action hint)
+- **Inline Click-to-Call/WhatsApp** sulle row clienti con messaggio AI-precompilato
+- **UI CSV Import Clienti** (`/it/app/clients/import`)
 
-- **D-022** — Architettura **Headless OMNIA**: 1000+ siti agenzia unici, un solo backend
-- **D-023** — **Clone-from-URL** del sito esistente (idea originale del Founder) ora pilastro M2.S5
-- **D-024** — Pricing **aggressivo** lancio (€19/€29/€79 vs €10.000/anno stack tradizionale) + listino pubblico
-- **D-025** — **Lead Scoring AI** anticipato in M2.S4 (risolve lamentela #1 del mercato)
-- **D-026** — `Property.seller_client_id` mini-sprint M2.S3.5 prima di M2.S4
+Test totali: **30/30 backend pytest passed**, 0 regressioni.
+
+### 🔴 Nuova priorità emersa: D-FUTURE-07
+Il Founder ha fatto notare che il CSV template richiede 5-13h per 100 clienti → barriera all'adoption. La soluzione è applicare il pattern Brand-Extractor (Gemini parsa input non strutturato → schema OMNIA) alla migrazione clienti. **P0 per la prossima sessione.**
 
 ---
 
 ## Milestone in corso
 
-**M2 — ImmoWeb MVP (Agency CRM)** (3 di 7 sessioni — S3.5 aggiunta)
+**M2 — ImmoWeb MVP (Agency CRM)** — 95% completata · sessioni 1→5 chiuse
 
-Prossima azione: **M2.S3.5 — Property↔Seller link** (mini-sprint, mezza giornata)
+Prossima azione: **D-FUTURE-07 AI Smart Import Clienti** (P0 next session), poi **M2.S6 Custom Domain** (richiede scelta provider DNS).
 
 **🚨 P0 PRIMA COSA AL RIENTRO**:
 

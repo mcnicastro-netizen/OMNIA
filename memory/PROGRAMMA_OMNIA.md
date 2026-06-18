@@ -1,14 +1,29 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 2.0
+**Versione**: 2.1
 **Data creazione**: Gennaio 2026
-**Ultimo aggiornamento**: 16 Giugno 2026 (post analisi competitiva + revisione strategica)
+**Ultimo aggiornamento**: 18 Giugno 2026 (post M2.S5 completo + D-FUTURE-04 Smart Clients + nuova priorità AI Smart Import D-FUTURE-07)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: M1 ✅ DONE · M2 IN CORSO (S1+S2+S3 ✅ · S3.5+S4+S5+S6 ⏳)
+**Stato**: M1 ✅ DONE · **M2.S1→S5 ✅ DONE** · M2.S6 ⏳ + D-FUTURE-07 🔴 NUOVA PRIORITÀ
 
 ---
+
+## 🔥 Cambiamenti strategici v2.1 (rispetto a v2.0)
+
+Dopo il completamento di M2.S5 (tutti i Layer A→D) e la sessione del 18 Giugno è emersa una nuova decisione vincolante (D-FUTURE-07):
+
+| Cosa cambia | v2.0 | v2.1 |
+|---|---|---|
+| **CSV Import Clienti** | "Backend pronto, polish UI in backlog" | ✅ **UI completata** + 🔴 **nuova priorità AI Smart Import** (D-FUTURE-07) |
+| **Pattern import dati** | XML Agestanet (immobili) + CSV (clienti) | Esteso: **AI-Assisted Import** per qualsiasi file disordinato (Excel non standard, vCard, contatti Gmail/Outlook, anche PDF/screenshot) |
+| **Stato M2** | "S1+S2+S3 ✅ · S3.5+S4+S5+S6 ⏳" | "**S1→S5 ✅ DONE**" — manca solo S6 (custom domain) |
+| **Killer feature commerciale** | Clone-from-URL siti | Clone-from-URL **+** AI Smart Import Clienti (zero-friction migration) |
+
+### Razionale D-FUTURE-07 (AI Smart Import Clienti)
+
+Compilare manualmente il template CSV di 18 colonne per 100 clienti = **5-13 ore di lavoro**. Nessun agente lo farà → senza dati la Smart Clients List (con AI Lead Scoring di M2.S4) vale zero. Lo stesso pattern di `brand_extractor` (Gemini parsa input non strutturato → schema OMNIA) applicato ai clienti riduce il tempo da ore a minuti, sbloccando l'adoption reale dell'ecosistema.
 
 ## 🔥 Cambiamenti strategici v2.0 (rispetto a v1.1)
 
@@ -141,8 +156,8 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🏢 MILESTONE 2 — IMMOWEB MVP (Gestionale Agenzia) 🟡 IN CORSO
-**Durata**: 4-5 settimane · **Sessioni**: 7 · **Stato**: S1+S2+S3 ✅ · S3.5+S4+S5+S6 ⏳
+# 🏢 MILESTONE 2 — IMMOWEB MVP (Gestionale Agenzia) 🟢 95% DONE
+**Durata**: 4-5 settimane · **Sessioni**: 7 · **Stato**: S1→S5 ✅ · S6 ⏳ + D-FUTURE-07 🔴 nuova priorità
 
 ### M2.S1 ✅ — Dashboard agenzia + onboarding
 - Wizard setup agenzia (logo, dati fiscali, indirizzo, contatti)
@@ -161,78 +176,76 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ### M2.S3 ✅ — CRM clienti + Preferenze di ricerca (idealista-style)
 - Anagrafica clienti (5 tipologie: buyer/seller/tenant/landlord/investor)
-- Preferenze ricerca COMPLETE (replica filtri idealista, D-021):
-  operation, property_types[], cities[], zones[], price/surface/rooms ranges,
-  conditions[], floor_preferences[], must_have_features[], energy_min_class,
-  needs_photos, needs_virtual_tour
-- CSV Import backend (UI rinviata, vedi backlog)
+- Preferenze ricerca COMPLETE (replica filtri idealista, D-021)
+- CSV Import backend
 - Filtri lista + tabella con chips colorati
-- Sidebar "Clienti" sbloccata
 - **Completato**: 16 Giu 2026
 - **Test**: 15/15 pytest backend + 7/7 flussi UI
 
-### M2.S3.5 ✅ (17/06/2026, D-026) — Link Property↔Seller Client
-- Aggiungere `Property.seller_client_id: Optional[str]` (D-026)
-- UI form immobile: dropdown autocomplete "Proprietario / Venditore" (filtra Client.client_type ∈ {seller, landlord})
-- UI scheda Cliente seller: tab "Immobili in carico" che lista i suoi immobili
-- UI scheda Immobile: pannello "Contatti proprietario" linkato al Client
-- Backend: indice composto su (agency_id, seller_client_id)
-- **Razionale**: prerequisito per M2.S4 (il matching deve sapere chi vende cosa)
-- **Tuo compito**: validare UX dropdown
+### M2.S3.5 ✅ — Link Property↔Seller Client (D-026)
+- `Property.seller_client_id` + cascade delete safety (409 se cliente ha immobili)
+- UI dropdown autocomplete venditore + scheda venditore con immobili in carico
+- **Completato**: 17 Giu 2026
 
-### M2.S4 ✅ (17/06/2026, D-025) — Matching Engine + Lead Scoring AI
-**Era**: solo matching su criteri statici (city 20 + zone 10 + type 15 + op 15 + price 20 + surface 10 + rooms 5 + beds 5)
-**Diventa**:
-- **Layer 1 — Property↔Client match score** (algoritmo deterministico già scoping in v1.1)
-- **Layer 2 — Lead Scoring AI** (0-100, classifica freddo/tiepido/caldo/rovente)
-  - Engagement utente (visite scheda, contatti diretti, ritorni)
-  - Coerenza budget vs immobile (verifica realistica AI)
-  - Storico interazioni con l'agenzia
-  - Velocità risposta a proposte
-  - Completezza profilo (telefono verificato, GDPR)
-- **Layer 3 — Vista Match**: per immobile e per cliente con doppio score visibile
-- Notifica email automatica su nuovo match con score >80%
-- **Stack AI**: Gemini-3 Flash via Emergent LLM Key (economico, fast)
-- **Killer feature commerciale**: *"OMNIA ti dice quale lead chiamare oggi"* — risolve lamentela #1 mercato
-- **Tuo compito**: validare match con criterio umano su 20-30 casi
+### M2.S4 ✅ — Matching Engine + AI Lead Scoring (D-025)
+- Layer 1 deterministico (city/zone/type/op/price/surface/rooms/beds + features)
+- Layer 2 Gemini-3-flash classificazione (freddo/tiepido/caldo/rovente + action_hint)
+- 24h cache per ottimizzare costi LLM
+- Inline match preview in PropertyFormPage
+- **Completato**: 17 Giu 2026
 
-### M2.S5 🟡 IN CORSO — 🔥 Multiposting + Clone-from-URL (D-023, D-028, D-029)
+### M2.S5 ✅ DONE — Multiposting + Clone-from-URL + Theme Registry
+**Tutti e 4 i Layer + 2 enhancement completati il 18 Giu 2026.**
 
-**Stato sotto-sprint**:
-- ✅ **Layer A — Portal Manager** (18/06/2026): backend CRUD `/api/app/portals` con Fernet encryption + 7 portali catalogati (Idealista, Immobiliare.it, Casa.it, Wikicasa, Subito.it, Facebook Catalog, LinkedIn). UI tabella + modale subscribe. Sidebar Portali attiva.
-- ✅ **Hardening 18/06** (post-M2.S4): Lead Score caching 24h (55× speedup), Match preview inline in PropertyFormPage, ErrorBoundary globale.
-- ✅ **Layer B — XML Feed Generator (OSF v1.0)** (18/06/2026): endpoint pubblici `feed.../{slug}.xml|.json` + JSON Schema documentation. Dual XML+JSON, namespace OMNIA AI-extended.
-- ✅ **Layer C — Site-as-Feed (HTML SEO)** (18/06/2026): 4 endpoint pubblici (`/p/{slug}/`, `/p/{slug}/{pid}`, sitemap.xml, photo binary). Schema.org RealEstateListing JSON-LD + OG tags + Idealista crawlable.
-- ⏳ **Layer D — Clone-from-URL**: Playwright + Gemini Vision ← NEXT
-- ⏳ **Layer A++**: cron worker reale push portali push_api
-**Era**: solo feed XML in uscita verso portali
-**Diventa** 3 layer:
-1. **Feed XML in uscita** verso portali (Idealista, Immobiliare.it, Casa.it, Wikicasa, Subito.it)
-2. **Feed XML compatibile** col vecchio sito agenzia (anti-Agestanet, D-017)
-3. **🆕 Clone-from-URL** (la tua idea segreta, D-023):
-   - Agenzia inserisce URL del proprio sito attuale
-   - Playwright headless crawla pagine chiave (home, lista immobili, scheda, contatti)
-   - Gemini Vision estrae brand profile (palette, font, hero, card style)
-   - Generazione bundle Next.js statico identico al vecchio sito, alimentato dalle API OMNIA
-   - Preview entro 60 secondi → demo killer commerciale
-   - Deploy automatico su dominio agenzia (CNAME)
-- **Tuo compito**: ottenere credenziali API/FTP portali + 3-5 URL di siti agenzie reali per test clone
+- ✅ **Layer A — Portal Manager**: backend CRUD `/api/app/portals` con Fernet AES-256 encryption, 7 portali catalogati (Idealista, Immobiliare.it, Casa.it, Wikicasa, Subito.it, Facebook Catalog, LinkedIn). UI tabella + modale subscribe.
+- ✅ **Layer B — XML/JSON OSF Feed Generator**: endpoint pubblici `/api/feed/{slug}.xml|.json`, namespace OMNIA AI-extended.
+- ✅ **Layer C — Site-as-Feed (HTML SEO)**: 4 endpoint pubblici (`/api/p/{slug}/`, `/{pid}`, sitemap.xml, photo binary). Schema.org RealEstateListing JSON-LD + OG tags + crawler-friendly.
+- ✅ **Layer D Phase 1 — Brand Extractor**: BeautifulSoup + Gemini-3-flash crawla URL agenzia → JSON brand profile (palette/typography/voice/structure/logo). Endpoint `POST /api/app/website/extract-from-url`.
+- ✅ **Layer D Phase 2 — Theme Registry & Site Generation**: 4 temi headless (minimal/classic/bold/luxury) consumano il brand_profile e renderizzano il sito agenzia con identità visiva. Endpoint `/api/app/website/{themes,theme,theme/apply,theme/auto-configure,preview/{id}}`. Frontend Brand Studio `/it/app/website` (extractor + theme picker + live preview iframe).
+- ✅ **Enhancement Social Share**: 4 pulsanti (WhatsApp · Facebook · Email · Copy Link) iniettati in ogni property pubblica `/api/p/{slug}/{pid}`. Absolute URLs per OG/share. JS inline copy-to-clipboard.
+- ✅ **D-FUTURE-04 — Smart Clients List**: editorial-sober variant. Endpoint `GET /api/app/clients/smart` (enriched + bucket filters + sort) e `POST /smart/refresh` (batch AI parallel). Frontend con ScoreBox Fraunces serif, TempPill monocroma, MatchesPill, filter pills stone.
+- ✅ **Inline Click-to-Call/WhatsApp**: bottoni 📞/💬 su ogni row clienti con `tel:` href + `wa.me` deep-link con messaggio precompilato basato sull'action_hint AI.
+- ✅ **UI CSV Client Import**: nuova pagina `/it/app/clients/import` con dropzone, preview e gestione errori.
+- ⏳ **Layer A++**: cron worker push portali push_api (rinviato a M4.S3+ insieme allo Stripe)
 
-### M2.S6 ⏳ — Theme registry + White Label headless (D-022)
-- Theme registry per agenzia (storage S3 dei bundle versioned)
-- Editor visuale base (logo upload + override colori/font sul bundle clonato)
-- Mini-sito vetrina default (`/agency/{slug}` come fallback)
-- Custom domain (CNAME) per agenzie del piano Agency+
-- Sistema CI per build automatico bundle al deploy theme
-- **Tuo compito**: logo OMNIA finale + paletta colori brand
+**Test totale**: 30/30 backend pytest passati + 100% frontend flows.
+
+### 🔴 D-FUTURE-07 ⏳ NUOVA PRIORITÀ — AI Smart Import Clienti
+**Razionale**: il CSV template richiede 5-13h per 100 clienti → barriera all'adoption.
+
+**Specifica funzionale**:
+- L'agente carica **qualsiasi file** disordinato: Excel arbitrario, vCard, export Gmail/Outlook, lista email con note libere, PDF, screenshot di tabelle.
+- Gemini-3-flash parsa il contenuto → propone righe già mappate allo schema OMNIA (`name`, `client_type`, `pref_cities`, `pref_price_max`, ...).
+- Preview side-by-side (originale | schema OMNIA) con confidence score per riga.
+- Bulk-edit inline + conferma → import.
+- Tempo agente: ~5 min per 100 clienti vs 8h CSV (riduzione >99%).
+
+**Pattern**: stesso del Brand Extractor (file/URL → Gemini → schema strutturato → preview → conferma).
+**Costo Gemini**: trascurabile (~€0.02-0.10 per file da 100 righe, una tantum).
+**Privacy GDPR**: no caching permanente del file originale, log scrubbed.
+**Sblocca**: Smart Clients List AI Lead Scoring diventa utile (dati reali da migrare).
+
+**Endpoint previsto**: `POST /api/app/clients/import/ai` con multipart file upload + draft preview + commit.
+**Dipende da**: nulla (può partire subito).
+
+### M2.S6 ⏳ — Custom domain + DNS verification (D-022)
+- Theme registry già operativo (Layer D Phase 2). Manca solo:
+  - Custom domain (CNAME) per agenzie del piano Agency+
+  - DNS verification con check TXT record (anti-takeover)
+  - Wildcard SSL (Let's Encrypt o provider managed)
+  - Routing ingress: `agenzia.it` → serve `/api/p/{slug}/` con host stripping
+- **Tuo compito**: scegliere provider DNS (Cloudflare?) + decidere se subdomain proxy o full CNAME apex
 
 ### ✅ Definition of Done M2
 - [x] Agenzia registra, onboarding, gestisce immobili (16 tipologie) e clienti (5 tipologie)
-- [ ] **Property↔Seller link operativo** (M2.S3.5)
-- [ ] **Matching engine + Lead Scoring AI live** (M2.S4)
-- [ ] **Multiposting + Clone-from-URL operativi** (M2.S5)
-- [ ] **Theme registry + custom domain funzionanti** (M2.S6)
-- [ ] 5 agenti in parallelo nella stessa agenzia
+- [x] **Property↔Seller link operativo** (M2.S3.5)
+- [x] **Matching engine + Lead Scoring AI live** (M2.S4)
+- [x] **Multiposting OSF + Site-as-Feed + Clone-from-URL operativi** (M2.S5)
+- [x] **Theme registry headless live + 4 temi applicabili** (M2.S5 Layer D Phase 2)
+- [x] **Social share + Smart Clients List + Click-to-call/WA + CSV Client Import**
+- [ ] **AI Smart Import Clienti** (D-FUTURE-07) — sblocca adoption
+- [ ] **Custom domain CNAME funzionante** (M2.S6)
+- [ ] 5 agenti in parallelo nella stessa agenzia (testabile ora)
 
 ---
 
@@ -426,7 +439,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 | M | Nome | Sessioni | Settimane | Costo infra cumulato | Output chiave |
 |---|---|---|---|---|---|
 | **M1** ✅ | Foundation | 4 | 1-2 | €0-50 | Auth + multi-tenant + DNS |
-| **M2** 🟡 | ImmoWeb | **7** | 4-5 | €50-150 | CRM + Matching+LeadScoring + Clone-from-URL + Headless theme |
+| **M2** 🟢 95% | ImmoWeb | **7** | 4-5 | €50-150 | CRM + Matching+LeadScoring + Clone-from-URL + Theme Registry + Smart Clients · **resta: AI Smart Import + Custom Domain** |
 | **M3** ⏸️ | ImmobilCloud | 5 | 2-3 | €100-250 | Portale pubblico + privato carica + immobili segreti |
 | **M4** ⏸️ | MLS + Stripe | 5 | 3-4 | €150-350 | 🎉 **Vendibile** con pricing aggressivo |
 | **M5** ⏸️ | AI Suite | 4 | 1-2 | €200-500 | Copywriter + Chatbot + Mutui + Modulistica |
@@ -514,19 +527,21 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ## 🎯 PARTE VII — Prossimo passo IMMEDIATO
 
-Quando rientri domani:
+**Stato al 18 Giugno 2026**: M1 ✅ · M2.S1→S5 ✅ DONE · M2.S6 + D-FUTURE-07 rimasti.
 
-1. ✅ Verificare che git push sia andato a buon fine ("Save to GitHub")
-2. ✅ Leggere `COMPETITIVE_ANALYSIS_IDEALISTA.md` per finalizzare visione strategica
-3. 🟠 Iniziare **M2.S3.5** (mezza giornata): `Property.seller_client_id`
-4. 🔴 Subito dopo: **M2.S4** Matching Engine + Lead Scoring AI
+Quando rientri prossima sessione:
+
+1. 🔴 **D-FUTURE-07 — AI Smart Import Clienti** (P0): sblocca adoption reale, pattern brand-extractor-style. Stimato 1 sessione.
+2. 🟠 **M2.S6 — Custom Domain + DNS** (P1): chiusura white-label. Richiede decisione provider DNS prima di partire.
+3. 🟡 **M3.S1 — ImmobilCloud B2C** (P1, dopo M2 completo): portale pubblico, home + search box.
 
 Parole magiche per ripartire:
-- *"Partiamo con M2.S3.5"* → seller link
-- *"Partiamo con M2.S4"* → matching + lead scoring
+- *"Partiamo con AI Smart Import Clienti"* → D-FUTURE-07
+- *"Partiamo con Custom Domain"* → M2.S6
+- *"Partiamo con M3"* → ImmobilCloud B2C
 - *"Dove siamo"* → riassunto stato
 
 ---
 
-*Documento approvato v2.0: 16 Giugno 2026*
-*Prossima revisione: alla fine di M2*
+*Documento approvato v2.1: 18 Giugno 2026*
+*Prossima revisione: alla fine di M2.S6 (completamento Milestone 2)*
