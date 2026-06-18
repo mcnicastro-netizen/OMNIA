@@ -190,3 +190,31 @@ class TestUnauth:
     def test_get_themes_requires_auth(self):
         r = requests.get(f"{BASE_URL}/api/app/website/themes")
         assert r.status_code in (401, 403)
+
+
+# --- Social Share Block (rendered on property page) ---
+class TestSocialShare:
+    def test_share_block_present_on_property_page(self, admin_session, agency_slug):
+        r_idx = requests.get(f"{BASE_URL}/api/p/{agency_slug}/")
+        m = re.search(rf'/api/p/{re.escape(agency_slug)}/([a-f0-9\-]{{8,}})', r_idx.text)
+        if not m:
+            pytest.skip("No active properties to test detail page")
+        pid = m.group(1)
+        r = requests.get(f"{BASE_URL}/api/p/{agency_slug}/{pid}")
+        assert r.status_code == 200
+        # 4 share buttons must be present
+        assert 'class="share-block"' in r.text
+        assert "wa.me/?text=" in r.text, "WhatsApp share URL missing"
+        assert "facebook.com/sharer/sharer.php" in r.text, "Facebook share URL missing"
+        assert "mailto:?subject=" in r.text, "Email share URL missing"
+        assert 'data-action="copy"' in r.text, "Copy-link button missing"
+        # data-share-url must be absolute (start with http)
+        m2 = re.search(r'data-share-url="(http[^"]+)"', r.text)
+        assert m2, "Share URL not absolute"
+        assert m2.group(1).startswith("http")
+
+    def test_share_block_not_on_index_page(self, agency_slug):
+        # Share block is per-property, not on the listing index
+        r = requests.get(f"{BASE_URL}/api/p/{agency_slug}/")
+        assert r.status_code == 200
+        assert 'class="share-block"' not in r.text

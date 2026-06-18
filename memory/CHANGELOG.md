@@ -1,5 +1,19 @@
 # OMNIA — Changelog
 
+## 2026-06-18 — Social Share su property pubblica ✅ (Layer D Enhancement)
+
+- **Backend** `themes.py` — aggiunto `_share_block()` con 4 pulsanti (WhatsApp · Facebook · Email · Copy Link)
+  iniettati dentro `render_property()` di tutti e 4 i temi.
+- **Absolute URLs** — `render_index` e `render_property` ora costruiscono canonical/OG/share URL
+  partendo da `FRONTEND_URL` env, così i meta-tag Open Graph + i link di share funzionano correttamente
+  quando l'URL viene incollato su WA/FB/Email.
+- **JS inline minimal** per copy-to-clipboard (no librerie esterne, no tracking).
+- **CSS** brand-color per WA (#25D366) e FB (#1877F2); Email button usa `--o-primary` del tema attivo.
+- **Test** `/app/backend/tests/test_themes.py` — 2 nuovi test (share buttons presenti, URL absolute,
+  share-block solo su property non sull'index). Totale 16/16 passati.
+- **Test credentials** — aggiunto URL ufficiale sito Founder (https://www.nicastroimmobiliare.it/web/)
+  da usare in tutti i test futuri al posto di Tecnocasa.
+
 ## 2026-06-18 — M2.S5 Layer D Phase 2 ✅ Theme Registry & Site Generation
 
 - **Backend** `apps/immoweb/themes.py` — 4 temi headless (`minimal`, `classic`, `bold`, `luxury`)
