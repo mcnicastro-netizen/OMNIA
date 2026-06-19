@@ -502,7 +502,20 @@
     "preview_intro": "Anteprima del sito con il tema selezionato — questo è esattamente quello che vedono i visitatori.",
     "refresh": "Aggiorna",
     "open_public": "Apri sito pubblico",
-    "show_resolved": "Mostra configurazione tema applicata (JSON)"
+    "show_resolved": "Mostra configurazione tema applicata (JSON)",
+    "section_cd": "4. Custom Domain (il tuo dominio)",
+    "cd_intro": "Vuoi che il sito brandizzato dell'agenzia risponda al tuo dominio (es. www.tuaagenzia.it)? Inseriscilo qui, configura i 2 record DNS sul tuo registrar e premi Verifica. Funzione gratuita inclusa nel tuo piano.",
+    "cd_request_btn": "Richiedi attivazione dominio",
+    "cd_verify_btn": "Verifica DNS",
+    "cd_verifying": "Verifica in corso…",
+    "cd_delete_btn": "Rimuovi dominio",
+    "cd_confirm_delete": "Sei sicuro di voler rimuovere il custom domain?",
+    "cd_dns_instructions": "Aggiungi questi 2 record DNS sul tuo registrar (Aruba, Register, ecc.)",
+    "cd_requested_at": "Richiesto il {{d}}",
+    "cd_status_pending": "In attesa DNS",
+    "cd_status_verified": "Verificato",
+    "cd_status_error": "Errore",
+    "cd_admin_will_activate_ssl": "DNS verificati! L'admin OMNIA attiverà l'SSL (Let's Encrypt) entro 24h. Riceverai una mail di conferma."
   },
   "clients_smart": {
     "subtitle": "Ordinati per priorità d'azione. In alto i lead più caldi.",

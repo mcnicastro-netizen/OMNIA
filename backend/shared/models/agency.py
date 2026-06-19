@@ -63,6 +63,12 @@ class AgencyWebsite(OmniaBaseModel):
     external_url: Optional[str] = Field(default=None, max_length=300)
     template_id: Optional[str] = Field(default=None, max_length=60)
     custom_domain: Optional[str] = Field(default=None, max_length=120)
+    # M2.S6 — custom domain verification workflow
+    custom_domain_status: Optional[Literal["pending", "verified", "error"]] = None
+    custom_domain_token: Optional[str] = Field(default=None, max_length=64)
+    custom_domain_requested_at: Optional[str] = None
+    custom_domain_verified_at: Optional[str] = None
+    custom_domain_last_error: Optional[str] = Field(default=None, max_length=300)
     # M2.S5 Layer D Phase 1 — raw extracted brand profile (output of /website/extract-from-url)
     extracted_profile: Optional[dict] = None
     # M2.S5 Layer D Phase 2 — active theme configuration applied to the public site

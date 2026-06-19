@@ -1,0 +1,35 @@
+{
+  "summary": "M2.S6 Custom Domain (D-022) — full end-to-end testing PASSED. Backend: 12/12 pytest pass on /app/backend/tests/test_custom_domain.py (2.6s). Covers: POST /domain/request creates pending state + returns correct dns_instructions (txt_record host=_omnia-challenge.<domain>, value=omnia-verify=<token>; cname_record value=agencies.omniarealestateecosystem.it); rejects invalid_domain ('not a domain!' → 400); rejects reserved_domain ('test.omniarealestateecosystem.it' → 400); URL normalization ('https://www.x.com/path' → 'www.x.com'); token regenerated on resubmit; POST /domain/verify runs real dns.resolver against 1.1.1.1/8.8.8.8 and correctly returns ok:false/status:error with explanatory errors when DNS not configured (expected behavior); POST /domain/verify without prior request → 400 no_domain_requested; GET /domain returns domain:null + cname_target when no request; DELETE /domain clears state; GET /domain/admin/pending (super_admin) returns items + counts {pending,verified,error} + total; unauthenticated request → 401/403. Regression: test_themes.py 16/17 (1 expected skip), test_clients_smart.py 10/10, test_client_csv_import.py 4/4 all green. Public /api/p/<slug>/ endpoint still routes (returns 404 agency_not_found for non-existent slug, 200 for existing). Frontend /it/app/website 'Section 4. Custom Domain (il tuo dominio)' renders with editorial-sober styling: cd-domain-input + cd-request-btn → POST request → cd-status-pending badge 'IN ATTESA DNS' (amber) appears + DNS instructions box shows both records (TXT _omnia-challenge.playwright-test.example.com + CNAME → agencies.omniarealestateecosystem.it) with 2 'Copia' buttons; cd-verify-btn → real DNS lookup ~10s → cd-status-error badge (red) appears (correctly, since playwright-test.example.com has no DNS); cd-delete-btn → confirm dialog accepted → input resets to empty. All required data-testids present: custom-domain-section, cd-domain-input, cd-request-btn, cd-verify-btn, cd-delete-btn, cd-status-pending|error|verified, cd-error (cd-error is for client-side request errors only — backend-returned verify errors surface via cd-status-error + section text; correct design). Italian i18n strings rendered: 'Custom Domain (il tuo dominio)', 'Richiedi attivazione dominio', 'In attesa DNS', etc. Cleanup: test agency custom_domain deleted via UI (and pytest fixture handles its own cleanup).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_custom_domain.py",
+    "/app/test_reports/pytest/custom_domain.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "custom_domain.py (~455 lines) — clean single-module design, well under 700-line limit. 5 endpoints + DNS resolver + email notify cleanly separated.",
+    "Domain validation: DOMAIN_RE regex + length check (≤120) + RESERVED_SUFFIXES (omniarealestateecosystem.it/emergent.host/emergentagent.com) blocks self-claim. _normalize_domain correctly strips https://, paths, trailing dots, and lowercases. Robust.",
+    "Token generation uses secrets.token_urlsafe(24) — cryptographically strong (32 chars base64url). Test verifies tokens differ on resubmit.",
+    "DNS verifier uses dnspython with explicit nameservers 1.1.1.1/8.8.8.8 + 4s timeout/6s lifetime — bounded, won't hang. Falls back to A-record IP comparison if CNAME doesn't match (handles flattened-CNAME apex registrars). Good defensive coding.",
+    "Conflict detection: another agency already claiming the domain → 409 domain_already_claimed (prevents takeover races). Properly scoped via {id: {$ne: agency_id}} filter.",
+    "_notify_super_admin_new_request is best-effort with try/except wrapping the import AND the send — never blocks the request flow. Correct fire-and-forget pattern.",
+    "admin/pending endpoint correctly excludes _id from projection ({_id: 0}) — no MongoDB ObjectId serialization issues.",
+    "All 4 mutating endpoints (request/verify/delete) gated by require_roles('agency_admin','super_admin'); admin/pending gated by require_roles('super_admin'); GET /domain only requires auth. Permission matrix correct.",
+    "WebsitePage.jsx CustomDomainSection: cd-error testid is for client-side fetch errors (e.g., 400 invalid_domain on request), while backend DNS verify errors (status='error' from /verify endpoint) surface via cd-status-error badge + section text — this is intentional design separation, NOT a missing testid.",
+    "Verify endpoint persists last_error (truncated to 280 chars) on failure — useful for surfacing actionable feedback in UI.",
+    "host_routing.py HostRoutingMiddleware is mounted but transparent for INTERNAL_HOST_SUFFIXES (emergentagent.com) — testing not impacted. Production custom-domain → /api/p/<slug>/ rewrite will activate when external Host header arrives."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (12/12 custom_domain + 29/30 regression with 1 expected skip)", "frontend": "100% (full request → DNS instructions → verify → error badge → delete flow + i18n)"},
+  "test_credentials": "mcnicastro@gmail.com / Forzainter2026. (super_admin) — works.",
+  "seed_data_creation": "Backend tests create temporary domains (www.nicastroimmobiliare.it, www.example.com, definitely-not-configured.example.test, test-cd.example.com, delete-test.example.com, pending-test.example.com, x.example.com) and clean them all up via DELETE in cleanup_domain fixture. Frontend test created playwright-test.example.com and deleted it via UI. No residual test data in DB.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "M2.S6 Custom Domain regression suite: /app/backend/tests/test_custom_domain.py (12 tests, ~2.6s, fast, no LLM calls). DNS verify returns status='error' in test env by design (DNS for test domains not configured) — this is EXPECTED and should NOT be treated as a bug. Frontend section 4 is the last section on /it/app/website page (scroll down). Copy buttons use navigator.clipboard.writeText — may not be assertable in headless Playwright but visually present. cd-error testid is for client-side fetch errors only.",
+  "rca of the issue": "No bugs found. All 15 acceptance criteria from the review request are met: (1) request creates pending + correct dns_instructions ✅ (2) invalid/reserved domain → 400 ✅ (3) URL normalization ✅ (4) token regenerated on resubmit ✅ (5) verify returns status:error without DNS ✅ (6) verify w/o request → 400 ✅ (7) GET returns null/state ✅ (8) DELETE works ✅ (9) admin/pending returns counts ✅ (10) frontend section 4 visible ✅ (11) status badges + DNS box with Copia buttons ✅ (12) Verifica + Rimuovi (confirm) work ✅ (13) Italian i18n correct ✅ (14) all data-testids present ✅ (15) regression /api/app/website/themes/extract-from-url/preview + /api/p/<slug>/ + clients_smart + ai-import not broken ✅."
+}

@@ -71,6 +71,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Host-based routing for verified custom domains (M2.S6)
+from apps.immoweb.host_routing import HostRoutingMiddleware
+app.add_middleware(HostRoutingMiddleware)
+
 
 @app.middleware("http")
 async def language_middleware(request: Request, call_next):

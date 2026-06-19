@@ -311,10 +311,189 @@ export default function WebsitePage() {
             </details>
           )}
         </section>
+
+        {/* ============ 4. CUSTOM DOMAIN (M2.S6) ============ */}
+        <CustomDomainSection t={t} />
       </section>
     </AgencyShell>
   );
 }
+
+function CustomDomainSection({ t }) {
+  const [state, setState] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [domain, setDomain] = React.useState("");
+  const [busy, setBusy] = React.useState(false);
+  const [err, setErr] = React.useState("");
+
+  const load = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get("/app/website/domain");
+      setState(data);
+    } catch (e) {
+      setErr(String(e?.response?.data?.detail || e.message));
+    } finally { setLoading(false); }
+  }, []);
+  React.useEffect(() => { load(); }, [load]);
+
+  const submit = async (e) => {
+    e?.preventDefault?.();
+    if (!domain) return;
+    setBusy(true); setErr("");
+    try {
+      const { data } = await api.post("/app/website/domain/request", { domain });
+      setState(data); setDomain("");
+    } catch (e) {
+      setErr(String(e?.response?.data?.detail || e.message));
+    } finally { setBusy(false); }
+  };
+
+  const verify = async () => {
+    setBusy(true); setErr("");
+    try {
+      const { data } = await api.post("/app/website/domain/verify");
+      setState({ ...state, status: data.status, last_error: data.last_error,
+                 verified_at: data.verified_at });
+    } catch (e) {
+      setErr(String(e?.response?.data?.detail || e.message));
+    } finally { setBusy(false); }
+  };
+
+  const remove = async () => {
+    if (!window.confirm(t("website.cd_confirm_delete"))) return;
+    setBusy(true); setErr("");
+    try {
+      await api.delete("/app/website/domain");
+      await load();
+    } catch (e) {
+      setErr(String(e?.response?.data?.detail || e.message));
+    } finally { setBusy(false); }
+  };
+
+  const copy = (txt) => navigator.clipboard?.writeText(txt);
+
+  if (loading) return <p className="text-sm text-stone-500">{t("common.loading")}</p>;
+
+  const hasDomain = !!state?.domain;
+  const status = state?.status;
+  const dns = state?.dns_instructions;
+
+  return (
+    <section className="space-y-4" data-testid="custom-domain-section">
+      <div>
+        <h2 className="text-xs uppercase tracking-widest text-stone-500 mb-2">
+          {t("website.section_cd")}
+        </h2>
+        <p className="text-sm text-stone-600">{t("website.cd_intro")}</p>
+      </div>
+
+      {err && <p data-testid="cd-error" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">{err}</p>}
+
+      {!hasDomain && (
+        <form onSubmit={submit} className="flex gap-3 flex-wrap">
+          <input
+            data-testid="cd-domain-input" value={domain}
+            onChange={(e) => setDomain(e.target.value)}
+            placeholder="www.tuaagenzia.it"
+            className="flex-1 min-w-[220px] px-3 py-2.5 bg-white border border-stone-300 rounded-md text-sm focus:outline-none focus:border-stone-900"
+          />
+          <button
+            type="submit" disabled={busy || !domain}
+            data-testid="cd-request-btn"
+            className="px-5 py-2.5 bg-stone-900 text-stone-50 text-xs uppercase tracking-widest font-medium rounded-md hover:bg-stone-700 disabled:opacity-50"
+          >
+            {t("website.cd_request_btn")}
+          </button>
+        </form>
+      )}
+
+      {hasDomain && (
+        <div className="bg-white border border-stone-200 rounded-lg p-5 space-y-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <div className="font-medium text-stone-900 text-base">{state.domain}</div>
+              <div className="text-xs text-stone-500 mt-0.5">
+                {t("website.cd_requested_at", { d: (state.requested_at || "").slice(0, 16).replace("T", " ") })}
+              </div>
+            </div>
+            <StatusBadge status={status} t={t} />
+          </div>
+
+          {status === "error" && state.last_error && (
+            <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2">
+              {state.last_error}
+            </p>
+          )}
+
+          {dns && (
+            <div className="bg-stone-50 border border-stone-200 rounded-md p-4 space-y-3">
+              <p className="text-xs uppercase tracking-widest text-stone-500">{t("website.cd_dns_instructions")}</p>
+              <DNSRow label="TXT" host={dns.txt_record.host} value={dns.txt_record.value} onCopy={copy} />
+              <DNSRow label="CNAME" host={dns.cname_record.host} value={dns.cname_record.value} onCopy={copy} />
+              <p className="text-xs text-stone-500 italic">{dns.apex_alternative}</p>
+            </div>
+          )}
+
+          <div className="flex gap-2 flex-wrap">
+            <button
+              type="button" onClick={verify} disabled={busy}
+              data-testid="cd-verify-btn"
+              className="px-4 py-2 bg-stone-900 text-stone-50 text-xs uppercase tracking-widest rounded-md hover:bg-stone-700 disabled:opacity-50"
+            >
+              {busy ? t("website.cd_verifying") : t("website.cd_verify_btn")}
+            </button>
+            <button
+              type="button" onClick={remove} disabled={busy}
+              data-testid="cd-delete-btn"
+              className="px-4 py-2 bg-white border border-red-200 text-red-700 text-xs uppercase tracking-widest rounded-md hover:bg-red-50 disabled:opacity-50"
+            >
+              {t("website.cd_delete_btn")}
+            </button>
+          </div>
+
+          {status === "verified" && (
+            <p className="text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-3 py-2">
+              ✓ {t("website.cd_admin_will_activate_ssl")}
+            </p>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function StatusBadge({ status, t }) {
+  const map = {
+    pending: { txt: t("website.cd_status_pending"), cls: "text-amber-800 bg-amber-50 border-amber-200" },
+    verified: { txt: t("website.cd_status_verified"), cls: "text-emerald-800 bg-emerald-50 border-emerald-200" },
+    error: { txt: t("website.cd_status_error"), cls: "text-red-700 bg-red-50 border-red-200" },
+  };
+  const m = map[status] || { txt: "—", cls: "text-stone-600 bg-stone-100 border-stone-200" };
+  return (
+    <span data-testid={`cd-status-${status}`}
+          className={`text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md border ${m.cls}`}>
+      {m.txt}
+    </span>
+  );
+}
+
+function DNSRow({ label, host, value, onCopy }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-[60px_1fr_auto] gap-2 items-start">
+      <span className="text-[10px] uppercase tracking-widest text-stone-500 mt-1">{label}</span>
+      <div className="font-mono text-xs space-y-1">
+        <div className="text-stone-500">Host: <span className="text-stone-900">{host}</span></div>
+        <div className="text-stone-500">Valore: <span className="text-stone-900 break-all">{value}</span></div>
+      </div>
+      <button type="button" onClick={() => onCopy(value)}
+              className="text-[10px] uppercase tracking-widest text-stone-600 border border-stone-300 rounded px-2 py-1 hover:bg-stone-100">
+        Copia
+      </button>
+    </div>
+  );
+}
+
 
 function ExtractedSummary({ data, onAutoConfigure, autoBtnDisabled, t }) {
   const bp = data?.brand_profile || data?.extracted_profile?.brand_profile || {};
