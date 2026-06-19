@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** (Onboarding/CRUD/CRM/Matching+AI/Multiposting+Theme Registry+Smart Clients+AI Import+Custom Domain) • Prossimo: **M3 ImmobilCloud B2C** (mappa, filtri, GIS valuator)
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ DONE (19 Giu 2026)** — Portale B2C ImmobilCloud live • Prossimo: **M3.S2 Publishing Center** (multi-portali + share)
 
 ---
 

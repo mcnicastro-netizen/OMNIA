@@ -402,3 +402,28 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Implementato**: `_share_block()` in `themes.py` + absolute URLs (FRONTEND_URL env) + JS inline copy-to-clipboard, no librerie esterne.
 - **Test**: 2 pytest dedicati (`test_themes.py::TestSocialShare`)
 - **Stato**: ✅ DONE
+
+### D-FUTURE-10 — AI Smart Import Immobili (pattern simmetrico a D-FUTURE-07) ⏳ (19 Giu 2026)
+- **Origine**: dopo aver completato D-FUTURE-07 AI Smart Import Clienti, applicare lo stesso pattern al lato immobili — l'agente trascina Excel listino immobili (con colonne arbitrarie) → Gemini-3-flash mappa al schema Property OMNIA con confidence per riga.
+- **Pattern**: identico a clients_ai_import (4 endpoint upload+parse, draft TTL 1h, patch, commit).
+- **Differenza chiave**: lo schema Property ha 30+ campi e media (foto), quindi parser pre-Gemini più complesso per supportare:
+  - Excel con colonne arbitrarie + URL/path foto separati
+  - XML legacy non-Agestanet (es. Getrix, Wikicasa) tramite Gemini
+  - Riconoscimento automatico tipologia da descrizione free-text
+- **Quando**: P1 quando avremo i primi early-adopter agenti che vogliono migrare il portafoglio. Pattern coerente con D-FUTURE-07.
+- **Stato**: in memoria.
+
+### D-FUTURE-11 — Auto-post su Facebook Page + Instagram (M3.S2 extension) ⏳ (19 Giu 2026)
+- **Origine**: osservazione del Founder durante il pianning di M3.S2 Publishing Center («l'agente in fase di caricamento dovrebbe poter decidere dove pubblicare e come condividere — pagina facebook, profilo facebook, instagram»).
+- **Cosa**: estendere Publishing Center con auto-posting verso:
+  - **Pagina Facebook agenzia** (via Meta Business Graph API + Pages access token)
+  - **Profilo personale Facebook agente** ❌ NON FATTIBILE — Meta ha rimosso le permission `publish_actions` per i profili personali nel 2018. Resta solo deep-link share manuale (già presente nel Social Share su property pubblica).
+  - **Instagram Business** (via Instagram Graph API, richiede account Business collegato a Page)
+- **Pre-requisiti tecnici**:
+  - Meta App registrata con review approvata (`pages_manage_posts`, `pages_read_engagement`, `instagram_content_publish`)
+  - OAuth flow per autenticare l'agente e ottenere Pages token (long-lived ~60gg, refresh automatico)
+  - Token management cifrato in MongoDB (riusiamo Fernet già usato per Portal Manager)
+  - Instagram: solo foto con aspect ratio 4:5 / 1:1 / 1.91:1 → serve cropping client-side prima del post
+- **Costo**: nessun costo Meta API (gratis per Pages business). Solo costo review Meta App (1-tantum).
+- **Quando**: dopo M3.S2 Publishing Center base (toggle multi-portale + share manuali). Probabilmente sessione dedicata.
+- **Stato**: in memoria, da fare dopo M3.S2.

@@ -1,5 +1,32 @@
 # OMNIA — Changelog
 
+## 2026-06-19 (notte) — 🎉 M3.S1 ImmobilCloud B2C Public Portal ✅ DONE
+
+**Inizio della Milestone 3 — Portale B2C pubblico.**
+
+- **Backend** `apps/immocloud/public_portal.py` (~295 righe, single module pulito):
+  - 4 endpoint PUBBLICI no-auth: `GET /api/cloud/{search,facets,property/{id},agency/{slug}}`
+  - `_base_filter()` applica visibility=public + status=active + is_listed_on_immobilcloud != false (opt-out default ON, scelta b3 del Founder)
+  - Privacy: `PUBLIC_FIELDS` projection esclude `owner`, `seller_client_id`, `commission_pct`, `listing_agent_id`, `lead_count` dai detail
+  - Search con filtri: city (prefix-match case-insensitive), property_type, operation (sale/rent), price range (auto-switch tra `price` e `rent_monthly`), surface, rooms_min, full-text q, sort recent/price/surface, paginazione page+page_size
+  - Facets aggregati top 20 città + tipologie con conteggi
+  - View counter best-effort sui detail
+  - Batch-resolve agenzie via `$in` per evitare N+1
+- **Modello** `Property` esteso con `is_listed_on_immobilcloud: bool = True` (default opt-out)
+- **Frontend** `ImmocloudApp.jsx` (~445 righe) full rewrite — design B2C cream/navy/gold (distinto dal stone-only di B2B):
+  - HomePage: hero serif "Trova la casa dei tuoi sogni", toggle Compra/Affitta (gold per affitto, navy per acquisto), search box city autocomplete + facets, pillole top città, sezione "Ultimi inserimenti" 6-card
+  - SearchPage: sidebar filtri (city/type/price range/surface/rooms) + risultati card photo-driven + sort selector + paginazione
+  - PropertyCard B2C: aspect-ratio 4:3 con cover, badge gold "Affitta" se rent, classe energetica top-right, prezzo serif Fraunces navy, agenzia attribution
+- **Routing**: `/it/cloud` (Home), `/it/cloud/search?...` (lista filtri+pagina). Sottodominio target: `cloud.omniarealestateecosystem.it`
+- **i18n** namespace `cloud` IT/EN/ES (~28 stringhe ciascuno)
+- **Test**: 13/13 backend pytest + 17/17 criteri frontend + zero regressioni su M2 (41/42 incluso 1 expected skip).
+
+**Decisioni Founder applicate**:
+- (a2) Sottodominio dedicato cloud.omniarealestateecosystem.it ✅
+- (b3) Opt-out di default ON (campo is_listed_on_immobilcloud) ✅
+- (c1) OpenStreetMap+Leaflet — deferito a M3.S3 (mappa)
+- 🆕 Roadmap M3 estesa da 5 a 7 sub-sessioni per accogliere Publishing Center (M3.S2) e Privato pubblica (M3.S5)
+
 ## 2026-06-19 (sera) — M2.S6 Custom Domain ✅ DONE (D-022)
 
 **Milestone 2 chiusa al 100% 🎉**

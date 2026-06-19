@@ -101,7 +101,7 @@ function HomePage() {
             </datalist>
             <button
               data-testid="cloud-search-btn" type="submit"
-              className={`${THEME.primary} ${THEME.primaryText} px-6 py-3 rounded-lg font-medium tracking-wide hover:opacity-90 transition`}
+              className={`${THEME.primary} ${THEME.primaryText} px-6 py-3 rounded-lg font-medium tracking-wide hover:bg-[#C19A6B] hover:shadow-md transition-all`}
             >
               {t("cloud.search_btn")}
             </button>
@@ -164,7 +164,9 @@ function OpButton({ id, active, onClick, children }) {
     <button
       type="button" onClick={onClick} data-testid={`op-${id}`}
       className={`px-6 py-2 text-sm font-medium rounded-full transition ${
-        active ? "bg-[#0B1E3F] text-white" : "text-stone-600 hover:text-stone-900"
+        active
+          ? (id === "rent" ? "bg-[#C19A6B] text-white shadow-sm" : "bg-[#0B1E3F] text-white shadow-sm")
+          : "text-stone-600 hover:text-stone-900"
       }`}>
       {children}
     </button>
