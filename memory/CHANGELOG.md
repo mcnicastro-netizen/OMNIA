@@ -1,5 +1,27 @@
 # OMNIA — Changelog
 
+## 2026-06-19 (mattino) — ✅ M3.S2 Publishing Center DONE
+
+**Centro Pubblicazione integrato nel form proprietà dell'agente.**
+
+- **Backend** `shared/models/property.py`:
+  - Aggiunto `is_listed_on_immobilcloud: bool = True` a `PropertyCreate`
+  - Aggiunto `is_listed_on_immobilcloud: Optional[bool] = None` a `PropertyUpdate`
+  - Già presente in `PropertyInDB` (default True). Filtro `/api/cloud/search` già attivo (`{"$ne": False}`).
+- **Frontend** `apps/immoweb/components/PublishingCenter.jsx` (nuovo, ~155 righe):
+  - Toggle "Pubblica su ImmobilCloud™" (verde quando ON, default ON)
+  - Pulsanti share: WhatsApp (wa.me), Facebook (sharer.php), Email (mailto:), Copy Link
+  - Genera URL pubblico `{BACKEND_URL}/api/p/{agency_slug}/{property_id}` (rotta themed esistente)
+  - Hint "Salva prima l'immobile..." in modalità create
+  - Nota visibile quando toggle OFF: "l'immobile non è pubblicato su ImmobilCloud"
+- **Frontend** `apps/immoweb/PropertyFormPage.jsx`:
+  - Fetch `/app/agencies/me` per ottenere slug dell'agenzia
+  - Sezione "Centro pubblicazione" inserita dopo Photos
+- **i18n** `it.json`: aggiunti 8 stringhe (`section_publishing`, `publish_immobilcloud_*`, `share_*`).
+- **Testing**: 4/4 backend pytest + 14/14 frontend Playwright PASS (iteration_10). Toggle persiste via POST/PATCH, `/api/cloud/search` filtra correttamente quando OFF, share URL generati correttamente con encoding.
+
+---
+
 ## 🔴 PROSSIMA SESSIONE (P0) — M3.S1.1 + M3.S5 v1 (basata su 6 osservazioni Founder 19 Giu sera)
 
 Scope vincolato dalle osservazioni del Founder dopo screenshot M3.S1:
