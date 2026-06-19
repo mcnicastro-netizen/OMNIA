@@ -32,6 +32,11 @@ class UserInDB(TimestampedModel):
     lang: UserLang = "it"
     agency_ids: List[str] = Field(default_factory=list)
     is_active: bool = True
+    # M3.S5 v1 — B2C account fields
+    account_type: Literal["b2b", "b2c"] = "b2b"
+    intents: List[Literal["sell", "rent_out", "get_alerts"]] = Field(default_factory=list)
+    notification_channels: List[Literal["email", "push"]] = Field(default_factory=lambda: ["email"])
+    email_verified: bool = False
 
 
 class RegisterRequest(OmniaBaseModel):
