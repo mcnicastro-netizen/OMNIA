@@ -384,6 +384,17 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Pattern coerente**: stesso paradigma usato per `brand_extractor.py` (URL → Gemini → JSON strutturato) e `import_agestanet.py` (XML legacy → schema OMNIA).
 - **Stato**: 🔴 **PROSSIMA SESSIONE** (P0)
 
+### D-FUTURE-09 — AI Smart Import v2: PDF + Screenshot tramite Gemini Vision ⏳ (18 Giu 2026)
+- **Origine**: opzione (c) della scelta scope D-FUTURE-07 — Founder ha scelto (a) per la prima sessione e ha chiesto di memorizzare (c) come decisione futura.
+- **Cosa**: estendere il pipeline AI Smart Import oltre formati testuali (CSV/Excel/vCard/TXT) per accettare:
+  - **PDF**: estrazione testo via `pdfminer.six` per tabelle Excel esportate come PDF (caso comune)
+  - **Screenshot/foto tabelle**: Gemini Vision (multimodal) su immagini di liste clienti (foto fatte al monitor del vecchio gestionale, screenshot di Excel inviati via WhatsApp dal collega, ecc.)
+- **Razionale**: completa il pattern "qualsiasi file → clienti OMNIA" coprendo i casi davvero disordinati che (a) non gestisce. È il **vero killer** per l'agente che migra senza accesso ai file sorgente del vecchio CRM.
+- **Costo Gemini**: leggermente più alto (input tokens per PDF lungo, image tokens per screenshot) ma sempre <€0.20 per file. Trascurabile.
+- **Quando**: dopo la validazione di D-FUTURE-07 v1 (formati testuali), idealmente quando avremo file reali di test dei Founder/early adopters per capire le casistiche più frequenti.
+- **Dipende da**: D-FUTURE-07 ✅ (deve essere completa e testata in produzione prima)
+- **Stato**: in memoria, da fare in seconda sessione AI Smart Import.
+
 ### D-FUTURE-08 — Social Share su property pubblica ✅ DONE (18 Giu 2026)
 - **Idea agent + Founder** (18 Giu 2026, post M2.S5 Layer D Phase 2)
 - **Cosa**: 4 pulsanti share sotto ogni immobile pubblico (`/api/p/{slug}/{pid}`): WhatsApp, Facebook, Email, Copy Link.
