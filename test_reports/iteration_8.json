@@ -1,0 +1,41 @@
+{
+  "summary": "M3.S1 ImmobilCloud B2C Public Portal — full end-to-end testing PASSED. Backend: 13/13 pytest pass on /app/backend/tests/test_immobilcloud_public.py (~2s). All 4 public no-auth endpoints verified: GET /api/cloud/search (returns items+total+pagination, agency.name populated, filters by city prefix-match case-insensitive, by operation=sale/rent, invalid sort=xxx → 422, page/page_size honored); GET /api/cloud/facets (returns total_active+cities[]+property_types[], operation=rent filter works); GET /api/cloud/property/{pid} (returns detail; sensitive fields owner/seller_client_id/commission_pct/listing_agent_id correctly excluded via PUBLIC_FIELDS projection, photos transformed to {url,is_cover,caption}, agency card attached, view counter incremented best-effort); GET /api/cloud/agency/{slug} (404 for unknown). Endpoints fully public — verified by clean Session() with no cookies/headers. Curl confirmed live data: 1 active property (Test OMNIA Agency, Roma, appartamento, sale, €250,000, 80m², 3 rooms). Regression: 41/42 pass (1 expected skip) on themes+clients_smart+csv_import+custom_domain — no breakage from is_listed_on_immobilcloud field addition (the {$ne: false} filter correctly includes legacy docs without the field). Frontend /it/cloud loaded successfully: hero h1 'Trova la casa dei tuoi sogni' rendered in Fraunces serif font (computed fontFamily: 'Fraunces, Georgia, serif') ✅, cream B2C bg #fbf9f5 (rgb(251,249,245)) confirmed visually distinct from B2B stone palette ✅, op-sale/op-rent toggle works (default sale active, op-rent click refetches facets+featured), cloud-search-city + cloud-search-btn submit navigates to /it/cloud/search?operation=sale&city=Roma, cloud-total displays '1 immobili attivi in tutta Italia', cloud-cities-row + cloud-featured both visible with data. SearchPage: all 9 required data-testids present (filter-city, filter-type, filter-price-min, filter-price-max, filter-surface-min, filter-rooms-min, filter-sort, results-count, search-results-list), 1 property card cloud-card-{id} rendered with price in Fraunces serif (€250.000) + navy color (#0B1E3F), title, city, surface, rooms, agency badge. Filter mutation (rooms_min=2) refetches correctly. Empty state: filling filter-city='ZZZZZ-NoCity' surfaces search-empty as expected. CTA buttons use navy (#0B1E3F) instead of black — B2C palette correctly applied.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "ImmobilCloud (general)", "issues": ["Palette is restrained cream/navy — looks 'editorial' rather than overtly colorful. User explicitly asked for 'più colorato (no editorial-sobrio)'. Current scheme reads as a sober/refined B2C (better than B2B stone-only, but still understated). Consider adding amber/gold accent more prominently in CTAs/badges/hero, or warmer secondary tones, if the user wanted a livelier B2C feel akin to Idealista/Immobiliare.it."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_immobilcloud_public.py",
+    "/app/test_reports/pytest/immobilcloud_public.xml"
+  ],
+  "action_items": [
+    "(Optional, design feedback) Make B2C palette more vibrant: gold/amber accents on featured-card badges and primary CTA hover, warmer accent on op-toggle. User wording 'più colorato (no editorial-sobrio)' may not be fully satisfied by current cream/navy/gold scheme."
+  ],
+  "critical_code_review_comments": [
+    "public_portal.py (~295 lines) — clean single-module, 4 endpoints, well under 700-line limit. PUBLIC_FIELDS and LIST_FIELDS projections correctly exclude internal fields (_id, owner, seller_client_id, commission_pct, listing_agent_id, lead_count, view_count) → privacy preserved.",
+    "_base_filter uses {is_listed_on_immobilcloud: {$ne: False}} which correctly opt-IN by default for legacy docs (field absent → matches) AND respects explicit opt-out (field=false → excluded). Matches the (b3) user choice 'opt-out default'.",
+    "Price filter logic switches between price (sale) and rent_monthly (rent) based on operation param — correct B2C UX.",
+    "view_count increment wrapped in try/except — best-effort fire-and-forget, won't fail user request. Good.",
+    "Sort enum validated via Pydantic regex pattern (^(recent|price_asc|price_desc|surface_desc)$) → returns 422 on invalid value (confirmed by test).",
+    "Endpoints mounted via router.include_router(public_portal_router) with no auth dependency → fully public as designed. Verified with clean Session().",
+    "Cover URL helper _cover_photo has a minor inconsistency: returns f'/api/public/property/<empty>/photo/{idx}' if property_id missing, then strips '//photo/' → could yield odd URL. Cosmetic only; _to_card uses different (correct) logic. Consider removing dead helper or fixing.",
+    "ImmocloudApp.jsx (~445 lines) — single file, well-organized into HomePage/SearchPage/PropertyCard/FilterBlock/SegSelect/FooterB2C. Good separation; could extract PropertyCard to its own file if it grows. Currently fine.",
+    "Frontend fetch() does NOT include credentials → correct for public endpoints (CORS allows credentials only when needed).",
+    "Hero h1 uses Fraunces serif via inline style — works but consider Tailwind class once font is registered globally.",
+    "B2C palette correctly uses #0B1E3F navy + #C19A6B gold + #fbf9f5 cream instead of B2B stone-only → palette differentiation achieved. However the overall look still reads 'refined editorial' rather than 'colorful B2C portal' — depends on user expectation.",
+    "Dev-env console warning '<span> cannot be a child of <option>' originates from Emergent's x-dynamic instrumentation wrapping mapped {n} children inside <option> — NOT user code, ignorable in prod.",
+    "Map (OpenStreetMap+Leaflet) deferred to M3.S3 as documented — not in current scope."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (13/13 immobilcloud_public + 41/42 regression with 1 expected skip)", "frontend": "100% (home + search + filters + empty-state + B2C palette)"},
+  "test_credentials": "Not required for /api/cloud/* (public). For seeding: mcnicastro@gmail.com / Forzainter2026.",
+  "seed_data_creation": "No test data created. Used existing 1 active property (Test OMNIA Agency, Roma, appartamento, sale, €250,000).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "M3.S1 regression suite: /app/backend/tests/test_immobilcloud_public.py (13 tests, ~2s, fast, no LLM, no auth). The B2C site is at /it/cloud (subdomain cloud.omniarealestateecosystem.it will route here in prod). DB has only 1 active property — to test richer scenarios (multiple cities, pagination across pages, rent operation results), seed more properties via /api/app/properties POST with status=active + visibility=public + operation in {sale,rent}. Note: existing legacy properties don't have is_listed_on_immobilcloud field — they are INCLUDED by the {$ne: false} filter (opt-out default). Map view is M3.S3 (not implemented yet).",
+  "rca of the issue": "No bugs found. All 17 acceptance criteria from the review request are met: (1-6) all /api/cloud/search filter+sort+pagination ✅ (7-8) /api/cloud/facets returns + filters by op ✅ (9) detail endpoint hides sensitive fields ✅ (10-11) 404 for unknown property/agency ✅ (12) all endpoints work without auth ✅ (13) HomePage hero+toggle+search+counter+cities+featured render with correct testids ✅ (14) op-rent toggle refetches ✅ (15) search submit navigates with correct query string ✅ (16) SearchPage filters+results+empty state work ✅ (17) regression M2 tests still pass 41/42 (1 expected skip) ✅. Only soft note: 'più colorato' design directive may want a bit more vibrancy — currently navy/gold/cream is refined but not overtly colorful."
+}

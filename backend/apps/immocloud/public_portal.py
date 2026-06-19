@@ -1,0 +1,294 @@
+"""OMNIA — ImmobilCloud B2C Public Portal (M3.S1).
+
+Aggregates all `status=active` + `visibility=public` + `is_listed_on_immobilcloud=true`
+properties from ALL OMNIA agencies and exposes them through public, NO-AUTH endpoints.
+
+Mounted at `/api/cloud/*`. Hostname `cloud.omniarealestateecosystem.it` will be
+routed here by the platform reverse proxy + a public React app served on the
+same domain consuming these endpoints.
+
+Endpoints (PUBLIC, NO AUTH):
+  GET  /search       — filtered+paginated property list
+  GET  /facets       — counters for the filter UI (cities/types/operations)
+  GET  /property/{id} — single property detail
+  GET  /property/{id}/agency — public agency card (display_name, slug, city)
+
+Photos are served by the existing endpoint /api/public/property/{pid}/photo/{idx}.
+"""
+import logging
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, HTTPException, Query
+
+from shared.db.connection import Database
+
+logger = logging.getLogger("omnia.immobilcloud")
+router = APIRouter(tags=["immobilcloud"])
+
+
+# ============================================================
+# Helpers
+# ============================================================
+
+PUBLIC_FIELDS = {
+    "_id": 0,
+    "owner": 0,                # internal-only
+    "seller_client_id": 0,     # internal-only
+    "commission_pct": 0,
+    "listing_agent_id": 0,
+    "lead_count": 0,
+    "view_count": 0,
+}
+
+LIST_FIELDS = {
+    "_id": 0,
+    "id": 1, "agency_id": 1, "title": 1, "description": 1,
+    "property_type": 1, "operation": 1, "status": 1,
+    "city": 1, "zone": 1, "address": 1,
+    "price": 1, "rent_monthly": 1,
+    "surface_sqm": 1, "rooms": 1, "bedrooms": 1, "bathrooms": 1,
+    "floor": 1, "energy": 1,
+    "photos": 1, "features": 1,
+    "updated_at": 1, "created_at": 1,
+    "reference_code": 1,
+}
+
+
+def _base_filter() -> Dict[str, Any]:
+    """Common visibility filter applied to every public query."""
+    return {
+        "status": "active",
+        "visibility": "public",
+        "is_listed_on_immobilcloud": {"$ne": False},
+    }
+
+
+def _cover_photo(photos: Optional[List[dict]]) -> Optional[str]:
+    if not photos:
+        return None
+    idx = next((i for i, p in enumerate(photos) if p.get("is_cover")), 0)
+    return f"/api/public/property/{photos[idx].get('property_id') or ''}/photo/{idx}".replace("//photo/", "/photo/")
+
+
+def _to_card(p: Dict[str, Any], agency: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Public list card payload."""
+    photos = p.get("photos") or []
+    cover_idx = next((i for i, ph in enumerate(photos) if ph.get("is_cover")), 0 if photos else None)
+    return {
+        "id": p["id"],
+        "title": p.get("title"),
+        "property_type": p.get("property_type"),
+        "operation": p.get("operation"),
+        "city": p.get("city"),
+        "zone": p.get("zone"),
+        "price": p.get("price"),
+        "rent_monthly": p.get("rent_monthly"),
+        "surface_sqm": p.get("surface_sqm"),
+        "rooms": p.get("rooms"),
+        "bedrooms": p.get("bedrooms"),
+        "bathrooms": p.get("bathrooms"),
+        "energy_class": (p.get("energy") or {}).get("energy_class"),
+        "cover_url": f"/api/public/property/{p['id']}/photo/{cover_idx}" if cover_idx is not None else None,
+        "photo_count": len(photos),
+        "reference_code": p.get("reference_code"),
+        "updated_at": p.get("updated_at"),
+        "agency": {
+            "id": agency.get("id") if agency else None,
+            "name": agency.get("display_name") if agency else None,
+            "slug": agency.get("slug") if agency else None,
+        } if agency else None,
+    }
+
+
+# ============================================================
+# 1) Search — main list endpoint
+# ============================================================
+
+@router.get("/search")
+async def public_search(
+    q: Optional[str] = None,
+    city: Optional[str] = None,
+    property_type: Optional[str] = None,
+    operation: Optional[str] = Query(None, pattern="^(sale|rent)$"),
+    price_min: Optional[int] = Query(None, ge=0),
+    price_max: Optional[int] = Query(None, ge=0),
+    surface_min: Optional[int] = Query(None, ge=0),
+    surface_max: Optional[int] = Query(None, ge=0),
+    rooms_min: Optional[int] = Query(None, ge=0),
+    sort: str = Query("recent", pattern="^(recent|price_asc|price_desc|surface_desc)$"),
+    page: int = Query(1, ge=1, le=500),
+    page_size: int = Query(20, ge=1, le=60),
+):
+    """Public paginated listing filtered by common B2C criteria."""
+    db = Database.get()
+    flt: Dict[str, Any] = _base_filter()
+
+    if city:
+        flt["city"] = {"$regex": f"^{city}", "$options": "i"}
+    if property_type:
+        flt["property_type"] = property_type
+    if operation:
+        flt["operation"] = operation
+    if rooms_min:
+        flt["rooms"] = {"$gte": rooms_min}
+    if surface_min or surface_max:
+        rng = {}
+        if surface_min:
+            rng["$gte"] = surface_min
+        if surface_max:
+            rng["$lte"] = surface_max
+        flt["surface_sqm"] = rng
+    if price_min or price_max:
+        rng = {}
+        if price_min:
+            rng["$gte"] = price_min
+        if price_max:
+            rng["$lte"] = price_max
+        # price for sale; rent_monthly for rent
+        if operation == "rent":
+            flt["rent_monthly"] = rng
+        else:
+            flt["price"] = rng
+    if q:
+        flt["$or"] = [
+            {"title": {"$regex": q, "$options": "i"}},
+            {"description": {"$regex": q, "$options": "i"}},
+            {"city": {"$regex": q, "$options": "i"}},
+            {"zone": {"$regex": q, "$options": "i"}},
+        ]
+
+    # Sort
+    sort_map = {
+        "recent": [("updated_at", -1)],
+        "price_asc": [("price", 1), ("rent_monthly", 1)],
+        "price_desc": [("price", -1), ("rent_monthly", -1)],
+        "surface_desc": [("surface_sqm", -1)],
+    }
+    sort_spec = sort_map[sort]
+
+    total = await db.properties.count_documents(flt)
+    skip = (page - 1) * page_size
+    cursor = db.properties.find(flt, LIST_FIELDS).sort(sort_spec).skip(skip).limit(page_size)
+    props = await cursor.to_list(length=page_size)
+
+    # Batch-resolve agencies
+    agency_ids = list({p.get("agency_id") for p in props if p.get("agency_id")})
+    agencies: Dict[str, Dict[str, Any]] = {}
+    if agency_ids:
+        async for a in db.agencies.find(
+            {"id": {"$in": agency_ids}, "is_active": True},
+            {"_id": 0, "id": 1, "slug": 1, "display_name": 1},
+        ):
+            agencies[a["id"]] = a
+
+    return {
+        "items": [_to_card(p, agencies.get(p.get("agency_id"))) for p in props],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "has_next": skip + page_size < total,
+        "sort": sort,
+    }
+
+
+# ============================================================
+# 2) Facets — counters for filter UI
+# ============================================================
+
+@router.get("/facets")
+async def public_facets(
+    operation: Optional[str] = Query(None, pattern="^(sale|rent)$"),
+):
+    """Returns top cities & property types with counts (for hero search box)."""
+    db = Database.get()
+    flt = _base_filter()
+    if operation:
+        flt["operation"] = operation
+
+    # Top 20 cities
+    cities_cur = db.properties.aggregate([
+        {"$match": flt},
+        {"$group": {"_id": "$city", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 20},
+    ])
+    cities = [{"city": d["_id"], "count": d["count"]} async for d in cities_cur if d["_id"]]
+
+    types_cur = db.properties.aggregate([
+        {"$match": flt},
+        {"$group": {"_id": "$property_type", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+    ])
+    types = [{"type": d["_id"], "count": d["count"]} async for d in types_cur if d["_id"]]
+
+    total = await db.properties.count_documents(flt)
+
+    return {
+        "total_active": total,
+        "cities": cities,
+        "property_types": types,
+    }
+
+
+# ============================================================
+# 3) Detail — single property
+# ============================================================
+
+@router.get("/property/{pid}")
+async def public_property_detail(pid: str):
+    db = Database.get()
+    p = await db.properties.find_one(
+        {"id": pid, **_base_filter()},
+        PUBLIC_FIELDS,
+    )
+    if not p:
+        raise HTTPException(status_code=404, detail="property_not_found")
+
+    agency = None
+    if p.get("agency_id"):
+        agency = await db.agencies.find_one(
+            {"id": p["agency_id"], "is_active": True},
+            {"_id": 0, "id": 1, "slug": 1, "display_name": 1, "logo_url": 1,
+             "phone": 1, "email": 1, "city": 1},
+        )
+
+    # Bump view counter (best-effort)
+    try:
+        await db.properties.update_one({"id": pid}, {"$inc": {"view_count": 1}})
+    except Exception:
+        pass
+
+    photos = p.get("photos") or []
+    return {
+        **{k: v for k, v in p.items() if k != "photos"},
+        "photos": [
+            {
+                "url": f"/api/public/property/{pid}/photo/{i}",
+                "is_cover": ph.get("is_cover", False),
+                "caption": ph.get("caption"),
+            }
+            for i, ph in enumerate(photos)
+        ],
+        "agency": agency,
+    }
+
+
+# ============================================================
+# 4) Agency public card
+# ============================================================
+
+@router.get("/agency/{slug}")
+async def public_agency_card(slug: str):
+    db = Database.get()
+    a = await db.agencies.find_one(
+        {"slug": slug, "is_active": True},
+        {"_id": 0, "id": 1, "slug": 1, "display_name": 1, "logo_url": 1,
+         "phone": 1, "email": 1, "city": 1, "address": 1, "description": 1},
+    )
+    if not a:
+        raise HTTPException(status_code=404, detail="agency_not_found")
+    # Count of public properties of this agency
+    count = await db.properties.count_documents({
+        "agency_id": a["id"], **_base_filter(),
+    })
+    return {**a, "public_property_count": count}

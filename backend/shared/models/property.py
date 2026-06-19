@@ -135,6 +135,11 @@ class PropertyInDB(TenantModel):
     visibility: Literal["public", "mls_only", "private"] = "public"
     listing_agent_id: Optional[str] = None  # user_id of responsible agent
 
+    # Cross-portal publishing (M3.S1 → finalized in M3.S2 Publishing Center)
+    # When True, this property appears on the public ImmobilCloud B2C portal
+    # (cloud.omniarealestateecosystem.it). Default ON (opt-out per agent/admin).
+    is_listed_on_immobilcloud: bool = True
+
     # Counters
     view_count: int = 0
     lead_count: int = 0
