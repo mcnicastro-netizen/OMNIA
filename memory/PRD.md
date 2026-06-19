@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: M1 ✅ DONE • M2.S1→S5 ✅ DONE • **D-FUTURE-07 AI Smart Import Clienti ✅ DONE (19 Giu 2026)** • M2.S6 ⏳ Custom Domain prossimo P0 • D-FUTURE-09 (PDF + Vision) in backlog
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** (Onboarding/CRUD/CRM/Matching+AI/Multiposting+Theme Registry+Smart Clients+AI Import+Custom Domain) • Prossimo: **M3 ImmobilCloud B2C** (mappa, filtri, GIS valuator)
 
 ---
 
