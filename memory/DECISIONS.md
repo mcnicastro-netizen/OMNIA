@@ -427,3 +427,20 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Costo**: nessun costo Meta API (gratis per Pages business). Solo costo review Meta App (1-tantum).
 - **Quando**: dopo M3.S2 Publishing Center base (toggle multi-portale + share manuali). Probabilmente sessione dedicata.
 - **Stato**: in memoria, da fare dopo M3.S2.
+
+
+### D-FUTURE-12 — Pagina dettaglio proprietà pubblica B2C come prossimo step (M3.S4) ⏳ (19 Giu 2026)
+- **Origine**: suggerimento dell'agente al termine di M3.S2. Oggi l'agente può condividere un immobile via WhatsApp/FB/Email/Copy-Link dal Centro Pubblicazione, ma chi clicca atterra sulla pagina themed del backend (`/api/p/{slug}/{pid}`), che è renderizzata server-side e non ha form di contatto né lead capture nativo.
+- **Cosa**: costruire una landing dedicata B2C su `/it/cloud/property/{pid}` con:
+  - Gallery foto (carousel responsive)
+  - Sezione info + features + classe energetica
+  - Form contatto agenzia che crea un lead nel CRM dell'agente proprietario (riutilizza il modello `Lead` esistente)
+  - Pulsanti share (riusa logica `PublishingCenter`)
+  - Schema.org `RealEstateListing` per SEO
+  - Tracking view_count (incremento server-side al GET)
+- **Perché ha senso ora**:
+  - Chiude il funnel acquisizione lead per l'agente (oggi il share è "monco" senza CTA conversione)
+  - Sblocca M3.S7 (alerts B2C) perché serve la pagina di destinazione dei click sugli alert email
+  - È il complemento naturale di M3.S2 (share genera link → link porta a landing → landing genera lead)
+- **Costo**: ~1 sessione media. Nessun integrazione 3rd party necessaria.
+- **Stato**: in attesa di approvazione Founder per priorizzazione vs M3.S3 (mappa).
