@@ -542,8 +542,8 @@
     "import_csv_btn": "⬆ Importa CSV"
   },
   "client_import": {
-    "title": "Importa clienti da CSV",
-    "subtitle": "Carica una lista clienti esistente con un foglio elettronico. Importazione massiva con anteprima e gestione errori.",
+    "title": "Importa clienti",
+    "subtitle": "Carica i tuoi clienti in pochi clic. Supporta Excel, vCard, CSV e testo libero — l'IA pensa al mapping.",
     "back_to_clients": "Torna ai clienti",
     "intro_title": "Come funziona",
     "intro_text": "Scarica il template CSV con l'esempio, compilalo con i tuoi clienti (uno per riga), poi caricalo qui. Ti mostriamo un'anteprima delle prime 5 righe prima di importare.",

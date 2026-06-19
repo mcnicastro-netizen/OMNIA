@@ -210,23 +210,15 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 **Test totale**: 30/30 backend pytest passati + 100% frontend flows.
 
-### 🔴 D-FUTURE-07 ⏳ NUOVA PRIORITÀ — AI Smart Import Clienti
-**Razionale**: il CSV template richiede 5-13h per 100 clienti → barriera all'adoption.
+### 🔴 D-FUTURE-07 ✅ DONE (19 Giu 2026) — AI Smart Import Clienti v1
+**Risolto il blocco adoption**: CSV template richiedeva 5-13h per 100 clienti → ora trascini qualsiasi file (CSV/Excel/vCard/TXT) e Gemini-3-flash mappa al schema OMNIA in 5-15 secondi con confidence score per riga.
 
-**Specifica funzionale**:
-- L'agente carica **qualsiasi file** disordinato: Excel arbitrario, vCard, export Gmail/Outlook, lista email con note libere, PDF, screenshot di tabelle.
-- Gemini-3-flash parsa il contenuto → propone righe già mappate allo schema OMNIA (`name`, `client_type`, `pref_cities`, `pref_price_max`, ...).
-- Preview side-by-side (originale | schema OMNIA) con confidence score per riga.
-- Bulk-edit inline + conferma → import.
-- Tempo agente: ~5 min per 100 clienti vs 8h CSV (riduzione >99%).
+**Implementato**:
+- Backend `apps/immoweb/clients_ai_import.py` (4 endpoint: upload+parse, get draft, patch row, commit) + pre-parser per `.csv .xlsx .vcf .txt` con format auto-detection + Gemini con system prompt domain-specific (interpreta "trilocale"→3 stanze, "venditore"→seller, ecc.) + draft TTL 1h via Mongo index.
+- Frontend `ClientImportPage.jsx` dual-tab (AI default + Template CSV legacy) editorial-sober con confidence badge ★/⚠/!.
+- 12/12 backend pytest + frontend full flow validato.
 
-**Pattern**: stesso del Brand Extractor (file/URL → Gemini → schema strutturato → preview → conferma).
-**Costo Gemini**: trascurabile (~€0.02-0.10 per file da 100 righe, una tantum).
-**Privacy GDPR**: no caching permanente del file originale, log scrubbed.
-**Sblocca**: Smart Clients List AI Lead Scoring diventa utile (dati reali da migrare).
-
-**Endpoint previsto**: `POST /api/app/clients/import/ai` con multipart file upload + draft preview + commit.
-**Dipende da**: nulla (può partire subito).
+**v2 prevista — D-FUTURE-09**: PDF + screenshot via Gemini Vision (in backlog, memorizzato).
 
 ### M2.S6 ⏳ — Custom domain + DNS verification (D-022)
 - Theme registry già operativo (Layer D Phase 2). Manca solo:

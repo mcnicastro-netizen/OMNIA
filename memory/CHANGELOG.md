@@ -1,5 +1,26 @@
 # OMNIA — Changelog
 
+## 2026-06-19 — D-FUTURE-07 AI Smart Import Clienti v1 ✅
+
+- **Backend** `apps/immoweb/clients_ai_import.py` — pipeline `file → pre-parser → Gemini-3-flash → draft TTL 1h → commit`:
+  - 4 endpoints: `POST /clients/import/ai` (upload+parse), `GET /draft/{id}` (reload), `PATCH /draft/{id}/row/{idx}` (edit/drop), `POST /draft/{id}/commit`.
+  - Pre-parser per **CSV / Excel (.xlsx) / vCard / TXT**: detect format via estensione + content sniff.
+  - System prompt Gemini con schema OMNIA + esempi d'interpretazione (es. "trilocale" → rooms_min:3, "venditore" → client_type:seller).
+  - Defensive normalization layer (sanitize email/phone, coerce enums, parse int da formati misti).
+  - Batch Gemini in chunk da 25 righe in parallelo (asyncio.gather).
+  - Limiti: 5MB file, 500 righe max, TTL 1h sui draft via Mongo TTL index.
+  - Source nei clienti importati: `"ai_import"`.
+- **Frontend** `ClientImportPage.jsx` riscritta con 2 tab:
+  - **Tab A "⚡ Import AI"** (default, badge "novità"): dropzone → loading → preview con confidence badge (★ verde / ⚠ ambra / ! rosso) → slider min-confidence + GDPR checkbox → commit.
+  - **Tab B "📋 Template CSV"**: flusso legacy preservato (template+upload+preview).
+  - Inline row edit (name, surname, email, phone, client_type) + drop/restore.
+  - Editorial-sober palette stone-only + emerald/amber/red minimal solo per i badge confidence.
+- **i18n** namespace `client_import` esteso IT/EN/ES + titolo H1 generico ("Importa clienti" invece di "...da CSV").
+- **Test**: 12/12 backend pytest passati (`test_clients_ai_import.py`, ~47s con chiamate Gemini reali) + frontend full flow.
+- **Deps**: aggiunte `openpyxl==3.1.5` e `vobject==0.9.9` in `requirements.txt`.
+
+**Verifica reale (test agent + manual)**: caricato CSV messy 5 righe con colonne italiane arbitrarie (`nome cliente; telefono; mail; cerca; budget max; città`) → Gemini ha estratto 4 clienti (saltata 1 riga vuota), riconosciuto Mario/Lucia come buyer, Giuseppe come **seller** (parola "venditore" + "ha incarico"), Anna come **investor**, mappato "trilocale"→rooms_min:3, "Roma EUR"→city+zone, confidence 92-100/100. Commit ha inserito 4 clienti con source="ai_import".
+
 ## 2026-06-18 — Quick-Win Wrap-up ✅ (Click-to-Call/WA + CSV Client Import UI)
 
 - **Frontend Smart Clients List**: bottoni inline **📞 tel:** e **💬 WhatsApp** su ogni row.

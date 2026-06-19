@@ -341,8 +341,8 @@
     "import_csv_btn": "⬆ Import CSV"
   },
   "client_import": {
-    "title": "Import clients from CSV",
-    "subtitle": "Bulk-load an existing client list from a spreadsheet. Preview + error handling.",
+    "title": "Import clients",
+    "subtitle": "Bring your clients in with a few clicks. Supports Excel, vCard, CSV and free-form text — AI handles the mapping.",
     "back_to_clients": "Back to clients",
     "intro_title": "How it works",
     "intro_text": "Download the template CSV with an example row, fill in your clients (one per row), then upload it here. We show a preview of the first 5 rows before importing.",

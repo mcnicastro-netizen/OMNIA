@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: M1 ✅ DONE • M2.S1→S5 ✅ DONE (Onboarding/CRUD/CRM/Matching+AI/Multiposting+Theme Registry+Smart Clients) • **M2.S6 ⏳ Custom Domain** • **🔴 D-FUTURE-07 AI Smart Import Clienti = P0 prossima sessione**
+- **Stato progetto**: M1 ✅ DONE • M2.S1→S5 ✅ DONE • **D-FUTURE-07 AI Smart Import Clienti ✅ DONE (19 Giu 2026)** • M2.S6 ⏳ Custom Domain prossimo P0 • D-FUTURE-09 (PDF + Vision) in backlog
 
 ---
 
