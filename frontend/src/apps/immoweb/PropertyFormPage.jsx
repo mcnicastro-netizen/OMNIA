@@ -4,6 +4,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import AgencyShell from "./components/AgencyShell";
 import PhotoUploader from "./components/PhotoUploader";
 import PropertyMatchesPreview from "./components/PropertyMatchesPreview";
+import PublishingCenter from "./components/PublishingCenter";
 import { api } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 
@@ -40,6 +41,7 @@ const empty = {
   owner: { name: "", phone: "", email: "" },
   seller_client_id: "",
   photos: [],
+  is_listed_on_immobilcloud: true,
 };
 
 export default function PropertyFormPage() {
@@ -51,6 +53,11 @@ export default function PropertyFormPage() {
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [agency, setAgency] = useState(null);
+
+  useEffect(() => {
+    api.get(`/app/agencies/me`).then((r) => setAgency(r.data)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -279,6 +286,17 @@ export default function PropertyFormPage() {
           {/* Photos */}
           <Section label="Foto immobile">
             <PhotoUploader photos={form.photos || []} onChange={(photos) => upd("photos", photos)} max={15} />
+          </Section>
+
+          {/* Publishing Center (M3.S2) — toggle ImmobilCloud + Social share */}
+          <Section label={t("properties.section_publishing")}>
+            <PublishingCenter
+              propertyId={isEdit ? id : null}
+              property={form}
+              agency={agency}
+              isListedOnImmobilCloud={form.is_listed_on_immobilcloud}
+              onToggleImmobilCloud={(v) => upd("is_listed_on_immobilcloud", v)}
+            />
           </Section>
 
           {/* AI Match preview — only in edit mode */}

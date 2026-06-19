@@ -182,6 +182,7 @@ class PropertyCreate(OmniaBaseModel):
     visibility: Literal["public", "mls_only", "private"] = "public"
     virtual_tour_url: Optional[str] = None
     photos: Optional[List[PropertyPhoto]] = None
+    is_listed_on_immobilcloud: bool = True  # M3.S2 Publishing Center
 
 
 class PropertyUpdate(OmniaBaseModel):
@@ -219,6 +220,7 @@ class PropertyUpdate(OmniaBaseModel):
     commission_pct: Optional[float] = None
     visibility: Optional[Literal["public", "mls_only", "private"]] = None
     reference_code: Optional[str] = None
+    is_listed_on_immobilcloud: Optional[bool] = None  # M3.S2 Publishing Center
 
 
 class PropertyListItem(OmniaBaseModel):
