@@ -1,5 +1,27 @@
 # OMNIA — Changelog
 
+## 🔴 PROSSIMA SESSIONE (P0) — M3.S1.1 + M3.S5 v1 (basata su 6 osservazioni Founder 19 Giu sera)
+
+Scope vincolato dalle osservazioni del Founder dopo screenshot M3.S1:
+
+**M3.S1.1 — Mini-fix grafico ImmobilCloud**:
+1. Aggiungere simbolo **™** accanto al brand "ImmobilCloud" (NON ® finché non c'è registrazione UIBM/EUIPO confermata, ® falso = illecito).
+2. Custom TopNav per route `/cloud`: 3 link **"Cerca casa · Vendi casa · Area riservata"**. RIMUOVERE link "Formazione" (Academy non riguarda B2C end users).
+3. Sostituire il toggle "Compra/Affitta" con **3 card grandi** sotto l'hero: 🔍 Cerca · 🏷️ Vendi · 🔑 Affitta. Pattern Idealista/Immobiliare.it. Equipara le 3 azioni (oggi "vendi" mancava completamente come CTA esplicito).
+4. Hero split-layout: testo a sinistra + **immagine Unsplash** a destra (es. skyline italiano / interno luxury). Niente hero text-only. Migliora drammaticamente percezione B2C.
+
+**M3.S5 v1 — Registrazione segmentata B2C**:
+5. Estendere modello `User` con `account_type: "b2c"` + `intents: ["sell" | "rent_out" | "get_alerts"]` + `notification_channels: ["email" | "push"]` (push browser inviato a sessione successiva — richiede service worker + VAPID keys).
+6. Backend `POST /api/cloud/auth/register` con verifica email via Resend.
+7. Frontend `/it/cloud/register` — form con scelta intenti (checkbox multi) + canale notifiche.
+8. Bottone "Area riservata" in TopNav apre login/registrazione.
+
+**Rinviato (next-next session)**:
+- Push browser notifications (VAPID, service worker, subscribe API)
+- WhatsApp/SMS canali (costi: Twilio €0.04/SMS, WA Business conversazione)
+- B2C Profile page completa con saved searches + cronologia
+- Flusso "Pubblica annuncio privato" dopo registrazione (verrà in M3.S5 v2)
+
 ## 2026-06-19 (notte) — 🎉 M3.S1 ImmobilCloud B2C Public Portal ✅ DONE
 
 **Inizio della Milestone 3 — Portale B2C pubblico.**
