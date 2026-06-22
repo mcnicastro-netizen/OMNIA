@@ -1,5 +1,29 @@
 # OMNIA — Changelog
 
+## 2026-06-22 — ✅ M3.S3 Mappa interattiva + Filtri avanzati DONE
+
+**Portale B2C ImmobilCloud — toggle Lista/Mappa, marker Leaflet, geocoding automatico.**
+
+- **Backend**:
+  - `apps/immocloud/geocoding.py` (nuovo): helper Nominatim/OSM + `schedule_geocode()` fire-and-forget (asyncio.create_task). User-Agent custom, fallback su city-only se l'address full non risolve.
+  - `apps/immoweb/properties.py`: chiama `schedule_geocode` su POST (se lat/lng assenti) e PATCH (se address/city/province/postal_code cambiano).
+  - `apps/immocloud/public_portal.py`:
+    - Nuovo endpoint `GET /api/cloud/map` — marker leggeri (id, lat, lng, price, operation, property_type, city, title) con filtri operation/city/property_type/price/rooms_min/bedrooms_min/energy_class e **bbox** (south,west,north,east).
+    - Filtri avanzati su `GET /api/cloud/search`: `bedrooms_min`, `bathrooms_min`, `energy_class` (regex Pydantic A4..G).
+    - `lat`/`lng` ora restituiti in `LIST_FIELDS` e in `_to_card`.
+- **Frontend**:
+  - Installate dipendenze: `leaflet@1.9.4` + `react-leaflet@5.0.0`.
+  - Nuovo componente `apps/immocloud/components/PropertyMapView.jsx` (~110 righe): MapContainer + TileLayer OSM + Marker con Popup (titolo, città, prezzo, link "Vedi dettaglio →"). FitBounds automatico, fallback Roma. Icone marker da CDN unpkg (workaround Webpack).
+  - `apps/immocloud/ImmocloudApp.jsx` SearchPage: stato `viewMode` (list/map), fetch `/api/cloud/map` quando in mappa, toggle button Lista/Mappa, nuovi filtri sidebar `bedrooms_min` e `energy_class`.
+- **i18n** `it.json`: 7 nuove chiavi (`cloud.f_bedrooms_min`, `f_energy_class`, `view_list`, `view_map`, `view_detail`, `map_empty`, +1 di consistenza).
+- **Testing**: 14/14 backend pytest (`test_immobilcloud_m3s3_map.py`) + 18/18 frontend Playwright PASS (iteration_11). Endpoint `/map` validato con bbox in/out, 400 su bbox malformato, 422 su energy_class invalida, geocoding Nominatim live, toggle UI list↔map, popup marker, link detail.
+- **Backfill manuale**: aggiunti lat/lng a una property "Roma" esistente per smoke test (10 città italiane mappate via script Python ad-hoc).
+
+**Non bloccanti (follow-up)**:
+- bbox map non valida `lat∈[-90,90]` / `lng∈[-180,180]` lato server (yield empty silently). Da aggiungere come Pydantic validator.
+
+---
+
 ## 2026-06-19 (mattino) — ✅ M3.S2 Publishing Center DONE
 
 **Centro Pubblicazione integrato nel form proprietà dell'agente.**

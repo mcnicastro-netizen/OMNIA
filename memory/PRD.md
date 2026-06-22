@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ + M3.S2 ✅ DONE** — Portale B2C ImmobilCloud live + Centro Pubblicazione lato agente • Prossimo: **M3.S3 Mappa interattiva + Filtri avanzati**
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ + M3.S2 ✅ + M3.S3 ✅ DONE** — Portale B2C con Home, Registrazione segmentata, Publishing Center agente, Mappa interattiva Leaflet + filtri avanzati + geocoding Nominatim • Prossimo: **M3.S4 Pagina dettaglio proprietà pubblica + form contatto**
 
 ---
 
