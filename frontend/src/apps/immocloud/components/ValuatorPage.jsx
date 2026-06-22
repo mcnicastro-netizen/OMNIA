@@ -250,7 +250,7 @@ function ValuationResult({ result, onReset, lang }) {
           <span className="text-xs uppercase tracking-widest bg-white/10 px-3 py-1 rounded">
             {fmt(result.price_per_sqm.avg)}/m²
           </span>
-          <span className={`text-xs uppercase tracking-widest px-3 py-1 rounded border ${confColor}`}>
+          <span className={`text-xs uppercase tracking-widest px-3 py-1 rounded border ${confColor}`} data-testid="r-confidence">
             {t("valuator.confidence")}: {t(`valuator.conf_${result.confidence}`)}
           </span>
         </div>

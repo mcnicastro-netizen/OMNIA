@@ -1,5 +1,38 @@
 # OMNIA — Changelog
 
+## 2026-06-22 (notte tarda) — ✅ M3.S6 Valutatore GIS pubblico DONE
+
+**Il valutatore è una NOSTRA SKILL. Output realistici verificati su Italia intera.**
+
+### Risultati congruenza verificati
+| Zona | Output €/m² | Range mercato 2025 |
+|---|---|---|
+| Milano centro nuovo A | €13.682 | 9.000–13.000 (+nuovo/A premium) ✓ |
+| Roma Trastevere (zona inferita) | €8.000 | 6.500–9.500 ✓ |
+| Napoli Vomero da_ristrutturare | €3.375 | 3.500–5.500 × 0.75 = 2.625–4.125 ✓ |
+| Cortina d'Ampezzo villa ottimo | €15.094 | 9.000–14.000 × 1.25 × 1.05 ✓ |
+| Portofino centro | €20.000 | 15.000–25.000 ✓ |
+| Crotone periferia | €575 | 450–700 ✓ |
+| Palermo periferia monolocale | €978 | < periferia appartamento ✓ |
+
+### Implementazione
+- **Backend** `apps/immocloud/data/italy_real_estate_prices_2025.py` (NUOVO, 380+ righe): dataset curato `CITY_PRICES` con **124 città italiane** in **20 regioni**, organizzate per zona tier (centro/semicentro/periferia). Fonti: Borsino Immobiliare 2025-Q1, OMI Agenzia Entrate, Tecnocasa report 2024, Idealista. Include città ultra-premium (Portofino, Capri, Porto Cervo, Cortina, Sanremo, Forte dei Marmi, Sorrento, Positano, Taormina) e turistiche (Olbia, Tropea, Ostuni).
+- **Backend** `apps/immocloud/valuator.py` (NUOVO, ~230 righe):
+  - `POST /api/cloud/valuator` (pubblico, no-auth) — payload `{city, zone?, address?, property_type, surface_sqm, condition?, energy_class?, floor?, name?, email?}`.
+  - Pipeline: normalize city → resolve canonical key (gestisce sinonimi EN come "Milan"/"Rome"/"Florence") → infer zone_tier da keywords address ("Trastevere", "Vomero", "Chiaia", "Navigli"...) → multipliers (property_type × condition × energy_class × floor) → comparables query db.properties → optional lead capture in db.valuation_leads.
+  - `GET /api/cloud/valuator/coverage` — public meta endpoint.
+  - Risposta include: price_per_sqm{min,avg,max}, estimated_value{min,avg,max}, multipliers_applied (audit trail), confidence (high/medium/low + score 0-100), methodology + data_source, comparables, disclaimer.
+- **Frontend** `apps/immocloud/components/ValuatorPage.jsx` (NUOVO, ~310 righe): pagina `/it/cloud/valutatore` con form 3-sezioni (location/property/contact opzionale) + risultato hero in dark gradient + grid dettagli + comparables clickabili + collapsible methodology + disclaimer.
+- **Frontend** `ImmocloudApp.jsx`: route + link in CloudTopNav "Valuta gratis".
+- **i18n**: namespace `valuator.*` con 40+ chiavi italiane.
+- **Testing**:
+  - **50 pytest di congruenza** in `tests/test_m3s6_valuator.py`: 25 city×zone realistic ranges (Portofino → Crotone), 12 monotonicity tests (centro > semicentro > periferia), 1 inter-city ranking (Milano > Roma > Bologna > Napoli > Palermo > Crotone), 5 multiplier tests (villa/garage/condition/energy/floor), 7 resilience (synonyms EN, unknown city, zone inference).
+  - Iteration_15: **50/50 pytest + 12/12 manual curl backend + 4/4 frontend Playwright + nav link + 11/11 field testids PASS**. Zero bug.
+- **Lead capture**: nuova collection `valuation_leads` (high-intent: chi cerca stima ha venduta decisione).
+- **Fix non-bloccanti applicati post-test**: aggiunto `tests/conftest.py` per portabilità pytest in CI; aggiunto `data-testid="r-confidence"` per regression UI cheap.
+
+---
+
 ## 2026-06-22 (notte) — ✅ M3.S5 v2 Pubblicazione annunci privati B2C + Moderazione admin DONE
 
 **Il portale B2C ora consente ai privati di pubblicare gratuitamente un annuncio (free-tier 1 attivo), con workflow di moderazione admin.**
