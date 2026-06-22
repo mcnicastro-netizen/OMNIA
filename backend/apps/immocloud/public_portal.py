@@ -45,6 +45,7 @@ LIST_FIELDS = {
     "id": 1, "agency_id": 1, "title": 1, "description": 1,
     "property_type": 1, "operation": 1, "status": 1,
     "city": 1, "zone": 1, "address": 1,
+    "lat": 1, "lng": 1,
     "price": 1, "rent_monthly": 1,
     "surface_sqm": 1, "rooms": 1, "bedrooms": 1, "bathrooms": 1,
     "floor": 1, "energy": 1,
@@ -81,6 +82,8 @@ def _to_card(p: Dict[str, Any], agency: Optional[Dict[str, Any]] = None) -> Dict
         "operation": p.get("operation"),
         "city": p.get("city"),
         "zone": p.get("zone"),
+        "lat": p.get("lat"),
+        "lng": p.get("lng"),
         "price": p.get("price"),
         "rent_monthly": p.get("rent_monthly"),
         "surface_sqm": p.get("surface_sqm"),
@@ -115,6 +118,9 @@ async def public_search(
     surface_min: Optional[int] = Query(None, ge=0),
     surface_max: Optional[int] = Query(None, ge=0),
     rooms_min: Optional[int] = Query(None, ge=0),
+    bedrooms_min: Optional[int] = Query(None, ge=0),
+    bathrooms_min: Optional[int] = Query(None, ge=0),
+    energy_class: Optional[str] = Query(None, pattern="^(A4|A3|A2|A1|A|B|C|D|E|F|G)$"),
     sort: str = Query("recent", pattern="^(recent|price_asc|price_desc|surface_desc)$"),
     page: int = Query(1, ge=1, le=500),
     page_size: int = Query(20, ge=1, le=60),
@@ -131,6 +137,12 @@ async def public_search(
         flt["operation"] = operation
     if rooms_min:
         flt["rooms"] = {"$gte": rooms_min}
+    if bedrooms_min:
+        flt["bedrooms"] = {"$gte": bedrooms_min}
+    if bathrooms_min:
+        flt["bathrooms"] = {"$gte": bathrooms_min}
+    if energy_class:
+        flt["energy.energy_class"] = energy_class
     if surface_min or surface_max:
         rng = {}
         if surface_min:
@@ -194,6 +206,69 @@ async def public_search(
 # ============================================================
 # 2) Facets — counters for filter UI
 # ============================================================
+
+@router.get("/map")
+async def public_map_markers(
+    city: Optional[str] = None,
+    property_type: Optional[str] = None,
+    operation: Optional[str] = Query(None, pattern="^(sale|rent)$"),
+    price_min: Optional[int] = Query(None, ge=0),
+    price_max: Optional[int] = Query(None, ge=0),
+    rooms_min: Optional[int] = Query(None, ge=0),
+    bedrooms_min: Optional[int] = Query(None, ge=0),
+    energy_class: Optional[str] = Query(None, pattern="^(A4|A3|A2|A1|A|B|C|D|E|F|G)$"),
+    bbox: Optional[str] = Query(None, description="south,west,north,east"),
+    limit: int = Query(500, ge=1, le=2000),
+):
+    """M3.S3 — Lightweight markers for map view. Returns only id/lat/lng/price/type
+    of properties with coordinates. Optional bbox filter (south,west,north,east).
+    """
+    db = Database.get()
+    flt: Dict[str, Any] = _base_filter()
+    # Required: must have coordinates
+    flt["lat"] = {"$ne": None, "$exists": True}
+    flt["lng"] = {"$ne": None, "$exists": True}
+
+    if city:
+        flt["city"] = {"$regex": f"^{city}", "$options": "i"}
+    if property_type:
+        flt["property_type"] = property_type
+    if operation:
+        flt["operation"] = operation
+    if rooms_min:
+        flt["rooms"] = {"$gte": rooms_min}
+    if bedrooms_min:
+        flt["bedrooms"] = {"$gte": bedrooms_min}
+    if energy_class:
+        flt["energy.energy_class"] = energy_class
+    if price_min or price_max:
+        rng = {}
+        if price_min:
+            rng["$gte"] = price_min
+        if price_max:
+            rng["$lte"] = price_max
+        if operation == "rent":
+            flt["rent_monthly"] = rng
+        else:
+            flt["price"] = rng
+
+    # Bounding box filter (south, west, north, east)
+    if bbox:
+        try:
+            south, west, north, east = (float(x) for x in bbox.split(","))
+            flt["lat"] = {"$gte": south, "$lte": north}
+            flt["lng"] = {"$gte": west, "$lte": east}
+        except (ValueError, AttributeError):
+            raise HTTPException(status_code=400, detail="invalid_bbox_format")
+
+    cursor = db.properties.find(
+        flt,
+        {"_id": 0, "id": 1, "lat": 1, "lng": 1, "price": 1, "rent_monthly": 1,
+         "property_type": 1, "operation": 1, "city": 1, "title": 1},
+    ).limit(limit)
+    items = await cursor.to_list(length=limit)
+    return {"items": items, "count": len(items)}
+
 
 @router.get("/facets")
 async def public_facets(

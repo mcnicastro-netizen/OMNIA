@@ -26,6 +26,7 @@ from shared.models.property import (
     XMLImportPayload,
 )
 from apps.immoweb.import_agestanet import detect_and_parse as detect_agestanet
+from apps.immocloud.geocoding import schedule_geocode
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/properties", tags=["properties"])
@@ -141,6 +142,12 @@ async def create_property(
     )
     doc = prop.model_dump()
     await db.properties.insert_one(doc)
+    # M3.S3 — fire-and-forget geocoding (Nominatim/OSM)
+    if not doc.get("lat") and not doc.get("lng"):
+        schedule_geocode(db, doc["id"], {
+            "address": doc.get("address"), "city": doc.get("city"),
+            "province": doc.get("province"), "postal_code": doc.get("postal_code"),
+        })
     return _strip(doc)
 
 
@@ -186,6 +193,13 @@ async def update_property(
 
     await db.properties.update_one({"id": prop_id}, {"$set": update_doc})
     updated = await db.properties.find_one({"id": prop_id})
+    # M3.S3 — re-geocode if any address field changed (best-effort)
+    address_changed = any(k in update_doc for k in ("address", "city", "province", "postal_code"))
+    if address_changed:
+        schedule_geocode(db, prop_id, {
+            "address": updated.get("address"), "city": updated.get("city"),
+            "province": updated.get("province"), "postal_code": updated.get("postal_code"),
+        })
     return _strip(updated)
 
 

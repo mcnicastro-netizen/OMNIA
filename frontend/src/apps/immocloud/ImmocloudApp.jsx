@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
+import PropertyMapView from "./components/PropertyMapView";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api/cloud`;
@@ -229,6 +230,8 @@ function SearchPage() {
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState({ items: [], total: 0, has_next: false, page: 1 });
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState("list"); // "list" | "map"
+  const [mapMarkers, setMapMarkers] = useState([]);
 
   const filters = useMemo(() => ({
     operation: params.get("operation") || "sale",
@@ -238,6 +241,8 @@ function SearchPage() {
     price_max: params.get("price_max") || "",
     surface_min: params.get("surface_min") || "",
     rooms_min: params.get("rooms_min") || "",
+    bedrooms_min: params.get("bedrooms_min") || "",
+    energy_class: params.get("energy_class") || "",
     sort: params.get("sort") || "recent",
     page: parseInt(params.get("page") || "1"),
   }), [params]);
@@ -253,6 +258,21 @@ function SearchPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [filters]);
+
+  // M3.S3 — fetch map markers when switching to map view or filters change
+  useEffect(() => {
+    if (viewMode !== "map") return;
+    const qs = new URLSearchParams();
+    ["operation", "city", "property_type", "price_min", "price_max",
+     "rooms_min", "bedrooms_min", "energy_class"].forEach((k) => {
+      if (filters[k]) qs.set(k, filters[k]);
+    });
+    qs.set("limit", "500");
+    fetch(`${API}/map?${qs.toString()}`)
+      .then((r) => r.json())
+      .then((d) => setMapMarkers(d.items || []))
+      .catch(() => setMapMarkers([]));
+  }, [viewMode, filters]);
 
   const updateFilter = (k, v) => {
     const next = new URLSearchParams(params);
@@ -342,6 +362,28 @@ function SearchPage() {
               {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}+</option>)}
             </select>
           </FilterBlock>
+
+          <FilterBlock label={t("cloud.f_bedrooms_min")}>
+            <select
+              data-testid="filter-bedrooms-min" value={filters.bedrooms_min}
+              onChange={(e) => updateFilter("bedrooms_min", e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-stone-300 rounded text-sm">
+              <option value="">{t("cloud.any")}</option>
+              {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}+</option>)}
+            </select>
+          </FilterBlock>
+
+          <FilterBlock label={t("cloud.f_energy_class")}>
+            <select
+              data-testid="filter-energy-class" value={filters.energy_class}
+              onChange={(e) => updateFilter("energy_class", e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-stone-300 rounded text-sm">
+              <option value="">{t("cloud.any")}</option>
+              {["A4", "A3", "A2", "A1", "A", "B", "C", "D", "E", "F", "G"].map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </FilterBlock>
         </aside>
 
         {/* Results */}
@@ -351,22 +393,45 @@ function SearchPage() {
                 style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
               {filters.city ? t("cloud.results_in_city", { city: filters.city }) : t("cloud.all_results")}
             </h1>
-            <select
-              data-testid="filter-sort" value={filters.sort}
-              onChange={(e) => updateFilter("sort", e.target.value)}
-              className="px-3 py-1.5 bg-white border border-stone-300 rounded text-sm">
-              <option value="recent">{t("cloud.sort_recent")}</option>
-              <option value="price_asc">{t("cloud.sort_price_asc")}</option>
-              <option value="price_desc">{t("cloud.sort_price_desc")}</option>
-              <option value="surface_desc">{t("cloud.sort_surface_desc")}</option>
-            </select>
+            <div className="flex items-center gap-3">
+              {/* M3.S3 — list/map view toggle */}
+              <div className="inline-flex bg-white border border-stone-300 rounded overflow-hidden text-xs uppercase tracking-widest">
+                <button
+                  data-testid="view-toggle-list"
+                  onClick={() => setViewMode("list")}
+                  className={`px-3 py-1.5 transition ${
+                    viewMode === "list" ? "bg-[#0B1E3F] text-white" : "text-stone-600 hover:bg-stone-50"
+                  }`}>
+                  {t("cloud.view_list")}
+                </button>
+                <button
+                  data-testid="view-toggle-map"
+                  onClick={() => setViewMode("map")}
+                  className={`px-3 py-1.5 transition ${
+                    viewMode === "map" ? "bg-[#0B1E3F] text-white" : "text-stone-600 hover:bg-stone-50"
+                  }`}>
+                  {t("cloud.view_map")}
+                </button>
+              </div>
+              <select
+                data-testid="filter-sort" value={filters.sort}
+                onChange={(e) => updateFilter("sort", e.target.value)}
+                className="px-3 py-1.5 bg-white border border-stone-300 rounded text-sm">
+                <option value="recent">{t("cloud.sort_recent")}</option>
+                <option value="price_asc">{t("cloud.sort_price_asc")}</option>
+                <option value="price_desc">{t("cloud.sort_price_desc")}</option>
+                <option value="surface_desc">{t("cloud.sort_surface_desc")}</option>
+              </select>
+            </div>
           </div>
 
           <p className="text-xs text-stone-500 mb-4" data-testid="results-count">
             {t("cloud.total_results", { n: data.total })}
           </p>
 
-          {loading ? (
+          {viewMode === "map" ? (
+            <PropertyMapView markers={mapMarkers} />
+          ) : loading ? (
             <p className="text-stone-500 text-sm" data-testid="search-loading">
               {t("common.loading")}
             </p>
