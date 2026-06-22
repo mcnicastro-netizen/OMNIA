@@ -17,8 +17,11 @@ Photos are served by the existing endpoint /api/public/property/{pid}/photo/{idx
 """
 import logging
 from typing import Any, Dict, List, Optional
+from datetime import datetime, timezone
+from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, EmailStr, Field
 
 from shared.db.connection import Database
 
@@ -367,3 +370,103 @@ async def public_agency_card(slug: str):
         "agency_id": a["id"], **_base_filter(),
     })
     return {**a, "public_property_count": count}
+
+
+# ============================================================
+# 5) Contact form — generates a Lead in the agency CRM (M3.S4)
+# ============================================================
+
+class PropertyContactPayload(BaseModel):
+    name: str = Field(min_length=1, max_length=200)
+    surname: Optional[str] = Field(default=None, max_length=200)
+    email: EmailStr
+    phone: Optional[str] = Field(default=None, max_length=30)
+    message: str = Field(min_length=10, max_length=2000)
+    gdpr_consent: bool = False
+    visit_requested: bool = False  # optional checkbox "richiedi visita"
+
+
+@router.post("/property/{pid}/contact")
+async def public_property_contact(pid: str, payload: PropertyContactPayload):
+    """B2C contact form. Creates (or reuses) a client in the agency CRM and
+    a Lead linking it to this property. Source = 'ImmobilCloud'.
+    """
+    if not payload.gdpr_consent:
+        raise HTTPException(status_code=400, detail="gdpr_consent_required")
+
+    db = Database.get()
+    prop = await db.properties.find_one(
+        {"id": pid, **_base_filter()},
+        {"_id": 0, "id": 1, "agency_id": 1, "title": 1},
+    )
+    if not prop:
+        raise HTTPException(status_code=404, detail="property_not_found")
+
+    agency_id = prop.get("agency_id")
+    if not agency_id:
+        raise HTTPException(status_code=409, detail="property_has_no_agency")
+
+    now = datetime.now(timezone.utc).isoformat()
+
+    # 1) Find or create client
+    existing = await db.clients.find_one(
+        {"agency_id": agency_id, "email": payload.email.lower()},
+        {"_id": 0, "id": 1},
+    )
+    if existing:
+        client_id = existing["id"]
+        # Refresh updated_at + last source if reused
+        await db.clients.update_one(
+            {"id": client_id},
+            {"$set": {"updated_at": now}, "$setOnInsert": {}},
+        )
+    else:
+        client_id = str(uuid4())
+        await db.clients.insert_one({
+            "id": client_id,
+            "agency_id": agency_id,
+            "name": payload.name,
+            "surname": payload.surname,
+            "email": payload.email.lower(),
+            "phone": payload.phone,
+            "whatsapp": None,
+            "fiscal_code": None,
+            "client_type": "buyer",
+            "status": "new",
+            "source": "ImmobilCloud",
+            "assigned_agent_id": None,
+            "preferences": {},
+            "notes": None,
+            "gdpr_consent": True,
+            "created_at": now,
+            "updated_at": now,
+        })
+
+    # 2) Create lead
+    lead_id = str(uuid4())
+    note_lines = [payload.message.strip()]
+    if payload.visit_requested:
+        note_lines.append("[richiesta visita immobile]")
+    await db.leads.insert_one({
+        "id": lead_id,
+        "agency_id": agency_id,
+        "client_id": client_id,
+        "property_id": pid,
+        "status": "new",
+        "score": None,
+        "notes": "\n".join(note_lines),
+        "assigned_agent_id": None,
+        "source": "ImmobilCloud",
+        "created_at": now,
+        "updated_at": now,
+    })
+
+    # 3) Bump property lead counter (best-effort)
+    try:
+        await db.properties.update_one({"id": pid}, {"$inc": {"lead_count": 1}})
+    except Exception:
+        pass
+
+    logger.info("B2C contact: lead=%s client=%s property=%s agency=%s",
+                lead_id, client_id, pid, agency_id)
+    return {"ok": True, "lead_id": lead_id, "client_id": client_id}
