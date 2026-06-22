@@ -1,6 +1,39 @@
 # OMNIA — Changelog
 
-## 2026-06-22 — ✅ M3.S3 Mappa interattiva + Filtri avanzati DONE
+## 2026-06-22 (pomeriggio) — ✅ M3.S4 Pagina dettaglio pubblica + Form contatto DONE
+
+**Funnel B2C → CRM agenzia: lead automatici dalla landing pubblica dell'immobile.**
+
+- **Backend** `apps/immocloud/public_portal.py`:
+  - Nuovo endpoint `POST /api/cloud/property/{pid}/contact` (no-auth pubblico):
+    - Validazione Pydantic: `PropertyContactPayload` (name, email EmailStr, phone, message min_length=10, gdpr_consent, visit_requested).
+    - 400 se `gdpr_consent=false`, 404 se property non pubblica, 422 per email invalida o message <10 char.
+    - **Find-or-create client** su `(agency_id, email.lower())` → idempotente, no duplicati.
+    - Crea `lead` con `source='ImmobilCloud'`, status='new', notes=messaggio + "[richiesta visita immobile]" se flag.
+    - Bump `property.lead_count` (best-effort).
+  - `GET /property/{pid}` già esistente — riusato. Restituisce property + photos + agency card, nasconde campi privati (owner, seller_client_id, commission_pct, etc.) e incrementa `view_count`.
+- **Frontend** `apps/immocloud/components/PropertyDetailPage.jsx` (nuovo, ~340 righe):
+  - Hero con titolo, breadcrumb, prezzo, operation badge.
+  - Photo gallery con thumbnails cliccabili.
+  - Card info griglia (8 celle): superficie, locali, camere, bagni, piano, anno, classe energetica, riferimento.
+  - Descrizione + features list con check verde.
+  - Mini-mappa Leaflet centrata sull'immobile (se lat/lng).
+  - Card agenzia (logo/iniziale, telefono `tel:`, email `mailto:`).
+  - Form contatto con messaggio precompilato i18n, GDPR, opzione "Vorrei prenotare una visita".
+  - **Schema.org JSON-LD** `RealEstateListing` per SEO (URL, address, geo, offer, floorSize).
+- **Frontend** `apps/immocloud/ImmocloudApp.jsx`: route `property/:pid` aggiunta.
+- **i18n** `it.json`: ~30 nuove chiavi (`cloud.detail_*`, `info_*`, `contact_*`).
+- **Testing**: 10/10 backend pytest (`test_immobilcloud_m3s4_contact.py`) + Playwright E2E PASS (iteration_12). Zero bug bloccanti. Coperti: happy path lead creation, dedup client su stessa email, 400 gdpr, 422 email/msg, 404 not-found/private, view_count++.
+- **Fix UX post-test**: submit button ora sempre abilitato; la guard onSubmit mostra `contact-error` se GDPR non spuntato (feedback inline invece di bottone muto).
+
+**Follow-up suggeriti (non bloccanti)**:
+- Rate limiting + honeypot anti-spam su endpoint contatto pubblico (security hardening).
+- Schema.org: omettere campi null (description) per cleanliness SEO.
+- Modularizzare `PropertyDetailPage.jsx` (Gallery, AgencyCard, ContactForm in file separati).
+
+---
+
+## 2026-06-22 (mattino) — ✅ M3.S3 Mappa interattiva + Filtri avanzati DONE
 
 **Portale B2C ImmobilCloud — toggle Lista/Mappa, marker Leaflet, geocoding automatico.**
 

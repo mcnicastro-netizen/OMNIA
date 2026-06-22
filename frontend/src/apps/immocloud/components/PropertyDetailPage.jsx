@@ -342,7 +342,7 @@ function ContactForm({ pid, propertyTitle }) {
       <button
         type="submit"
         data-testid="contact-submit"
-        disabled={busy || !form.gdpr_consent}
+        disabled={busy}
         className="w-full bg-[#0B1E3F] text-white py-2.5 rounded text-sm uppercase tracking-widest font-medium hover:bg-[#C19A6B] transition disabled:opacity-50"
       >
         {busy ? t("cloud.contact_submitting") : t("cloud.contact_submit")}
