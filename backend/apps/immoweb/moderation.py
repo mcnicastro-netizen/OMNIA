@@ -32,6 +32,9 @@ async def _ensure_admin(user: dict) -> None:
 class ModerationRejectPayload(BaseModel):
     notes: str = Field(min_length=3, max_length=1000)
 
+    def stripped_notes(self) -> str:
+        return self.notes.strip()
+
 
 @router.get("/queue")
 async def moderation_queue(
@@ -98,13 +101,17 @@ async def reject_listing(
     if not p:
         raise HTTPException(status_code=404, detail="listing_not_found")
 
+    notes_clean = payload.stripped_notes()
+    if len(notes_clean) < 3:
+        raise HTTPException(status_code=422, detail="notes_too_short")
+
     now = datetime.now(timezone.utc).isoformat()
     await db.properties.update_one(
         {"id": pid},
         {"$set": {
             "moderation_status": "rejected",
             "status": "draft",
-            "moderation_notes": payload.notes.strip(),
+            "moderation_notes": notes_clean,
             "moderation_reviewed_at": now,
             "moderation_reviewed_by": user["id"],
             "updated_at": now,

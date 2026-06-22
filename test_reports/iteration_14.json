@@ -1,0 +1,47 @@
+{
+  "summary": "OMNIA M3.S5 v2 RETEST after backend HIGH-bug fix in _public(). All previously blocked SellPage frontend flows (19-23) now PASS. End-to-end B2C publish → admin reject → B2C-sees-rejection (steps 1-12) is GREEN. Backend fixes verified: /api/auth/me returns account_type='b2c' + intents=['sell'] + notification_channels + phone; /api/app/moderation/{pid}/reject validates notes after strip() (422 notes_too_short).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tested_scenarios": {
+    "backend_fix_verification": [
+      "FIX1 /api/auth/me — returns account_type='b2c', intents=['sell'], notification_channels=['email'], phone=null for freshly registered B2C user (verified via curl + page.request) ✓",
+      "FIX2 /api/app/moderation/{pid}/reject — code review confirmed notes_clean = payload.stripped_notes(); if len<3 → 422 notes_too_short (apps/immoweb/moderation.py:104-106). Empirical 3-space test on a non-existent pid returns 404 listing_not_found because existence check precedes notes check — order is fine, fix logic is correct ✓"
+    ],
+    "frontend_sellpage_pass": [
+      "1. B2C register via /api/cloud/auth/register sets httpOnly cookies ✓",
+      "2. Hard-reload /it/cloud/account/sell — NO redirect to /cloud/register (loop bug fixed) ✓",
+      "3. data-testid='sell-page' renders + title 'I tuoi annunci' + data-testid='sell-new-btn' present ✓",
+      "4. Click sell-new-btn opens data-testid='sell-form'. Filled sell-f-title='Bilocale Test Roma', sell-f-city='Roma', sell-f-price='200000'. sell-save-btn saves successfully ✓",
+      "5. After save: data-testid='listing-{id}' appears with data-testid='status-pending' (yellow 'IN REVISIONE' badge). sell-new-btn disappears, data-testid='sell-limit-notice' appears (free-tier limit copy) ✓",
+      "6. data-testid='edit-{id}' opens prefilled form (title='Bilocale Test Roma'). Updated to 'Bilocale Test Roma MODIFICATO' and saved — list reflects new title ✓",
+      "7. data-testid='delete-{id}' present (not clicked, kept for moderation flow) ✓"
+    ],
+    "frontend_moderation_pass": [
+      "8. Super-admin login + /it/app/moderation pending tab shows data-testid='moderation-card-{pid}' with 'Bilocale Test Roma MODIFICATO' title + approve-{pid} + reject-open-{pid} buttons ✓",
+      "9. reject-open-{pid} → reject-notes-{pid} textarea visible; filled 'Foto mancanti'; reject-confirm-{pid} clicked; card disappears from pending tab ✓",
+      "10. moderation-tab-rejected → card visible with 'RESPINTO' badge + rejection note 'Foto mancanti' ✓",
+      "11. Re-login as B2C (via /api/auth/login — same endpoint as agents, not /api/cloud/auth/login which does not exist) → /it/cloud/account/sell shows data-testid='status-rejected' + data-testid='rejection-notes' containing '“Foto mancanti”' ✓",
+      "12. data-testid='submit-{id}' present with label 'REINVIA DOPO MODIFICHE' (CSS uppercased; visual label = 'Reinvia dopo modifiche') ✓"
+    ],
+    "cleanup": "13. Mongo cleanup executed: db.users.delete_many({email:/^b2csellretest_/}) → 2 docs; db.properties.delete_many({is_private_listing:true}) → 1 doc ✓"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_m3s5_private_listings.py",
+    "/app/test_reports/pytest/m3s5_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "OK: _public() in /app/backend/apps/core/auth.py now serializes account_type (default 'agent'), intents, notification_channels, phone — fixes SellPage redirect loop.",
+    "OK: moderation.py reject_listing validates notes via stripped_notes() with len<3 → 422 notes_too_short.",
+    "MINOR (informational): There is NO dedicated /api/cloud/auth/login endpoint — B2C users authenticate through the generic /api/auth/login. The frontend correctly uses that. Worth documenting; iteration_13 used the wrong path in its example and got 404.",
+    "MINOR (UX): on the B2C SellPage, once a listing is REJECTED (status=draft, moderation_status=rejected), the '+ CREA NUOVO ANNUNCIO' button re-appears alongside the rejected card. This is consistent with backend free-tier counting (only 1 ACTIVE allowed) but could confuse users who expect to resubmit the existing card. Current behaviour matches spec; flag for review."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (fixes verified)", "frontend": "100% (SellPage 19-23 + moderation 8-12 all PASS)"},
+  "test_credentials": "Super admin: mcnicastro@gmail.com / Forzainter2026.  B2C ephemeral: b2csellretest_{ts}@example.com / TestB2C2026! (cleaned up).",
+  "seed_data_creation": "Test created 1 B2C user + 1 private listing during the run, then deleted via Mongo. No residual test data.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "M3.S5 v2 is fully GREEN end-to-end (backend 19/19 in iter_13 + all frontend SellPage + moderation flows in iter_14). The previously blocking bug in /app/backend/apps/core/auth.py::_public() has been resolved and the SellPage no longer loops to /cloud/register. B2C login uses /api/auth/login (NOT /api/cloud/auth/login — that path does not exist). Free-tier limit: only ACTIVE listings count, so a rejected listing leaves room for a new draft (this is by design but worth confirming with product).",
+  "rca_of_the_issue": "N/A — previous HIGH bug confirmed fixed. _public() now returns account_type + intents, so AuthContext keeps account_type='b2c' after /me refresh, breaking the previous redirect loop on /it/cloud/account/sell."
+}

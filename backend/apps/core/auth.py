@@ -62,6 +62,10 @@ def _public(user: dict) -> dict:
         "lang": user.get("lang", "it"),
         "agency_ids": user.get("agency_ids", []),
         "is_active": user.get("is_active", True),
+        "account_type": user.get("account_type", "agent"),
+        "intents": user.get("intents", []),
+        "notification_channels": user.get("notification_channels", []),
+        "phone": user.get("phone"),
         "created_at": user["created_at"],
         "updated_at": user["updated_at"],
     }
