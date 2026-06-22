@@ -140,6 +140,14 @@ class PropertyInDB(TenantModel):
     # (cloud.omniarealestateecosystem.it). Default ON (opt-out per agent/admin).
     is_listed_on_immobilcloud: bool = True
 
+    # M3.S5 — Private listing (B2C user publishing without agency)
+    is_private_listing: bool = False
+    owner_user_id: Optional[str] = None  # link to users.id (B2C account)
+    moderation_status: Literal["approved", "pending", "rejected"] = "approved"
+    moderation_notes: Optional[str] = Field(default=None, max_length=2000)
+    moderation_reviewed_at: Optional[str] = None
+    moderation_reviewed_by: Optional[str] = None
+
     # Counters
     view_count: int = 0
     lead_count: int = 0

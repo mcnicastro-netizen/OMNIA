@@ -57,6 +57,11 @@ SUBJECTS = {
         "en": "You have been invited to join {{agency_name}} on OMNIA",
         "es": "Has sido invitado a unirte a {{agency_name}} en OMNIA",
     },
+    "lead_notification": {
+        "it": "🔔 Nuovo lead da ImmobilCloud — {{property_title}}",
+        "en": "🔔 New lead from ImmobilCloud — {{property_title}}",
+        "es": "🔔 Nuevo lead desde ImmobilCloud — {{property_title}}",
+    },
 }
 
 

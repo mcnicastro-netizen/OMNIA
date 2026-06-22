@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import PropertyMapView from "./components/PropertyMapView";
 import PropertyDetailPage from "./components/PropertyDetailPage";
+import SellPage from "./components/SellPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api/cloud`;
@@ -25,6 +26,7 @@ export default function ImmocloudApp() {
         <Route path="search" element={<SearchPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="property/:pid" element={<PropertyDetailPage />} />
+        <Route path="account/sell" element={<SellPage />} />
       </Routes>
       <FooterB2C />
     </div>

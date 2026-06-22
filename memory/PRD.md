@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ + M3.S2 ✅ + M3.S3 ✅ + M3.S4 ✅ DONE** — Portale B2C completo: Home, Registrazione segmentata, Publishing Center agente, Mappa Leaflet, Pagina dettaglio pubblica con form contatto che genera lead nel CRM. Funnel acquisizione lead **chiuso end-to-end**. • Prossimo: **M3.S5 v2 Pubblicazione annunci privati B2C + moderazione**
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ + M3.S2 ✅ + M3.S3 ✅ + M3.S4 ✅ + M3.S4.1 ✅ DONE** — Portale B2C completo: Home, Registrazione segmentata, Publishing Center agente, Mappa Leaflet, Pagina dettaglio pubblica con form contatto, **notifica email istantanea via Resend all'agente**. Funnel acquisizione lead **chiuso end-to-end con notification real-time**. • Prossimo: **M3.S5 v2 Pubblicazione annunci privati B2C + moderazione**
 
 ---
 

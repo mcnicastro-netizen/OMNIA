@@ -33,6 +33,7 @@ import MatchesPage from "@/apps/immoweb/MatchesPage";
 import MatchLeadScorePage from "@/apps/immoweb/MatchLeadScorePage";
 import PortalsPage from "@/apps/immoweb/PortalsPage";
 import WebsitePage from "@/apps/immoweb/WebsitePage";
+import ModerationPage from "@/apps/immoweb/ModerationPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
@@ -242,6 +243,16 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
                         <WebsitePage />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  {/* Moderation (M3.S5 v2) — admin reviews B2C private listings */}
+                  <Route
+                    path="app/moderation"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "platform_admin", "admin"]}>
+                        <ModerationPage />
                       </ProtectedRoute>
                     }
                   />

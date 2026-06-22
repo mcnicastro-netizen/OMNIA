@@ -18,6 +18,7 @@ from apps.immoweb.portals import router as portals_router
 from apps.immoweb.brand_extractor import router as brand_router
 from apps.immoweb.custom_domain import router as custom_domain_router
 from apps.immoweb.themes import router as themes_router
+from apps.immoweb.moderation import router as moderation_router
 
 router = APIRouter(prefix="/app", tags=["immoweb"])
 
@@ -46,3 +47,4 @@ router.include_router(portals_router)
 router.include_router(brand_router)
 router.include_router(custom_domain_router)
 router.include_router(themes_router)
+router.include_router(moderation_router)

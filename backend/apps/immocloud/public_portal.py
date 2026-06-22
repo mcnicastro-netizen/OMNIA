@@ -64,6 +64,7 @@ def _base_filter() -> Dict[str, Any]:
         "status": "active",
         "visibility": "public",
         "is_listed_on_immobilcloud": {"$ne": False},
+        "moderation_status": {"$nin": ["pending", "rejected"]},
     }
 
 
@@ -442,7 +443,31 @@ async def public_property_contact(pid: str, payload: PropertyContactPayload):
             "updated_at": now,
         })
 
-    # 2) Create lead
+    # 2) Fetch listing agent OR fallback to agency email
+    prop_full = await db.properties.find_one(
+        {"id": pid},
+        {"_id": 0, "listing_agent_id": 1},
+    )
+    notify_email = None
+    notify_lang = "it"
+    if prop_full and prop_full.get("listing_agent_id"):
+        agent = await db.users.find_one(
+            {"id": prop_full["listing_agent_id"]},
+            {"_id": 0, "email": 1, "lang": 1},
+        )
+        if agent and agent.get("email"):
+            notify_email = agent["email"]
+            notify_lang = agent.get("lang") or "it"
+    if not notify_email:
+        agency_doc = await db.agencies.find_one(
+            {"id": agency_id},
+            {"_id": 0, "email": 1, "lang": 1},
+        )
+        if agency_doc and agency_doc.get("email"):
+            notify_email = agency_doc["email"]
+            notify_lang = agency_doc.get("lang") or "it"
+
+    # 3) Create lead
     lead_id = str(uuid4())
     note_lines = [payload.message.strip()]
     if payload.visit_requested:
@@ -461,12 +486,67 @@ async def public_property_contact(pid: str, payload: PropertyContactPayload):
         "updated_at": now,
     })
 
-    # 3) Bump property lead counter (best-effort)
+    # 4) Bump property lead counter (best-effort)
     try:
         await db.properties.update_one({"id": pid}, {"$inc": {"lead_count": 1}})
     except Exception:
         pass
 
-    logger.info("B2C contact: lead=%s client=%s property=%s agency=%s",
-                lead_id, client_id, pid, agency_id)
+    # 5) Fire-and-forget email notification to agent (M3.S4.1)
+    if notify_email:
+        _schedule_lead_email(
+            to=notify_email,
+            lang=notify_lang,
+            property_title=prop.get("title") or "Immobile",
+            lead_name=f"{payload.name} {payload.surname or ''}".strip(),
+            lead_email=payload.email,
+            lead_phone=payload.phone,
+            lead_message="\n".join(note_lines),
+            agency_id=agency_id,
+            property_id=pid,
+        )
+
+    logger.info("B2C contact: lead=%s client=%s property=%s agency=%s notify=%s",
+                lead_id, client_id, pid, agency_id, notify_email or "—")
     return {"ok": True, "lead_id": lead_id, "client_id": client_id}
+
+
+def _schedule_lead_email(*, to: str, lang: str, property_title: str,
+                        lead_name: str, lead_email: str,
+                        lead_phone: Optional[str], lead_message: str,
+                        agency_id: str, property_id: str) -> None:
+    """Fire-and-forget Resend notification to listing agent / agency."""
+    import asyncio
+    import os
+    from shared.email.client import send_email
+
+    base = os.environ.get("FRONTEND_BASE_URL", "https://omniarealestateecosystem.it")
+    crm_url = f"{base}/{lang if lang in ('it', 'en', 'es') else 'it'}/app/properties/{property_id}"
+    phone_block = (
+        f'<p style="margin:4px 0 0 0; font-size:14px; color:#0E1419;">📞 '
+        f'<a href="tel:{lead_phone}" style="color:#0B1E3F;">{lead_phone}</a></p>'
+        if lead_phone else ""
+    )
+
+    async def _task():
+        try:
+            await send_email(
+                to=to,
+                template="lead_notification",
+                lang=lang,
+                variables={
+                    "property_title": property_title,
+                    "lead_name": lead_name,
+                    "lead_email": lead_email,
+                    "lead_phone_block": phone_block,
+                    "lead_message": lead_message,
+                    "crm_url": crm_url,
+                },
+            )
+        except Exception as e:
+            logger.warning("lead email failed: %s", e)
+
+    try:
+        asyncio.create_task(_task())
+    except RuntimeError:
+        pass

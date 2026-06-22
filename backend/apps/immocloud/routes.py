@@ -7,6 +7,7 @@ from shared.utils.i18n import t, normalize_lang
 from shared.db.connection import set_current_lang
 from apps.immocloud.public_portal import router as public_portal_router
 from apps.immocloud.cloud_auth import router as cloud_auth_router
+from apps.immocloud.private_listings import router as private_listings_router
 
 router = APIRouter(prefix="/cloud", tags=["immocloud"])
 
@@ -24,3 +25,4 @@ async def cloud_health(accept_language: Optional[str] = Header(None)):
 
 router.include_router(public_portal_router)
 router.include_router(cloud_auth_router)
+router.include_router(private_listings_router)

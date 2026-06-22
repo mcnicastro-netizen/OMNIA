@@ -1,5 +1,20 @@
 # OMNIA — Changelog
 
+## 2026-06-22 (sera) — ✅ M3.S4.1 Notifica email istantanea al lead DONE
+
+**Quando arriva un lead dal portale B2C, l'agente lo riceve via email entro 2 secondi.**
+
+- **Backend** `apps/immocloud/public_portal.py`:
+  - Aggiunto helper `_schedule_lead_email()` fire-and-forget (asyncio.create_task) chiamato in coda al flusso `POST /property/{pid}/contact`.
+  - **Destinatario smart**: prima cerca `listing_agent_id.email` su `users`, fallback su `agency.email`. Lang dedotta dal user/agency.
+  - Variabili template: `property_title`, `lead_name`, `lead_email`, `lead_phone_block` (condizionale), `lead_message`, `crm_url` (deep link `/{lang}/app/properties/{pid}`).
+- **Email** `shared/email/templates/lead_notification.{it,en,es}.html`: nuovo template OMNIA-styled con badge "🔔 Nuovo lead", contatto evidenziato, messaggio, CTA "Apri nel CRM".
+- **Subject** in `client.py` SUBJECTS: aggiunte 3 lingue per `lead_notification`.
+- **Test live**: contact API → Resend conferma `[EMAIL OK] template=lead_notification id=6562de46-...` in <1s. Lead creato in CRM, email recapitata.
+- **Comportamento mock-safe**: senza `RESEND_API_KEY` cade in log mock come per ogni altro template.
+
+---
+
 ## 2026-06-22 (pomeriggio) — ✅ M3.S4 Pagina dettaglio pubblica + Form contatto DONE
 
 **Funnel B2C → CRM agenzia: lead automatici dalla landing pubblica dell'immobile.**
