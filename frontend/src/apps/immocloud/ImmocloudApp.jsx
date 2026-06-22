@@ -5,6 +5,7 @@ import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import PropertyMapView from "./components/PropertyMapView";
 import PropertyDetailPage from "./components/PropertyDetailPage";
 import SellPage from "./components/SellPage";
+import ValuatorPage from "./components/ValuatorPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api/cloud`;
@@ -27,6 +28,7 @@ export default function ImmocloudApp() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="property/:pid" element={<PropertyDetailPage />} />
         <Route path="account/sell" element={<SellPage />} />
+        <Route path="valutatore" element={<ValuatorPage />} />
       </Routes>
       <FooterB2C />
     </div>
@@ -49,6 +51,9 @@ function CloudTopNav() {
         <nav className="hidden md:flex items-center gap-6 text-sm uppercase tracking-widest">
           <Link to={`/${lang}/cloud/search`} data-testid="cloud-nav-search" className="text-stone-600 hover:text-stone-900">
             {t("cloud.nav_search")}
+          </Link>
+          <Link to={`/${lang}/cloud/valutatore`} data-testid="cloud-nav-valuator" className="text-stone-600 hover:text-stone-900">
+            {t("cloud.nav_valuator")}
           </Link>
           <Link to={`/${lang}/cloud/register?intent=sell`} data-testid="cloud-nav-sell" className="text-stone-600 hover:text-stone-900">
             {t("cloud.nav_sell")}

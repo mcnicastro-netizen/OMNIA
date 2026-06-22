@@ -1,0 +1,50 @@
+{
+  "summary": "OMNIA M3.S6 — Public GIS Valuator. 50/50 pytest GREEN. Backend public POST /api/cloud/valuator and GET /coverage verified end-to-end via REACT_APP_BACKEND_URL. Frontend /it/cloud/valutatore fully functional: all required data-testid present, full happy-path flow + unknown-city low confidence + lead capture badge + HTML5 surface validation all PASS.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "tested_scenarios": {
+    "pytest": "cd /app/backend && PYTHONPATH=/app/backend pytest tests/test_m3s6_valuator.py -v → 50 passed in 0.76s (0 failed). Note: needed PYTHONPATH=/app/backend because test file imports `from server import app` and there is no conftest.py at /app/backend. Existing CI/dev runs from /app/backend so this only matters if pytest is invoked from /app; current command works.",
+    "backend_curl_via_public_url": [
+      "GET /api/cloud/valuator/coverage → 200, cities_covered=124, regions_covered=20 ✓",
+      "Milano centro 80m² appartamento buono → psm.avg=11000 (∈ [8500,13500]) confidence=high ✓",
+      "Roma address='Via di Trastevere 10' (inference) → zone_tier='centro', psm.avg=8000 (∈ [6000,10000]) ✓",
+      "Napoli address='Via Scarlatti, Vomero' da_ristrutturare → zone='centro' (Vomero=centro in dataset), psm.avg=3375 with condition multiplier 0.75 ✓ (note: 3375 < 4500 upper bound but expected was 'avg in [2500,4500] with -25% discount' — base centro Napoli ~4500 × 0.75 = 3375 ✓)",
+      "Cortina d'Ampezzo villa 120m² centro ottimo → psm.avg=15094 (∈ [10000,16000]), multipliers villa=1.25 × ottimo=1.05 ✓",
+      "Crotone periferia 80m² → psm.avg=575 (∈ [400,800]) ✓",
+      "Portofino centro 100m² → psm.avg=20000 (∈ [14000,26000]) ✓",
+      "Palermo periferia monolocale 60m² psm.avg=978 < apartment 60m² psm.avg=1150 ✓",
+      "Unknown city 'PaeseInesistenteXYZ' → city_in_dataset=false, confidence='low', psm.avg=2350 > 0 ✓",
+      "Ranking Milano centro (11000) > Roma centro (8000) > Napoli centro (4500) ✓",
+      "Validation: surface_sqm=5 → 422, surface_sqm=100000 → 422, energy_class='Z' → 422 ✓",
+      "Lead capture: POST {city:Milano, surface:80, name:'Mario Test', email:'valtest+TS@example.com'} → returned valuation_lead_id=<uuid>; Mongo verified 1 doc in db.valuation_leads ✓"
+    ],
+    "frontend_playwright": [
+      "/it/cloud/valutatore loads → data-testid='valuator-page' + 'valuator-form' + all 11 field testids (val-city, val-zone, val-address, val-type, val-surface, val-floor, val-condition, val-energy, val-name, val-email, val-submit) PRESENT ✓",
+      "TopNav: data-testid='cloud-nav-valuator' PRESENT, href=/it/cloud/valutatore, label 'VALUTA GRATIS' ✓",
+      "Flow A — Milano centro 85m² nuovo A piano5 → submit → r-value-avg='€ 1.162.970' (matches smoke screenshot), r-recompute returns to form ✓",
+      "Flow B — Unknown city 'Caivanos' (zone=auto) → submit → result shows 'Affidabilità: Bassa' (no dedicated r-confidence testid, but label visible in DOM text) ✓",
+      "Flow C — Lead capture with name='Mario Test FE' + email='valtest+feTS@example.com' → submit → data-testid='r-lead-captured' visible with text '✓ Riceverai la valutazione completa via email…' ✓",
+      "Flow D — HTML5 validation: surface=5 → click submit → form NOT submitted, browser validationMessage='Value must be greater than or equal to 10.' ✓"
+    ],
+    "cleanup": "db.valuation_leads.delete_many({email: /^valtest/}) → deleted 2 documents ✓"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_m3s6_valuator.py",
+    "/app/test_reports/pytest/m3s6_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "MINOR: tests/test_m3s6_valuator.py uses `from server import app` without a conftest.py that adjusts sys.path. Pytest must be invoked from /app/backend (or with PYTHONPATH=/app/backend) — otherwise collection fails with ModuleNotFoundError. Consider adding /app/backend/tests/conftest.py that does `sys.path.insert(0, str(Path(__file__).resolve().parents[1]))` so the suite is portable across CI runners.",
+    "MINOR (UX/test surface): the ValuatorResult does not expose a dedicated `data-testid=\"r-confidence\"` selector. The confidence label ('Affidabilità: Alta/Media/Bassa') is rendered in text and is reachable via text search, but a dedicated testid would make UI regression tests cheaper. The task spec mentioned 'badge confidence' implicitly — current implementation works but a testid would harden the contract.",
+    "INFO: payload field for zone is `zone` (free-text Optional[str], max 200) — the public-URL caller MUST use `zone`, not `zone_tier`. Sending `zone_tier` is silently ignored (treated as unknown field → defaults to inference, which often returns 'semicentro'). Worth documenting in OpenAPI examples to avoid integrator confusion.",
+    "OK: validation (Pydantic) on surface_sqm range (10..50000) and energy_class enum returns 422 cleanly. Multipliers in CONDITION_MULTIPLIER applied as expected (da_ristrutturare=0.75, ottimo=1.05, nuovo>1). Villa premium 1.25 confirmed; monolocale 0.85 confirmed; lead persistence wired correctly to db.valuation_leads (UUID id, email, name, city, source/created_at)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (50/50 pytest + 12/12 manual curl)", "frontend": "100% (all 4 flows + nav link + 11 field testids verified)"},
+  "test_credentials": "NO AUTH required — endpoint public.",
+  "seed_data_creation": "Created 2 valuation_leads during testing (Mario Test via curl + Mario Test FE via Playwright). Both deleted in teardown.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "M3.S6 valuator is GREEN end-to-end. All 50 pytest pass (run from /app/backend with PYTHONPATH=/app/backend pytest tests/test_m3s6_valuator.py). Public endpoint POST /api/cloud/valuator uses `zone` field (NOT zone_tier) and the response field is `zone_tier`. Italian thousand-separator output verified (€ 1.162.970). HTML5 min=10 on val-surface input prevents tiny submits client-side; backend also validates 10..50000. Lead capture confirmed persisting to db.valuation_leads with UUID `id`. No `r-confidence` testid exists yet (only text). Cleanup query: db.valuation_leads.delete_many({email:/^valtest/}).",
+  "rca_of_the_issue": "N/A — no bugs found. Smoke value Milano 85m² nuovo A piano-5 reproduced (€ 1.162.970)."
+}
