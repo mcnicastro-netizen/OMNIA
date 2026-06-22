@@ -1,5 +1,33 @@
 # OMNIA — Changelog
 
+## 2026-06-22 (notte) — ✅ M3.S5 v2 Pubblicazione annunci privati B2C + Moderazione admin DONE
+
+**Il portale B2C ora consente ai privati di pubblicare gratuitamente un annuncio (free-tier 1 attivo), con workflow di moderazione admin.**
+
+- **Backend**:
+  - `apps/immocloud/private_listings.py` (NUOVO, ~205 righe): router `/api/cloud/me/properties` (B2C auth required) con POST/GET/PATCH/DELETE/submit. Sentinel `agency_id="_private_listings"` per evitare schema breaking. Free-tier limit: 1 listing in `status ∈ {draft, active}` per `owner_user_id`. PATCH sostantivo (title/price/address) su listing `approved`/`rejected` → reset a `pending`+`draft`.
+  - `apps/immoweb/moderation.py` (NUOVO, ~110 righe): router `/api/app/moderation` (admin only — `super_admin`/`platform_admin`/`admin`) con queue/approve/reject. `approve` setta `status="active"`, `moderation_status="approved"`. `reject` con `notes ≥3 char` (dopo strip) setta `status="draft"`, salva motivo visibile all'utente.
+  - `shared/models/property.py`: PropertyInDB ora ha `is_private_listing`, `owner_user_id`, `moderation_status: Literal[approved,pending,rejected]`, `moderation_notes`, `moderation_reviewed_at`, `moderation_reviewed_by`.
+  - `apps/immocloud/public_portal.py:_base_filter()`: aggiunto filtro `moderation_status: {$nin: [pending, rejected]}` — i pending non appaiono mai pubblicamente.
+  - **BUG FIX (HIGH)** `apps/core/auth.py:_public()`: ora restituisce `account_type`, `intents`, `notification_channels`, `phone`. Risolto loop di redirect SellPage per utenti B2C (causa: AuthContext rifetcha `/api/auth/me` al boot, perdeva `account_type`).
+  - **Minor fix** `moderation.py:reject_listing`: notes ora validate dopo `.strip()` (422 `notes_too_short` se solo whitespace).
+- **Frontend**:
+  - `apps/immocloud/components/SellPage.jsx` (NUOVO, ~360 righe): pagina B2C `/it/cloud/account/sell`. Redirect a registrazione se non B2C. Lista annunci con badge status, form crea/modifica/elimina, submit-for-review, riapertura post-rejection con notes visibili.
+  - `apps/immoweb/ModerationPage.jsx` (NUOVO, ~215 righe): pagina admin `/it/app/moderation`. Tabs pending/approved/rejected. Card con foto, info, owner, bottoni approve (one-click) + reject (con textarea inline per notes).
+  - Routing: `/cloud/account/sell` (B2C public), `/app/moderation` (ProtectedRoute super_admin/platform_admin/admin).
+  - `apps/immocloud/ImmocloudApp.jsx`: route SellPage aggiunta.
+  - i18n `it.json`: nuovi namespace `cloud.sell.*` (30 chiavi) e `moderation.*` (16 chiavi).
+- **Testing**:
+  - Iteration_13: **19/19 backend PASS** + Moderation page UI PASS. Trovato bug HIGH (`_public()`) → SellPage in loop.
+  - **Bug fixato**. Iteration_14: **100% backend retest PASS + 100% frontend PASS** (12/12 step E2E: register B2C → publish draft → admin reject with notes → B2C sees rejection notes → resubmit button). Tutti i flussi sono GREEN end-to-end.
+  - Cleanup: tutti gli utenti `b2cseller_*`/`b2csellretest_*` eliminati, nessun residuo DB.
+
+**Note prodotto (segnalate da QA — non bloccanti, da rivedere)**:
+- Free-tier counter conta solo `status ∈ {draft, active}` → un listing `rejected` non blocca la creazione di un nuovo annuncio. Potenzialmente confondente: l'utente potrebbe pensare di dover prima cancellare il rejected.
+- B2C login: usa `/api/auth/login` come gli agenti (non esiste `/api/cloud/auth/login`). Da documentare nei DECISIONS.
+
+---
+
 ## 2026-06-22 (sera) — ✅ M3.S4.1 Notifica email istantanea al lead DONE
 
 **Quando arriva un lead dal portale B2C, l'agente lo riceve via email entro 2 secondi.**
