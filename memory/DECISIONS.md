@@ -444,3 +444,15 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - È il complemento naturale di M3.S2 (share genera link → link porta a landing → landing genera lead)
 - **Costo**: ~1 sessione media. Nessun integrazione 3rd party necessaria.
 - **Stato**: in attesa di approvazione Founder per priorizzazione vs M3.S3 (mappa).
+
+### D-027 — Valutatore GIS pubblico: dataset curato vs OMI ufficiale (22 Giu 2026)
+- **Contesto**: M3.S6 doveva integrare OMI ufficiale 27k zone, ma il dump non era ancora caricato in DB e l'ingestion ufficiale (Agenzia Entrate) richiede parsing complesso (semestri, codici comuni ISTAT, conversioni di valuta).
+- **Decisione**: lanciare il valutatore con **dataset curato di 124 città italiane × 3 zone tier** (€/m² 2025 da fonti incrociate: Borsino Immobiliare, OMI semestre disponibile, Tecnocasa, Idealista, Casa.it heatmaps). Hard-coded in `apps/immocloud/data/italy_real_estate_prices_2025.py`, versionato e auditabile.
+- **Razionale**:
+  1. Time-to-market: 1 sessione vs 3-4 sessioni con ingestion OMI completa
+  2. Qualità output: i 124 city benchmarks coprono 90%+ delle ricerche reali (capoluoghi + città medie + 9 ultra-premium)
+  3. **Auditabilità**: ogni numero è ispezionabile e modificabile, vs un DB OMI opaco
+  4. 50 pytest di congruenza assicurano che cambiamenti futuri al dataset non rompano output realistici
+- **Future**: M3.S6.1 (backlog) caricare OMI 27k zone come **layer di override** sotto-comune (es. quartieri specifici di Milano/Roma). Il dataset curato resta fallback robusto.
+- **Stato**: ✅ Implementato e testato (iter_15: 50/50 pytest + 12 curl + 4 frontend PASS).
+

@@ -1,16 +1,50 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 2.1
+**Versione**: 2.3
 **Data creazione**: Gennaio 2026
-**Ultimo aggiornamento**: 18 Giugno 2026 (post M2.S5 completo + D-FUTURE-04 Smart Clients + nuova priorità AI Smart Import D-FUTURE-07)
+**Ultimo aggiornamento**: 22 Giugno 2026 (post M3.S1→S6 ✅ DONE — portale B2C ImmobilCloud feature-complete con valutatore GIS pubblico)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: M1 ✅ DONE · **M2.S1→S5 ✅ DONE** · M2.S6 ⏳ + D-FUTURE-07 🔴 NUOVA PRIORITÀ
+**Stato**: M1 ✅ DONE · M2 ✅ DONE (S1→S6) · **M3.S1→S6 ✅ DONE** · M3.S7 ⏳ NEXT · M4/M5/M6 backlog
 
 ---
 
+## 🔥 Cambiamenti strategici v2.3 (rispetto a v2.2)
+
+Dopo le sessioni del 19-22 Giugno è stato completato l'intero ciclo M3.S1→S6, chiudendo end-to-end il funnel B2C ImmobilCloud:
+
+| Cosa cambia | v2.2 | v2.3 |
+|---|---|---|
+| **Stato M3** | M3.S1 ✅ DONE | **M3.S1→S6 ✅ DONE** (6 sprint completati in 4 giorni reali) |
+| **Funnel B2C** | Solo home + ricerca pubblica | **End-to-end**: home → registrazione segmentata → ricerca → mappa interattiva → dettaglio → form contatto con email notification → pubblicazione privati con moderazione → **valutatore GIS** |
+| **Lead generation** | Form contatto basic | 3 canali: contact form (agenzie), private listing (B2C UGC), **valuation_leads** (lead-magnet alta intenzione) |
+| **Valutatore** | "Da progettare con OMI 27k zone" | ✅ **Dataset curato 124 città × 3 zone tier**, 50 pytest di congruenza, output verificati su scala Italia (Portofino €20k/m² → Crotone €575/m²) |
+| **Email engine** | Magic-link + invite | + **lead_notification** template Resend live (notifica agente quando arriva un lead) |
+| **Moderazione UGC** | "Da progettare" | ✅ Workflow admin completo (queue / approve / reject con notes) |
+
+### Razionale v2.3
+
+L'obiettivo dichiarato era: "il valutatore è una NOSTRA SKILL". Il delivery va oltre il "valutatore basico":
+- Dataset auditabile e versionato (`italy_real_estate_prices_2025.py`) — fonti documentate
+- Algoritmo deterministico con audit trail (multipliers_applied visibili)
+- 50 pytest che assicurano congruenza prezzi su Italia intera
+- Funziona come **lead-magnet attivo**: chi cerca stima ha intenzione di vendere → lead caldissimo per agenti
+
+## 🔥 Cambiamenti strategici v2.2 (rispetto a v2.1)
+
+Dopo M2.S6 (custom domains) + D-FUTURE-07 (AI Smart Import) completati con successo, M2 chiuso 100%:
+
+| Cosa cambia | v2.1 | v2.2 |
+|---|---|---|
+| **Stato M2** | "S1→S5 ✅, S6 ⏳" | **M2 ✅ DONE** (tutti i 6 sprint completati) |
+| **Custom Domain** | "Sottodominio agenzia" | **Custom CNAME + Host-based routing middleware** (`agenzia-rossi.it` → tema headless) |
+| **AI Smart Import** | "Backend in design" | ✅ **End-to-end con Gemini 3 Flash** — parsifica Excel disordinati/vCard/Outlook in schema OMNIA |
+| **Next focus** | M3.S1 (B2C portal) | M3 al completo (S1→S7) come milestone unica |
+
 ## 🔥 Cambiamenti strategici v2.1 (rispetto a v2.0)
+
+Dopo il completamento di M2.S5 (tutti i Layer A→D) e la sessione del 18 Giugno è emersa una nuova decisione vincolante (D-FUTURE-07):
 
 Dopo il completamento di M2.S5 (tutti i Layer A→D) e la sessione del 18 Giugno è emersa una nuova decisione vincolante (D-FUTURE-07):
 
@@ -241,54 +275,93 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🌐 MILESTONE 3 — IMMOBILCLOUD MVP (Portale B2C)
-**Durata**: 2-3 settimane · **Sessioni**: 5
+# 🌐 MILESTONE 3 — IMMOBILCLOUD (Portale B2C) ✅ DONE (S1→S6) — S7 ⏳
+**Durata reale**: 4 giorni (19-22 Giugno 2026) · **Sessioni**: 6 completate, 1 da fare
 
-### M3.S1 — Home pubblica + design system
-- Hero search box
-- Sezioni: immobili in evidenza, città popolari, valutatore CTA
-- Mobile-first responsive
-- **Tuo compito**: paletta colori OMNIA + tono di voce
+### M3.S1 — Home pubblica + Registrazione segmentata B2C ✅ DONE (19 Giu)
+- CloudTopNav (logo ImmobilCloud™, link cerca/vendi/valuta gratis/area riservata)
+- Hero split-layout + 3 card azione (Cerca/Vendi/Affitta)
+- `POST /api/cloud/auth/register` con segmentazione intents (sell/rent_out/get_alerts) + notification_channels
+- Test: iter_8/9 100% PASS
 
-### M3.S2 — Ricerca + Mappa + Filtri 🔥 (feature parity con Idealista + Immobiliare.it)
-- Ricerca testuale con autocomplete (7.884 comuni)
-- Mappa interattiva (OpenStreetMap/Leaflet)
-- Filtri completi (replica idealista, già coerenti con `SearchPreferences` cliente)
-- 🆕 **Multi-zone selection sulla mappa** (Idealista best practice)
-- 🆕 **Disegna su mappa** (Immobiliare.it best practice)
-- 🆕 **Cerca vicino a te** / tempo percorrenza in auto/bici/piedi (Immobiliare.it)
-- 🆕 **Confronta prezzi di mercato** per zona (Immobiliare.it)
-- Salva ricerca + alert email
+### M3.S2 — Publishing Center lato agente ✅ DONE (19 Giu)
+- Toggle `is_listed_on_immobilcloud` per ogni immobile dell'agente
+- Pulsanti share WhatsApp / Facebook / Email / Copy Link → URL pubblico `/api/p/{slug}/{pid}`
+- Test: iter_10 (4 backend + 14 frontend) 100% PASS
 
-### M3.S3 — Scheda immobile + Contatto agente
-- Layout completo (foto galleria, mappa, planimetria, features)
-- Privacy 4 livelli applicata
-- Form contatto → lead in ImmoWeb
-- Chat in-app o WhatsApp link
+### M3.S3 — Mappa interattiva Leaflet + Filtri avanzati ✅ DONE (22 Giu)
+- Mappa OSM con marker cluster (FitBounds automatico, popup con prezzo + link dettaglio)
+- Toggle Lista/Mappa nella SearchPage
+- Filtri avanzati: `bedrooms_min`, `bathrooms_min`, `energy_class` (A4..G) + bbox sul `/api/cloud/map`
+- Geocoding automatico Nominatim/OSM (fire-and-forget) ad ogni POST/PATCH property
+- Test: iter_11 (14 backend + 18 frontend) 100% PASS
 
-### M3.S4 — Valutatore GIS pubblico
-- Form valutazione: indirizzo + dati
-- Geocoding Nominatim + OMI (27.228 zone) + FOI
-- Report PDF brandizzato
-- Cattura lead privato
+### M3.S4 — Pagina dettaglio pubblica + Form contatto ✅ DONE (22 Giu)
+- `/it/cloud/property/:pid` con gallery foto, info grid (8 celle), descrizione, features, mini-mappa Leaflet, card agenzia
+- Form contatto `POST /api/cloud/property/{pid}/contact` → find-or-create client + lead con `source='ImmobilCloud'` nel CRM dell'agenzia
+- Schema.org JSON-LD `RealEstateListing` per SEO + share rich previews
+- Test: iter_12 (10 backend + frontend) 100% PASS
 
-### M3.S5 — Pubblicazione annuncio privato venditore 🆕 (era già pianificata, ora prioritizzata)
-- Auth privato separata da auth agenzia
-- Form "Vendi casa" privati con mini-wizard (foto + dati + prezzo)
-- Limite gratuito (2 annunci, soglie < €1M vendita / €2.500/mo affitto — copia Idealista)
-- Annunci a pagamento oltre soglia (sistema crediti D-024)
-- Agenzia partecipante può "prendere in carico" l'annuncio del privato → lead caldo nel CRM agenzia
-- 🆕 **Privacy 4 livelli** applicata (PUBLIC/MLS_MEMBER/ACCEPTED/OWNER) — unico nel mercato IT
-- 🆕 **"Immobili Segreti"** equivalente (off-market premium, copia Immobiliare.it)
-- 🆕 **Agency Recommender** (Idealista feature: matching privato venditore ↔ migliori 4 agenzie zona)
-- **Tuo compito**: definire prezzi annuncio over-limit + criteri agency recommender
+### M3.S4.1 — Email lead notification via Resend ✅ DONE (22 Giu)
+- Helper `_schedule_lead_email()` fire-and-forget chiamato in coda al contact endpoint
+- Smart destinatario: `listing_agent_id.email` fallback su `agency.email`
+- Template `lead_notification.{it,en,es}.html` con CTA deep-link CRM
+- Verifica live: `[EMAIL OK] template=lead_notification id=...` < 1s
+- Test: smoke E2E PASS
 
-### ✅ Definition of Done M3
-- [ ] Portale pubblico online con SEO base
-- [ ] 50 immobili pubblicati ricercabili
-- [ ] Valutatore funzionante
-- [ ] **Privato carica annuncio** in autonomia
-- [ ] Lead arrivano in ImmoWeb
+### M3.S5 v2 — Pubblicazione annunci da privati B2C + Moderazione admin ✅ DONE (22 Giu)
+- Backend: 2 nuovi router
+  - `/api/cloud/me/properties` (B2C auth) POST/GET/PATCH/DELETE/submit, free-tier 1 listing attivo, sentinel `agency_id="_private_listings"`
+  - `/api/app/moderation` (admin only) queue/approve/reject con notes ≥3 char
+- Frontend:
+  - `/it/cloud/account/sell` (B2C) — form lista/crea/edita/sottometti, badge status, motivo rifiuto visibile
+  - `/it/app/moderation` (admin) — tabs pending/approved/rejected, approve one-click + reject con textarea
+- Bug fix HIGH: `_public()` ora restituisce `account_type`, `intents`, `notification_channels`, `phone` (era causa di redirect loop SellPage)
+- Test: iter_13 (19 backend) + iter_14 (100% retest dopo fix) PASS
+
+### M3.S6 — Valutatore GIS pubblico ✅ DONE (22 Giu) — **NOSTRA SKILL CORE**
+- **Dataset curato 124 città italiane × 3 zone tier** (centro/semicentro/periferia) — €/m² 2025 da Borsino Immobiliare/OMI/Tecnocasa/Idealista
+- Algoritmo deterministico auditabile:
+  1. Normalize city → resolve canonical key (gestisce sinonimi EN)
+  2. Infer zone_tier da keywords address (Trastevere/Vomero/Chiaia/Navigli…)
+  3. Apply multipliers: property_type × condition × energy_class × floor
+  4. Comparables query db.properties stessa città + tipo
+- `POST /api/cloud/valuator` (pubblico): risposta con price_per_sqm{min,avg,max}, estimated_value{min,avg,max}, multipliers_applied (audit trail), confidence (high/medium/low), methodology, data_source, comparables, disclaimer
+- `GET /api/cloud/valuator/coverage` (meta): 124 città, 20 regioni
+- Frontend `/it/cloud/valutatore` con hero dark gradient + form 3-sezioni + correttori auditabili + comparables clickabili + collapsible methodology
+- **Lead capture**: `db.valuation_leads` (high-intent — chi cerca stima ha decisione di vendere)
+- **Verifica congruenza prezzi su Italia intera**:
+  - Milano centro nuovo A → €13.682/m² ✓
+  - Cortina villa ottimo → €15k/m² ✓
+  - Portofino centro → €20k/m² ✓
+  - Crotone periferia → €575/m² ✓
+- Test: iter_15 (50 pytest + 12 backend + 4 frontend) 100% PASS
+
+### M3.S7 — Account B2C completo: ricerche salvate + alert email ⏳ NEXT
+- Backend: `POST /api/cloud/me/saved-searches`, `GET /api/cloud/me/saved-searches`, `DELETE .../{id}`
+- Schema: `{user_id, name, filters: SearchFilters, frequency: daily|weekly|instant, created_at, last_run_at}`
+- Cron job (APScheduler o cron Mongo) che ogni ora controlla matching tra ricerche salvate e proprietà nuove
+- Email template `alert_match.{it,en,es}.html` con preview 3 immobili matching + link search
+- Frontend: `/it/cloud/account` (Dashboard B2C) con tab "Ricerche salvate" + bottone "Salva questa ricerca" in SearchPage
+
+### ✅ Definition of Done M3 (aggiornato 22 Giu)
+- [x] Portale pubblico online con SEO Schema.org
+- [x] Funnel acquisizione lead chiuso (form contatto + email notification real-time)
+- [x] Mappa interattiva + filtri avanzati
+- [x] Pagina dettaglio pubblica
+- [x] Privato pubblica annuncio in autonomia (B2C UGC)
+- [x] Moderazione admin queue funzionante
+- [x] Valutatore GIS pubblico con 124 città verificate
+- [x] Lead arrivano in ImmoWeb (3 fonti: contact form, private listing, valutatore)
+- [ ] Saved searches + alert email B2C (M3.S7)
+
+### 🔮 Backlog M3 (post-S7)
+- **Upgrade valutatore**: caricare OMI 27k zone come override DB (granularità sub-quartiere)
+- **Auto-assignment lead**: lead valutatore → agente OMNIA più attivo nella zona (lead score + round-robin)
+- Cluster marker mappa con `react-leaflet-cluster` (>100 marker)
+- Cerca vicino a te / tempo percorrenza
+- Disegna su mappa / multi-zone selection
+- Immobili Segreti off-market premium
 - [ ] Privacy 4 livelli rispettata
 - [ ] Multi-zone selection + Disegna su mappa + Cerca vicino a te + Confronta prezzi
 

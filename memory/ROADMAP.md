@@ -1,33 +1,58 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 18 Giugno 2026
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.1) e `COMPETITIVE_ANALYSIS_IDEALISTA.md`
+**Ultimo aggiornamento**: 22 Giugno 2026
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.3) e `CHANGELOG.md`
 
 ---
 
 ## Stato attuale
 
-🟢 **M2.S1→S5 ✅ DONE (95%)** — resta solo M2.S6 (Custom Domain) + 🔴 nuova P0 D-FUTURE-07 (AI Smart Import Clienti).
+🟢 **M3.S1→S6 ✅ DONE (86%)** — Portale B2C ImmobilCloud feature-complete. Resta solo M3.S7 (Saved Searches + Alert email).
 
 ```
-M1   M2    M3  M4  M5  M6
-✅   🟢    ⏸️  ⏸️  ⏸️  ⏸️
-100% 95%  0%  0%  0%  0%
+M1   M2   M3   M4  M5  M6
+✅   ✅   🟢   ⏸️  ⏸️  ⏸️
+100% 100% 86%  0%  0%  0%
 ```
 
-### 🔥 Sessione 18 Giugno 2026 — Riassunto
+### 🔥 Sessioni 19-22 Giugno 2026 — Riassunto sprint M3
 
-Completato in un giorno:
-- **M2.S5 Layer D Phase 2** — Theme Registry & Site Generation (4 temi headless consumano brand_profile estratto)
-- **Social Share** su property pubblica (WA · FB · Email · Copy)
-- **D-FUTURE-04 Smart Clients List** — editorial-sober (AI Lead Score sort, bucket pills, temperature monocroma, action hint)
-- **Inline Click-to-Call/WhatsApp** sulle row clienti con messaggio AI-precompilato
-- **UI CSV Import Clienti** (`/it/app/clients/import`)
+In 4 giorni reali completati 6 sprint M3:
 
-Test totali: **30/30 backend pytest passed**, 0 regressioni.
+| Sprint | Data | Test report | Risultato |
+|---|---|---|---|
+| **M3.S1** Home B2C + Registrazione segmentata | 19 Giu | iter_8/9 | 100% PASS |
+| **M3.S2** Publishing Center lato agente | 19 Giu | iter_10 | 4+14 PASS |
+| **M3.S3** Mappa Leaflet + Filtri avanzati + Geocoding | 22 Giu | iter_11 | 14+18 PASS |
+| **M3.S4** Pagina dettaglio pubblica + Form contatto | 22 Giu | iter_12 | 10 PASS |
+| **M3.S4.1** Email lead notification Resend | 22 Giu | live smoke | EMAIL OK |
+| **M3.S5 v2** Annunci privati B2C + Moderazione admin | 22 Giu | iter_13/14 | 100% PASS (post bug fix) |
+| **M3.S6** Valutatore GIS pubblico (124 città IT) | 22 Giu | iter_15 | 50 pytest + 12 + 4 PASS |
 
-### 🔴 Nuova priorità emersa: D-FUTURE-07
-Il Founder ha fatto notare che il CSV template richiede 5-13h per 100 clienti → barriera all'adoption. La soluzione è applicare il pattern Brand-Extractor (Gemini parsa input non strutturato → schema OMNIA) alla migrazione clienti. **P0 per la prossima sessione.**
+Test totali sprint M3: **~80 backend + ~55 frontend PASS**. 0 regressioni su M1/M2.
+
+### 🎯 Funnel B2C ImmobilCloud — Chiuso end-to-end
+
+```
+Utente arriva → ricerca / mappa → dettaglio immobile → form contatto
+                                                       ↓
+                                            Lead in CRM agente
+                                            + EMAIL notification < 1s
+
+Utente B2C "intent=sell" → registrazione segmentata → /cloud/account/sell
+                                                    → annuncio pending
+                                                    → admin queue → approve
+                                                    → live pubblicamente
+
+Utente "voglio sapere quanto vale" → /cloud/valutatore → 124 città dataset
+                                                       → multipliers
+                                                       → stima istantanea
+                                                       → valuation_lead (high-intent)
+```
+
+### 🔴 Prossima sessione: M3.S7
+**Saved searches + alert email matching B2C**. Chiude il loop: l'utente cerca, salva la ricerca, riceve email quando arriva nuovo immobile compatibile.
+
 
 ---
 
@@ -146,30 +171,22 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
   - Backend `/api/app/clients` CRUD + filtri + CSV import
   - Frontend ClientsPage + ClientFormPage con preferenze replica Idealista
   - Test: 15/15 pytest backend + 7/7 flussi UI passed
-- [ ] 🆕 **M2.S3.5 — Property↔Seller link** (mini-sprint, mezza giornata) [D-026]
-  - `Property.seller_client_id` con dropdown autocomplete in form immobile
-  - Tab "Immobili in carico" nella scheda Cliente seller
-  - Pannello "Contatti proprietario" nella scheda immobile
-  - **Razionale**: prerequisito M2.S4 (matching deve sapere chi vende cosa)
-- [ ] 🔥 **M2.S4 — Matching Engine + Lead Scoring AI** [D-025]
-  - Layer 1: Property↔Client match score deterministico
-  - Layer 2: Lead Scoring AI (Gemini-3 Flash via Emergent LLM Key)
-  - Layer 3: Vista Match per immobile/cliente + notifica email
-- [ ] 🔥 **M2.S5 — Multiposting XML + Clone-from-URL** [D-023]
-  - Feed XML in uscita verso portali (Idealista, Immobiliare.it, Casa.it, Wikicasa)
-  - Feed XML compatibile sito esistente (anti-Agestanet, D-017)
-  - **Clone-from-URL**: Playwright + Gemini Vision → bundle Next.js statico identico
-- [ ] **M2.S6 — Theme registry + White Label headless** [D-022]
-  - Theme registry per agenzia (S3 versioned bundles)
-  - Editor visuale base + custom domain CNAME
-  - CI per build automatico
+- [x] **M2.S3.5 — Property↔Seller link** ✅ (16 Giu 2026)
+- [x] **M2.S4 — Matching Engine + Lead Scoring AI** ✅ (16-17 Giu 2026)
+- [x] **M2.S5 — Multiposting XML + Clone-from-URL + Theme Registry** ✅ (17-18 Giu 2026)
+- [x] **D-FUTURE-04 Smart Clients List** ✅ (18 Giu 2026)
+- [x] **D-FUTURE-07 AI Smart Import Clienti** (Gemini-3 Flash) ✅ (18 Giu 2026)
+- [x] **M2.S6 — Custom Domain + Host-based routing** ✅ (18 Giu 2026)
 
-### M3 — ImmobilCloud MVP (5 sessioni)
-- [ ] M3.S1 — Home pubblica + design system
-- [ ] M3.S2 — Ricerca + Mappa + Filtri
-- [ ] M3.S3 — Scheda immobile + Contatto agente
-- [ ] M3.S4 — Valutatore GIS pubblico
-- [ ] M3.S5 — Pubblicazione annuncio privato
+### M3 — ImmobilCloud (6 sprint completati, 1 da fare)
+- [x] **M3.S1 — Home pubblica + Registrazione segmentata B2C** ✅ (19 Giu)
+- [x] **M3.S2 — Publishing Center lato agente** ✅ (19 Giu)
+- [x] **M3.S3 — Mappa Leaflet + Filtri avanzati + Geocoding OSM** ✅ (22 Giu)
+- [x] **M3.S4 — Pagina dettaglio pubblica + Form contatto** ✅ (22 Giu)
+- [x] **M3.S4.1 — Email lead notification via Resend** ✅ (22 Giu)
+- [x] **M3.S5 v2 — Annunci privati B2C + Moderazione admin** ✅ (22 Giu)
+- [x] **M3.S6 — Valutatore GIS pubblico (124 città IT, 50 pytest)** ✅ (22 Giu)
+- [ ] 🔴 **M3.S7 — Saved searches + Alert email matching B2C** (NEXT)
 
 ### M4 — MLS + Stripe (5 sessioni) 🎉 VENDIBILE
 - [ ] M4.S1 — MLS Network multi-agenzia
