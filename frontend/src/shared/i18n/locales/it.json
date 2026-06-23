@@ -761,6 +761,32 @@
       "status_approved": "Approvato",
       "status_rejected": "Respinto",
       "status_live": "Pubblicato su ImmobilCloud"
+    },
+    "save_search": {
+      "cta": "Salva questa ricerca",
+      "title": "Salva ricerca + alert email",
+      "name_ph": "Es. Bilocale Roma centro",
+      "submit": "Salva e attiva alert",
+      "done": "Ricerca salvata! Riceverai un'email quando arrivano nuovi immobili.",
+      "go_dashboard": "Vai alle tue ricerche →",
+      "default_name": "La mia ricerca",
+      "err_limit": "Hai raggiunto il limite di 10 ricerche salvate. Elimina quelle vecchie.",
+      "err_generic": "Errore nel salvataggio."
+    },
+    "account": {
+      "eyebrow": "Area riservata",
+      "title": "Ciao {{name}}",
+      "subtitle": "Gestisci le tue ricerche salvate e ricevi alert quando arrivano nuovi immobili compatibili.",
+      "saved_searches_title": "Ricerche salvate",
+      "new_search": "Nuova ricerca",
+      "ss_empty_desc": "Non hai ancora salvato nessuna ricerca. Salvane una e riceverai email automatiche quando trovo immobili compatibili.",
+      "ss_empty_cta": "Cerca casa",
+      "last_matches": "Ultimo controllo: {{count}} immobili trovati",
+      "freq_instant": "Istantaneo",
+      "freq_daily": "Giornaliero",
+      "freq_weekly": "Settimanale",
+      "active": "Attiva",
+      "confirm_delete": "Eliminare questa ricerca salvata?"
     }
   },
   "valuator": {

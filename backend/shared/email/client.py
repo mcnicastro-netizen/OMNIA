@@ -62,6 +62,11 @@ SUBJECTS = {
         "en": "🔔 New lead from ImmobilCloud — {{property_title}}",
         "es": "🔔 Nuevo lead desde ImmobilCloud — {{property_title}}",
     },
+    "saved_search_alert": {
+        "it": "🔔 {{match_count}} nuovi immobili per la tua ricerca \"{{search_name}}\"",
+        "en": "🔔 {{match_count}} new listings for your search \"{{search_name}}\"",
+        "es": "🔔 {{match_count}} nuevos inmuebles para tu búsqueda \"{{search_name}}\"",
+    },
 }
 
 

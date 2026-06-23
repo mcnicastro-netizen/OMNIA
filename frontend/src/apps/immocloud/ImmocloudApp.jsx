@@ -6,6 +6,9 @@ import PropertyMapView from "./components/PropertyMapView";
 import PropertyDetailPage from "./components/PropertyDetailPage";
 import SellPage from "./components/SellPage";
 import ValuatorPage from "./components/ValuatorPage";
+import AccountDashboard from "./components/AccountDashboard";
+import { api } from "../../shared/lib/api";
+import { useAuth } from "../../shared/lib/auth";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api/cloud`;
@@ -28,6 +31,7 @@ export default function ImmocloudApp() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="property/:pid" element={<PropertyDetailPage />} />
         <Route path="account/sell" element={<SellPage />} />
+        <Route path="account" element={<AccountDashboard />} />
         <Route path="valutatore" element={<ValuatorPage />} />
       </Routes>
       <FooterB2C />
@@ -438,6 +442,8 @@ function SearchPage() {
             {t("cloud.total_results", { n: data.total })}
           </p>
 
+          <SaveSearchButton filters={filters} />
+
           {viewMode === "map" ? (
             <PropertyMapView markers={mapMarkers} />
           ) : loading ? (
@@ -709,6 +715,101 @@ function Field({ label, children }) {
     </div>
   );
 }
+
+function SaveSearchButton({ filters }) {
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language || "it").slice(0, 2);
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [freq, setFreq] = useState("daily");
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+
+  if (done) {
+    return (
+      <div data-testid="save-search-done" className="mb-4 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-3 py-2">
+        ✓ {t("cloud.save_search.done")}{" "}
+        <Link to={`/${lang}/cloud/account`} className="underline">
+          {t("cloud.save_search.go_dashboard")}
+        </Link>
+      </div>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button
+        data-testid="save-search-open"
+        onClick={() => {
+          if (!user || user.account_type !== "b2c") {
+            window.location.href = `/${lang}/cloud/register?intent=get_alerts`;
+            return;
+          }
+          setOpen(true);
+          setName(filters.city ? `${filters.city} — ${filters.operation === "rent" ? t("cloud.op_rent") : t("cloud.op_sale")}` : t("cloud.save_search.default_name"));
+        }}
+        className="mb-4 inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-widest border border-[#0B1E3F] text-[#0B1E3F] rounded hover:bg-[#0B1E3F] hover:text-white transition"
+      >
+        🔔 {t("cloud.save_search.cta")}
+      </button>
+    );
+  }
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setBusy(true); setError("");
+    const apiFilters = { ...filters };
+    delete apiFilters.sort; delete apiFilters.page;
+    Object.keys(apiFilters).forEach((k) => { if (!apiFilters[k]) delete apiFilters[k]; });
+    ["price_min", "price_max", "surface_min", "rooms_min", "bedrooms_min", "bathrooms_min"].forEach((k) => {
+      if (apiFilters[k]) apiFilters[k] = Number(apiFilters[k]);
+    });
+    try {
+      await api.post("/cloud/me/saved-searches", { name, filters: apiFilters, frequency: freq });
+      setDone(true);
+    } catch (e) {
+      setError(e?.response?.data?.detail === "saved_searches_limit_reached"
+        ? t("cloud.save_search.err_limit")
+        : t("cloud.save_search.err_generic"));
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <form data-testid="save-search-form" onSubmit={submit} className="mb-4 bg-stone-50 border border-stone-200 rounded p-4 space-y-3">
+      <h3 className="text-xs uppercase tracking-widest text-stone-500 font-medium">
+        🔔 {t("cloud.save_search.title")}
+      </h3>
+      <input
+        data-testid="save-search-name" required minLength={2} maxLength={120}
+        value={name} onChange={(e) => setName(e.target.value)}
+        placeholder={t("cloud.save_search.name_ph")}
+        className="w-full px-3 py-2 border border-stone-300 rounded text-sm focus:outline-none focus:border-[#0B1E3F]"
+      />
+      <select
+        data-testid="save-search-freq" value={freq} onChange={(e) => setFreq(e.target.value)}
+        className="px-3 py-2 border border-stone-300 rounded text-sm"
+      >
+        <option value="instant">{t("cloud.account.freq_instant")}</option>
+        <option value="daily">{t("cloud.account.freq_daily")}</option>
+        <option value="weekly">{t("cloud.account.freq_weekly")}</option>
+      </select>
+      {error && <p className="text-xs text-rose-700">{error}</p>}
+      <div className="flex gap-2">
+        <button type="submit" disabled={busy} data-testid="save-search-submit"
+          className="px-4 py-2 bg-[#0B1E3F] text-white text-xs uppercase tracking-widest rounded hover:bg-[#C19A6B] disabled:opacity-50">
+          {busy ? t("common.saving") : t("cloud.save_search.submit")}
+        </button>
+        <button type="button" onClick={() => setOpen(false)}
+          className="px-4 py-2 border border-stone-300 text-xs uppercase tracking-widest rounded hover:bg-stone-50">
+          {t("common.cancel")}
+        </button>
+      </div>
+    </form>
+  );
+}
+
 
 function FooterB2C() {
   const { t } = useTranslation();
