@@ -7,12 +7,12 @@
 
 ## Stato attuale
 
-🟢 **M3.S1→S6 ✅ DONE (86%)** — Portale B2C ImmobilCloud feature-complete. Resta solo M3.S7 (Saved Searches + Alert email).
+🟢 **M3 ✅ DONE (100%)** — Portale B2C ImmobilCloud feature-complete, funnel chiuso end-to-end con automazione email.
 
 ```
 M1   M2   M3   M4  M5  M6
-✅   ✅   🟢   ⏸️  ⏸️  ⏸️
-100% 100% 86%  0%  0%  0%
+✅   ✅   ✅   ⏸️   ⏸️   ⏸️
+100% 100% 100% 0%  0%  0%
 ```
 
 ### 🔥 Sessioni 19-22 Giugno 2026 — Riassunto sprint M3
@@ -186,7 +186,7 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [x] **M3.S4.1 — Email lead notification via Resend** ✅ (22 Giu)
 - [x] **M3.S5 v2 — Annunci privati B2C + Moderazione admin** ✅ (22 Giu)
 - [x] **M3.S6 — Valutatore GIS pubblico (124 città IT, 50 pytest)** ✅ (22 Giu)
-- [ ] 🔴 **M3.S7 — Saved searches + Alert email matching B2C** (NEXT)
+- [x] **M3.S7 — Saved searches + Alert email matching B2C** ✅ (23 Giu) — 12 pytest + 11 Playwright PASS
 
 ### M4 — MLS + Stripe (5 sessioni) 🎉 VENDIBILE
 - [ ] M4.S1 — MLS Network multi-agenzia

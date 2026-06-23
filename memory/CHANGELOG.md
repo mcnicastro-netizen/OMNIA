@@ -1,5 +1,42 @@
 # OMNIA — Changelog
 
+## 2026-06-23 — ✅ M3.S7 Saved Searches + Alert Email Matching B2C DONE
+
+**Il funnel B2C è ora completamente chiuso: cerca → salva → alert email automatici.**
+
+- **Backend** `apps/immocloud/saved_searches.py` (NUOVO, ~245 righe):
+  - Router `/api/cloud/me/saved-searches` (B2C auth) con POST/GET/PATCH/DELETE/run.
+  - Schema `SearchFilters` Pydantic (operation, city, property_type, ranges prezzo/superficie/locali/camere/bagni, energy_class).
+  - Free-tier limit: 10 saved searches/utente (409 `saved_searches_limit_reached`).
+  - `run_all_active_saved_searches()` matching engine: per ogni ricerca attiva, `_build_mongo_filter()` riusa `_base_filter()` (esclude pending/rejected/non-listed) + filtro `created_at > last_run_at` → email digest Resend.
+  - **Fix semantico post-test**: `last_run_at` ora aggiornato SEMPRE (anche quando skip per canale email disattivato) → previene replay di vecchi match quando l'utente riattiva il canale email.
+- **Backend** `apps/immoweb/cron.py` (NUOVO): `POST /api/app/cron/saved-searches/run-all` (admin only) — callable da k8s CronJob / GitHub Actions.
+- **Email** template `saved_search_alert.{it,en,es}.html` (NUOVI): branded digest con elenco fino a 6 immobili matching (titolo, città, zona, m², prezzo) + CTA "Vedi tutti i risultati".
+- **Subject** in `shared/email/client.py`: 3 lingue per `saved_search_alert`.
+- **Frontend** `components/AccountDashboard.jsx` (NUOVO, ~155 righe): `/it/cloud/account` — dashboard B2C con lista ricerche, controlli per riga (freq dropdown, toggle attiva, delete), empty state con CTA.
+- **Frontend** `ImmocloudApp.jsx`: nuovo `SaveSearchButton` inline nella SearchPage — login-gated (B2C-only). Click senza B2C → redirect `/cloud/register?intent=get_alerts`. Form inline con name pre-compilato + frequency select. Done state con link diretto alla dashboard.
+- **i18n** `it.json`: namespace `cloud.save_search.*` (10 chiavi) + `cloud.account.*` (12 chiavi).
+- **Testing**:
+  - **12/12 pytest backend** in `tests/test_m3s7_saved_searches.py`: auth guards, CRUD completo, limit 10, cron admin gating.
+  - **11/11 Playwright frontend**: SaveSearchButton, login-gate redirect, save form, AccountDashboard, controlli per riga, empty state, access control.
+  - **Email pipeline live**: `[EMAIL OK] template=saved_search_alert id=70f0c6c7-...` verificato in log Resend.
+- **Note non bloccanti dal QA**:
+  - UX: filter tags nella dashboard renderizzati come raw key:value (es. `city: Roma`). Da i18n-tradurre in v1.1.
+  - Pre-esistente: warning React hydration `<span>` in `<option>` nel filtro "Locali minimi" — non causato da M3.S7, non rompe nulla.
+
+### 🎯 Funnel B2C completo end-to-end
+```
+1. Utente arriva           → /cloud (home)
+2. Cerca con filtri        → /cloud/search (Lista o Mappa)
+3. SALVA LA RICERCA        → POST /cloud/me/saved-searches
+4. Sistema cron periodico  → run_all_active_saved_searches()
+5. Email digest automatico → Resend "🔔 N nuovi immobili per la tua ricerca"
+6. Click su immobile       → /cloud/property/:id
+7. Form contatto           → lead nel CRM agente + email instant
+```
+
+---
+
 ## 2026-06-22 (notte tarda) — ✅ M3.S6 Valutatore GIS pubblico DONE
 
 **Il valutatore è una NOSTRA SKILL. Output realistici verificati su Italia intera.**

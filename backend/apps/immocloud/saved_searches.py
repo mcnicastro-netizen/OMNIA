@@ -274,33 +274,38 @@ async def run_all_active_saved_searches() -> Dict[str, Any]:
         user = await db.users.find_one({"id": s["user_id"]},
                                        {"_id": 0, "email": 1, "name": 1, "lang": 1,
                                         "notification_channels": 1, "account_type": 1})
-        if not user or user.get("account_type") != "b2c":
-            continue
-        # Respect user's notification channels (only email for now)
-        if "email" not in (user.get("notification_channels") or []):
-            continue
+        # Always update last_run_at (even on skip) to avoid stale digests
+        # when user later enables email channel.
+        should_email = (
+            user
+            and user.get("account_type") == "b2c"
+            and "email" in (user.get("notification_channels") or [])
+        )
 
         flt = _build_mongo_filter(s["filters"], since=s.get("last_run_at"))
-        matches_cursor = db.properties.find(flt, {
-            "_id": 0, "id": 1, "title": 1, "city": 1, "zone": 1, "price": 1,
-            "rent_monthly": 1, "surface_sqm": 1, "rooms": 1, "operation": 1,
-            "property_type": 1, "created_at": 1,
-        }).sort("created_at", -1).limit(20)
-        matches = await matches_cursor.to_list(length=20)
+        matches: List[dict] = []
+        if should_email:
+            matches_cursor = db.properties.find(flt, {
+                "_id": 0, "id": 1, "title": 1, "city": 1, "zone": 1, "price": 1,
+                "rent_monthly": 1, "surface_sqm": 1, "rooms": 1, "operation": 1,
+                "property_type": 1, "created_at": 1,
+            }).sort("created_at", -1).limit(20)
+            matches = await matches_cursor.to_list(length=20)
 
-        if matches:
-            await _send_alert_email(
-                to_email=user["email"],
-                user_name=user.get("name") or "",
-                lang=user.get("lang") or "it",
-                search_name=s["name"],
-                matches=matches,
-                frontend_base=frontend_base,
-            )
-            total_emails += 1
-            total_matches += len(matches)
+            if matches:
+                await _send_alert_email(
+                    to_email=user["email"],
+                    user_name=user.get("name") or "",
+                    lang=user.get("lang") or "it",
+                    search_name=s["name"],
+                    matches=matches,
+                    frontend_base=frontend_base,
+                )
+                total_emails += 1
+                total_matches += len(matches)
 
-        # Always update last_run_at to avoid re-sending old matches
+        # Always advance last_run_at — guarantees no replay of old matches
+        # when user toggles notification channels later.
         await db.saved_searches.update_one(
             {"id": s["id"]},
             {"$set": {"last_run_at": now, "last_match_count": len(matches),

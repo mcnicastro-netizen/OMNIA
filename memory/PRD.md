@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ 100% DONE** • **M3.S1 ✅ + M3.S2 ✅ + M3.S3 ✅ + M3.S4 ✅ + M3.S4.1 ✅ + M3.S5 v2 ✅ + M3.S6 ✅ DONE** — Portale B2C completo: Home, Registrazione segmentata, Publishing Center, Mappa Leaflet, Pagina dettaglio + form contatto + email lead notification, Pubblicazione privati con moderazione admin, **Valutatore GIS pubblico (124 città, 20 regioni, output realistici 2025 — 50 pytest di congruenza)**. Funnel acquisizione + UGC + lead-magnet valutatore: tutto attivo. • Prossimo: **M3.S7 Account B2C con saved searches + alert email matching**
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ 100% DONE** — Portale B2C ImmobilCloud feature-complete: Home + Registrazione segmentata + Publishing Center + Mappa Leaflet + Pagina dettaglio + Form contatto + Email lead notification + Pubblicazione privati con moderazione + Valutatore GIS (124 città IT) + **Saved searches + Alert email matching**. **Funnel B2C end-to-end chiuso con automazione**. • Prossimo: **M4 Monetizzazione (MLS + Stripe + Sistema crediti)**
 
 ---
 
