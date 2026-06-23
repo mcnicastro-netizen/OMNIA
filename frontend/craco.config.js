@@ -29,6 +29,9 @@ let webpackConfig = {
       rules: {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+        // Disable experimental rule referenced by react-hooks v5.2.0 preset
+        // but not always exposed (causes transient HMR errors).
+        "react-hooks/set-state-in-effect": "off",
       },
     },
   },
