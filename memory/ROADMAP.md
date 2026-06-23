@@ -188,6 +188,20 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [x] **M3.S6 — Valutatore GIS pubblico (124 città IT, 50 pytest)** ✅ (22 Giu)
 - [x] **M3.S7 — Saved searches + Alert email matching B2C** ✅ (23 Giu) — 12 pytest + 11 Playwright PASS
 
+### M5 — AI Suite (8 sprint, sequenza definita D-028 del 23 Giu)
+- [ ] 🤖 **M5.S1 — Al for Agents** (chatbot CRM IMMOWEB con function calling) — **NEXT**
+- [ ] 📚 **M5.S2 — Al Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
+- [ ] ⚖️ **M5.S3 — Al Legal** (web-search + anti-hallucination + escalate-to-specialist)
+- [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
+- [ ] 💰 **M5.S5 — Comparatore mutui** (scraping banche IT)
+- [ ] 🌡️ **M5.S6 — Certificazione APE** (calcolo orientativo)
+- [ ] 📑 **M5.S7 — Modulistica AI** (post-società)
+- [ ] ✍️ **M5.S8 — Firma elettronica + Visure** (post-società, account paid)
+
+### Strategia monetizzazione (Founder, 23 Giu)
+- **M4 (Stripe + crediti + abbonamenti) rinviata** fino al completamento del gestionale + costituzione nuova società per registrazione marchi e credenziali bancarie
+- Sequenza definitiva: **M3 ✅ → M5 (AI Suite) → M6 (Academy) → M4 (Monetizzazione)**
+
 ### M4 — MLS + Stripe (5 sessioni) 🎉 VENDIBILE
 - [ ] M4.S1 — MLS Network multi-agenzia
 - [ ] M4.S2 — Workflow collaborazione 5gg

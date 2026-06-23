@@ -456,3 +456,36 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Future**: M3.S6.1 (backlog) caricare OMI 27k zone come **layer di override** sotto-comune (es. quartieri specifici di Milano/Roma). Il dataset curato resta fallback robusto.
 - **Stato**: ✅ Implementato e testato (iter_15: 50/50 pytest + 12 curl + 4 frontend PASS).
 
+
+### D-028 — Chatbot "Al" (M5.S1-S3): architettura e roadmap (23 Giu 2026)
+- **Contesto**: discussione tecnica approfondita con Founder sull'architettura del chatbot AI di OMNIA. Founder vuole un assistente all'avanguardia che copra: codice OMNIA, manuale app, supporto utenti 24h, **anche aspetto giuridico/notarile**.
+
+- **Decisione architetturale finale**: split in **3 chatbot specializzati sequenziali**, non un unico "tuttofare":
+  1. **Al for Agents** (M5.S1) — assistente CRM interno IMMOWEB con function calling (query Mongo live, lead score, scrittura annunci, descrizioni, email follow-up)
+  2. **Al Knowledge** (M5.S2) — supporto how-to della piattaforma via RAG su manuale curato (il manuale **sarà scritto da E1 a progetto ultimato** prima di M5.S2)
+  3. **Al Legal** (M5.S3) — assistenza giuridica/notarile con architettura **web-search-first + anti-hallucination + escalate-to-specialist**
+
+- **Architettura Al Legal definita (importante)**:
+  - **Web search live** su fonti normative ufficiali italiane (normattiva.it, gazzettaufficiale.it, agenziaentrate.gov.it, notariato.it, cassazione.it)
+  - Risposte con **citazioni inline obbligatorie** (artt. di legge, sentenze, circolari)
+  - **Anti-hallucination layer**: secondo LLM verifica che ogni claim abbia fonte tracciabile + confidence scoring (soglia ≥0.85)
+  - Sotto soglia confidence → "Non sono certo. Parla con un notaio →" (escalation CTA)
+  - **Termini d'uso espliciti** + checkbox accettazione: "informazioni orientative, non parere legale ai sensi L.247/2012"
+  - **Audit log completo** (5 anni retention) di ogni query + fonti citate + confidence + risposta
+  - **NON serve** studio legale convenzionato per il lancio (la validazione la fanno le fonti pubbliche autoritative)
+
+- **Stack tecnico**:
+  - Modello primario: **Gemini 3 Flash** via Emergent LLM Key (costo trascurabile: ~€2/mese a 10 agenzie, ~€760/mese a 1000 agenzie)
+  - Web search: **API gratuita in fase di lancio** (Brave Search API free-tier 2000 query/mese OR alternative gratis da valutare al momento implementazione)
+  - Vector DB per RAG: Mongo Atlas vector search
+  - Embeddings: Google text-embedding-004 (quasi gratis)
+  - Ottimizzazioni standard: caching risposte frequenti, router cheap (regex), context window minimale, streaming responses
+
+- **Razionale errori di stima precedenti corretti**:
+  - Costi LLM inizialmente sovrastimati ×10 (avevo pensato a Claude Sonnet). Con Gemini Flash sono trascurabili → cost-control B2C non più urgente, possiamo offrire 24/7 illimitato in free-tier inizialmente
+  - Al Legal inizialmente proposto come "post-monetizzazione + studio legale convenzionato" → ridimensionato a M5.S3 con architettura web-search che elimina necessità di KB curato e quindi di validazione legale dei contenuti
+
+- **Sequenza definitiva concordata**:
+  M5.S1 (Agents) → M5.S2 (Knowledge, dopo manuale scritto) → M5.S3 (Legal) → M5.S4-S6 (virtual staging, mutui, modulistica, APE) → M5.S7-S8 (visure, firma elettronica — questi sì post-società per account paid)
+
+- **Stato**: in attesa. M5.S1 partirà nella prossima sessione operativa.

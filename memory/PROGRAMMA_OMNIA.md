@@ -418,41 +418,75 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 ---
 
 # 🤖 MILESTONE 5 — AI SUITE (Vantaggio competitivo)
-**Durata**: 1-2 settimane · **Sessioni**: 4
+**Durata**: 2-3 settimane · **Sessioni**: 8 (sequenza definita 23 Giu 2026, vedi D-028)
 
-### M5.S1 — AI Copywriter annunci
-- Descrizione da foto + dati (Gemini)
-- 3 toni: standard / lusso / giovane
-- Multi-lingua IT/EN
-- Costo in crediti
-- **Tuo compito**: validare qualità su 20 esempi
+> **Decisione architetturale chiave (D-028)**: Il chatbot "Al" del santo graal è stato **split in 3 chatbot specializzati sequenziali** invece di un unico tuttofare. Stack: Gemini 3 Flash via Emergent LLM Key, web-search API gratuita in fase lancio, anti-hallucination layer, audit log 5 anni.
 
-### M5.S2 — Chatbot "Al" pubblico (ImmobilCloud)
-- Assistente 24/7 portale
-- RAG su FAQ + database immobili
-- Lead capture conversazionale
-- Handoff agente reale
-- **Tuo compito**: 30-50 FAQ + tono di voce
+### M5.S1 — 🤖 Al for Agents (chatbot CRM IMMOWEB)
+- Assistente conversazionale dentro l'app IMMOWEB con **function calling** sul backend
+- Query Mongo in linguaggio naturale: "quanti immobili attivi a Milano sotto 300k?", "lead caldi della settimana", "match score più alto del cliente X"
+- Scrittura assistita: descrizioni annunci da foto+dati, email follow-up, risposte commerciali
+- **Multi-tono** (standard / lusso / giovane), multi-lingua IT/EN/ES
+- **Tuo compito**: validare qualità su 20 esempi reali
 
-### M5.S3 — Comparatore mutui
-- Form richiesta mutuo
-- Lookup tassi (mock o partner affiliate)
-- Genera lead partner finanziari
-- Tracciamento conversion
-- **Tuo compito**: 1-2 partner mutui
+### M5.S2 — 📚 Al Knowledge (chatbot how-to piattaforma)
+- **Prerequisito**: il manuale OMNIA sarà scritto da E1 a progetto completato (decisione Founder 23 Giu)
+- RAG su manuale curato + FAQ + (opzionale) database immobili pubblico
+- Vector DB: Mongo Atlas vector search, embeddings Google text-embedding-004
+- Lead capture conversazionale quando rilevante, handoff agente reale possibile
+- **Tuo compito**: revisione del manuale prima del lancio
 
-### M5.S4 — Modulistica AI + Reperimento documenti
-- Template contratti (proposta, mandato, preliminare)
-- Auto-compilazione
-- Lookup visure (VisureItalia API)
-- Storage documenti
-- **Tuo compito**: VisureItalia account + 5 template legali
+### M5.S3 — ⚖️ Al Legal (chatbot giuridico-notarile con web search)
+- **Web search live** su fonti normative ufficiali (normattiva.it, gazzettaufficiale.it, agenziaentrate.gov.it, notariato.it, cassazione.it) → **API gratuita in fase lancio**
+- Risposte con **citazioni inline obbligatorie** (articoli, sentenze, circolari)
+- **Anti-hallucination layer**: secondo LLM verifica claim ↔ fonti, confidence scoring (soglia ≥0.85)
+- Sotto soglia → "Non sono certo. Parla con un notaio →" (escalation CTA)
+- **Termini d'uso** + checkbox obbligatorio: "informazioni orientative, non parere legale ai sensi L.247/2012"
+- **Audit log** completo (5 anni retention)
+- **NON serve** studio legale convenzionato al lancio
+- **Tuo compito**: termini d'uso da revisionare con avvocato di fiducia (€200 una tantum)
+
+### M5.S4 — 🎨 Virtual Staging foto immobili
+- Gemini Nano Banana arreda foto vuote / migliora illuminazione / suggerisce render
+- A/B "prima vs dopo" cliccabile
+- Costo in crediti (preparazione per M4)
+- **Tuo compito**: validare qualità render su 10 immobili reali
+
+### M5.S5 — 💰 Comparatore mutui
+- Form richiesta mutuo (LTV, durata, reddito, tipo tasso)
+- Scraping tassi banche IT (Intesa, Unicredit, BPER, Crédit Agricole, online banks) — costo zero
+- Tabella comparativa rate/TAEG/spread
+- Genera lead partner finanziari (preparazione per partner affiliate)
+- **Tuo compito**: 1-2 partner affiliate banche/mediatori creditizi
+
+### M5.S6 — 🌡️ Certificazione APE
+- Form input parametri termici (mq, anno costruzione, riscaldamento, isolamento, classe involucro...)
+- Calcolo automatico classe energetica + tabella consumi
+- PDF brandizzato in stile certificato APE
+- **NB**: serve certificatore abilitato per firma legale, ma il calcolo orientativo è nostro
+- **Tuo compito**: convalidare formule con 1 certificatore di fiducia
+
+### M5.S7 — 📑 Modulistica AI (post-società)
+- Template contratti italiani (proposta acquisto, mandato vendita/locazione, preliminare, lettera ai condòmini, disdetta)
+- Auto-compilazione con dati CRM (cliente, immobile, prezzo)
+- Generazione PDF brandizzati
+- Storage documenti per agenzia
+- **Tuo compito**: 5 template legali iniziali (può aiutare un legale)
+
+### M5.S8 — ✍️ Firma elettronica + Visure (post-società)
+- Integrazione DocuSign / Yousign per firma a distanza (richiede account paid)
+- VisureItalia API per visure catastali/ipotecarie (richiede account paid)
+- Storage documenti firmati nel cloud
+- **Tuo compito**: account DocuSign + VisureItalia (a carico nuova società)
 
 ### ✅ Definition of Done M5
-- [ ] Copywriter produce descrizioni vendibili
-- [ ] Chatbot risponde a 80% domande
-- [ ] Comparatore mutui genera primi lead
-- [ ] Modulistica salva 50% tempo agente
+- [ ] Al for Agents risponde correttamente a 90%+ query CRM
+- [ ] Al Knowledge copre 30+ how-to della piattaforma
+- [ ] Al Legal: 95%+ risposte con citazione normativa, 0 false positive ad alta confidence
+- [ ] Virtual Staging produce render vendibili
+- [ ] Comparatore mutui genera primi lead reali
+- [ ] APE calcolo orientativo affidabile
+- [ ] Modulistica + Firma + Visure tutto integrato (post-società)
 
 ---
 
