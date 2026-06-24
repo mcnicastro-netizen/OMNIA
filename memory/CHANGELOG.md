@@ -1,5 +1,40 @@
 # OMNIA — Changelog
 
+## 2026-06-24 — ✅ M5.S3 AL Legal DONE
+
+**Assistente legale immobiliare con web search + anti-hallucination — killer feature vs Agestanet (zero AI).**
+
+### Implementato
+- 🧠 **5 sub-agenti specializzati** (general, proposta, locazioni, catasto, urbanistica) + `pdf_analysis`
+- 🔍 **Tavily AI web search** live su 7 fonti normative IT (normattiva, gazzettaufficiale, AdE, notariato, cassazione, altalex, brocardi)
+- ⚖️ **Anti-hallucination validator** (2° LLM call, confidence ∈ [0,1], soglia 0.85) → sotto soglia: CTA notaio
+- 🧪 **Chain of Thought interno** + temperature 0.2 (D-029) — non leak nella risposta
+- 📄 **Upload PDF** proposte/preliminari/locazioni (max 5MB / 60 pp / 40k char)
+- 🚨 **Disclaimer L.247/2012** + checkbox first-visit + footer permanente
+- 📜 **Audit log** `al_legal_audit` (retention 5 anni)
+- 🎨 Pagina `/it/legal` con DisclaimerModal, ChatTab (sources panel), PdfTab, sidebar nav `⚖ AL Legal`
+- 🧪 Test E2E iteration_20: **16/16 backend + 100% frontend**
+
+### Integrazioni
+- Tavily AI: TAVILY_API_KEY in `.env`, 1000 query/mese free
+- Gemini 3 Flash (Emergent LLM key) per main + validator
+
+---
+
+## 2026-06-24 — ✅ M5.S1 AL for Agents DONE (chat + streaming + inline copywriter)
+
+**Chatbot CRM con function calling + UX ChatGPT streaming + inline copywriter multilingua.**
+
+### Implementato
+- 🤖 **POST `/api/app/al/chat`** — sync con 5 tool whitelistati + agency_id JWT injection
+- ⚡ **POST `/api/app/al/chat/stream`** — SSE token-by-token live + Stop button + cursore lampeggiante
+- ✨ **POST `/api/app/al/improve`** — inline copywriter (titolo/descrizione, IT/EN/ES) montato in PropertyForm + SellPage B2C
+- 🅰️ Brand rename Al → **AL** ovunque
+- 🌐 P2 fix Chrome auto-translate (lang/translate/notranslate meta)
+- 🧪 Tests iteration_17/18/19 — **100%** in tutti i casi
+
+---
+
 ## 2026-06-23 — ✅ M3.S7 Saved Searches + Alert Email Matching B2C DONE
 
 **Il funnel B2C è ora completamente chiuso: cerca → salva → alert email automatici.**

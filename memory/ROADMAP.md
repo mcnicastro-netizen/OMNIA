@@ -191,7 +191,7 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 ### M5 — AI Suite (8 sprint, sequenza definita D-028 del 23 Giu)
 - [x] 🤖 **M5.S1 — AL for Agents** ✅ (24 Giu) — chatbot CRM con function-calling JSON, streaming SSE token-by-token, **inline ✨ "Migliora con AL" su titolo+descrizione (IT/EN/ES)** in ImmoWeb + ImmobilCloud. Test 100% (iteration_17/18/19).
 - [ ] 📚 **M5.S2 — AL Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
-- [ ] ⚖️ **M5.S3 — AL Legal** (web-search + anti-hallucination + escalate-to-specialist) — **NEXT P1**
+- [x] ⚖️ **M5.S3 — AL Legal** ✅ (24 Giu) — 5 sub-agenti specializzati + Tavily web search (7 fonti normative IT) + anti-hallucination validator (confidence 0.85) + Chain of Thought + temperature 0.2 + upload PDF + disclaimer L.247/2012. Pagina `/it/legal`. Test 16/16 backend + 100% frontend (iteration_20).
 - [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
 - [ ] 💰 **M5.S5 — Comparatore mutui** (scraping banche IT)
 - [ ] 🌡️ **M5.S6 — Certificazione APE** (calcolo orientativo)

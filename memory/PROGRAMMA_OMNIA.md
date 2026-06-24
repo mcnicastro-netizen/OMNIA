@@ -1,12 +1,29 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 2.3
+**Versione**: 2.4
 **Data creazione**: Gennaio 2026
-**Ultimo aggiornamento**: 22 Giugno 2026 (post M3.S1→S6 ✅ DONE — portale B2C ImmobilCloud feature-complete con valutatore GIS pubblico)
+**Ultimo aggiornamento**: 24 Giugno 2026 (post M3 ✅ + M5.S1 ✅ + M5.S3 ✅ — AI Suite operativa con chatbot CRM, copywriter inline e assistente legale)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: M1 ✅ DONE · M2 ✅ DONE (S1→S6) · **M3.S1→S6 ✅ DONE** · M3.S7 ⏳ NEXT · M4/M5/M6 backlog
+**Stato**: M1 ✅ · M2 ✅ · M3.S1→S7 ✅ · **M5.S1 ✅ · M5.S3 ✅** · M4/M5.S2/S4-S8/M6 backlog
+
+---
+
+## 🔥 Cambiamenti strategici v2.4 (rispetto a v2.3)
+
+Sessione 23-24 Giugno: introdotta la prima ondata della **AI Suite** (M5), che ribalta il posizionamento competitivo OMNIA contro Idealista/Immobiliare.it/Agestanet (questi ultimi hanno ZERO AI).
+
+| Cosa cambia | v2.3 | v2.4 |
+|---|---|---|
+| **AI Suite** | Roadmap astratta | **3 deliverable in produzione**: AL Chatbot CRM + AL Inline Copywriter + AL Legal |
+| **Modello AI base** | Da decidere (stima Claude Sonnet) | **Gemini 3 Flash** via Emergent LLM Key — costi ~×10 inferiori al previsto, free-tier B2C sostenibile |
+| **Architettura AL** | Singolo chatbot tuttofare | **3 chatbot specializzati**: Agents (CRM tool-use) / Knowledge (RAG manuale, blocked) / Legal (web-search + anti-hallucination) |
+| **Web search legale** | Non in scope | **Tavily AI** integrato (1000 query/mese free) su 7 fonti normative ufficiali italiane |
+| **Anti-hallucination** | Non previsto | Validator a secondo LLM con confidence ≥0.85 + CTA notaio sotto soglia |
+| **PDF analysis** | Roadmap | ✅ Upload proposte/preliminari/locazioni con analisi strutturata (max 5MB / 60 pp / 40k char) |
+| **Posizionamento competitivo** | "Killer feature copy" | "Killer feature **anti-Agestanet**" — loro non hanno AI |
+| **Brand AI** | "Al" (nome proprio) | "**AL**" (maiuscolo, acronimo) coerente in UI |
 
 ---
 
@@ -422,29 +439,35 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 > **Decisione architetturale chiave (D-028)**: Il chatbot "Al" del santo graal è stato **split in 3 chatbot specializzati sequenziali** invece di un unico tuttofare. Stack: Gemini 3 Flash via Emergent LLM Key, web-search API gratuita in fase lancio, anti-hallucination layer, audit log 5 anni.
 
-### M5.S1 — 🤖 Al for Agents (chatbot CRM IMMOWEB)
-- Assistente conversazionale dentro l'app IMMOWEB con **function calling** sul backend
-- Query Mongo in linguaggio naturale: "quanti immobili attivi a Milano sotto 300k?", "lead caldi della settimana", "match score più alto del cliente X"
-- Scrittura assistita: descrizioni annunci da foto+dati, email follow-up, risposte commerciali
-- **Multi-tono** (standard / lusso / giovane), multi-lingua IT/EN/ES
-- **Tuo compito**: validare qualità su 20 esempi reali
+### M5.S1 — 🤖 AL for Agents (chatbot CRM ImmoWeb) ✅ **DONE — 24 Giu 2026**
+- ✅ Assistente conversazionale dentro l'app ImmoWeb con **manual JSON tool-use** (emergentintegrations non supporta `tools=` nativi di Gemini)
+- ✅ 5 tool whitelistati: `query_properties`, `query_clients`, `query_leads`, `monthly_performance`, `write_description`
+- ✅ Sicurezza multi-tenant: `agency_id` iniettato dal JWT server-side, **mai** dall'AI
+- ✅ **Streaming SSE token-by-token** (`POST /api/app/al/chat/stream`) per UX ChatGPT-style con cursore lampeggiante + Stop button
+- ✅ **Inline ✨ "Migliora con AL"** su titolo+descrizione di PropertyForm (agenti) e SellPage (privati B2C) — multilingua IT/EN/ES, modal con preview Originale | Suggerito
+- ✅ Persistenza sessioni (`al_sessions`) + audit (`al_audit`), rate limit 60/h chat + 60/h improve indipendenti
+- ✅ Tests: iteration_17.json (8/8 sync), iteration_18.json (6/6 streaming), iteration_19.json (13/13 improve) — **100%**
 
-### M5.S2 — 📚 Al Knowledge (chatbot how-to piattaforma)
+### M5.S2 — 📚 AL Knowledge (chatbot how-to piattaforma)
 - **Prerequisito**: il manuale OMNIA sarà scritto da E1 a progetto completato (decisione Founder 23 Giu)
 - RAG su manuale curato + FAQ + (opzionale) database immobili pubblico
 - Vector DB: Mongo Atlas vector search, embeddings Google text-embedding-004
 - Lead capture conversazionale quando rilevante, handoff agente reale possibile
 - **Tuo compito**: revisione del manuale prima del lancio
 
-### M5.S3 — ⚖️ Al Legal (chatbot giuridico-notarile con web search)
-- **Web search live** su fonti normative ufficiali (normattiva.it, gazzettaufficiale.it, agenziaentrate.gov.it, notariato.it, cassazione.it) → **API gratuita in fase lancio**
-- Risposte con **citazioni inline obbligatorie** (articoli, sentenze, circolari)
-- **Anti-hallucination layer**: secondo LLM verifica claim ↔ fonti, confidence scoring (soglia ≥0.85)
-- Sotto soglia → "Non sono certo. Parla con un notaio →" (escalation CTA)
-- **Termini d'uso** + checkbox obbligatorio: "informazioni orientative, non parere legale ai sensi L.247/2012"
-- **Audit log** completo (5 anni retention)
-- **NON serve** studio legale convenzionato al lancio
-- **Tuo compito**: termini d'uso da revisionare con avvocato di fiducia (€200 una tantum)
+### M5.S3 — ⚖️ AL Legal (chatbot giuridico-notarile con web search) ✅ **DONE — 24 Giu 2026**
+- ✅ Architettura **multi-agente**: 5 sub-agenti specializzati (General, Proposta, Locazioni, Catasto, Urbanistica) + analizzatore PDF, routing automatico via keyword matching
+- ✅ **Web search live** via **Tavily AI** (1000 query/mese gratis) su 7 fonti normative: `normattiva.it`, `gazzettaufficiale.it`, `agenziaentrate.gov.it`, `notariato.it`, `cassazione.it`, `altalex.com`, `brocardi.it`
+- ✅ **Citazioni inline obbligatorie** `[1]`, `[2]`, ... con pannello fonti laterale cliccabile
+- ✅ **Anti-hallucination layer**: secondo LLM (Gemini 3 Flash, sessione separata) valuta `confidence ∈ [0,1]` + lista `unsupported_claims` + `fabricated_refs`, soglia 0.85
+- ✅ Sotto soglia → CTA `notariato.it/trova-notaio` automatica + disclaimer rafforzato
+- ✅ **Chain of Thought interno** + temperature 0.2 (D-029)
+- ✅ **Upload PDF** (max 5MB / 60 pp / 40k char) con sub-agente `pdf_analysis`: analisi strutturata clausole, criticità, verifiche pre-firma
+- ✅ **Disclaimer L.247/2012** + checkbox obbligatorio first-visit, persistito in localStorage
+- ✅ Audit log `al_legal_audit` completo (user, sub_agent, citation_count, confidence, unsupported_claims, validator_rationale)
+- ✅ Pagina dedicata `/it/legal` accessibile a **tutti gli utenti autenticati** (agenti + B2C, no agency_id required)
+- ✅ Tests: iteration_20.json — **16/16 backend + 100% frontend**
+- 🟡 **Tuo compito**: termini d'uso da revisionare con avvocato di fiducia (€200 una tantum) prima della commercializzazione
 
 ### M5.S4 — 🎨 Virtual Staging foto immobili
 - Gemini Nano Banana arreda foto vuote / migliora illuminazione / suggerisce render

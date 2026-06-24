@@ -232,6 +232,39 @@ Vedi `test_credentials.md` (creato al primo deploy).
 
 ---
 
+## Changelog M5.S3 — AL Legal (24-Giu-2026)
+
+✅ **Backend modulare** (`/app/backend/apps/immoweb/al_legal/`):
+- `prompts.py` — 5 sub-agenti (general, proposta, locazioni, catasto, urbanistica) + `pdf_analysis` + router keyword-based
+- `tavily.py` — async wrapper Tavily AI con whitelist 7 domini normativi IT
+- `validator.py` — secondo LLM con `confidence ∈ [0,1]`, soglia 0.85, fallback graceful, `append_disclaimers()`
+- `pdf_parser.py` — pypdf, hard cap 5MB / 60 pages / 40k chars
+- `router.py` — 5 endpoint: chat / analyze-pdf / sessions list/get/delete / health
+
+✅ **Endpoint REST**:
+- `POST /api/app/legal/chat` — Tavily search + main LLM + validator + disclaimer assembly
+- `POST /api/app/legal/analyze-pdf` (multipart) — upload + extract + analyze
+- `GET/DELETE /api/app/legal/sessions[/{sid}]` — CRUD storico
+- `GET /api/app/legal/health` — probe (no auth)
+
+✅ **Frontend** (`/app/frontend/src/apps/legal/LegalApp.jsx`):
+- Pagina dedicata `/it/legal` accessibile a tutti gli utenti autenticati
+- DisclaimerModal first-visit con checkbox L.247/2012 + localStorage `omnia_legal_disclaimer_v1`
+- ChatTab: stream Tavily + LLM (~20s) con thinking placeholder, sub-agent badge colorato, ConfidencePill (verde/ambra), pannello fonti clickable
+- PdfTab: dropzone + question + analisi strutturata
+- CTA notaio automatica sotto soglia confidence
+- Sidebar `AgencyShell.jsx` — nav item `⚖ AL Legal`
+- Axios timeout custom: 90s chat, 120s PDF
+
+✅ **Sicurezza**:
+- Rate limit 30/h per utente (chat+PDF condivisi, scelta intenzionale)
+- Multi-tenancy: nessun `agency_id` necessario (operazione su query/PDF utente)
+- Audit log permanente `al_legal_audit` (retention 5 anni richiesta da D-028)
+
+✅ **Test E2E** — iteration_20.json: **16/16 backend** (5 sub-agenti routing, schema, multi-turn, B2C access, PDF valido/non-PDF/>5MB, sessions CRUD, audit log) + **100% frontend** (disclaimer modal, chat flow completo, sub-agent badge, confidence pill, fonti clickable, PDF tab, sidebar nav)
+
+---
+
 ## Changelog M5.S1 — AL for Agents (24-Giu-2026)
 
 ✅ **Backend** (`/app/backend/apps/immoweb/al_agent.py`):
