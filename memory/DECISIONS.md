@@ -489,3 +489,23 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   M5.S1 (Agents) → M5.S2 (Knowledge, dopo manuale scritto) → M5.S3 (Legal) → M5.S4-S6 (virtual staging, mutui, modulistica, APE) → M5.S7-S8 (visure, firma elettronica — questi sì post-società per account paid)
 
 - **Stato**: in attesa. M5.S1 partirà nella prossima sessione operativa.
+
+### D-029 — Al Legal: upgrade architetturale post-input Founder (24 Giu 2026)
+- **Contesto**: Founder ha condiviso documento "chatbot legale" con prompt-engineering guide.
+- **Adozioni nuove** (oltre architettura D-028):
+  1. **Chain of Thought interno** prima di ogni risposta (riduce allucinazioni 30-40%)
+  2. **Sub-agenti specializzati** (non più 1 bot generico):
+     - Al-Legal-General · Al-Legal-Proposta · Al-Legal-Locazioni · Al-Legal-Catasto · Al-Legal-Urbanistica
+  3. **Temperature 0.2** esplicito sul modello
+  4. **Multi-Agent Validation** (riconferma D-028 hallucination check)
+  5. **Upload PDF utente** per analisi proposte d'acquisto / compromessi (killer feature commerciale)
+- **Architettura ibrida fonti**:
+  - KB locale RAG: modelli contrattuali OMNIA, best practices interne, glossario settore
+  - Web search live: CC, TU Edilizia, sentenze Cassazione, circolari AdE, DL recenti
+- **Riformulazione prompt obbligatoria** per rischio legale:
+  - "Agisci come **assistente informativo specializzato**" (NON "consulente legale senior")
+  - Evita "pareri legali", parla di "informazioni orientative basate su fonti normative"
+  - Riduce esposizione art. 348 c.p. (esercizio abusivo professione)
+- **Graph-RAG rimandato** a M5.S3.5 / post-lancio (setup complesso, benefici reali solo con 100+ agenzie attive)
+- **Impatto su roadmap**: M5.S3 passa da 1 sessione a 1.5-2 sessioni, valore commerciale 3-4× superiore
+- **Stato**: piano architetturale aggiornato, attesa avvio M5.S1
