@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
@@ -308,6 +309,170 @@ def _try_parse_tool_call(text: str) -> Optional[dict]:
         except (json.JSONDecodeError, ValueError):
             pass
     return None
+
+
+# ============================================================
+# Streaming chat endpoint (Server-Sent Events)
+# ============================================================
+
+@router.post("/chat/stream")
+async def chat_stream(req: ChatRequest, user: dict = Depends(get_current_user)):
+    """SSE token-by-token streaming. Yields lines like `data: {json}\\n\\n`.
+
+    Event types:
+      - {"type":"session","session_id":"..."}     — sent once at start
+      - {"type":"thinking"}                        — sniffed a JSON tool call, waiting
+      - {"type":"tool","name":"..."}               — about to execute a CRM tool
+      - {"type":"token","content":"..."}           — natural-language token delta
+      - {"type":"done","tool_used":"...|null"}     — terminator
+      - {"type":"error","detail":"..."}            — terminator on error
+    """
+    if not EMERGENT_LLM_KEY:
+        raise HTTPException(status_code=503, detail="llm_key_not_configured")
+
+    db = Database.get()
+    agency_id = _agency_id(user)
+    await _check_rate_limit(db, user["id"])
+
+    sid = req.session_id or str(uuid4())
+    sess = await db.al_sessions.find_one({"id": sid, "user_id": user["id"]}, {"_id": 0})
+    if not sess:
+        sess = {"id": sid, "user_id": user["id"], "agency_id": agency_id,
+                "messages": [], "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()}
+        await db.al_sessions.insert_one(sess)
+
+    history = sess.get("messages", [])[-MAX_TURNS * 2:]
+    history.append({"role": "user", "content": req.message})
+
+    from emergentintegrations.llm.chat import LlmChat, UserMessage, TextDelta
+    chat_client = LlmChat(
+        api_key=EMERGENT_LLM_KEY,
+        session_id=sid,
+        system_message=SYSTEM_PROMPT,
+    ).with_model("gemini", MODEL)
+
+    # Replay history (best-effort; same compromise as /chat)
+    for msg in history[:-1]:
+        if msg["role"] == "user":
+            try:
+                await chat_client.send_message(UserMessage(text=msg["content"]))
+            except Exception:
+                break
+
+    def _sse(data: dict) -> str:
+        return f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
+
+    async def event_gen():
+        yield _sse({"type": "session", "session_id": sid})
+
+        # Phase 1: stream first response, sniff for JSON tool call
+        text_buf: List[str] = []
+        looks_like_tool = None  # None=undecided, True/False once we have enough
+        thinking_sent = False
+        SNIFF_CHARS = 16
+
+        try:
+            async for delta in chat_client.stream_message(UserMessage(text=req.message)):
+                if not isinstance(delta, TextDelta):
+                    continue
+                text_buf.append(delta.content)
+                buf_str = "".join(text_buf)
+
+                if looks_like_tool is None and len(buf_str) >= SNIFF_CHARS:
+                    head = buf_str.lstrip().lower()
+                    looks_like_tool = head.startswith("{") or head.startswith("```json") or head.startswith("```\n{")
+                    if looks_like_tool is False:
+                        # Flush already-buffered tokens to client
+                        yield _sse({"type": "token", "content": buf_str})
+                        continue
+                    if looks_like_tool is True and not thinking_sent:
+                        yield _sse({"type": "thinking"})
+                        thinking_sent = True
+                        continue
+
+                if looks_like_tool is False:
+                    yield _sse({"type": "token", "content": delta.content})
+        except Exception as e:
+            msg = str(e).lower()
+            logger.warning("Stream phase-1 failed: %s", e)
+            detail = "llm_budget_exceeded" if any(k in msg for k in ("budget", "quota", "credit", "402")) else "llm_unavailable"
+            yield _sse({"type": "error", "detail": detail})
+            return
+
+        raw_reply = "".join(text_buf)
+        # If we never decided (short reply), treat as plain text
+        if looks_like_tool is None:
+            for ch in raw_reply:
+                yield _sse({"type": "token", "content": ch})
+            looks_like_tool = False
+
+        final_reply = raw_reply
+        tool_used = None
+        tool_params = {}
+
+        # Phase 2: tool execution + streamed natural-language follow-up
+        if looks_like_tool:
+            parsed = _try_parse_tool_call(raw_reply)
+            if parsed and parsed.get("tool") in TOOLS:
+                tool_name = parsed["tool"]
+                tool_params = parsed.get("params", {}) or {}
+                yield _sse({"type": "tool", "name": tool_name})
+                try:
+                    tool_result = await TOOLS[tool_name](db, agency_id, tool_params)
+                    tool_used = tool_name
+                    follow_up = (
+                        f"Risultato del tool {tool_name}:\n"
+                        f"{json.dumps(tool_result, ensure_ascii=False)}\n\n"
+                        "Componi ora la risposta finale all'utente in italiano, sintetica e utile."
+                    )
+                    final_buf: List[str] = []
+                    async for delta in chat_client.stream_message(UserMessage(text=follow_up)):
+                        if not isinstance(delta, TextDelta):
+                            continue
+                        final_buf.append(delta.content)
+                        yield _sse({"type": "token", "content": delta.content})
+                    final_reply = "".join(final_buf)
+                except HTTPException:
+                    raise
+                except Exception as e:
+                    msg = str(e).lower()
+                    logger.warning("Tool/follow-up failed: %s", e)
+                    if any(k in msg for k in ("budget", "quota", "credit", "402")):
+                        yield _sse({"type": "error", "detail": "llm_budget_exceeded"})
+                        return
+                    err_msg = f"Ho provato a consultare {tool_name} ma ho avuto un problema. Riprova."
+                    for ch in err_msg:
+                        yield _sse({"type": "token", "content": ch})
+                    final_reply = err_msg
+            else:
+                # JSON-looking but unparseable → emit raw as fallback
+                for ch in raw_reply:
+                    yield _sse({"type": "token", "content": ch})
+
+        # Persist + audit
+        now = datetime.now(timezone.utc).isoformat()
+        history.append({"role": "assistant", "content": final_reply, "tool": tool_used})
+        await db.al_sessions.update_one(
+            {"id": sid},
+            {"$set": {"messages": history, "updated_at": now}},
+        )
+        await db.al_audit.insert_one({
+            "id": str(uuid4()), "session_id": sid,
+            "user_id": user["id"], "agency_id": agency_id,
+            "ts": now, "user_msg": req.message[:500],
+            "assistant_msg": final_reply[:1000],
+            "tool": tool_used, "tool_params_count": len(tool_params),
+            "stream": True,
+        })
+
+        yield _sse({"type": "done", "tool_used": tool_used, "session_id": sid})
+
+    return StreamingResponse(
+        event_gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.get("/sessions")

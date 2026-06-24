@@ -1,10 +1,10 @@
-/* OMNIA — Al Chat Widget (M5.S1)
- * Floating Action Button in basso-destra. Si espande in pannello chat.
- * Path montato dentro AgencyShell per essere globale in IMMOWEB.
+/* OMNIA — Al Chat Widget (M5.S1 + Streaming)
+ * Floating Action Button bottom-right. Espande pannello chat.
+ * Streaming SSE token-by-token via fetch + ReadableStream.
  */
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { api } from "../../../shared/lib/api";
+import { API_BASE } from "../../../shared/lib/api";
 
 export default function AlChatWidget() {
   const { t } = useTranslation();
@@ -14,6 +14,7 @@ export default function AlChatWidget() {
   const [busy, setBusy] = useState(false);
   const [sid, setSid] = useState(null);
   const scrollRef = useRef(null);
+  const abortRef = useRef(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -21,30 +22,129 @@ export default function AlChatWidget() {
     }
   }, [messages, busy]);
 
+  // Cleanup on unmount
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  const updateLast = (patch) => {
+    setMessages((m) => {
+      const out = [...m];
+      const last = out[out.length - 1];
+      if (last && last.role === "assistant") out[out.length - 1] = { ...last, ...patch };
+      return out;
+    });
+  };
+
+  const appendToLast = (chunk) => {
+    setMessages((m) => {
+      const out = [...m];
+      const last = out[out.length - 1];
+      if (last && last.role === "assistant") {
+        out[out.length - 1] = { ...last, content: (last.content || "") + chunk };
+      }
+      return out;
+    });
+  };
+
   const send = async (e) => {
     e?.preventDefault();
     const text = input.trim();
     if (!text || busy) return;
     setBusy(true);
-    setMessages((m) => [...m, { role: "user", content: text }]);
+    setMessages((m) => [
+      ...m,
+      { role: "user", content: text },
+      { role: "assistant", content: "", tool: null, thinking: false },
+    ]);
     setInput("");
+
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+
     try {
-      const r = await api.post("/app/al/chat", { session_id: sid, message: text });
-      if (!sid) setSid(r.data.session_id);
-      setMessages((m) => [...m, {
-        role: "assistant", content: r.data.reply, tool: r.data.tool_used,
-      }]);
-    } catch (e) {
-      const detail = e?.response?.data?.detail;
-      let msg;
-      if (detail === "rate_limit_exceeded") msg = t("al.err_rate_limit");
-      else if (detail === "llm_budget_exceeded" || detail === "llm_unavailable") msg = t("al.err_budget");
-      else msg = t("al.err_generic");
-      setMessages((m) => [...m, { role: "assistant", content: msg }]);
-    } finally { setBusy(false); }
+      const resp = await fetch(`${API_BASE}/app/al/chat/stream`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": (typeof navigator !== "undefined" ? navigator.language : "it") || "it",
+        },
+        body: JSON.stringify({ session_id: sid, message: text }),
+        signal: ctrl.signal,
+      });
+
+      if (!resp.ok) {
+        let detail = null;
+        try { detail = (await resp.json())?.detail; } catch { /* noop */ }
+        const msg =
+          detail === "rate_limit_exceeded" ? t("al.err_rate_limit")
+            : (detail === "llm_budget_exceeded" || detail === "llm_unavailable") ? t("al.err_budget")
+            : t("al.err_generic");
+        updateLast({ content: msg });
+        return;
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        // Parse SSE frames (separated by blank line)
+        const frames = buffer.split("\n\n");
+        buffer = frames.pop() || ""; // last (possibly partial) frame kept in buffer
+        for (const frame of frames) {
+          const line = frame.split("\n").find((l) => l.startsWith("data:"));
+          if (!line) continue;
+          let evt;
+          try { evt = JSON.parse(line.slice(5).trim()); } catch { continue; }
+
+          switch (evt.type) {
+            case "session":
+              if (!sid) setSid(evt.session_id);
+              break;
+            case "thinking":
+              updateLast({ thinking: true });
+              break;
+            case "tool":
+              updateLast({ tool: evt.name, thinking: false });
+              break;
+            case "token":
+              if (evt.content) appendToLast(evt.content);
+              break;
+            case "done":
+              updateLast({ thinking: false });
+              break;
+            case "error": {
+              const m =
+                evt.detail === "llm_budget_exceeded" || evt.detail === "llm_unavailable"
+                  ? t("al.err_budget")
+                  : t("al.err_generic");
+              updateLast({ content: m, thinking: false });
+              break;
+            }
+            default:
+              break;
+          }
+        }
+      }
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        updateLast({ content: t("al.err_generic"), thinking: false });
+      }
+    } finally {
+      setBusy(false);
+      abortRef.current = null;
+    }
+  };
+
+  const stop = () => {
+    abortRef.current?.abort();
   };
 
   const newSession = () => {
+    abortRef.current?.abort();
     setSid(null);
     setMessages([]);
     setInput("");
@@ -116,7 +216,10 @@ export default function AlChatWidget() {
                 : "bg-[#FAF7F2] mr-6 p-3 rounded-lg border border-stone-200"
             }`}
           >
-            {m.content}
+            {m.content || (m.thinking ? <span className="italic text-stone-400">{t("al.thinking")}</span> : "")}
+            {busy && m.role === "assistant" && i === messages.length - 1 && m.content && (
+              <span className="inline-block w-1.5 h-3.5 bg-[#0B1E3F] align-middle ml-0.5 animate-pulse" />
+            )}
             {m.tool && (
               <span className="block mt-1.5 text-[10px] uppercase tracking-widest text-[#C19A6B]">
                 via {m.tool}
@@ -124,11 +227,6 @@ export default function AlChatWidget() {
             )}
           </div>
         ))}
-        {busy && (
-          <div data-testid="al-typing" className="text-xs text-stone-400 italic px-3">
-            {t("al.typing")}
-          </div>
-        )}
       </div>
 
       <form onSubmit={send} className="border-t border-stone-200 p-3 flex gap-2">
@@ -141,14 +239,25 @@ export default function AlChatWidget() {
           className="flex-1 px-3 py-2 text-sm border border-stone-300 rounded focus:outline-none focus:border-[#0B1E3F]"
           disabled={busy}
         />
-        <button
-          type="submit"
-          data-testid="al-send"
-          disabled={busy || !input.trim()}
-          className="px-4 py-2 bg-[#0B1E3F] text-white text-xs uppercase tracking-widest rounded hover:bg-[#C19A6B] disabled:opacity-50"
-        >
-          {t("al.send")}
-        </button>
+        {busy ? (
+          <button
+            type="button"
+            data-testid="al-stop"
+            onClick={stop}
+            className="px-4 py-2 bg-stone-700 text-white text-xs uppercase tracking-widest rounded hover:bg-stone-900"
+          >
+            {t("al.stop")}
+          </button>
+        ) : (
+          <button
+            type="submit"
+            data-testid="al-send"
+            disabled={!input.trim()}
+            className="px-4 py-2 bg-[#0B1E3F] text-white text-xs uppercase tracking-widest rounded hover:bg-[#C19A6B] disabled:opacity-50"
+          >
+            {t("al.send")}
+          </button>
+        )}
       </form>
     </div>
   );

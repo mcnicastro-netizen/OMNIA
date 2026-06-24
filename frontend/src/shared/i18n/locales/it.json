@@ -860,7 +860,9 @@
     "suggest_4": "Scrivimi una descrizione per l'immobile ABC123",
     "placeholder": "Scrivi qui...",
     "send": "Invia",
+    "stop": "Stop",
     "typing": "Al sta scrivendo...",
+    "thinking": "Sto consultando il tuo CRM...",
     "err_generic": "Errore. Riprova tra un momento.",
     "err_rate_limit": "Troppi messaggi in poco tempo. Riprova tra qualche minuto.",
     "err_budget": "Servizio AI temporaneamente non disponibile (budget esaurito). Contatta l'amministratore."
