@@ -236,23 +236,29 @@ Vedi `test_credentials.md` (creato al primo deploy).
 
 ✅ **Backend** (`/app/backend/apps/immoweb/al_agent.py`):
 - POST `/api/app/al/chat` — chat sincrona con Gemini-3-Flash via emergentintegrations
+- **POST `/api/app/al/chat/stream`** — **streaming SSE token-by-token** (UX ChatGPT-style)
 - Pattern manuale JSON tool-use (la lib non supporta `tools=` nativi)
 - 5 tool whitelistati: `query_properties`, `query_clients`, `query_leads`, `monthly_performance`, `write_description`
 - Sicurezza multi-tenant: `agency_id` iniettato server-side dal JWT, mai dall'AI
 - Rate limit soft: 60 msg/utente/ora
 - Sessioni persistenti (collection `al_sessions` + audit `al_audit`)
-- Error handling: budget esaurito → 503 `llm_budget_exceeded`
+- Error handling: budget esaurito → 503/SSE event `llm_budget_exceeded`
 
 ✅ **Frontend** (`/app/frontend/src/apps/immoweb/components/AlChatWidget.jsx`):
 - FAB rotondo "Al" bottom-24/right-6 montato in `AgencyShell`
-- Widget chat 360×520px con cronologia messaggi, suggerimenti, indicatore typing
+- Widget chat 360×520px con cronologia messaggi, suggerimenti
+- **Streaming live via fetch + ReadableStream** (parsing SSE frames)
+- **Stop button** per abortire generazione in corso
+- **Cursore lampeggiante** durante streaming + indicatore "Sto consultando il tuo CRM..."
 - Reset sessione + chiusura widget
 - i18n completo (`al.*`)
 
 ✅ **P2 Fix — Chrome auto-translate**:
 - `<html lang="it" translate="no">` + `<meta name="google" content="notranslate">` + `<body class="notranslate">`
 
-✅ **Test E2E** — iteration_17.json: 100% backend (8/8 pytest) + 100% frontend (FAB→open→send→Italian reply→new-session→close)
+✅ **Test E2E**:
+- iteration_17.json — 100% backend (8/8) + 100% frontend (sync chat)
+- iteration_18.json — 100% backend (6/6) + 100% frontend (streaming SSE incrementale confermato)
 
 ---
 
