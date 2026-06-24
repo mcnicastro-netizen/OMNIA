@@ -36,12 +36,11 @@ export default function AlChatWidget() {
       }]);
     } catch (e) {
       const detail = e?.response?.data?.detail;
-      setMessages((m) => [...m, {
-        role: "assistant",
-        content: detail === "rate_limit_exceeded"
-          ? t("al.err_rate_limit")
-          : t("al.err_generic"),
-      }]);
+      let msg;
+      if (detail === "rate_limit_exceeded") msg = t("al.err_rate_limit");
+      else if (detail === "llm_budget_exceeded" || detail === "llm_unavailable") msg = t("al.err_budget");
+      else msg = t("al.err_generic");
+      setMessages((m) => [...m, { role: "assistant", content: msg }]);
     } finally { setBusy(false); }
   };
 
@@ -68,7 +67,7 @@ export default function AlChatWidget() {
   return (
     <div
       data-testid="al-widget"
-      className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-100px)] bg-white border border-stone-200 rounded-lg shadow-2xl flex flex-col"
+      className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-140px)] bg-white border border-stone-200 rounded-lg shadow-2xl flex flex-col"
     >
       <header className="px-4 py-3 border-b border-stone-200 flex items-center justify-between bg-[#0B1E3F] text-white rounded-t-lg">
         <div>

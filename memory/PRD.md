@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ 100% DONE** — Portale B2C ImmobilCloud feature-complete: Home + Registrazione segmentata + Publishing Center + Mappa Leaflet + Pagina dettaglio + Form contatto + Email lead notification + Pubblicazione privati con moderazione + Valutatore GIS (124 città IT) + **Saved searches + Alert email matching**. **Funnel B2C end-to-end chiuso con automazione**. • Prossimo: **M4 Monetizzazione (MLS + Stripe + Sistema crediti)**
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ 100% DONE + M5.S1 ✅ DONE** — Portale B2C ImmobilCloud feature-complete: Home + Registrazione segmentata + Publishing Center + Mappa Leaflet + Pagina dettaglio + Form contatto + Email lead notification + Pubblicazione privati con moderazione + Valutatore GIS (124 città IT) + Saved searches + Alert email matching. **Al for Agents (AI chatbot CRM)** completato e testato 24-Giu-2026. • Prossimo: **M5.S3 Al Legal** o **M5.S2 Al Knowledge** (in attesa manuale)
 
 ---
 
@@ -232,4 +232,28 @@ Vedi `test_credentials.md` (creato al primo deploy).
 
 ---
 
-*Prossima revisione: al termine di M1*
+## Changelog M5.S1 — Al for Agents (24-Giu-2026)
+
+✅ **Backend** (`/app/backend/apps/immoweb/al_agent.py`):
+- POST `/api/app/al/chat` — chat sincrona con Gemini-3-Flash via emergentintegrations
+- Pattern manuale JSON tool-use (la lib non supporta `tools=` nativi)
+- 5 tool whitelistati: `query_properties`, `query_clients`, `query_leads`, `monthly_performance`, `write_description`
+- Sicurezza multi-tenant: `agency_id` iniettato server-side dal JWT, mai dall'AI
+- Rate limit soft: 60 msg/utente/ora
+- Sessioni persistenti (collection `al_sessions` + audit `al_audit`)
+- Error handling: budget esaurito → 503 `llm_budget_exceeded`
+
+✅ **Frontend** (`/app/frontend/src/apps/immoweb/components/AlChatWidget.jsx`):
+- FAB rotondo "Al" bottom-24/right-6 montato in `AgencyShell`
+- Widget chat 360×520px con cronologia messaggi, suggerimenti, indicatore typing
+- Reset sessione + chiusura widget
+- i18n completo (`al.*`)
+
+✅ **P2 Fix — Chrome auto-translate**:
+- `<html lang="it" translate="no">` + `<meta name="google" content="notranslate">` + `<body class="notranslate">`
+
+✅ **Test E2E** — iteration_17.json: 100% backend (8/8 pytest) + 100% frontend (FAB→open→send→Italian reply→new-session→close)
+
+---
+
+*Prossima revisione: al termine di M5.S3 (Al Legal)*

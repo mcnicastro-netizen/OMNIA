@@ -218,7 +218,14 @@ async def chat(req: ChatRequest, user: dict = Depends(get_current_user)):
             await chat_client.send_message(UserMessage(text=msg["content"]))
 
     # Send current message → potentially get JSON tool call
-    raw_reply = await chat_client.send_message(UserMessage(text=req.message))
+    try:
+        raw_reply = await chat_client.send_message(UserMessage(text=req.message))
+    except Exception as e:
+        msg = str(e).lower()
+        logger.warning("LLM call failed: %s", e)
+        if "budget" in msg or "quota" in msg or "credit" in msg or "402" in msg:
+            raise HTTPException(status_code=503, detail="llm_budget_exceeded")
+        raise HTTPException(status_code=503, detail="llm_unavailable")
 
     # Detect JSON tool call (manual pattern — no native function calling in lib)
     final_reply = raw_reply
@@ -237,7 +244,14 @@ async def chat(req: ChatRequest, user: dict = Depends(get_current_user)):
                     f"Risultato del tool {tool_name}:\n{json.dumps(tool_result, ensure_ascii=False)}\n\n"
                     "Componi ora la risposta finale all'utente in italiano, sintetica e utile."
                 )
-                final_reply = await chat_client.send_message(UserMessage(text=follow_up))
+                try:
+                    final_reply = await chat_client.send_message(UserMessage(text=follow_up))
+                except Exception as e:
+                    msg = str(e).lower()
+                    logger.warning("LLM follow-up failed: %s", e)
+                    if "budget" in msg or "quota" in msg or "credit" in msg or "402" in msg:
+                        raise HTTPException(status_code=503, detail="llm_budget_exceeded")
+                    raise HTTPException(status_code=503, detail="llm_unavailable")
             except Exception as e:
                 logger.warning("tool %s failed: %s", tool_name, e)
                 final_reply = f"Ho provato a consultare {tool_name} ma ho avuto un problema. Riprova."
