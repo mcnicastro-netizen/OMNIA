@@ -509,3 +509,70 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Graph-RAG rimandato** a M5.S3.5 / post-lancio (setup complesso, benefici reali solo con 100+ agenzie attive)
 - **Impatto su roadmap**: M5.S3 passa da 1 sessione a 1.5-2 sessioni, valore commerciale 3-4× superiore
 - **Stato**: piano architetturale aggiornato, attesa avvio M5.S1
+
+---
+
+### D-030 — Brand AI: "AL" (maiuscolo) come naming definitivo (24-Giu-2026)
+
+- **Decisione**: il brand di tutti gli assistenti AI di OMNIA si scrive **"AL"** in maiuscolo (acronimo, non nome proprio "Al")
+- **Razionale**: maggiore riconoscibilità visiva, lettura inequivoca ("AL Legal" vs "Al Legal"), allineamento con la nomenclatura IA italiana
+- **Applicato a**: FAB chatbot, AL Chatbot CRM, AL Copywriter inline, AL Legal, SYSTEM_PROMPT backend, tutte le i18n keys, documentazione
+- **Eccezione**: i routing path internal (`/api/app/al/...`) restano lowercase (non visibili all'utente)
+
+---
+
+### D-031 — Integrazione Tavily AI per ricerca normativa (24-Giu-2026)
+
+- **Decisione**: AL Legal usa **Tavily AI** come web-search provider per fonti normative italiane
+- **Razionale**: 1000 query/mese free, supporto `include_domains` per whitelist autoritative, latenza <2s, async-native compatibile con FastAPI
+- **Domini whitelistati**: `normattiva.it`, `gazzettaufficiale.it`, `agenziaentrate.gov.it`, `notariato.it`, `cassazione.it`, `altalex.com`, `brocardi.it`
+- **API key salvata**: `TAVILY_API_KEY` in `/app/backend/.env` (free dev key, da upgradare a paid quando query/mese supereranno 1000)
+- **Alternative valutate e scartate**: Brave Search (generico, no whitelist fine-grained), Bing Search API (caro), Google Custom Search (limite 100/giorno free)
+
+---
+
+### D-032 — REVISIONE STRATEGICA: OMNIA è marketplace multi-side, non SaaS B2B (24-Giu-2026)
+
+- **Trigger**: domanda critica del Founder *"i ricavi da crediti e annunci B2C dove sono nell'analisi?"*
+- **Errore identificato**: nelle prime modellazioni economiche avevo considerato SOLO lo stream subscription B2B agenzie, sottostimando i ricavi totali di **~88%** (€1,3M annui vs €10,9M annui a 1000 agenzie)
+- **Mappatura corretta — 7 revenue stream**:
+  1. **Subscription B2B agenzie** (Starter €69 / Pro €189 / Premium €499 / Enterprise custom) — 19% del totale
+  2. **Overage/credits B2B** (extra staging €0,90/img · video €3,90 · query AL Legal €0,60 · highlights portale €19-99 · ecc.) — 6%
+  3. **B2C annunci privati** (Free / Vetrina €19 / Premium €49 / Top €99 / Pacchetto vendi-casa €299) — **32% del totale** (stream più grande, prima ignorato)
+  4. **Lead-gen premium** per agenzie (lead qualificati €15-25, esclusivi €39-59) — 15%
+  5. **Marketplace partner commissions** (mutui €750/pratica, APE €15-30, notai €30-100, assicurazioni 10-15% premio, fotografia 25%, cleaning/staging fisico 20%) — 23%
+  6. **Data insights B2B** (report annuali a banche/sviluppatori) — 2% long-term
+  7. **Omnia Academy** (corsi paid + subscription) — 3%
+- **Implicazioni strategiche**:
+  - Le agenzie sono il **funnel di acquisizione qualità annunci**, NON il profit center primario
+  - Il vero profit center è il **consumatore privato B2C** + **commissioni partner**
+  - Pricing aggressivo per agenzie (anche tier Starter quasi a costo) è giustificato dal cross-stream
+  - **Founder 50 a −50% lock-in 24 mesi** è il GTM raccomandato
+- **Stato**: analisi salvata in `BUSINESS_MODEL.md` (creato), pricing draft in `PRICING_DRAFT.md` (da creare), validazione finale richiesta da **commercialista / fractional CFO esperto real estate**
+
+---
+
+### D-033 — Architettura M5.S4 Virtual Staging "premium 3-stage" (24-Giu-2026)
+
+- **Trigger**: rifiuto del Founder di una pipeline "basic single-pass" tipica dei competitor (Virtual Staging AI, Remodel AI, DecorCopilot, MyArchitectAI, ecc.). Richiesta esplicita: *"non possiamo parlare di ecosistema innovativo e poi offrire un sistema basic"*
+- **Decisione**: pipeline a 3 stadi specializzati invece di img2img singolo
+- **Stack tecnico**:
+  - Stage 1: **SAM 2** (Segment Anything Model 2) via `fal-ai/segment-anything-2` per maschera pavimento/pareti/soffitto (~€0,001/img)
+  - Stage 2: **Flux.1 [dev] Inpainting + Depth ControlNet** via `fal-ai/flux-general/inpainting` (~€0,05/img × 4 varianti parallele)
+  - Stage 3: **Real-ESRGAN 4x** upscale via `fal-ai/real-esrgan` (~€0,005/img) + watermark "Render virtuale OMNIA"
+- **Costo totale per render**: ~**€0,056/img** vs competitor che vendono €15-29/img (margine ~99,6%)
+- **Provider unico**: fal.ai (1 API key per tutti i modelli)
+- **5 differenziatori vs competitor** approvati:
+  - A) **Prompt contestuale CRM-aware** (AL legge zona/prezzo/buyer persona e genera prompt ottimale)
+  - B) **Reverse Staging** (rimuove arredo esistente e ri-arreda con stile diverso) — feature unica di mercato
+  - C) **Micro-tour video 5s** via `fal-ai/kling-video/v1.6` o `cogvideox-5b` (~€0,30/clip)
+  - D) **A/B test automatico sul portale B2C** (data-driven scelta stile vincente)
+  - E) **Trasparenza normativa** (watermark obbligatorio + toggle "foto reale/render virtuale" — conformità AGCM 2024 + Codice Consumo art. 21)
+- **Sequenza sprint M5.S4**:
+  - S4.1 — Pipeline 3-stage + endpoint + frontend dropzone + watermark + i18n (1 sessione)
+  - S4.2 — Reverse Staging + 4-varianti parallele + prompt CRM-aware (1 sessione)
+  - S4.3 — Micro-tour video + embed listing B2C + export Reels 9:16 (1 sessione)
+  - S4.4 — A/B testing portale + dashboard analytics (~0,5 sessione)
+- **API key richiesta**: `FAL_KEY` da ottenere su https://fal.ai/dashboard/keys ($5 free credit = ~80 staging test gratis)
+- **Stato**: in attesa attivazione `FAL_KEY` da Founder, poi parte M5.S4.1
+

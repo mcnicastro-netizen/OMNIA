@@ -232,6 +232,33 @@ Vedi `test_credentials.md` (creato al primo deploy).
 
 ---
 
+## Changelog Sessione 24-Giu-2026 — Strategic & AI Suite
+
+### ⚙️ Tecnico realizzato (4 milestone)
+- ✅ **M5.S1 AL for Agents** completato (chat + streaming SSE + inline copywriter IT/EN/ES)
+- ✅ **M5.S3 AL Legal** completato (5 sub-agenti, Tavily web search, anti-hallucination, PDF analysis, disclaimer L.247/2012)
+- ✅ Brand rename "Al" → "**AL**" ovunque (D-030)
+- ✅ P2 fix Chrome auto-translate
+
+### 🧠 Strategic decisions (NON ANCORA IMPLEMENTATE)
+- **D-032**: OMNIA è marketplace multi-side con **7 revenue stream**, non SaaS B2B singolo. Vedi `BUSINESS_MODEL.md`
+- **D-033**: Architettura **M5.S4 Virtual Staging "premium 3-stage"**: SAM + Flux Inpainting + Real-ESRGAN via fal.ai (~€0,06/img vs €15-29 competitor)
+- 5 differenziatori M5.S4: CRM-aware prompt / Reverse Staging / Micro-tour video / A/B test portale / Trasparenza normativa
+
+### 💰 Pricing draft (da validare con consulente esterno)
+- Starter €69 / Pro €189 / Premium €499 / Enterprise custom (per agenzia, non per agente)
+- **Founder 50** offer: −50% per 24 mesi prime 50 agenzie (lock-in)
+- Sweet spot Pro: agenzia media 3-5 agenti, margine 74%
+- Vero profit center identificato: **Stream 3 B2C privati** (€3,5M/anno potenziale) + **Stream 5 marketplace** (€2,5M/anno)
+- ARR potenziale @1000 agenzie: **€10,9M** (vs vecchia stima €1,3M = +750%)
+
+### 🚨 Blocker richiesto da Founder
+1. **Validazione consulente esterno** (commercialista startup SaaS + fractional CFO real estate) prima di GTM
+2. **FAL_KEY** richiesta per partire M5.S4 (https://fal.ai/dashboard/keys, $5 free credits)
+3. Discussione M4 Stripe sospesa fino a nuova società Founder
+
+---
+
 ## Changelog M5.S3 — AL Legal (24-Giu-2026)
 
 ✅ **Backend modulare** (`/app/backend/apps/immoweb/al_legal/`):

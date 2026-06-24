@@ -205,6 +205,26 @@ Stesso pattern di `AlImproveButton` (modal inline su form immobile):
 - [ ] **✨ Stima prezzo coerente** — confronto con valutatore GIS + recenti vendite → flag automatico se prezzo annuncio fuori-mercato ±20% (warning in form, non blocco)
 - [ ] **✨ Lint annuncio** — AL controlla che descrizione non contenga numeri di telefono/email (vietato sui portali), claim non verificabili, refusi gravi
 
+---
+
+### 🚨 PRIORITÀ STRATEGICA RIVISTA (D-032, 24 Giu 2026)
+
+Dopo l'analisi business completa (vedi `BUSINESS_MODEL.md`):
+
+**Roadmap aggiornata in ordine di valore economico**:
+1. ✅ M5.S1 AL Agents (24 Giu) — fatto
+2. ✅ M5.S3 AL Legal (24 Giu) — fatto
+3. 🟡 **M5.S4 Virtual Staging** ← NEXT (abilita vetrina/premium B2C, Stream 3)
+4. 🟡 **M4 Stripe + Crediti + Monetizzazione B2C** ← post M5.S4 (sblocca Stream 2, 3, 4)
+5. 🟡 **M5.S5 Comparatore Mutui** (sblocca Stream 5 marketplace, €150k/mese partner commission)
+6. 🟡 **M5.S6 APE certification** (altro Stream 5)
+7. 🟡 **M5.S2 AL Knowledge** (RAG manuale — quando il manuale è scritto)
+8. 🔴 **M6 Omnia Academy** (Stream 7)
+9. 🔴 Data insights B2B (Stream 6, anno 3+)
+
+**Blocker M4**: nuova società Founder per credenziali bancarie Stripe.
+**Blocker M5.S4**: `FAL_KEY` (free $5 credit da https://fal.ai/dashboard/keys).
+
 ### Strategia monetizzazione (Founder, 23 Giu)
 - **M4 (Stripe + crediti + abbonamenti) rinviata** fino al completamento del gestionale + costituzione nuova società per registrazione marchi e credenziali bancarie
 - Sequenza definitiva: **M3 ✅ → M5 (AI Suite) → M6 (Academy) → M4 (Monetizzazione)**
