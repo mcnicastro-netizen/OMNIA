@@ -189,14 +189,21 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [x] **M3.S7 — Saved searches + Alert email matching B2C** ✅ (23 Giu) — 12 pytest + 11 Playwright PASS
 
 ### M5 — AI Suite (8 sprint, sequenza definita D-028 del 23 Giu)
-- [ ] 🤖 **M5.S1 — Al for Agents** (chatbot CRM IMMOWEB con function calling) — **NEXT**
-- [ ] 📚 **M5.S2 — Al Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
-- [ ] ⚖️ **M5.S3 — Al Legal** (web-search + anti-hallucination + escalate-to-specialist)
+- [x] 🤖 **M5.S1 — AL for Agents** ✅ (24 Giu) — chatbot CRM con function-calling JSON, streaming SSE token-by-token, **inline ✨ "Migliora con AL" su titolo+descrizione (IT/EN/ES)** in ImmoWeb + ImmobilCloud. Test 100% (iteration_17/18/19).
+- [ ] 📚 **M5.S2 — AL Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
+- [ ] ⚖️ **M5.S3 — AL Legal** (web-search + anti-hallucination + escalate-to-specialist) — **NEXT P1**
 - [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
 - [ ] 💰 **M5.S5 — Comparatore mutui** (scraping banche IT)
 - [ ] 🌡️ **M5.S6 — Certificazione APE** (calcolo orientativo)
 - [ ] 📑 **M5.S7 — Modulistica AI** (post-società)
 - [ ] ✍️ **M5.S8 — Firma elettronica + Visure** (post-società, account paid)
+
+### 💡 AL Inline Enhancements — Backlog idee (24 Giu 2026)
+Stesso pattern di `AlImproveButton` (modal inline su form immobile):
+- [ ] **✨ Suggerisci features** — AL analizza descrizione + foto caricate → propone di spuntare automaticamente le caratteristiche nel form (balcone, ascensore, cantina, posto auto, vista, ecc.). Risparmia 1-2 min per annuncio. Richiede: vision-capable model (Gemini 3 Flash supporta immagini). Priority: P2 dopo M5.S3-S4. (Idea utente, 24 Giu)
+- [ ] **✨ Suggerisci tag SEO** — meta description + keyword + struttura H1/H2 per la pagina annuncio pubblica B2C
+- [ ] **✨ Stima prezzo coerente** — confronto con valutatore GIS + recenti vendite → flag automatico se prezzo annuncio fuori-mercato ±20% (warning in form, non blocco)
+- [ ] **✨ Lint annuncio** — AL controlla che descrizione non contenga numeri di telefono/email (vietato sui portali), claim non verificabili, refusi gravi
 
 ### Strategia monetizzazione (Founder, 23 Giu)
 - **M4 (Stripe + crediti + abbonamenti) rinviata** fino al completamento del gestionale + costituzione nuova società per registrazione marchi e credenziali bancarie

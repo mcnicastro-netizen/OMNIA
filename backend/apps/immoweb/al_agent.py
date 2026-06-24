@@ -17,6 +17,7 @@ Tools whitelisted (agency_id auto-injected from auth):
   - write_description    (generate property description)
 """
 import json
+import re
 import logging
 import os
 from datetime import datetime, timezone, timedelta
@@ -81,9 +82,20 @@ def _agency_id(user: dict) -> str:
     return aids[0]
 
 
-async def _check_rate_limit(db, user_id: str) -> None:
+async def _check_rate_limit(db, user_id: str, kind: Optional[str] = None) -> None:
+    """Soft rate limit per user/hour, optionally scoped to a kind.
+
+    kind=None (default) → counts ONLY chat messages (rows without `kind` field, i.e. chat audit)
+    kind="improve"      → counts only improve calls
+    """
     one_hour_ago = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
-    count = await db.al_audit.count_documents({"user_id": user_id, "ts": {"$gt": one_hour_ago}})
+    query = {"user_id": user_id, "ts": {"$gt": one_hour_ago}}
+    if kind is None:
+        # Legacy chat rows do not set the `kind` field
+        query["kind"] = {"$exists": False}
+    else:
+        query["kind"] = kind
+    count = await db.al_audit.count_documents(query)
     if count >= SOFT_RATE_LIMIT:
         raise HTTPException(status_code=429, detail="rate_limit_exceeded")
 
@@ -286,6 +298,31 @@ def _build_improve_prompt(req: ImproveRequest) -> str:
     )
 
 
+_FENCE_RE = re.compile(r"^```(?:\w+)?\s*\n?|\n?\s*```\s*$", re.IGNORECASE)
+_PREFIX_RE = re.compile(
+    r"^\s*(titolo|descrizione|title|description|título|descripción)\s*[:\-–]\s*",
+    re.IGNORECASE,
+)
+
+
+def _sanitize_improve_output(text: str) -> str:
+    """Strip markdown fences, common prefixes ('Titolo:', etc.) and wrapping quotes."""
+    if not text:
+        return ""
+    out = text.strip()
+    # Strip fenced code blocks (```json ... ``` or ``` ... ```)
+    out = _FENCE_RE.sub("", out).strip()
+    # Drop common label prefix ("Titolo:", "Description:", etc.)
+    out = _PREFIX_RE.sub("", out, count=1).strip()
+    # Strip wrapping quotes (regular, smart, French, German)
+    pairs = [('"', '"'), ("«", "»"), ("“", "”"), ("„", "“"), ("'", "'")]
+    for left, right in pairs:
+        if len(out) >= 2 and out.startswith(left) and out.endswith(right):
+            out = out[1:-1].strip()
+            break
+    return out
+
+
 @router.post("/improve")
 async def improve_text(req: ImproveRequest, user: dict = Depends(get_current_user)):
     """Generate an improved title or description from property form data.
@@ -297,7 +334,7 @@ async def improve_text(req: ImproveRequest, user: dict = Depends(get_current_use
         raise HTTPException(status_code=503, detail="llm_key_not_configured")
 
     db = Database.get()
-    await _check_rate_limit(db, user["id"])
+    await _check_rate_limit(db, user["id"], kind="improve")
 
     prompt = _build_improve_prompt(req)
 
@@ -317,14 +354,7 @@ async def improve_text(req: ImproveRequest, user: dict = Depends(get_current_use
             raise HTTPException(status_code=503, detail="llm_budget_exceeded")
         raise HTTPException(status_code=503, detail="llm_unavailable")
 
-    # Sanitize: strip wrapping quotes/whitespace, drop common prefixes
-    cleaned = (text or "").strip()
-    for prefix in ("Titolo:", "Descrizione:", "Title:", "Description:", "Título:", "Descripción:"):
-        if cleaned.lower().startswith(prefix.lower()):
-            cleaned = cleaned[len(prefix):].lstrip(" :\n")
-            break
-    if (cleaned.startswith('"') and cleaned.endswith('"')) or (cleaned.startswith("«") and cleaned.endswith("»")):
-        cleaned = cleaned[1:-1].strip()
+    cleaned = _sanitize_improve_output(text)
 
     # Audit (lightweight)
     await db.al_audit.insert_one({
