@@ -42,7 +42,7 @@ MAX_TURNS = 30     # cap conversation history per session
 SOFT_RATE_LIMIT = 60  # max messages per user per hour
 
 
-SYSTEM_PROMPT = """Sei Al, l'assistente AI di OMNIA per agenti immobiliari italiani.
+SYSTEM_PROMPT = """Sei AL, l'assistente AI di OMNIA per agenti immobiliari italiani.
 
 Aiuti l'agente a:
 - Cercare immobili, clienti, lead del suo CRM
@@ -57,7 +57,7 @@ REGOLE FONDAMENTALI:
    Tools disponibili: query_properties, query_clients, query_leads, monthly_performance, write_description
 3. Quando ricevi il risultato del tool, componi una risposta naturale in linguaggio umano
 4. NON inventare dati. Se non sai, rispondi "Non ho questa informazione nel tuo CRM"
-5. NON dare consigli legali. Se l'utente chiede di leggi/notai/contratti, suggerisci di usare Al Legal (in arrivo)
+5. NON dare consigli legali. Se l'utente chiede di leggi/notai/contratti, suggerisci di usare AL Legal (in arrivo)
 6. NON eseguire azioni distruttive (delete, drop). Sei in modalità SOLA LETTURA
 
 TOOLS SCHEMA:
@@ -177,6 +177,174 @@ TOOLS = {
     "monthly_performance": _tool_monthly_performance,
     "write_description": _tool_write_description,
 }
+
+
+# ============================================================
+# Inline AI: Improve title/description in property form
+# ============================================================
+
+class ImproveRequest(BaseModel):
+    field: str = Field(pattern="^(title|description)$")
+    current_text: str = Field(default="", max_length=10000)
+    property_data: Dict[str, Any] = Field(default_factory=dict)
+    target_lang: str = Field(default="it", pattern="^(it|en|es)$")
+    tone: Optional[str] = Field(default="standard", pattern="^(standard|lusso|giovane)$")
+
+
+def _format_property_context(data: dict) -> str:
+    """Build a compact, human-readable bullet list of available property data."""
+    lines: List[str] = []
+    def add(label: str, key: str, fmt=None):
+        v = data.get(key)
+        if v in (None, "", [], {}):
+            return
+        if fmt:
+            v = fmt(v)
+        lines.append(f"- {label}: {v}")
+
+    add("Tipologia", "property_type")
+    add("Operazione", "operation")
+    add("Città", "city")
+    add("Provincia", "province")
+    add("Zona/Quartiere", "zone")
+    add("Indirizzo", "address")
+    add("Superficie", "surface_sqm", lambda v: f"{v} mq")
+    add("Locali", "rooms")
+    add("Camere", "bedrooms")
+    add("Bagni", "bathrooms")
+    add("Piano", "floor")
+    add("Piani totali", "total_floors")
+    add("Anno costruzione", "year_built")
+    add("Condizione", "condition")
+    add("Arredamento", "furnished")
+    add("Prezzo vendita", "price", lambda v: f"€ {v}")
+    add("Canone mensile", "rent_monthly", lambda v: f"€ {v}/mese")
+    add("Spese condominiali", "condo_fees", lambda v: f"€ {v}")
+
+    energy = data.get("energy") or {}
+    if isinstance(energy, dict):
+        ec = energy.get("energy_class")
+        if ec:
+            lines.append(f"- Classe energetica: {ec}")
+        heat = energy.get("heating")
+        if heat:
+            lines.append(f"- Riscaldamento: {heat}")
+
+    features = data.get("features") or {}
+    if isinstance(features, dict):
+        active = [k for k, v in features.items() if v]
+        if active:
+            lines.append(f"- Caratteristiche: {', '.join(active[:20])}")
+    elif isinstance(features, list) and features:
+        lines.append(f"- Caratteristiche: {', '.join(features[:20])}")
+
+    return "\n".join(lines) if lines else "(nessun dato disponibile)"
+
+
+_LANG_LABEL = {"it": "italiano", "en": "inglese", "es": "spagnolo"}
+_TONE_HINT = {
+    "standard": "tono professionale, chiaro, informativo. Stile real estate moderno italiano.",
+    "lusso": "tono elegante e ricercato, lessico premium, evoca esclusività e prestigio.",
+    "giovane": "tono dinamico, fresco, friendly. Stile più colloquiale, ideale per giovani acquirenti/inquilini.",
+}
+
+
+def _build_improve_prompt(req: ImproveRequest) -> str:
+    ctx = _format_property_context(req.property_data)
+    lang_label = _LANG_LABEL.get(req.target_lang, "italiano")
+    tone_hint = _TONE_HINT.get(req.tone or "standard", _TONE_HINT["standard"])
+
+    if req.field == "title":
+        target_rules = (
+            "Genera un TITOLO accattivante per l'annuncio immobiliare, MASSIMO 80 caratteri. "
+            "Deve includere tipologia + zona/città + 1-2 punti di forza. Niente prezzo nel titolo. "
+            "Niente emoji. Niente virgolette. Niente punto finale."
+        )
+        max_len = "80 caratteri"
+    else:
+        target_rules = (
+            "Genera una DESCRIZIONE professionale per l'annuncio immobiliare, 600-1200 caratteri. "
+            "Struttura: 1) attacco con punti di forza, 2) descrizione locali/finiture, 3) zona/servizi, "
+            "4) classe energetica e info pratiche. Niente bullet point, paragrafi fluidi. "
+            "Niente prezzo nel testo. Niente emoji. Niente claim invented (non inventare dati assenti)."
+        )
+        max_len = "1200 caratteri"
+
+    current = (req.current_text or "").strip()
+    current_block = f"TESTO ATTUALE DELL'AGENTE/PRIVATO (da migliorare/sostituire):\n\"{current}\"\n\n" if current else ""
+
+    return (
+        f"Sei AL, copywriter immobiliare di OMNIA. Riscrivi in {lang_label} con {tone_hint}\n\n"
+        f"{target_rules}\n\n"
+        f"DATI IMMOBILE DISPONIBILI:\n{ctx}\n\n"
+        f"{current_block}"
+        f"REGOLE FERREE:\n"
+        f"- Massimo {max_len}.\n"
+        f"- Non inventare dati che non sono nei DATI IMMOBILE (no falsi metri quadri, no false stanze).\n"
+        f"- Non includere mai prezzo, telefono, email, URL.\n"
+        f"- Rispondi SOLO con il testo finale, senza prefissi, senza spiegazioni, senza markdown, senza virgolette.\n"
+    )
+
+
+@router.post("/improve")
+async def improve_text(req: ImproveRequest, user: dict = Depends(get_current_user)):
+    """Generate an improved title or description from property form data.
+
+    Used inline in PropertyForm (agents) and SellPage (B2C private owners).
+    No agency_id needed — operation is on form data only.
+    """
+    if not EMERGENT_LLM_KEY:
+        raise HTTPException(status_code=503, detail="llm_key_not_configured")
+
+    db = Database.get()
+    await _check_rate_limit(db, user["id"])
+
+    prompt = _build_improve_prompt(req)
+
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    chat_client = LlmChat(
+        api_key=EMERGENT_LLM_KEY,
+        session_id=f"improve-{user['id']}-{uuid4().hex[:8]}",
+        system_message="Sei AL, copywriter immobiliare di OMNIA. Rispondi sempre e solo con il testo finale richiesto, senza prefissi né spiegazioni.",
+    ).with_model("gemini", MODEL)
+
+    try:
+        text = await chat_client.send_message(UserMessage(text=prompt))
+    except Exception as e:
+        msg = str(e).lower()
+        logger.warning("Improve LLM call failed: %s", e)
+        if any(k in msg for k in ("budget", "quota", "credit", "402")):
+            raise HTTPException(status_code=503, detail="llm_budget_exceeded")
+        raise HTTPException(status_code=503, detail="llm_unavailable")
+
+    # Sanitize: strip wrapping quotes/whitespace, drop common prefixes
+    cleaned = (text or "").strip()
+    for prefix in ("Titolo:", "Descrizione:", "Title:", "Description:", "Título:", "Descripción:"):
+        if cleaned.lower().startswith(prefix.lower()):
+            cleaned = cleaned[len(prefix):].lstrip(" :\n")
+            break
+    if (cleaned.startswith('"') and cleaned.endswith('"')) or (cleaned.startswith("«") and cleaned.endswith("»")):
+        cleaned = cleaned[1:-1].strip()
+
+    # Audit (lightweight)
+    await db.al_audit.insert_one({
+        "id": str(uuid4()),
+        "user_id": user["id"],
+        "kind": "improve",
+        "field": req.field,
+        "lang": req.target_lang,
+        "tone": req.tone,
+        "ts": datetime.now(timezone.utc).isoformat(),
+        "input_len": len(req.current_text or ""),
+        "output_len": len(cleaned),
+    })
+
+    return {
+        "field": req.field,
+        "lang": req.target_lang,
+        "tone": req.tone,
+        "improved": cleaned,
+    }
 
 
 # ============================================================

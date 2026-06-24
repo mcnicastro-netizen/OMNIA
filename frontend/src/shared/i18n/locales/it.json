@@ -849,11 +849,11 @@
     "cond_ruderi_da_demolire": "Ruderi da demolire"
   },
   "al": {
-    "open_chat": "Apri chat con Al",
+    "open_chat": "Apri chat con AL",
     "close": "Chiudi",
     "new": "Nuova conversazione",
     "subtitle": "il tuo assistente",
-    "welcome": "Ciao! Sono Al, il tuo assistente AI. Posso aiutarti con queste cose:",
+    "welcome": "Ciao! Sono AL, il tuo assistente AI. Posso aiutarti con queste cose:",
     "suggest_1": "Quanti immobili attivi ho a Roma?",
     "suggest_2": "Mostrami i lead caldi della settimana",
     "suggest_3": "Come va il mio mese?",
@@ -861,11 +861,26 @@
     "placeholder": "Scrivi qui...",
     "send": "Invia",
     "stop": "Stop",
-    "typing": "Al sta scrivendo...",
+    "typing": "AL sta scrivendo...",
     "thinking": "Sto consultando il tuo CRM...",
     "err_generic": "Errore. Riprova tra un momento.",
     "err_rate_limit": "Troppi messaggi in poco tempo. Riprova tra qualche minuto.",
     "err_budget": "Servizio AI temporaneamente non disponibile (budget esaurito). Contatta l'amministratore."
+  },
+  "al_improve": {
+    "button": "Migliora con AL",
+    "tooltip": "AL può riscrivere questo testo in modo professionale",
+    "subtitle": "AL legge tutti i dati dell'immobile e propone una versione professionale",
+    "title_title": "Migliora il titolo annuncio",
+    "title_description": "Migliora la descrizione annuncio",
+    "original": "Originale",
+    "suggested": "Suggerito da AL",
+    "empty_original": "Nessun testo da migliorare. AL genererà un testo da zero usando i dati dell'immobile.",
+    "empty_suggested": "Premi rigenera per produrre un suggerimento",
+    "generating": "AL sta scrivendo...",
+    "regenerate": "Rigenera",
+    "apply": "Applica",
+    "cancel": "Annulla"
   },
   "moderation": {
     "title": "Moderazione annunci privati",

@@ -1,0 +1,40 @@
+{
+  "summary": "M5.S1+ AL Inline Improve feature end-to-end test PASS. Backend: 13/13 pytest cases pass on /api/app/al/improve — schema {field,lang,tone,improved}, IT title <= ~80 chars no quote-wrap, IT description >= 1500 chars no markdown/emoji, EN and ES language switching produce native-language output (verified via heuristics), Pydantic 422 on invalid field/missing field/oversize current_text/invalid target_lang, 401 unauth without cookies, B2C user (no agency_ids) gets 200 (NOT 403), price=550000 NEVER appears in suggested output, al_audit MongoDB collection receives kind='improve' entry with field/lang/tone/input_len/output_len. SYSTEM_PROMPT updated to 'Sei AL,' (uppercase). Frontend (agent /it/app/properties/new): title trigger + description trigger visible, modal opens with auto-generated IT suggestion (len 60-68), lang switch EN produces English (e.g. 'Three-room apartment for sale in Rome bright and elegant'), switch back to IT regenerates, REGENERATE produces a different variation, APPLY closes modal and replaces prop-title (verified: 'trilo roma' → 'Trilocale in vendita a Roma...'), description generation produced 1656 chars, CANCEL closes modal without modifying prop-description textarea (verified before==after). Brand rename: chat FAB shows 'AL' uppercase, lowercase 'Al' button NOT present. B2C SellPage UI flow not fully exercised (see context).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/app/al/improve", "issue": "Rate limit shares the same al_audit counter with /chat — heavy chat users will exhaust the 60/h quota faster when also using improve. Not a defect, but worth tracking."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "AlImproveButton modal", "issues": ["Suggested panel renders as <div> (not textarea) so screen-reader copy/paste UX is slightly different from a real input; minor accessibility note only."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_m5s1_al_improve.py",
+    "/app/test_reports/pytest/m5s1_improve_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "al_agent.py:289 improve_text correctly skips _agency_id() so B2C users (no agency_ids) can use the endpoint — verified by passing test_b2c_user_can_improve_title.",
+    "al_agent.py:321-327 sanitizer strips wrapping quotes and common prefixes ('Titolo:', 'Title:', 'Título:', etc.) — solid. Does NOT strip code fences ``` though; if Gemini ever wraps the title in a fenced block this would leak. Consider adding fence-strip parity with _try_parse_tool_call.",
+    "al_agent.py:298-300 _check_rate_limit uses a single counter for both chat AND improve audit rows (same al_audit collection). Functionally fine but blurs quota semantics — a heavy improve user could starve their chat quota.",
+    "al_agent.py:188 ImproveRequest.current_text max_length=10000 → 422 boundary verified (10001 chars rejected).",
+    "al_agent.py:309 LlmChat session_id is per-request (improve-{user_id}-{rand}) → no cross-request memory leak; correct for an inline rewrite use case.",
+    "AlImproveButton.jsx:165-178 Suggested panel is a <div> not <textarea>; the 'Suggerito da AL' label uses a textarea-like styled div. Apply button correctly disabled via {!suggestion || loading}. force=True click in tests bypasses this — that's a test concern only.",
+    "AlImproveButton.jsx:186 regenerate calls generate(lang) which (per the auto-run pattern) should re-fetch with same language — visually confirmed via 'Trilocale a Roma... → Trilocale in vendita a Roma...' divergence."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_m5s1_al_improve.py"
+  ],
+  "success_rate": {"backend": "100% (13/13 pytest)", "frontend": "100% on agent flow (open/IT/EN/regenerate/apply/cancel/brand-AL). B2C SellPage UI flow inconclusive due to register UI lacking visible B2C toggle — see context."},
+  "test_credentials": "Super admin mcnicastro@gmail.com / Forzainter2026. (from /app/memory/test_credentials.md). B2C user dynamically created with prefix TEST_alimprove_b2c_* via POST /api/auth/register (no agency creation).",
+  "seed_data_creation": "1 TEST_alimprove_b2c_* user per backend test run (not cleaned). al_audit collection gains improve rows during tests (audit data, not user-visible).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Endpoint POST /api/app/al/improve {field:'title'|'description', current_text, property_data (any dict — keys auto-mapped in _format_property_context: property_type/operation/city/zone/surface_sqm/rooms/bathrooms/energy.energy_class/features dict-or-list/price), target_lang:'it'|'en'|'es', tone:'standard'|'lusso'|'giovane'}. Returns {field,lang,tone,improved}. Auth required via httpOnly cookie set by /api/auth/login. No agency_id required. Audit goes to al_audit collection with kind='improve'. Frontend: AlImproveButton is a shared component mounted in PropertyFormPage.jsx (testIds prefixed 'al-improve-title-*' and 'al-improve-description-*') and in SellPage.jsx (testIds prefixed 'sell-al-improve-title-*' and 'sell-al-improve-description-*'). Modal auto-runs first generation on open; lang tab click re-runs generation; suggested panel is a <div> (use text_content() not input_value()) — the loader copy contains 'scrivendo' (IT) so poll until text length > 10 AND lacks 'scrivendo'. B2C SellPage UI test could not be fully executed in this run because the public /it/register form did not expose a visible account_type=b2c toggle (default registered as agent → /app/dashboard), so /it/cloud/sell rendered empty. Backend B2C path is confirmed via test_b2c_user_can_improve_title (registers via API with role='b2c'/account_type='b2c'/intent='sell' — backend accepts).",
+  "rca of the issue": "No bugs found. The Apply button correctly stays disabled while loading=true (confirmed in screenshot showing dimmed APPLICA during 'AL sta scrivendo...' phase). A naïve Playwright test using force=True click during loading WOULD fail to update the field — that is correct guard behavior, not a bug. The fix for the test (not the app) is to poll text_content() until the loader phrase 'scrivendo' is no longer present before clicking Apply. All AC items: 200 schema ✓, length constraints ✓, lang matrix ✓, validation 422 ✓, auth 401 ✓, B2C 200 ✓, no price leak ✓, audit log ✓, brand 'AL' uppercase ✓, UI triggers ✓, modal open/close ✓, lang switch regenerates ✓, regenerate produces variation ✓, apply replaces field ✓, cancel preserves field ✓."
+}

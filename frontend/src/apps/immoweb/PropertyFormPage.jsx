@@ -5,6 +5,7 @@ import AgencyShell from "./components/AgencyShell";
 import PhotoUploader from "./components/PhotoUploader";
 import PropertyMatchesPreview from "./components/PropertyMatchesPreview";
 import PublishingCenter from "./components/PublishingCenter";
+import AlImproveButton from "../../shared/components/AlImproveButton";
 import { api } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 
@@ -137,10 +138,30 @@ export default function PropertyFormPage() {
           {/* Basics */}
           <Section label={t("properties.section_basics")}>
             <Field label={t("properties.field_title")} required>
-              <input data-testid="prop-title" required value={form.title} onChange={(e) => upd("title", e.target.value)} className="form-input" />
+              <div className="flex items-start gap-2">
+                <input data-testid="prop-title" required value={form.title} onChange={(e) => upd("title", e.target.value)} className="form-input flex-1" />
+                <AlImproveButton
+                  field="title"
+                  value={form.title}
+                  propertyData={form}
+                  onApply={(text) => upd("title", text)}
+                  testId="al-improve-title"
+                />
+              </div>
             </Field>
             <Field label={t("properties.field_description")}>
-              <textarea value={form.description || ""} onChange={(e) => upd("description", e.target.value)} className="form-input h-24" />
+              <div className="space-y-2">
+                <textarea data-testid="prop-description" value={form.description || ""} onChange={(e) => upd("description", e.target.value)} className="form-input h-24" />
+                <div className="flex justify-end">
+                  <AlImproveButton
+                    field="description"
+                    value={form.description}
+                    propertyData={form}
+                    onApply={(text) => upd("description", text)}
+                    testId="al-improve-description"
+                  />
+                </div>
+              </div>
             </Field>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Field label={t("properties.field_type")}>

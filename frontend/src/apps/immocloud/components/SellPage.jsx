@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../../../shared/lib/api";
 import { useAuth, formatApiErrorDetail } from "../../../shared/lib/auth";
+import AlImproveButton from "../../../shared/components/AlImproveButton";
 
 const empty = {
   title: "",
@@ -233,8 +234,17 @@ export default function SellPage() {
           </h2>
 
           <Field label={t("cloud.sell.f_title")} required>
-            <input data-testid="sell-f-title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
-              required minLength={3} maxLength={200} className={inputCls} />
+            <div className="flex items-start gap-2">
+              <input data-testid="sell-f-title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
+                required minLength={3} maxLength={200} className={`${inputCls} flex-1`} />
+              <AlImproveButton
+                field="title"
+                value={form.title}
+                propertyData={form}
+                onApply={(text) => setForm({ ...form, title: text })}
+                testId="sell-al-improve-title"
+              />
+            </div>
           </Field>
 
           <div className="grid grid-cols-2 gap-3">
@@ -292,9 +302,20 @@ export default function SellPage() {
           </div>
 
           <Field label={t("cloud.sell.f_description")}>
-            <textarea data-testid="sell-f-description" rows={4} maxLength={10000}
-              value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className={inputCls} />
+            <div className="space-y-2">
+              <textarea data-testid="sell-f-description" rows={4} maxLength={10000}
+                value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className={inputCls} />
+              <div className="flex justify-end">
+                <AlImproveButton
+                  field="description"
+                  value={form.description}
+                  propertyData={form}
+                  onApply={(text) => setForm({ ...form, description: text })}
+                  testId="sell-al-improve-description"
+                />
+              </div>
+            </div>
           </Field>
 
           <div className="flex gap-3 pt-2">

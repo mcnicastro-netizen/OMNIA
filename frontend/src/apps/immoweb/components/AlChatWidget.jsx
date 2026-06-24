@@ -159,7 +159,7 @@ export default function AlChatWidget() {
         style={{ fontFamily: "'Fraunces', Georgia, serif" }}
         title={t("al.open_chat")}
       >
-        Al
+        AL
       </button>
     );
   }
@@ -171,7 +171,7 @@ export default function AlChatWidget() {
     >
       <header className="px-4 py-3 border-b border-stone-200 flex items-center justify-between bg-[#0B1E3F] text-white rounded-t-lg">
         <div>
-          <h3 className="font-light text-base" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>Al</h3>
+          <h3 className="font-light text-base" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>AL</h3>
           <p className="text-[10px] uppercase tracking-widest text-stone-300">{t("al.subtitle")}</p>
         </div>
         <div className="flex items-center gap-2">
