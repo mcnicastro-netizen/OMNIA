@@ -232,33 +232,34 @@ Vedi `test_credentials.md` (creato al primo deploy).
 
 ---
 
-## Changelog M5.S1 — Al for Agents (24-Giu-2026)
+## Changelog M5.S1 — AL for Agents (24-Giu-2026)
 
 ✅ **Backend** (`/app/backend/apps/immoweb/al_agent.py`):
 - POST `/api/app/al/chat` — chat sincrona con Gemini-3-Flash via emergentintegrations
 - **POST `/api/app/al/chat/stream`** — **streaming SSE token-by-token** (UX ChatGPT-style)
+- **POST `/api/app/al/improve`** — generazione inline titolo/descrizione (IT/EN/ES) usando snapshot del form immobile, no agency_id required (funziona anche per utenti B2C privati)
 - Pattern manuale JSON tool-use (la lib non supporta `tools=` nativi)
 - 5 tool whitelistati: `query_properties`, `query_clients`, `query_leads`, `monthly_performance`, `write_description`
 - Sicurezza multi-tenant: `agency_id` iniettato server-side dal JWT, mai dall'AI
-- Rate limit soft: 60 msg/utente/ora
+- Rate limit soft: 60 msg/utente/ora (chat + improve condividono contatore)
 - Sessioni persistenti (collection `al_sessions` + audit `al_audit`)
 - Error handling: budget esaurito → 503/SSE event `llm_budget_exceeded`
+- Brand: AL (maiuscolo) — system prompt aggiornato a "Sei AL,..."
 
-✅ **Frontend** (`/app/frontend/src/apps/immoweb/components/AlChatWidget.jsx`):
-- FAB rotondo "Al" bottom-24/right-6 montato in `AgencyShell`
-- Widget chat 360×520px con cronologia messaggi, suggerimenti
-- **Streaming live via fetch + ReadableStream** (parsing SSE frames)
-- **Stop button** per abortire generazione in corso
-- **Cursore lampeggiante** durante streaming + indicatore "Sto consultando il tuo CRM..."
-- Reset sessione + chiusura widget
-- i18n completo (`al.*`)
+✅ **Frontend**:
+- `/app/frontend/src/apps/immoweb/components/AlChatWidget.jsx` — FAB "AL" bottom-24/right-6, streaming live via fetch+ReadableStream, Stop button, cursore lampeggiante, i18n completo
+- **`/app/frontend/src/shared/components/AlImproveButton.jsx`** — componente riusabile ✨ "Migliora con AL" + modal con tabs IT/EN/ES, layout Originale | Suggerito, Apply/Regenerate/Cancel
+- Mount in `PropertyFormPage.jsx` (agente ImmoWeb): accanto a titolo + sotto descrizione
+- Mount in `SellPage.jsx` (privato B2C ImmobilCloud): accanto a titolo + sotto descrizione
+- Brand: tutto "Al" → "AL" in label UI + i18n (`al.open_chat`, `al.welcome`, ecc.)
 
 ✅ **P2 Fix — Chrome auto-translate**:
 - `<html lang="it" translate="no">` + `<meta name="google" content="notranslate">` + `<body class="notranslate">`
 
 ✅ **Test E2E**:
 - iteration_17.json — 100% backend (8/8) + 100% frontend (sync chat)
-- iteration_18.json — 100% backend (6/6) + 100% frontend (streaming SSE incrementale confermato)
+- iteration_18.json — 100% backend (6/6) + 100% frontend (streaming SSE incrementale)
+- iteration_19.json — 100% backend (13/13 pytest improve) + 100% frontend agent flow (IT/EN/regen/apply/cancel/brand AL)
 
 ---
 
