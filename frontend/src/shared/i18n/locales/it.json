@@ -848,6 +848,22 @@
     "cond_da_ristrutturare": "Da ristrutturare",
     "cond_ruderi_da_demolire": "Ruderi da demolire"
   },
+  "al": {
+    "open_chat": "Apri chat con Al",
+    "close": "Chiudi",
+    "new": "Nuova conversazione",
+    "subtitle": "il tuo assistente",
+    "welcome": "Ciao! Sono Al, il tuo assistente AI. Posso aiutarti con queste cose:",
+    "suggest_1": "Quanti immobili attivi ho a Roma?",
+    "suggest_2": "Mostrami i lead caldi della settimana",
+    "suggest_3": "Come va il mio mese?",
+    "suggest_4": "Scrivimi una descrizione per l'immobile ABC123",
+    "placeholder": "Scrivi qui...",
+    "send": "Invia",
+    "typing": "Al sta scrivendo...",
+    "err_generic": "Errore. Riprova tra un momento.",
+    "err_rate_limit": "Troppi messaggi in poco tempo. Riprova tra qualche minuto."
+  },
   "moderation": {
     "title": "Moderazione annunci privati",
     "subtitle": "Revisiona gli annunci pubblicati dagli utenti B2C prima che vadano live su ImmobilCloud.",

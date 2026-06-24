@@ -5,6 +5,7 @@ import { useAuth } from "../../../shared/lib/auth";
 import { api } from "../../../shared/lib/api";
 import Brand from "../../../shared/components/Brand";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher";
+import AlChatWidget from "./AlChatWidget";
 
 /**
  * AgencyShell — shared sidebar+topbar layout for all authenticated ImmoWeb pages.
@@ -195,6 +196,7 @@ export default function AgencyShell({ children, current = "dashboard" }) {
           {children}
         </main>
       </div>
+      <AlChatWidget />
     </div>
   );
 }
