@@ -1,0 +1,39 @@
+{
+  "summary": "M5.S3 AL Legal end-to-end test PASS. Backend: 16/16 pytest cases pass — health (sub_agents list + tavily/llm configured), auth gate (401 without cookies), 5/5 sub-agent routing (proposta=caparra, locazioni=cedolare, urbanistica=SCIA/CILA, catasto=voltura, general=mutuo 100%), full response schema {session_id, sub_agent, reply, citations, confidence, low_confidence, disclaimer}, multi-turn session reuse (history grows to >=4 msgs in al_legal_sessions), B2C user (registered via /api/cloud/auth/register with intents/gdpr_consent) can chat without agency_id, PDF analysis on a reportlab-generated valid PDF (page_count=1, sub_agent=pdf_analysis), 400 on .txt upload (only_pdf_allowed), 400 on >5MB PDF, sessions list/detail/delete (204) flow, al_legal_audit MongoDB collection persists chat row with kind/sub_agent/citation_count/confidence/unsupported_claims/validator_rationale. Frontend (/it/legal as super_admin): disclaimer modal opens on first visit, checkbox+accept closes it and localStorage 'omnia_legal_disclaimer_v1' = '1', chat sends 'Cos'è la caparra confirmatoria?' → thinking placeholder appears then disappears in ~15s, assistant message (1761 chars) renders with sub-agent badge 'PROPOSTE D'ACQUISTO', confidence pill 100%, sources list of 5 clickable URLs (Brocardi/Altalex/Codice Civile), inline citations [1]..[5] in reply, no 'CHAIN OF THOUGHT'/'Step 1' header leakage, footer disclaimer L.247/2012 visible. PDF tab switch shows dropzone/question/analyze button. Sidebar in AgencyShell shows '⚖AL Legal' nav item linking to /it/legal.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_m5s3_al_legal.py",
+    "/app/test_reports/pytest/m5s3_al_legal.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "router.py:56 _check_rate_limit counts BOTH chat AND pdf_analysis audit rows against the same 30/hr limit (good — both are expensive). Counter uses ISO-string ts comparison which works lexicographically only because they share identical zone+format; safer would be a Date object — but functionally correct today.",
+    "router.py:107 /chat does NOT have explicit B2C role guard — relies on get_current_user only. Verified test_b2c_can_chat passes: a 'client' role with account_type=b2c and agency_ids=[] can chat. Intentional per spec.",
+    "router.py:144 history fetch on every turn loads full session doc; for >100 turns this could grow but MAX_TURNS=6 keeps tail short.",
+    "router.py:184 /analyze-pdf reads the entire upload into memory before size check (extract_text_from_pdf raises ValueError for >5MB). Best practice would be to check file.size BEFORE file.read() to avoid OOM on malicious uploads — minor hardening opportunity.",
+    "router.py:195 filename extension check is case-insensitive (.pdf) — good. No MIME sniff, but extension check is sufficient for this MVP.",
+    "router.py:259 list sessions returns id/created_at/updated_at/message_count/preview — matches spec. Limit 30 — OK.",
+    "router.py:283 get session returns full document including all messages — no pagination. For chat history with images/long replies this could grow; consider trimming or paginating in v2.",
+    "router.py:287 DELETE returns 204 with no body — correct.",
+    "router.py:294 /health is unauthenticated and exposes whether TAVILY_API_KEY and EMERGENT_LLM_KEY are present (booleans only, no values) — acceptable.",
+    "validator.py CONFIDENCE_THRESHOLD=0.85 (per spec) — low_confidence flag correctly emitted when confidence < 0.85."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_m5s3_al_legal.py"
+  ],
+  "success_rate": {"backend": "100% (16/16 pytest)", "frontend": "100% — disclaimer modal/localStorage, chat send/thinking/response, sub-agent badge, confidence pill, sources panel with clickable URLs, PDF tab switch, sidebar AL Legal nav all verified"},
+  "test_credentials": "Super admin mcnicastro@gmail.com / Forzainter2026. (from /app/memory/test_credentials.md). B2C user dynamically created via /api/cloud/auth/register with email TEST_legal_b2c_<hex>@omnia.it, password B2cLegal2026!, intents=['sell'], gdpr_consent=true.",
+  "seed_data_creation": "1 TEST_legal_b2c_* user per backend test run. ~10 al_legal_sessions rows (admin + 1 b2c) and ~10 al_legal_audit rows (chat+pdf) created — audit/test data, not user-visible. Not auto-cleaned (consistent with existing test suite conventions).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "B2C register endpoint is /api/cloud/auth/register (NOT /api/auth/register). Payload: {email, password>=8, name, intents:['sell'|'rent_out'|'get_alerts'], notification_channels:['email'|'push'], lang:'it', gdpr_consent:true}. AL Legal endpoints under /api/app/legal/* (chat, analyze-pdf, sessions, sessions/{sid}, health). Tavily live key configured in /app/backend/.env (TAVILY_API_KEY). Each /chat costs ~1 Tavily + 2 LLM calls (main + validator) → total latency 15-25s. Use 90s+ timeouts for chat and 120s for PDF. Frontend disclaimer modal uses localStorage key 'omnia_legal_disclaimer_v1' (=='1' means accepted). Test took ~3 minutes for full backend suite (16 tests). Rate limit is 30/hr per user across BOTH chat and pdf audit rows.",
+  "rca of the issue": "No bugs to RCA. All 16 backend cases pass on first execution after correcting the B2C registration endpoint+payload (cloud_auth uses /cloud/auth/register with intents/gdpr_consent, not the standard /auth/register). All 7 frontend flows verified in a single Playwright run."
+}

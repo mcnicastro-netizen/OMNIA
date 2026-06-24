@@ -35,6 +35,7 @@ import PortalsPage from "@/apps/immoweb/PortalsPage";
 import WebsitePage from "@/apps/immoweb/WebsitePage";
 import ModerationPage from "@/apps/immoweb/ModerationPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
+import LegalApp from "@/apps/legal/LegalApp";
 
 import LoginPage from "@/apps/auth/LoginPage";
 import RegisterPage from "@/apps/auth/RegisterPage";
@@ -259,6 +260,16 @@ function App() {
 
                   {/* Academy */}
                   <Route path="learn/*" element={<AcademyApp />} />
+
+                  {/* AL Legal (M5.S3) — accessible to all authenticated users (agents + B2C) */}
+                  <Route
+                    path="legal"
+                    element={
+                      <ProtectedRoute>
+                        <LegalApp />
+                      </ProtectedRoute>
+                    }
+                  />
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
