@@ -160,11 +160,21 @@ _NOMINATIM_HEADERS = {"User-Agent": "OMNIA-Valuator/1.0 (mcnicastro@gmail.com)"}
 
 
 async def _lookup_province_via_nominatim(city: str) -> Optional[str]:
-    """Return a 2-letter province sigla (es. 'MI') by geocoding the city.
+    """Return a 2-letter province sigla (es. 'MI') for the given city.
 
-    Returns None on any failure (network, no result, etc.) — the caller
-    must fall back to the regional default.
+    Tries ANNCSU first (ISTAT-authoritative), Nominatim OSM as fallback.
+    Returns None on any failure — caller falls back to the regional default.
     """
+    # 1. ANNCSU (ISTAT) primary
+    try:
+        from apps.immocloud.anncsu import _try_anncsu
+        anncsu_result = await _try_anncsu(city)
+        if anncsu_result and anncsu_result.get("provincia_sigla") in PROVINCE_PRICES:
+            return anncsu_result["provincia_sigla"]
+    except Exception:
+        pass
+
+    # 2. Nominatim OSM fallback
     try:
         async with httpx.AsyncClient(timeout=_NOMINATIM_TIMEOUT) as client:
             r = await client.get(

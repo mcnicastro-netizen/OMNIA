@@ -37,15 +37,41 @@ const empty = {
   name: "", email: "",
 };
 
+const emptyPro = {
+  // UNI 10750 superfici (lasciate vuote = 0)
+  veranda_mq: "", terrazzo_mq: "", balcone_mq: "",
+  cantina_mq: "", soffitta_mq: "",
+  box_auto_mq: "", posto_auto_scoperto_mq: "",
+  giardino_villa_mq: "", giardino_condom_mq: "",
+  taverna_mq: "", mansarda_abitabile_mq: "",
+  // Merito
+  floor_class: "", exposure: "", view: "", heating: "", elevator: "",
+  year_built: "",
+  vincolo_storico: false, vincolo_paesag: false,
+  locazione_libera_breve: false, locazione_lunga: false, nuda_proprieta: false,
+};
+
+const FLOOR_CLASSES = [
+  "seminterrato", "piano_terra", "piano_1", "piano_intermedio",
+  "ultimo_no_asc", "ultimo_con_asc", "attico_panoramico",
+];
+const EXPOSURES = ["sud", "sud_est", "sud_ovest", "est", "ovest", "nord_est", "nord_ovest", "nord", "cieca", "doppia_esp"];
+const VIEWS = ["interno", "cortile", "strada", "verde", "panoramico", "mare", "lago_montagna"];
+const HEATINGS = ["autonomo", "centralizzato", "pompa_calore", "assente"];
+const ELEVATORS = ["presente", "presente_piano_alto", "assente_piano_basso", "assente_piano_alto"];
+
 export default function ValuatorPage() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
   const [form, setForm] = useState(empty);
+  const [pro, setPro] = useState(emptyPro);
+  const [proMode, setProMode] = useState(false);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
   const upd = (k, v) => setForm({ ...form, [k]: v });
+  const updPro = (k, v) => setPro({ ...pro, [k]: v });
 
   const submit = async (e) => {
     e.preventDefault();
@@ -56,10 +82,36 @@ export default function ValuatorPage() {
         if (payload[k] === "" || payload[k] == null) delete payload[k];
         else payload[k] = Number(payload[k]);
       });
-      // Clean empty strings
       Object.keys(payload).forEach((k) => {
         if (payload[k] === "") delete payload[k];
       });
+
+      // Pro mode: assemble commercial_surfaces + merit
+      if (proMode) {
+        const surfaceKeys = [
+          "veranda_mq", "terrazzo_mq", "balcone_mq", "cantina_mq", "soffitta_mq",
+          "box_auto_mq", "posto_auto_scoperto_mq", "giardino_villa_mq",
+          "giardino_condom_mq", "taverna_mq", "mansarda_abitabile_mq",
+        ];
+        const cs = {};
+        if (form.surface_sqm) cs.principale_mq = Number(form.surface_sqm);
+        surfaceKeys.forEach((k) => {
+          const v = pro[k];
+          if (v !== "" && v != null && Number(v) > 0) cs[k] = Number(v);
+        });
+        if (Object.keys(cs).length > 1) payload.commercial_surfaces = cs;
+
+        const merit = {};
+        ["floor_class", "exposure", "view", "heating", "elevator"].forEach((k) => {
+          if (pro[k]) merit[k] = pro[k];
+        });
+        if (pro.year_built && Number(pro.year_built) > 1700) merit.year_built = Number(pro.year_built);
+        ["vincolo_storico", "vincolo_paesag", "locazione_libera_breve", "locazione_lunga", "nuda_proprieta"].forEach((k) => {
+          if (pro[k]) merit[k] = true;
+        });
+        if (Object.keys(merit).length > 0) payload.merit = merit;
+      }
+
       const r = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,6 +131,8 @@ export default function ValuatorPage() {
   const reset = () => {
     setResult(null);
     setForm(empty);
+    setPro(emptyPro);
+    setProMode(false);
     setError("");
   };
 
@@ -202,6 +256,107 @@ export default function ValuatorPage() {
             <p className="text-[11px] text-stone-500 mt-2">{t("valuator.contact_hint")}</p>
           </section>
 
+          {/* PRO MODE — UNI 10750 + Merito */}
+          <section className="border-t border-stone-200 pt-6">
+            <label className="flex items-center gap-3 cursor-pointer mb-4" data-testid="val-pro-toggle">
+              <input
+                type="checkbox"
+                checked={proMode}
+                onChange={(e) => setProMode(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-sm font-medium text-[#0B1E3F]">
+                {t("valuator.pro_toggle")}
+              </span>
+              <span className="text-[10px] uppercase tracking-widest text-[#C19A6B] bg-[#FAF7F2] px-2 py-0.5 rounded">PRO</span>
+            </label>
+            {!proMode && (
+              <p className="text-[11px] text-stone-500">{t("valuator.pro_hint")}</p>
+            )}
+
+            {proMode && (
+              <div data-testid="val-pro-section" className="space-y-6 mt-2">
+                {/* UNI 10750 surfaces */}
+                <div>
+                  <h4 className="text-[11px] uppercase tracking-widest text-stone-500 mb-3">
+                    {t("valuator.pro_surfaces_title")} — UNI 10750
+                  </h4>
+                  <p className="text-[11px] text-stone-500 mb-3">{t("valuator.pro_surfaces_hint")}</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {[
+                      ["balcone_mq", "Balconi"],
+                      ["terrazzo_mq", "Terrazzi"],
+                      ["veranda_mq", "Verande"],
+                      ["cantina_mq", "Cantina"],
+                      ["soffitta_mq", "Soffitta"],
+                      ["box_auto_mq", "Box auto"],
+                      ["posto_auto_scoperto_mq", "Posto auto"],
+                      ["giardino_villa_mq", "Giardino villa"],
+                      ["giardino_condom_mq", "Giardino cond."],
+                      ["taverna_mq", "Taverna"],
+                      ["mansarda_abitabile_mq", "Mansarda abit."],
+                    ].map(([k, label]) => (
+                      <label key={k} className="block">
+                        <span className="text-[10px] uppercase tracking-widest text-stone-500">{label} (mq)</span>
+                        <input
+                          data-testid={`val-pro-${k}`}
+                          type="number" min="0" step="1"
+                          value={pro[k]}
+                          onChange={(e) => updPro(k, e.target.value)}
+                          className={inputCls}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Merit factors */}
+                <div>
+                  <h4 className="text-[11px] uppercase tracking-widest text-stone-500 mb-3">
+                    {t("valuator.pro_merit_title")}
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <SelectField testid="val-pro-floor-class" label="Piano" value={pro.floor_class} onChange={(v) => updPro("floor_class", v)} options={FLOOR_CLASSES} t={t} ns="floor_class" />
+                    <SelectField testid="val-pro-exposure" label="Esposizione" value={pro.exposure} onChange={(v) => updPro("exposure", v)} options={EXPOSURES} t={t} ns="exposure" />
+                    <SelectField testid="val-pro-view" label="Affaccio" value={pro.view} onChange={(v) => updPro("view", v)} options={VIEWS} t={t} ns="view" />
+                    <SelectField testid="val-pro-heating" label="Riscaldamento" value={pro.heating} onChange={(v) => updPro("heating", v)} options={HEATINGS} t={t} ns="heating" />
+                    <SelectField testid="val-pro-elevator" label="Ascensore" value={pro.elevator} onChange={(v) => updPro("elevator", v)} options={ELEVATORS} t={t} ns="elevator" />
+                    <label className="block">
+                      <span className="text-[10px] uppercase tracking-widest text-stone-500">Anno costruzione</span>
+                      <input
+                        data-testid="val-pro-year_built"
+                        type="number" min="1700" max="2030"
+                        value={pro.year_built}
+                        onChange={(e) => updPro("year_built", e.target.value)}
+                        className={inputCls}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {[
+                      ["vincolo_storico", "Vincolo storico-artistico"],
+                      ["vincolo_paesag", "Vincolo paesaggistico"],
+                      ["locazione_libera_breve", "Locato (contratto breve)"],
+                      ["locazione_lunga", "Locato (contratto lungo)"],
+                      ["nuda_proprieta", "Nuda proprietà"],
+                    ].map(([k, label]) => (
+                      <label key={k} className="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
+                        <input
+                          data-testid={`val-pro-${k}`}
+                          type="checkbox"
+                          checked={!!pro[k]}
+                          onChange={(e) => updPro(k, e.target.checked)}
+                        />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </section>
+
           {error && (
             <div data-testid="valuator-error" className="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded px-3 py-2">
               {error}
@@ -219,6 +374,27 @@ export default function ValuatorPage() {
 
       {result && <ValuationResult result={result} onReset={reset} lang={lang} />}
     </div>
+  );
+}
+
+function SelectField({ testid, label, value, onChange, options, t, ns }) {
+  return (
+    <label className="block">
+      <span className="text-[10px] uppercase tracking-widest text-stone-500">{label}</span>
+      <select
+        data-testid={testid}
+        value={value || ""}
+        onChange={(e) => onChange(e.target.value)}
+        className={inputCls}
+      >
+        <option value="">—</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {t(`valuator.${ns}_${o}`, o.replace(/_/g, " "))}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
@@ -256,6 +432,13 @@ function ValuationResult({ result, onReset, lang }) {
         </div>
       </div>
 
+      {/* Province fallback notice */}
+      {result.fallback_used === "province" && result.province_name && (
+        <div data-testid="r-province-fallback" className="bg-[#FAF7F2] border border-[#C19A6B]/40 rounded p-3 text-xs text-stone-700">
+          <strong>ℹ️ {t("valuator.r_province_fallback_title", "Comune non in dataset diretto")}</strong> — {t("valuator.r_province_fallback_body", `usata media provinciale di ${result.province_name} (${result.province_sigla}) come riferimento.`, { name: result.province_name, sigla: result.province_sigla })}
+        </div>
+      )}
+
       {/* Detail grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white border border-stone-200 rounded-lg p-5">
@@ -263,9 +446,19 @@ function ValuationResult({ result, onReset, lang }) {
             {t("valuator.r_inputs")}
           </h3>
           <dl className="text-sm space-y-1.5">
-            <Row label={t("valuator.r_city")} value={`${result.city_resolved || "—"} ${result.region ? `(${result.region})` : ""}`} />
+            <Row label={t("valuator.r_city")} value={`${result.city_resolved || (result.province_name || "—")} ${result.region ? `(${result.region})` : ""}`} />
             <Row label={t("valuator.r_zone")} value={result.zone_tier + (result.zone_explicit ? "" : ` (${t("valuator.r_inferred")})`)} />
             <Row label={t("valuator.r_surface")} value={`${result.surface_sqm} m²`} />
+            {result.surface?.commercial_mq && result.surface.commercial_mq !== result.surface_sqm && (
+              <Row
+                label={
+                  <span title="UNI 10750: superficie ponderata di balconi, terrazzi, cantine, box, ecc.">
+                    {t("valuator.r_commercial_mq", "Superficie commerciale (UNI 10750)")}
+                  </span>
+                }
+                value={<strong data-testid="r-commercial-mq">{result.surface.commercial_mq} m²</strong>}
+              />
+            )}
             <Row label={t("valuator.r_psm")} value={`${fmt(result.price_per_sqm.min)} — ${fmt(result.price_per_sqm.max)}`} />
           </dl>
         </div>
@@ -279,10 +472,58 @@ function ValuationResult({ result, onReset, lang }) {
             <Row label={t("valuator.r_mult_condition")} value={`× ${result.multipliers_applied.condition}`} />
             <Row label={t("valuator.r_mult_energy")} value={`× ${result.multipliers_applied.energy_class}`} />
             <Row label={t("valuator.r_mult_floor")} value={`× ${result.multipliers_applied.floor}`} />
+            {typeof result.multipliers_applied.merit_pct === "number" && result.multipliers_applied.merit_pct !== 0 && (
+              <Row
+                label={t("valuator.r_mult_merit", "Coefficiente di merito")}
+                value={<span data-testid="r-merit-pct">{(result.multipliers_applied.merit_pct * 100).toFixed(1)}%</span>}
+              />
+            )}
+            {typeof result.multipliers_applied.regional_pct === "number" && result.multipliers_applied.regional_pct !== 0 && (
+              <Row
+                label={t("valuator.r_mult_regional", "Coefficiente regionale")}
+                value={<span data-testid="r-regional-pct">{(result.multipliers_applied.regional_pct * 100).toFixed(2)}%</span>}
+              />
+            )}
             <Row label={<strong>{t("valuator.r_mult_total")}</strong>} value={<strong>× {result.multipliers_applied.total}</strong>} />
           </dl>
         </div>
       </div>
+
+      {/* Surface breakdown UNI 10750 */}
+      {result.surface?.breakdown && Object.keys(result.surface.breakdown).length > 1 && (
+        <div data-testid="r-surface-breakdown" className="bg-white border border-stone-200 rounded-lg p-5">
+          <h3 className="text-xs uppercase tracking-widest text-stone-500 mb-3 font-medium">
+            {t("valuator.r_surface_breakdown", "Componenti superficie commerciale UNI 10750")}
+          </h3>
+          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-xs">
+            {Object.entries(result.surface.breakdown).map(([k, v]) => (
+              <div key={k} className="flex justify-between">
+                <dt className="text-stone-500 capitalize">{k.replace(/_mq$/, "").replace(/_/g, " ")}</dt>
+                <dd className="font-medium">{v} m²</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+
+      {/* Merit breakdown */}
+      {result.merit_breakdown && Object.keys(result.merit_breakdown).length > 0 && (
+        <div data-testid="r-merit-breakdown" className="bg-white border border-stone-200 rounded-lg p-5">
+          <h3 className="text-xs uppercase tracking-widest text-stone-500 mb-3 font-medium">
+            {t("valuator.r_merit_breakdown", "Coefficienti di merito applicati")}
+          </h3>
+          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-xs">
+            {Object.entries(result.merit_breakdown).map(([k, v]) => (
+              <div key={k} className="flex justify-between">
+                <dt className="text-stone-500 capitalize">{k.replace(/_/g, " ")}</dt>
+                <dd className={`font-medium ${v > 0 ? "text-emerald-700" : v < 0 ? "text-rose-700" : ""}`}>
+                  {v > 0 ? "+" : ""}{(v * 100).toFixed(1)}%
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
 
       {/* Comparables */}
       {result.comparable_count > 0 && (
