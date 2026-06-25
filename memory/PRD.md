@@ -11,6 +11,7 @@
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
   - ⏸️ **In pausa**: founder ha richiesto pausa il 25-Giu-2026 (sera). Migrazione DNS → Cloudflare avviata, in attesa propagazione nameserver (1-24h).
   - 🎯 **Prossimo accesso**: verifica dominio Resend → test mail live → poi **banner CTA "Sei un agente immobiliare?"** sul Valuator/AL Legal → **manuale OMNIA** completo (per RAG AL Knowledge) → **ANNCSU Sprint 2** → opzionale **Code Review pre-produzione**.
+  - 📌 **LEGGERE PRIMA**: `/app/memory/NEXT_SESSION_TIPS.md` — contiene warm-up strategy, decisioni pendenti su banner CTA, struttura manuale, pricing tier, idee strategiche aperte.
 
 ---
 
