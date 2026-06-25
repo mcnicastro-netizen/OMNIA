@@ -227,3 +227,50 @@ Ordine di lettura raccomandato per il prossimo agente:
 ---
 
 **Buon lavoro, agente del futuro. Tieni alta l'asticella — qui stiamo costruendo qualcosa di serio.** 🚀
+
+---
+
+## 🐴 DEMO COME CAVALLO DI TROIA (decisione strategica founder 25-Giu-2026 notte)
+
+**Verbatim founder**: *"La demo deve essere il nostro cavallo di troia. Quella da sola deve convincere le agenzie a farci fare lo scraping."*
+
+### Implicazioni operative
+1. La **demo video da 3 minuti** è il **singolo asset più importante** dell'intera strategia di acquisition. Tutto il resto (cold email, LinkedIn, banner CTA, SEO) serve solo a portare l'agenzia davanti a questa demo.
+2. La demo deve generare reazione emotiva *"questa devo averla, qualunque cosa serva"* → solo a quel punto l'agenzia accetta lo scraping del gestionale legacy.
+3. **Sequenza di conversione mentale**:
+   - Step 1 (demo): "Wow questa è magia"
+   - Step 2 (offerta): "6 mesi gratis + 3 mesi pubblicità portale"
+   - Step 3 (onboarding): "Ti aggancio gratis al tuo gestionale attuale, niente cambio software"
+   - Step 4 (lock-in): dopo 9 mesi l'agenzia ha lead + clienti dentro OMNIA → non può più tornare indietro
+
+### Cosa serve per costruire questa demo (action items per quando si arriverà al punto)
+- 🎬 **Storyboard 3 minuti** strutturato per emozione: 30s problema → 90s soluzione magica (3 wow-moment) → 30s prova sociale → 30s CTA
+- 🎙️ **Voice-over professionale** in italiano (no agente AI, voce calda umana — costo ~€150 su Fiverr top tier)
+- 🎨 **Screen recording 4K** con Loom Pro o Screen Studio (€20-50/mese)
+- 🔥 **3 wow-moment imperdibili da mostrare**:
+  - AL Legal che risponde a una clausola complessa con citazione Cassazione precisa
+  - Valuator Pro che produce valutazione bank-grade in 5 secondi
+  - AI matching che trova il cliente perfetto per un nuovo annuncio in tempo reale
+- 📈 **Closing emotivo**: testimonial di 1 agente reale (anche se è un pilota free) che dice *"In 30 giorni di OMNIA ho chiuso più contratti che nei 6 mesi precedenti"*
+
+### KPI demo
+- **Open rate**: %  di chi clicca play sul video dopo aver ricevuto cold email
+- **Completion rate target**: 70%+ (sotto = video debole, da rifare)
+- **Conversion rate post-demo**: 5-10% click su CTA "Voglio provarla"
+- Se sotto al 3% → la demo NON è abbastanza forte, NON scalare cold outreach
+
+### Quando costruirla
+**MAI prima di**: avere Resend verificato + banner CTA + landing dedicata `/it/agenzie` + Founding pricing definito.
+**MAI dopo di**: aver bruciato 5.000 cold mail con demo mediocre. La demo è il **prerequisito**, non un asset secondario.
+
+---
+
+## 📝 Founder ha richiesto pausa per consulto esterno (25-Giu-2026 notte)
+> *"Ho bisogno di confrontarmi con qualcuno che mi schiarisca le idee. A domani."*
+
+Quando il founder torna, prima di tutto:
+1. Chiedere se ha avuto insight nuovi dal consulto
+2. Chiedere il numero di **mesi di runway personale** (l'agente precedente non ha avuto risposta — questa info cambia drasticamente il piano)
+3. Discutere insieme il calibro del MVP-100 (quali 12 feature core, quali 38 rimandate)
+4. Solo dopo, riprendere con verifica Resend e implementazione banner CTA
+
