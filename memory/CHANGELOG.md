@@ -1,5 +1,36 @@
 # OMNIA — Changelog
 
+## 2026-02-25 — ✅ M3.S6-pro GIS Valuator Pro + CTA Lead Funnel DONE
+
+**Valutatore immobiliare bank-grade nazionale + conversione automatica stima→lead.**
+
+### Implementato
+- 🇮🇹 **Copertura nazionale**: Nominatim live geocoding + fallback provinciale automatico per i comuni fuori dal dataset 161-city diretto (`/app/backend/apps/immocloud/anncsu.py`)
+- 📐 **UNI 10750 superfici commerciali**: principale 100%, balcone 30%, terrazzo 30-50%, veranda 60%, cantina 25-35%, soffitta 15-25%, box 50%, posto auto scoperto 20%, giardini 5-10%, taverna 50%, mansarda abitabile 60-80% (`/app/backend/apps/immocloud/data/coefficients.py`)
+- ⚖️ **Coefficienti di merito**: piano (-15% seminterrato → +15% attico panoramico), esposizione (-3% nord → +5% sud), affaccio (-5% interno → +12% mare), riscaldamento (-2% assente → +3% autonomo/pompa calore), ascensore, anno costruzione (deperimento + premio nuovo), vincoli (-10% storico/-7% paesaggistico), locazione (-8/-15%), nuda proprietà (-20%)
+- 🗺️ **Coefficienti regionali**: 20 regioni IT con micro-adjustment (es. Lombardia +1.25%, Calabria -2%)
+- 🧪 **Test**: 32 unit pytest + 5 live API pytest = **37/37 PASS** (`/app/backend/tests/test_m3s6_valuator_pro.py` + `test_m3s6_valuator_live_api.py`)
+- 🎨 **Frontend Pro mode toggle** (`ValuatorPage.jsx`): checkbox "Modalità Pro" → mostra 11 input mq superfici + 6 select merit (piano, esposizione, affaccio, riscaldamento, ascensore, anno) + 5 checkbox vincoli/locazione
+- 📊 **Risultato Pro**: hero stima + range, breakdown superficie commerciale UNI 10750, panel coefficienti merito applicati (verde/rosso), province-fallback notice per comuni piccoli
+- 💎 **CTA "Confronta con immobili simili in vendita"** sul pannello risultato → deep-link a `/:lang/cloud/search?operation=sale&city=X&property_type=Y&price_min=AVG*0.8&price_max=AVG*1.2` con filtri precompilati → funnel **Valutazione → Annunci comparabili → Saved-search (lead email)**
+
+### File modificati/creati
+- `/app/backend/apps/immocloud/valuator.py` (refactor con nuova schema commercial_surfaces + merit)
+- `/app/backend/apps/immocloud/data/coefficients.py` (NEW)
+- `/app/backend/apps/immocloud/data/province_prices.py` (NEW)
+- `/app/backend/apps/immocloud/anncsu.py` (NEW — fallback provinciale via Nominatim)
+- `/app/backend/tests/test_m3s6_valuator_pro.py` (NEW — 32 cases)
+- `/app/backend/tests/test_m3s6_valuator_live_api.py` (NEW — 5 cases)
+- `/app/frontend/src/apps/immocloud/components/ValuatorPage.jsx` (Pro mode UI + CTA Compare)
+- `/app/frontend/src/shared/i18n/locales/it.json` (+ key `r_compare_market`, `r_compare_market_hint`)
+
+### Bug fix
+- 🐛 **Bug fittizio**: la fork precedente segnalava un timeout Playwright su `/it/cloud/valuator` → in realtà la rotta italiana è `/it/cloud/valutatore`. Pagina sempre stata funzionante.
+- 📝 Il 401 da `/api/auth/me` su rotte pubbliche B2C è un probe globale benigno, non blocca il rendering.
+
+---
+
+
 ## 2026-06-24 — ✅ M5.S3 AL Legal DONE
 
 **Assistente legale immobiliare con web search + anti-hallucination — killer feature vs Agestanet (zero AI).**

@@ -1,57 +1,30 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 22 Giugno 2026
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.3) e `CHANGELOG.md`
+**Ultimo aggiornamento**: 25 Febbraio 2026
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.3), `CHANGELOG.md` e `BUSINESS_MODEL.md`
 
 ---
 
-## Stato attuale
+## Stato attuale (25-Feb-2026 — PAUSA founder)
 
-🟢 **M3 ✅ DONE (100%)** — Portale B2C ImmobilCloud feature-complete, funnel chiuso end-to-end con automazione email.
-
-```
-M1   M2   M3   M4  M5  M6
-✅   ✅   ✅   ⏸️   ⏸️   ⏸️
-100% 100% 100% 0%  0%  0%
-```
-
-### 🔥 Sessioni 19-22 Giugno 2026 — Riassunto sprint M3
-
-In 4 giorni reali completati 6 sprint M3:
-
-| Sprint | Data | Test report | Risultato |
-|---|---|---|---|
-| **M3.S1** Home B2C + Registrazione segmentata | 19 Giu | iter_8/9 | 100% PASS |
-| **M3.S2** Publishing Center lato agente | 19 Giu | iter_10 | 4+14 PASS |
-| **M3.S3** Mappa Leaflet + Filtri avanzati + Geocoding | 22 Giu | iter_11 | 14+18 PASS |
-| **M3.S4** Pagina dettaglio pubblica + Form contatto | 22 Giu | iter_12 | 10 PASS |
-| **M3.S4.1** Email lead notification Resend | 22 Giu | live smoke | EMAIL OK |
-| **M3.S5 v2** Annunci privati B2C + Moderazione admin | 22 Giu | iter_13/14 | 100% PASS (post bug fix) |
-| **M3.S6** Valutatore GIS pubblico (124 città IT) | 22 Giu | iter_15 | 50 pytest + 12 + 4 PASS |
-
-Test totali sprint M3: **~80 backend + ~55 frontend PASS**. 0 regressioni su M1/M2.
-
-### 🎯 Funnel B2C ImmobilCloud — Chiuso end-to-end
+🟢 **M1+M2+M3+M5.S1+M5.S3+M3.S6-pro ✅ DONE**
 
 ```
-Utente arriva → ricerca / mappa → dettaglio immobile → form contatto
-                                                       ↓
-                                            Lead in CRM agente
-                                            + EMAIL notification < 1s
-
-Utente B2C "intent=sell" → registrazione segmentata → /cloud/account/sell
-                                                    → annuncio pending
-                                                    → admin queue → approve
-                                                    → live pubblicamente
-
-Utente "voglio sapere quanto vale" → /cloud/valutatore → 124 città dataset
-                                                       → multipliers
-                                                       → stima istantanea
-                                                       → valuation_lead (high-intent)
+M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  M4   M5.S2  M5.S4  M6
+✅   ✅   ✅   ✅         ✅     ✅     ⏸️   ⏸️     ⏸️     ⏸️
+100% 100% 100% 100%       100%   100%   0%   0%     0%     0%
 ```
 
-### 🔴 Prossima sessione: M3.S7
-**Saved searches + alert email matching B2C**. Chiude il loop: l'utente cerca, salva la ricerca, riceve email quando arriva nuovo immobile compatibile.
+### ✅ Completato 25-Feb-2026
+- **M3.S6-pro GIS Valuator Pro**: copertura nazionale (Nominatim province fallback), UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno) + regionali + vincoli/locazione. 37/37 backend + 4/4 frontend E2E PASS.
+- **CTA Compare Market**: bottone dorato su pannello risultato → deep-link a `/it/cloud/search` con filtri precompilati (city + property_type + price ±20%) → funnel Valutazione → Lead.
+
+### 🔴 Prossima sessione (post-pausa)
+**Opzioni in ordine di priorità**:
+1. 🟡 **ANNCSU Sprint 2** — autocomplete/validazione indirizzi nel Valuator (P1, ~1 giorno)
+2. 🔍 **Code Review pre-produzione** — analisi statica completa codebase prima di entrare in M4 Stripe (P1, ~0.5 giorni, raccomandato prima del go-live)
+3. 🎨 **M5.S4 Virtual Staging** — fal.ai (SAM 2 + Flux Inpainting + Real-ESRGAN), **bloccato in attesa FAL_KEY founder**
+4. 📚 **M5.S2 AL Knowledge** — RAG sul manuale utente, **bloccato in attesa che il manuale sia scritto**
 
 
 ---
