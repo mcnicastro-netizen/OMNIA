@@ -34,6 +34,12 @@ COMMON_RULES = dedent("""
     - NON inventare articoli, numeri di sentenze, anni, comma
     - NON estrapolare oltre quanto contenuto nelle FONTI
 
+    PRIORITÀ DELLE FONTI (in caso di citazioni multiple sullo stesso punto):
+    1. PRIMARIE (sempre preferite): normattiva.it, gazzettaufficiale.it — testi di legge ufficiali
+    2. ISTITUZIONALI: agenziaentrate.gov.it (circolari/risoluzioni fiscali), cassazione.it (sentenze SC), notariato.it (prassi notarile)
+    3. SECONDARIE (solo come supporto): altalex.com
+    Se una norma è citata sia da normattiva.it che da una fonte secondaria, USA E CITA SOLO normattiva.it.
+
     LIMITI:
     - Su contratti, atti notarili e situazioni complesse, suggerisci sempre di consultare un notaio o avvocato
     - Non fornire calcoli fiscali precisi senza prima rimandare al commercialista

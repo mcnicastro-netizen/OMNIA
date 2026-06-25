@@ -18,14 +18,19 @@ TAVILY_URL = "https://api.tavily.com/search"
 TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY")
 
 # Authoritative Italian legal sources only (D-028).
+# Priority order: PRIMARY (state-published) first → SECONDARY (institutional) → TERTIARY (legal portals).
+# Tavily respects the include_domains list order as a soft hint; the result `score` is the real ranker.
+# Brocardi REMOVED (founder decision 25-Giu-2026): inconsistently reliable for binding citations.
 LEGAL_DOMAINS = [
-    "normattiva.it",
-    "gazzettaufficiale.it",
-    "agenziaentrate.gov.it",
-    "notariato.it",
-    "cassazione.it",
-    "altalex.com",          # secondary, widely cited legal portal
-    "brocardi.it",          # case-law commentary, useful for c.c. articles
+    # PRIMARY — state-published, binding source of truth
+    "normattiva.it",          # official gazzetta della Repubblica
+    "gazzettaufficiale.it",   # Gazzetta Ufficiale italiana
+    # SECONDARY — institutional, high authority
+    "agenziaentrate.gov.it",  # tax authority (circolari, risoluzioni)
+    "cassazione.it",          # Corte Suprema di Cassazione
+    "notariato.it",           # Consiglio Nazionale del Notariato
+    # TERTIARY — legal portals (well-cited, secondary references only)
+    "altalex.com",
 ]
 
 
