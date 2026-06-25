@@ -3,7 +3,7 @@
 **Versione**: 1.0
 **Data**: Gennaio 2026
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ 100% DONE + M5.S1 ✅ DONE** — Portale B2C ImmobilCloud feature-complete: Home + Registrazione segmentata + Publishing Center + Mappa Leaflet + Pagina dettaglio + Form contatto + Email lead notification + Pubblicazione privati con moderazione + Valutatore GIS (124 città IT) + Saved searches + Alert email matching. **Al for Agents (AI chatbot CRM)** completato e testato 24-Giu-2026. • Prossimo: **M5.S3 Al Legal** o **M5.S2 Al Knowledge** (in attesa manuale)
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ + M5.S1 ✅ + M5.S3 ✅ + M3.S6-pro ✅ DONE** — Aggiornamento 25-Feb-2026: **GIS Valuator Pro completato e testato 100% (37/37 backend + 4/4 frontend E2E)**. Copertura nazionale via Nominatim province fallback, UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno) + coefficienti regionali + vincoli/locazione. **AL Chatbot SSE streaming + AL Legal con Tavily anti-hallucination** completati. • Prossimo: **ANNCSU Sprint 2 (autocomplete indirizzi)** oppure **M5.S4 Virtual Staging** (in attesa FAL_KEY).
 
 ---
 
