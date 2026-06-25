@@ -1,6 +1,6 @@
 # OMNIA — Changelog
 
-## 2026-02-25 — ✅ M3.S6-pro GIS Valuator Pro + CTA Lead Funnel DONE
+## 2026-06-25 — ✅ M3.S6-pro GIS Valuator Pro + CTA Lead Funnel DONE
 
 **Valutatore immobiliare bank-grade nazionale + conversione automatica stima→lead.**
 

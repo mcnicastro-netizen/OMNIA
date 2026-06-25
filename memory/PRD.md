@@ -1,15 +1,15 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.0
-**Data**: Gennaio 2026 (ultimo update: 25-Feb-2026)
+**Data**: Gennaio 2026 (ultimo update: 25-Giu-2026)
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ + M3.S6-pro ✅ + M5.S1 ✅ + M5.S3 ✅ DONE** — Aggiornamento **25-Feb-2026**:
+- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ + M3.S6-pro ✅ + M5.S1 ✅ + M5.S3 ✅ DONE** — Aggiornamento **25-Giu-2026**:
   - ✅ **GIS Valuator Pro** completato e testato 100% (37/37 backend pytest + 4/4 frontend E2E). Copertura nazionale via Nominatim province fallback, UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno costruzione) + coefficienti regionali + vincoli/locazione.
   - ✅ **CTA "Confronta con immobili simili in vendita"** sul pannello risultato Valuator → trasforma ogni valutazione in lead funnel verso `/it/cloud/search` con filtri precompilati (città + tipologia + prezzo ±20%).
   - ✅ **AL Chatbot SSE streaming** + inline `AlImproveButton` ("✨ Migliora con AL") per copywriting.
   - ✅ **AL Legal** con Tavily web-search e validator anti-hallucination su `/it/legal`.
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
-  - ⏸️ **In pausa**: founder ha richiesto pausa il 25-Feb-2026.
+  - ⏸️ **In pausa**: founder ha richiesto pausa il 25-Giu-2026.
   - 🎯 **Prossimo**: **ANNCSU Sprint 2 (autocomplete indirizzi)** → poi opzionale **Code Review pre-produzione**, poi **M5.S4 Virtual Staging** (in attesa `FAL_KEY`).
 
 ---

@@ -1,11 +1,11 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 25 Febbraio 2026
+**Ultimo aggiornamento**: 25 Giugno 2026
 **Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.3), `CHANGELOG.md` e `BUSINESS_MODEL.md`
 
 ---
 
-## Stato attuale (25-Feb-2026 — PAUSA founder)
+## Stato attuale (25-Giu-2026 — PAUSA founder)
 
 🟢 **M1+M2+M3+M5.S1+M5.S3+M3.S6-pro ✅ DONE**
 
@@ -15,7 +15,7 @@ M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  M4   M5.S2  M5.S4  M6
 100% 100% 100% 100%       100%   100%   0%   0%     0%     0%
 ```
 
-### ✅ Completato 25-Feb-2026
+### ✅ Completato 25-Giu-2026
 - **M3.S6-pro GIS Valuator Pro**: copertura nazionale (Nominatim province fallback), UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno) + regionali + vincoli/locazione. 37/37 backend + 4/4 frontend E2E PASS.
 - **CTA Compare Market**: bottone dorato su pannello risultato → deep-link a `/it/cloud/search` con filtri precompilati (city + property_type + price ±20%) → funnel Valutazione → Lead.
 
