@@ -1,5 +1,45 @@
 # OMNIA — Changelog
 
+## 2026-06-25 (sera) — 🌐 Migrazione DNS → Cloudflare + Setup Resend con dominio verificato
+
+**Obiettivo**: sbloccare la verifica del dominio Resend (richiede MX custom che Aruba non supporta).
+
+### Completato
+- ✅ **AL Legal**: rimosso `brocardi.it` dalle fonti per decisione founder (non sempre attendibile). Riordinate `LEGAL_DOMAINS` in 3 tier (PRIMARIE/ISTITUZIONALI/SECONDARIE) con priorità a `normattiva.it`.
+- ✅ **Prompt AL Legal**: aggiunta regola esplicita *"Se una norma è citata sia da normattiva.it che da una fonte secondaria, USA E CITA SOLO normattiva.it"*.
+- ✅ **Resend Domain**: aggiunto `omniarealestateecosystem.it` su Resend (region eu-west-1). Domain ID `37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4`.
+- ✅ **DNS Aruba → Cloudflare migration** (D-029):
+  - Account Cloudflare creato con `info@omniarealestateecosystem.it` (piano Free)
+  - Importati tutti i record Aruba in automatico (A radice, 7×A mx, MX @, CNAME app/cloud/admin/www/_domainconnect, 3×TXT Resend)
+  - Aggiunto record MX `send` → `feedback-smtp.eu-west-1.amazonses.com` priorità 10 (quello bloccato da Aruba)
+  - Proxy correttamente impostati: 🟠 Proxy su sito web e radice, ☁️ DNS only su tutti gli `mx`, sui CNAME Emergent (`app`, `cloud`) e su tutti i record email
+  - Cambiati nameserver su Aruba: `brit.ns.cloudflare.com` + `jose.ns.cloudflare.com`
+- ✅ **SENDER_EMAIL** in `/app/backend/.env`: cambiato da `onboarding@resend.dev` → `OMNIA <info@omniarealestateecosystem.it>`
+- ✅ Backend riavviato
+
+### In attesa (al prossimo accesso)
+- ⏳ Propagazione nameserver Cloudflare (1-4 ore, max 24h)
+- ⏳ Verifica dominio Resend (`status: verified` su DKIM + SPF TXT + SPF MX)
+- ⏳ Test invio email live (controllo arrivo in INBOX, non spam)
+
+### File modificati
+- `/app/backend/apps/immoweb/al_legal/tavily.py` — rimosso brocardi.it, riordinate fonti
+- `/app/backend/apps/immoweb/al_legal/prompts.py` — regola priorità fonti
+- `/app/backend/.env` — SENDER_EMAIL
+- `/app/memory/RESEND_DOMAIN_GUIDE.md` — riscritto con stato migrazione completa
+
+### Note operative
+- ⚠️ Backend CORS si aspetta `learn.omniarealestateecosystem.it` ma su Cloudflare il CNAME è `cloud` (non `learn`). Da sistemare al prossimo accesso (aggiungere CNAME `learn` o modificare CORS).
+- 🛡️ DMARC in modalità `p=none` (monitor only). Da alzare a `p=quarantine` dopo 2 settimane senza problemi.
+- 📊 Bonus Cloudflare: CDN, SSL universale, anti-DDoS, propagazione veloce — tutto gratis incluso piano Free.
+
+### Decisioni
+- **D-028** (consolidata): Brocardi rimosso dalle fonti AL Legal.
+- **D-029**: DNS del dominio delegati a Cloudflare. Aruba resta registrar.
+
+---
+
+
 ## 2026-06-25 — ✅ M3.S6-pro GIS Valuator Pro + CTA Lead Funnel DONE
 
 **Valutatore immobiliare bank-grade nazionale + conversione automatica stima→lead.**

@@ -9,8 +9,8 @@
   - ✅ **AL Chatbot SSE streaming** + inline `AlImproveButton` ("✨ Migliora con AL") per copywriting.
   - ✅ **AL Legal** con Tavily web-search e validator anti-hallucination su `/it/legal`.
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
-  - ⏸️ **In pausa**: founder ha richiesto pausa il 25-Giu-2026.
-  - 🎯 **Prossimo**: **ANNCSU Sprint 2 (autocomplete indirizzi)** → poi opzionale **Code Review pre-produzione**, poi **M5.S4 Virtual Staging** (in attesa `FAL_KEY`).
+  - ⏸️ **In pausa**: founder ha richiesto pausa il 25-Giu-2026 (sera). Migrazione DNS → Cloudflare avviata, in attesa propagazione nameserver (1-24h).
+  - 🎯 **Prossimo accesso**: verifica dominio Resend → test mail live → poi **banner CTA "Sei un agente immobiliare?"** sul Valuator/AL Legal → **manuale OMNIA** completo (per RAG AL Knowledge) → **ANNCSU Sprint 2** → opzionale **Code Review pre-produzione**.
 
 ---
 

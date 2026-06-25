@@ -19,12 +19,20 @@ M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  M4   M5.S2  M5.S4  M6
 - **M3.S6-pro GIS Valuator Pro**: copertura nazionale (Nominatim province fallback), UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno) + regionali + vincoli/locazione. 37/37 backend + 4/4 frontend E2E PASS.
 - **CTA Compare Market**: bottone dorato su pannello risultato → deep-link a `/it/cloud/search` con filtri precompilati (city + property_type + price ±20%) → funnel Valutazione → Lead.
 
-### 🔴 Prossima sessione (post-pausa)
-**Opzioni in ordine di priorità**:
-1. 🟡 **ANNCSU Sprint 2** — autocomplete/validazione indirizzi nel Valuator (P1, ~1 giorno)
-2. 🔍 **Code Review pre-produzione** — analisi statica completa codebase prima di entrare in M4 Stripe (P1, ~0.5 giorni, raccomandato prima del go-live)
-3. 🎨 **M5.S4 Virtual Staging** — fal.ai (SAM 2 + Flux Inpainting + Real-ESRGAN), **bloccato in attesa FAL_KEY founder**
-4. 📚 **M5.S2 AL Knowledge** — RAG sul manuale utente, **bloccato in attesa che il manuale sia scritto**
+### 🔴 Prossima sessione (post-pausa, 25-Giu-2026 sera)
+**Ordine consigliato**:
+1. ⏳ **Verifica Resend domain** (5 min): controllare propagazione NS Cloudflare → forzare verify Resend → test mail live in inbox (NON spam). Se OK, eliminare anche record temporanei DNS Aruba se servono.
+2. 🟢 **Banner CTA "Sei un agente immobiliare?"** sul Valuator e AL Legal (P1, ~2 ore): copy + design + landing `/it/agenzie` con form interesse + counter "X/100 posti rimasti".
+3. 📝 **Setup Founding pricing**: definire 3 livelli gestionale (canone + crediti inclusi) + 3 livelli portale (15/50/70 annunci + boost). Calcolo unit economics dettagliato.
+4. 📚 **Manuale OMNIA completo** (P1, 6-10 ore): scrittura strutturata per moduli → input per RAG M5.S2 AL Knowledge.
+5. 🟡 **ANNCSU Sprint 2** — autocomplete/validazione indirizzi nel Valuator (~1 giorno).
+6. 🔍 **Code Review pre-produzione** — analisi statica codebase prima di Stripe/M4 (~0.5 giorni).
+7. 🎨 **M5.S4 Virtual Staging** — fal.ai (SAM 2 + Flux Inpainting + Real-ESRGAN), **bloccato in attesa FAL_KEY founder**.
+8. 🌐 **Analisi mercati Cina + Paesi Arabi** (P2): costi-benefici, barriere legali, partner locali.
+
+### 🟡 Bug noti / TODO tecnico
+- CORS backend si aspetta `learn.omniarealestateecosystem.it` ma CNAME su Cloudflare è `cloud`. Allineare al prossimo accesso.
+- Aggiungere CNAME `learn` su Cloudflare per Academy quando sarà costruita (P3).
 
 
 ---

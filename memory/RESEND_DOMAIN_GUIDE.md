@@ -1,121 +1,152 @@
-# 📧 GUIDA RESEND DOMAIN VERIFICATION
+# 📧 Resend Domain Setup — OMNIA
 
-> **Obiettivo**: Verificare il dominio `omniarealestateecosystem.it` su Resend per inviare email transazionali (welcome, password reset, notifiche) da `noreply@omniarealestateecosystem.it`.
-> **Stato attuale**: ⏸️ SKIPPED in M1.S4 (Founder ha scelto default per ora, sandbox attiva).
-> **Sblocco**: Da fare prima di onboarding reale agenzie in M2.
-
----
-
-## ⚠️ LIMITE SANDBOX ATTUALE
-
-Senza dominio verificato, Resend permette di inviare email **solo all'indirizzo email del proprietario dell'account Resend** (cioè `mcnicastro@gmail.com`).
-
-Configurazione corrente in `/app/backend/.env`:
-```env
-SENDER_EMAIL="onboarding@resend.dev"
-```
-
-Questo basta per testing dell'admin, ma **NON** funziona quando si registreranno utenti reali (non riceveranno email).
+**Stato attuale**: ⏳ **PENDING VERIFICATION** (in attesa propagazione nameserver Cloudflare)
+**Ultimo aggiornamento**: 25 Giugno 2026
 
 ---
 
-## 📋 STEP 1 — Aggiungi il dominio su Resend
+## 🎯 Configurazione finale
 
-1. Login: https://resend.com/domains
-2. Click **"Add Domain"**
-3. Inserisci: `omniarealestateecosystem.it`
-4. Scegli la regione più vicina: **EU (West)** raccomandata per GDPR
-5. Resend mostrerà 3-4 record DNS da aggiungere
+| Parametro | Valore |
+|---|---|
+| **Sender email** | `OMNIA <info@omniarealestateecosystem.it>` |
+| **Dominio Resend** | `omniarealestateecosystem.it` |
+| **Resend Domain ID** | `37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4` |
+| **Region** | `eu-west-1` (GDPR-compliant) |
+| **API Key** | `RESEND_API_KEY` in `/app/backend/.env` |
+| **DNS provider** | **Cloudflare** (delegato da Aruba) |
+| **Nameserver Cloudflare** | `brit.ns.cloudflare.com`, `jose.ns.cloudflare.com` |
+| **Registrar** | Aruba (resta come registrar) |
 
 ---
 
-## 📋 STEP 2 — Aggiungi i record DNS
+## 🛣️ Storia della migrazione DNS (25-Giu-2026)
 
-Esempio di record che Resend genererà (i valori esatti li vedi nel tuo pannello):
+### Tentativo 1: Aruba DNS diretto
+Inseriti 3 record TXT su Aruba via pannello DNS:
+- ✅ `resend._domainkey` (DKIM)
+- ✅ `send` (SPF TXT)
+- ❌ `send` MX → **Aruba non permette MX custom** (limitazione strutturale)
 
-### SPF (autorizza Resend a inviare per tuo conto)
-| Tipo | Host | Valore |
-|---|---|---|
-| `TXT` | `send` | `v=spf1 include:amazonses.com ~all` |
+Risultato: dominio Resend resta `pending` perché manca il record MX.
 
-### DKIM (firma crittografica)
-| Tipo | Host | Valore |
-|---|---|---|
-| `TXT` | `resend._domainkey` | `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GN...` (chiave lunga) |
+### Tentativo 2: Migrazione DNS → Cloudflare
+**Decisione (D-029)**: spostare i DNS del dominio su Cloudflare mantenendo Aruba come registrar.
+**Motivazione**:
+- Cloudflare supporta tutti i tipi di record (incluso MX custom su sottodominio)
+- Gratis
+- Bonus: CDN, SSL universale, anti-DDoS, propagazione veloce
+- Reversibile
 
-### DMARC (policy anti-spoofing — raccomandato)
-| Tipo | Host | Valore |
-|---|---|---|
-| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:postmaster@omniarealestateecosystem.it` |
+**Procedura completata**:
+1. Creato account Cloudflare con `info@omniarealestateecosystem.it`
+2. Aggiunto dominio `omniarealestateecosystem.it` → piano Free
+3. Cloudflare ha importato automaticamente tutti i record Aruba
+4. Configurati proxy correttamente:
+   - 🟠 Proxy ON: `@` (radice), `www`, `admin`, `_domainconnect`
+   - ☁️ DNS only: tutti gli `mx` (mail Aruba), `app`, `cloud`, tutti i TXT, tutti gli MX
+5. Aggiunto record MX `send` → `feedback-smtp.eu-west-1.amazonses.com` priorità 10
+6. Cambiati nameserver su Aruba: `brit.ns.cloudflare.com` + `jose.ns.cloudflare.com`
+7. ⏳ In attesa propagazione (1-4 ore tipico, max 24h)
 
-### MX (per ricevere reply se SENDER è onreply@...)
-| Tipo | Host | Valore | Priority |
+---
+
+## 📋 Record DNS finali su Cloudflare
+
+### Site
+| Tipo | Nome | Valore | Proxy |
 |---|---|---|---|
-| `MX` | `send` | `feedback-smtp.eu-west-1.amazonses.com` | 10 |
+| A | @ | 172.66.2.113 | 🟠 |
+| A | @ | 162.159.142.117 | 🟠 |
+| CNAME | www | omniarealestateecosystem.it | 🟠 |
+| CNAME | admin | admin.redirect.aruba.it | 🟠 |
+| CNAME | _domainconnect | _domainconnect.hst.aruba.it | 🟠 |
+
+### Email Aruba (mail principale @omniarealestateecosystem.it)
+| Tipo | Nome | Valore | Priorità | Proxy |
+|---|---|---|---|---|
+| MX | @ | mx.omniarealestateecosystem.it | 10 | ☁️ |
+| A | mx | 62.149.128.74 / .151 / .154 / .157 / .160 / .163 / .166 | — | ☁️ (×7) |
+
+### Subdomain OMNIA → Emergent preview
+| Tipo | Nome | Valore | Proxy |
+|---|---|---|---|
+| CNAME | app | audit-tool-12.emergent.host | ☁️ |
+| CNAME | cloud | audit-tool-12.emergent.host | ☁️ |
+
+⚠️ **TODO**: aggiungere CNAME `learn` → `audit-tool-12.emergent.host` (per Academy). Backend CORS si aspetta `learn.omniarealestateecosystem.it`.
+
+### Resend (email transazionale OMNIA)
+| Tipo | Nome | Valore | Priorità |
+|---|---|---|---|
+| TXT | resend._domainkey | `p=MIGfMA0GCSqG...wIDAQAB` (DKIM) | — |
+| TXT | send | `v=spf1 include:amazonses.com ~all` (SPF) | — |
+| MX | send | feedback-smtp.eu-west-1.amazonses.com | 10 |
+| TXT | _dmarc | `v=DMARC1; p=none; rua=mailto:info@omniarealestateecosystem.it; pct=100; adkim=s; aspf=s` | — |
 
 ---
 
-## 📋 STEP 3 — Configura DNS sul registrar
+## 🔄 Cosa fare al prossimo accesso
 
-Procedura identica a `DNS_SETUP_GUIDE.md` step 1: vai sul pannello DNS del registrar e aggiungi i 4 record qui sopra.
-
-⏱️ Propagazione: 5-30 min nella maggior parte dei casi.
-
----
-
-## 📋 STEP 4 — Verifica su Resend
-
-Torna su https://resend.com/domains → click sul dominio → bottone **"Verify DNS Records"**.
-
-Dovresti vedere ✅ verde su tutti e 3 i record. Se ne manca uno, Resend ti dice quale.
-
----
-
-## 📋 STEP 5 — Aggiorna SENDER_EMAIL
-
-Una volta verificato il dominio, aggiorna `/app/backend/.env`:
-
-```env
-SENDER_EMAIL="noreply@omniarealestateecosystem.it"
-SUPPORT_EMAIL="support@omniarealestateecosystem.it"
-```
-
-Restart: `sudo supervisorctl restart backend`
-
----
-
-## 📋 STEP 6 — Test email reale
-
+### 1. Verificare propagazione nameserver
 ```bash
-curl -X POST https://api.omniarealestateecosystem.it/api/auth/forgot-password \
-  -H "Content-Type: application/json" \
-  -d '{"email":"tuo-altro-indirizzo@gmail.com"}'
+python3 -c "
+import httpx
+r = httpx.get('https://dns.google/resolve', params={'name':'omniarealestateecosystem.it','type':'NS'})
+print(r.json())
+"
 ```
+Atteso: 2 nameserver Cloudflare (`brit.ns.cloudflare.com`, `jose.ns.cloudflare.com`).
 
-Controlla l'inbox dell'indirizzo. L'email deve arrivare da `noreply@omniarealestateecosystem.it`.
+### 2. Forzare verifica dominio Resend
+```bash
+cd /app/backend && python3 << 'EOF'
+import os, httpx
+from dotenv import load_dotenv
+load_dotenv('/app/backend/.env')
+key = os.environ.get('RESEND_API_KEY')
+DOMAIN_ID = '37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4'
+httpx.post(f'https://api.resend.com/domains/{DOMAIN_ID}/verify', headers={'Authorization': f'Bearer {key}'}, timeout=15)
+r = httpx.get(f'https://api.resend.com/domains/{DOMAIN_ID}', headers={'Authorization': f'Bearer {key}'}, timeout=15)
+print(r.json())
+EOF
+```
+Atteso: `status: verified` su tutti e 3 i record (DKIM, SPF TXT, SPF MX).
+
+### 3. Test invio email live
+```bash
+cd /app/backend && python3 << 'EOF'
+import os, resend
+from dotenv import load_dotenv
+load_dotenv('/app/backend/.env')
+resend.api_key = os.environ.get('RESEND_API_KEY')
+r = resend.Emails.send({
+    'from': os.environ.get('SENDER_EMAIL'),
+    'to': ['mcnicastro@gmail.com'],
+    'subject': '[OMNIA] Verifica dominio Resend - PASSED',
+    'html': '<h1>OMNIA Resend Domain Verified</h1><p>Mail di test dal sender ufficiale.</p>'
+})
+print(r)
+EOF
+```
+Verificare arrivo in **INBOX** (non spam) con sender pulito `OMNIA <info@omniarealestateecosystem.it>`.
+
+### 4. Setup webhook bounce (opzionale, raccomandato)
+Andare su Resend Dashboard → Webhooks → aggiungere endpoint POST per ricevere notifiche bounce/complaint in tempo reale.
 
 ---
 
-## 🎯 CHECKLIST
+## 🚨 Troubleshooting
 
-- [ ] Dominio aggiunto su Resend
-- [ ] SPF/DKIM/DMARC configurati sul DNS
-- [ ] Verifica DNS su Resend ✅ verde
-- [ ] `SENDER_EMAIL` aggiornato in backend `.env`
-- [ ] Test invio a email esterna riuscito
-- [ ] Aggiornare `/app/memory/PRD.md` per chiudere issue "Resend Sandbox"
-
----
-
-## 🚨 ALTERNATIVE SE RESEND BLOCCA
-
-Se Resend dovesse darti problemi (es: account non approvato per produzione):
-- **Postmark** (https://postmarkapp.com) — eccellente per transazionali, $15/mese 10k email
-- **Brevo / SendinBlue** — gratis fino a 300/giorno
-- **AWS SES** — economico ma più complesso da configurare
-
-Decisione attuale (D-009): **Resend confermato**. Non cambiare senza autorizzazione Founder.
+| Sintomo | Causa | Fix |
+|---|---|---|
+| `status: pending` su tutti i record | Nameserver Cloudflare non propagati | Aspetta, max 24h |
+| `status: pending` solo su MX `send` | MX non propagato | Aspetta, max 1h dopo propagazione NS |
+| Mail finisce in spam | DMARC `p=none` (modalità monitor) | OK per ora, dopo 2 settimane senza problemi alzare a `p=quarantine` |
+| Mail Aruba `@omniarealestateecosystem.it` non funziona | Record `mx` A o MX `@` con proxy ON | Rimettere "DNS only" |
+| Sito B2C non risponde | CNAME `app` o `cloud` proxied | Rimettere "DNS only" |
 
 ---
 
-*Quando sei pronto a verificare il dominio Resend, riapri questa guida.*
+## 📌 Decision log
+- **D-029** (25-Giu-2026): Migrazione DNS Aruba → Cloudflare per sbloccare verifica dominio Resend. Aruba mantiene il ruolo di registrar.
