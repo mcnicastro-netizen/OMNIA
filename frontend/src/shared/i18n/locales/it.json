@@ -839,6 +839,8 @@
     "r_methodology": "Metodologia di calcolo",
     "r_data_source": "Fonte dati",
     "r_recompute": "Nuova stima",
+    "r_compare_market": "Confronta con immobili simili in vendita",
+    "r_compare_market_hint": "Vedi annunci nella stessa città e tipologia con prezzo entro ±20% della stima",
     "r_lead_thanks": "Riceverai la valutazione completa via email. Un agente OMNIA potrà contattarti per una perizia approfondita.",
     "cond_nuovo": "Nuovo",
     "cond_ristrutturato": "Ristrutturato",

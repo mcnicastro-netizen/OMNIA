@@ -372,7 +372,7 @@ export default function ValuatorPage() {
         </form>
       )}
 
-      {result && <ValuationResult result={result} onReset={reset} lang={lang} />}
+      {result && <ValuationResult result={result} onReset={reset} lang={lang} formCity={form.city} formType={form.property_type} />}
     </div>
   );
 }
@@ -398,7 +398,7 @@ function SelectField({ testid, label, value, onChange, options, t, ns }) {
   );
 }
 
-function ValuationResult({ result, onReset, lang }) {
+function ValuationResult({ result, onReset, lang, formCity, formType }) {
   const { t } = useTranslation();
   const fmt = (n) => `€ ${Math.round(n).toLocaleString("it-IT")}`;
   const confColor = {
@@ -406,6 +406,19 @@ function ValuationResult({ result, onReset, lang }) {
     medium: "bg-amber-100 text-amber-800 border-amber-200",
     low: "bg-stone-100 text-stone-800 border-stone-200",
   }[result.confidence] || "bg-stone-100 text-stone-800 border-stone-200";
+
+  // Build "Confronta con immobili simili" deep-link to /:lang/cloud/search
+  // City from form (raw user input), property_type from form, price range ±20%
+  const avg = result.estimated_value?.avg || 0;
+  const priceMin = Math.max(0, Math.round(avg * 0.8));
+  const priceMax = Math.round(avg * 1.2);
+  const compareParams = new URLSearchParams();
+  compareParams.set("operation", "sale");
+  if (formCity) compareParams.set("city", formCity);
+  if (formType) compareParams.set("property_type", formType);
+  if (priceMin > 0) compareParams.set("price_min", String(priceMin));
+  if (priceMax > 0) compareParams.set("price_max", String(priceMax));
+  const compareUrl = `/${lang}/cloud/search?${compareParams.toString()}`;
 
   return (
     <div data-testid="valuator-result" className="space-y-6">
@@ -567,6 +580,14 @@ function ValuationResult({ result, onReset, lang }) {
 
       {/* CTA */}
       <div className="flex flex-wrap gap-3 pt-4">
+        <Link
+          to={compareUrl}
+          data-testid="r-compare-market"
+          className="px-6 py-3 bg-[#C19A6B] text-white text-sm uppercase tracking-widest font-medium rounded hover:bg-[#a8845a] transition inline-flex items-center gap-2"
+          title={t("valuator.r_compare_market_hint")}
+        >
+          {t("valuator.r_compare_market")} →
+        </Link>
         <button
           onClick={onReset} data-testid="r-recompute"
           className="px-6 py-3 border border-stone-300 text-sm uppercase tracking-widest rounded hover:bg-stone-50"
