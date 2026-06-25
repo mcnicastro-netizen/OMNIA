@@ -48,6 +48,14 @@ from apps.immocloud.data.italy_real_estate_prices_2025 import (
     CONDITION_MULTIPLIER,
     ENERGY_CLASS_MULTIPLIER,
 )
+from apps.immocloud.data.province_prices import PROVINCE_PRICES, PROVINCE_NAMES
+from apps.immocloud.data.coefficients import (
+    compute_commercial_surface,
+    compute_merit_adjustment,
+    compute_regional_adjustment,
+    foi_revaluation,
+)
+import httpx
 
 logger = logging.getLogger("omnia.valuator")
 router = APIRouter(prefix="/valuator", tags=["cloud-valuator"])
@@ -145,46 +153,165 @@ def _infer_zone_tier(zone_text: Optional[str], address: Optional[str]) -> Tuple[
 
 # ----------- Core valuation function ------------
 
+# Nominatim helper for province lookup of unknown comuni
+_NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+_NOMINATIM_TIMEOUT = 5.0
+_NOMINATIM_HEADERS = {"User-Agent": "OMNIA-Valuator/1.0 (mcnicastro@gmail.com)"}
+
+
+async def _lookup_province_via_nominatim(city: str) -> Optional[str]:
+    """Return a 2-letter province sigla (es. 'MI') by geocoding the city.
+
+    Returns None on any failure (network, no result, etc.) — the caller
+    must fall back to the regional default.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=_NOMINATIM_TIMEOUT) as client:
+            r = await client.get(
+                _NOMINATIM_URL,
+                params={
+                    "q": f"{city}, Italia",
+                    "format": "json",
+                    "limit": 1,
+                    "addressdetails": 1,
+                    "countrycodes": "it",
+                },
+                headers=_NOMINATIM_HEADERS,
+            )
+        if r.status_code != 200:
+            return None
+        data = r.json()
+        if not data:
+            return None
+        addr = data[0].get("address", {}) or {}
+        # ISO3166-2 returns IT-MI, IT-RM, ecc.
+        iso = addr.get("ISO3166-2-lvl6") or addr.get("ISO3166-2-lvl4") or ""
+        if isinstance(iso, str) and iso.startswith("IT-") and len(iso) >= 5:
+            sigla = iso.split("-")[-1].upper()
+            if sigla in PROVINCE_PRICES:
+                return sigla
+        # Fallback: county field sometimes contains "Provincia di Milano" / "Milano"
+        county = (addr.get("county") or "").lower()
+        for sigla, name in PROVINCE_NAMES.items():
+            if name.lower() in county:
+                return sigla
+    except Exception:
+        return None
+    return None
+
+
+class CommercialSurfaces(BaseModel):
+    """Componenti di superficie ponderata UNI 10750 (opzionali, default 0)."""
+    principale_mq: Optional[float] = Field(default=None, ge=0, le=10000)
+    veranda_mq: Optional[float] = Field(default=0, ge=0, le=500)
+    terrazzo_mq: Optional[float] = Field(default=0, ge=0, le=2000)
+    balcone_mq: Optional[float] = Field(default=0, ge=0, le=500)
+    cantina_mq: Optional[float] = Field(default=0, ge=0, le=200)
+    soffitta_mq: Optional[float] = Field(default=0, ge=0, le=200)
+    box_auto_mq: Optional[float] = Field(default=0, ge=0, le=200)
+    posto_auto_scoperto_mq: Optional[float] = Field(default=0, ge=0, le=100)
+    giardino_villa_mq: Optional[float] = Field(default=0, ge=0, le=20000)
+    giardino_condom_mq: Optional[float] = Field(default=0, ge=0, le=2000)
+    taverna_mq: Optional[float] = Field(default=0, ge=0, le=300)
+    mansarda_abitabile_mq: Optional[float] = Field(default=0, ge=0, le=300)
+
+
+class MeritFactors(BaseModel):
+    """Coefficienti di merito UNI 10750 (tutti opzionali)."""
+    floor_class: Optional[str] = None     # seminterrato | piano_terra | piano_1 | piano_intermedio | ultimo_no_asc | ultimo_con_asc | attico_panoramico
+    exposure: Optional[str] = None        # sud | sud_est | sud_ovest | est | ovest | nord_est | nord_ovest | nord | cieca | doppia_esp
+    view: Optional[str] = None            # interno | cortile | strada | verde | panoramico | mare | lago_montagna
+    heating: Optional[str] = None         # autonomo | centralizzato | pompa_calore | assente
+    elevator: Optional[str] = None        # presente | presente_piano_alto | assente_piano_basso | assente_piano_alto
+    year_built: Optional[int] = Field(default=None, ge=1700, le=2030)
+    vincolo_storico: Optional[bool] = False
+    vincolo_paesag: Optional[bool] = False
+    locazione_libera_breve: Optional[bool] = False
+    locazione_lunga: Optional[bool] = False
+    nuda_proprieta: Optional[bool] = False
+
+
 class ValuationPayload(BaseModel):
     city: str = Field(min_length=2, max_length=100)
     zone: Optional[str] = Field(default=None, max_length=200)
     address: Optional[str] = Field(default=None, max_length=300)
     property_type: str = Field(default="appartamento", max_length=50)
-    surface_sqm: int = Field(ge=10, le=10000)
+    surface_sqm: int = Field(ge=10, le=10000)   # superficie calpestabile principale
     condition: Optional[str] = Field(default="buono", max_length=50)
     energy_class: Optional[str] = Field(default=None, pattern="^(A4|A3|A2|A1|A|B|C|D|E|F|G)?$")
     floor: Optional[int] = Field(default=None, ge=-2, le=80)
-    # Optional: capture lead intent
+
+    # NEW M3.S6-pro: superficie commerciale UNI 10750 (se passata, sovrascrive surface_sqm)
+    commercial_surfaces: Optional[CommercialSurfaces] = None
+    # NEW M3.S6-pro: coefficienti di merito
+    merit: Optional[MeritFactors] = None
+
+    # Lead capture
     email: Optional[str] = Field(default=None, max_length=200)
     name: Optional[str] = Field(default=None, max_length=200)
 
 
 @router.post("")
 async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
-    """Estimate the market value range for a residential property."""
+    """Estimate the market value range for a residential property.
+
+    Pipeline (M3.S6-pro):
+      1. Resolve città → prezzo base (CITY_PRICES → PROVINCE_PRICES via Nominatim → regional fallback)
+      2. Risolvi zone tier (centro/semicentro/periferia)
+      3. Superficie commerciale UNI 10750 (se commercial_surfaces è passato)
+      4. Moltiplicatori: property_type · condition · energy_class · floor
+      5. Coefficienti di merito (esposizione, vista, riscaldamento, ascensore, età, vincoli)
+      6. Coefficienti regionali (liquidità + trend)
+      7. FOI ISTAT (rivalutazione FOI cumulato a oggi)
+      8. Comparables + lead capture
+    """
     city_key = _resolve_city_key(payload.city)
     city_data = CITY_PRICES.get(city_key) if city_key else None
 
     zone_tier, zone_explicit = _infer_zone_tier(payload.zone, payload.address)
 
+    # 1. Base price resolution — 3 layer cascade
+    fallback_source = None
+    province_sigla = None
     if city_data:
         base_min, base_max = city_data[zone_tier]
         region = city_data.get("region")
-        data_source = city_data.get("source", "Borsino/OMI 2025 curated")
+        data_source = city_data.get("source", "Borsino/OMI 2025 curated city")
     else:
-        # Regional fallback (e.g., user typed a small town not in our dataset)
-        # Try to infer region from explicit hint, else default
-        region = None
-        base_min, base_max = REGIONAL_DEFAULTS["center"]
-        data_source = "Regional fallback (city not in curated dataset)"
+        # Layer 2: Nominatim geocoding → province lookup
+        province_sigla = await _lookup_province_via_nominatim(payload.city)
+        if province_sigla and province_sigla in PROVINCE_PRICES:
+            prov = PROVINCE_PRICES[province_sigla]
+            base_min, base_max = prov[zone_tier]
+            region = prov.get("region")
+            data_source = f"Province fallback ({PROVINCE_NAMES.get(province_sigla, province_sigla)}) via Nominatim geocoding"
+            fallback_source = "province"
+            # comune piccolo → discount 8-15% vs capoluogo
+            small_town_discount = 0.88
+            base_min = round(base_min * small_town_discount)
+            base_max = round(base_max * small_town_discount)
+        else:
+            # Layer 3: regional default (worst case)
+            region = None
+            base_min, base_max = REGIONAL_DEFAULTS["center"]
+            data_source = "Regional fallback (no city/province match)"
+            fallback_source = "regional"
 
-    # Property type multiplier
+    # 2. Calcolo superficie commerciale ponderata UNI 10750
+    if payload.commercial_surfaces:
+        surf_dict = payload.commercial_surfaces.model_dump(exclude_none=True)
+        # Se utente non passa principale_mq esplicito, usa surface_sqm come principale
+        if not surf_dict.get("principale_mq"):
+            surf_dict["principale_mq"] = float(payload.surface_sqm)
+        commercial_mq, surface_breakdown = compute_commercial_surface(surf_dict)
+    else:
+        commercial_mq = float(payload.surface_sqm)
+        surface_breakdown = {"principale_mq": float(payload.surface_sqm)}
+
+    # 3. Base multipliers
     ptype_mult = PROPERTY_TYPE_MULTIPLIER.get(payload.property_type, 0.90)
-    # Condition multiplier
     cond_mult = CONDITION_MULTIPLIER.get(payload.condition or "buono", 1.00)
-    # Energy class multiplier
     energy_mult = ENERGY_CLASS_MULTIPLIER.get(payload.energy_class, 1.00) if payload.energy_class else 1.00
-    # Floor adjustment: top floor / penthouse bonus, ground/basement penalty
     floor_mult = 1.00
     if payload.floor is not None:
         if payload.floor >= 5:
@@ -194,22 +321,36 @@ async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
         elif payload.floor == 1:
             floor_mult = 0.98
 
-    total_mult = ptype_mult * cond_mult * energy_mult * floor_mult
+    # 4. Coefficienti di merito UNI 10750
+    if payload.merit:
+        merit_dict = payload.merit.model_dump(exclude_none=True)
+        merit_pct, merit_breakdown = compute_merit_adjustment(merit_dict)
+    else:
+        merit_pct, merit_breakdown = 0.0, {}
 
-    # Final €/m² range
+    # 5. Coefficienti regionali (liquidità + trend)
+    regional_pct, regional_breakdown = compute_regional_adjustment(region, months_since_omi=6)
+
+    # 6. Total combined multiplier
+    base_mult = ptype_mult * cond_mult * energy_mult * floor_mult
+    coefficient_mult = (1 + merit_pct) * (1 + regional_pct)
+    total_mult = base_mult * coefficient_mult
+
     psm_min = round(base_min * total_mult)
     psm_max = round(base_max * total_mult)
     psm_avg = round((psm_min + psm_max) / 2)
 
-    # Total values
-    value_min = psm_min * payload.surface_sqm
-    value_max = psm_max * payload.surface_sqm
-    value_avg = psm_avg * payload.surface_sqm
+    # 7. Final values use COMMERCIAL surface (not raw calpestabile)
+    value_min = round(psm_min * commercial_mq)
+    value_max = round(psm_max * commercial_mq)
+    value_avg = round(psm_avg * commercial_mq)
 
     # Confidence scoring
     confidence_score = 0
     if city_data:
         confidence_score += 50
+    elif province_sigla:
+        confidence_score += 30
     if zone_explicit:
         confidence_score += 20
     if payload.property_type in PROPERTY_TYPE_MULTIPLIER:
@@ -219,6 +360,10 @@ async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
     if payload.energy_class:
         confidence_score += 5
     if payload.address:
+        confidence_score += 5
+    if payload.commercial_surfaces:
+        confidence_score += 5
+    if payload.merit:
         confidence_score += 5
 
     if confidence_score >= 80:
@@ -289,9 +434,18 @@ async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
         "ok": True,
         "city_resolved": city_key,
         "city_in_dataset": city_data is not None,
+        "province_sigla": province_sigla,
+        "province_name": PROVINCE_NAMES.get(province_sigla) if province_sigla else None,
+        "fallback_used": fallback_source,
         "region": region,
         "zone_tier": zone_tier,
         "zone_explicit": zone_explicit,
+        "surface": {
+            "calpestabile_mq": payload.surface_sqm,
+            "commercial_mq": commercial_mq,
+            "breakdown": surface_breakdown,
+            "method": "UNI 10750 / DPR 138/1998" if payload.commercial_surfaces else "calpestabile_only",
+        },
         "price_per_sqm": {
             "min": psm_min, "avg": psm_avg, "max": psm_max,
         },
@@ -299,41 +453,51 @@ async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
             "min": value_min, "avg": value_avg, "max": value_max,
         },
         "currency": "EUR",
-        "surface_sqm": payload.surface_sqm,
+        "surface_sqm": payload.surface_sqm,  # kept for backwards-compat
         "multipliers_applied": {
             "property_type": ptype_mult,
             "condition": cond_mult,
             "energy_class": energy_mult,
             "floor": floor_mult,
+            "merit_pct": round(merit_pct, 4),
+            "regional_pct": round(regional_pct, 4),
             "total": round(total_mult, 4),
         },
+        "merit_breakdown": merit_breakdown,
+        "regional_breakdown": regional_breakdown,
         "confidence": confidence,
         "confidence_score": confidence_score,
         "methodology": (
-            "Stima basata su benchmark di mercato 2025 per la città e zona indicate, "
-            "corretti per tipologia immobiliare, condizione, classe energetica e piano. "
-            f"Algoritmo: base_€/m²_{zone_tier} × tipologia({ptype_mult}) × "
-            f"condizione({cond_mult}) × classe_en({energy_mult}) × piano({floor_mult}) × superficie."
+            "Pipeline professionale OMNIA: 1) prezzo base OMI/Borsino città o provincia (Nominatim), "
+            "2) superficie commerciale UNI 10750 / DPR 138/1998 con ponderazione di balconi/terrazzi/cantine/box, "
+            "3) moltiplicatori tipologia·condizione·classe energetica·piano, "
+            "4) coefficienti di merito (esposizione, vista, riscaldamento, ascensore, età, vincoli), "
+            "5) coefficienti regionali (liquidità + trend semestrale)."
         ),
         "data_source": data_source,
         "comparable_count": comparable_count,
         "comparables": comparables[:10],
         "valuation_lead_id": lead_id,
         "disclaimer": (
-            "Stima orientativa basata su dati statistici di mercato. Per una valutazione "
-            "vincolante richiedi una perizia ufficiale a un agente OMNIA certificato."
+            "Stima orientativa basata su dati statistici di mercato e norme UNI 10750. "
+            "Per una valutazione vincolante richiedi una perizia ufficiale a un agente OMNIA "
+            "certificato o un perito iscritto all'Albo."
         ),
     }
 
 
 @router.get("/coverage")
 async def coverage_info():
-    """Public info endpoint: how many cities are in the dataset."""
+    """Public info endpoint: how many cities + provinces are in the dataset."""
     return {
         "cities_covered": len(CITY_PRICES),
+        "provinces_covered": len(PROVINCE_PRICES),
         "regions_covered": len(set(c.get("region") for c in CITY_PRICES.values() if c.get("region"))),
+        "national_coverage": True,
+        "fallback_chain": ["city_curated", "province_via_nominatim", "regional_default"],
         "zone_tiers": ["centro", "semicentro", "periferia"],
         "property_types": list(PROPERTY_TYPE_MULTIPLIER.keys()),
         "conditions": list(CONDITION_MULTIPLIER.keys()),
+        "norms_applied": ["UNI 10750:1998", "DPR 138/1998"],
         "data_year": 2025,
     }

@@ -552,6 +552,30 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 
 ---
 
+### D-034 — Valutatore GIS Pro: copertura nazionale + UNI 10750 + merito + regionali (25-Giu-2026)
+
+- **Trigger**: Founder ricorda che nei vecchi repo (IMMOWEB + Immocloud-2.0, pre-monorepo) c'era già la decisione di un valutatore "stile perizia bancaria" con copertura nazionale completa, leggero per il deploy
+- **Recupero**: ricostruita la decisione leggendo `https://github.com/mcnicastro-netizen/Immocloud-2.0/docs/architecture/ROADMAP_AND_KEYS.md` → "Zone OMI 27.228 + ISTAT FOI + 7.884 comuni"
+- **Implementazione M3.S6-pro (25 Giu)**:
+  1. **Estensione copertura nazionale leggera**: 124 città curate + 107 province IT con prezzi €/m² × 3 tier zona (centro/semicentro/periferia) + fallback regionale 20 regioni. Lookup via Nominatim (già nello stack) per comuni non in dataset → matcha provincia → applica prezzi province + sconto small-town -12%
+  2. **Superficie commerciale UNI 10750 / DPR 138/1998**: ponderazione progressiva di principale (100%), verande (60%), terrazzi/balconi (30%→10% oltre 25mq), cantine/soffitte (25%), box (50%), giardino villa (10%→5%→2%), taverna (60%), mansarda (80%). Implementazione in `data/coefficients.py:compute_commercial_surface()`
+  3. **Coefficienti di merito**: piano (classe), esposizione (sud/nord/cieca/...), affaccio (mare/panoramico/verde/cortile), riscaldamento (autonomo/centralizzato/pompa), ascensore vs piano, età immobile (decay -0,5%/anno oltre 30 anni capped -20%), vincoli (storico -10%, paesaggistico -5%), locazione in essere (-5/-15%), nuda proprietà (-30%). Cap totale: -40%/+30%
+  4. **Coefficienti regionali**: liquidità di mercato (months time-to-sell × discount factor: Lombardia 0% → Calabria -8%) + trend YoY 2024-25 per regione (Lombardia +2.5% → Calabria -1%)
+  5. **FOI ISTAT cumulato** per rivalutazione: pronto in `foi_revaluation(year_from, year_to)`, da attivare quando avremo prezzi storici
+- **Files creati**:
+  - `/app/backend/apps/immocloud/data/coefficients.py` (UNI 10750 + merito + regionali + FOI)
+  - `/app/backend/apps/immocloud/data/province_prices.py` (107 province + nomi)
+- **Files refactorati**:
+  - `/app/backend/apps/immocloud/valuator.py` (pipeline 5-stage + Nominatim province fallback + new payload fields `commercial_surfaces` e `merit`)
+- **Backwards-compat**: nuovi campi tutti OPTIONAL, vecchi client funzionano invariati
+- **Test smoke**:
+  - Saronno (non in dataset) → Nominatim → VA Varese, €1.782/m², €151k ✅
+  - Pisa con UNI 10750 completo → 90mq calpestabile → 103,1mq commerciali, merit +15%, estimated €353-484k ✅
+- **Coverage finale**: 100% IT, 3 layer fallback (city→province→region), endpoint `/api/cloud/valuator/coverage` documenta tutto
+- **Stato**: backend operativo. Frontend `ValuatorPage.jsx` da estendere (form pro con UNI 10750 fields) — task next session
+
+---
+
 ### D-033 — Architettura M5.S4 Virtual Staging "premium 3-stage" (24-Giu-2026)
 
 - **Trigger**: rifiuto del Founder di una pipeline "basic single-pass" tipica dei competitor (Virtual Staging AI, Remodel AI, DecorCopilot, MyArchitectAI, ecc.). Richiesta esplicita: *"non possiamo parlare di ecosistema innovativo e poi offrire un sistema basic"*
