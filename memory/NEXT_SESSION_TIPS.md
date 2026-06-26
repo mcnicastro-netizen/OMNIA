@@ -201,7 +201,7 @@ Founder ha esplicitamente detto in più sessioni: lavoriamo per micro-task con c
 | Risorsa | Valore |
 |---|---|
 | Super admin | `mcnicastro@gmail.com` / `Forzainter2026.` |
-| Resend Domain ID | `37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4` |
+| Resend Domain ID | `37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4` (VERIFIED 26-Giu-2026) |
 | Cloudflare nameservers | `brit.ns.cloudflare.com`, `jose.ns.cloudflare.com` |
 | Sender mail finale | `OMNIA <info@omniarealestateecosystem.it>` |
 | Dominio principale | `omniarealestateecosystem.it` (registrar Aruba, DNS Cloudflare) |
@@ -209,7 +209,9 @@ Founder ha esplicitamente detto in più sessioni: lavoriamo per micro-task con c
 | Subdomain cloud (B2C) | `cloud.omniarealestateecosystem.it` → ImmobilCloud |
 | Test credentials | `/app/memory/test_credentials.md` |
 | Business model | `/app/memory/BUSINESS_MODEL.md` |
+| Pricing v1.0 | `/app/memory/PRICING_OMNIA.md` |
 | Decisioni storiche | `/app/memory/DECISIONS.md` |
+| **Concept reel Sora 2 (3 clip)** | `/app/demo_videos/` + URL private con token `AklxeXExFYM04JpBS5D5_RixD-k3lvVz` |
 
 ---
 

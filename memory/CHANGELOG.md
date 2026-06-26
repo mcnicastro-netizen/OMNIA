@@ -1,5 +1,31 @@
 # OMNIA — Changelog
 
+## 2026-06-26 (sera tardi) — 🎬 Concept reel Sora 2 — 3 clip pilota
+
+Founder ha voluto vedere "come sarebbe venuta fuori l'idea di ecosistema" tramite mini-video AI senza testo parlato. Generate 3/4 clip cinematic con Sora 2 (modello sora-2, 1280×720 HD landscape, 8 secondi cadauna).
+
+### Output
+- Scene generate: skyline futuristico OMNIA, mappa olografica 3D, agente con AI assistant
+- Scena 4 (famiglia smart keys) NON generata — budget Emergent LLM esaurito ($4.18 spesi vs $3.40 limit)
+- File salvati in `/app/demo_videos/scene_*.mp4` (file master)
+- Copia accessibile via URL private (security-by-token): `/app/frontend/public/_omnia_private_AklxeXExFYM04JpBS5D5_RixD-k3lvVz/`
+
+### Costo Sora 2 misurato
+- ~$1.40 a clip da 8 secondi 1280×720 con sora-2 standard
+- Per concept reel da 4-6 clip considera budget $6-10
+
+### Decisione founder
+- Resta a 3 clip "concept v0.1", non rigeneriamo scena 4
+- Domani: ripresa dal **programma operativo** (NON dai video)
+
+### Note per agente futuro
+- I 3 video sono asset disponibili per ispirare Landing `/it/agenzie` o demo letale futura
+- Token URL private salvato in CHANGELOG (qui sopra) e NEXT_SESSION_TIPS — recuperabile se serve
+- Script di generazione: `/app/demo_videos/_generate_omnia_concept.py` — riutilizzabile
+
+---
+
+
 ## 2026-06-26 (sera) — 📋 Programma operativo aggiornato + decisioni rimandate
 
 ### Aggiornamento programma OMNIA
