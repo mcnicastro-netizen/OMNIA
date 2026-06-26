@@ -1,5 +1,16 @@
 # OMNIA — Changelog
 
+## 2026-06-26 (mattina) — ✅ Resend Domain VERIFIED + primo invio ufficiale
+
+- ✅ NS Cloudflare propagati overnight (~10 ore): `brit.ns.cloudflare.com` + `jose.ns.cloudflare.com` attivi
+- ✅ Tutti i 4 record DNS Resend propagati (DKIM, SPF TXT, MX feedback, DMARC) verificati via Google DNS + Cloudflare DNS 1.1.1.1
+- ✅ Resend domain `omniarealestateecosystem.it` status: **VERIFIED** (DKIM + SPF MX + SPF TXT tutti `verified`)
+- ✅ Primo invio ufficiale: email ID `17d98551-c039-409d-bdc8-3210db6389e2` da `OMNIA <info@omniarealestateecosystem.it>` a `mcnicastro@gmail.com`
+- ⏳ Attesa conferma founder su placement (inbox vs promo vs spam)
+
+---
+
+
 ## 2026-06-25 (sera) — 🌐 Migrazione DNS → Cloudflare + Setup Resend con dominio verificato
 
 **Obiettivo**: sbloccare la verifica del dominio Resend (richiede MX custom che Aruba non supporta).

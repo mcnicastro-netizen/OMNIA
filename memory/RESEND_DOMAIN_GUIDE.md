@@ -1,7 +1,7 @@
 # 📧 Resend Domain Setup — OMNIA
 
-**Stato attuale**: ⏳ **PENDING VERIFICATION** (in attesa propagazione nameserver Cloudflare)
-**Ultimo aggiornamento**: 25 Giugno 2026
+**Stato attuale**: ✅ **VERIFIED** — dominio operativo dal 26-Giu-2026 mattina
+**Ultimo aggiornamento**: 26 Giugno 2026 (mattina)
 
 ---
 
