@@ -1,5 +1,37 @@
 # OMNIA — Changelog
 
+## 2026-06-26 (pomeriggio) — 💰 Pricing OMNIA v1.0 DEFINITIVO
+
+Sessione di calibrazione pricing con founder. Approvato dopo confronto coi competitor di mercato (Idealista, Immobiliare.it, Realgest, Gestim, fal.ai, APEFACILE, OpenAPI).
+
+### Decisioni
+- 🎯 **Founders 50 (lock-in 24m)**: Starter €39 / Pro €99 / Agency €249
+- 📈 **Standard post-Founders**: Starter €59 / Pro €179 / Agency €349 (sconto 50% vita per Founders post-24m)
+- 💳 **Sistema crediti**: 1 credito = €0,30. Pacchetti top-up 100/500/1500/5000 crediti
+- 🌐 **Boost portale privati**: Premium 30gg €19,90 (-33% vs Idealista) / TOP €29,90 (-19%)
+- 🏢 **Annunci agency**: tier inclusi gratis (15/50/70), pacchetti extra 10/€69, 30/€179, 100/€499
+- 🚀 **Boost agency fase 1 MVP**: 5 Premium Starter / 15+5 Pro / illimitati (fair-use cap) Agency. Algoritmo granulare "ogni 10 annunci" → fase 2 a 30+ clienti
+- ❌ **APE rimosso v1.0**: margine troppo basso (€130-180 costo vivo), ricomporre v2.0 con contratto enterprise
+- ❌ **No referral program** (founder valuterà dopo)
+- ⏸️ **Enterprise tier**: sessione separata futura
+
+### Insight di mercato emersi
+- Mercato gestionale italiano è BASSO (Realgest €16, Gestim Pro €47) → OMNIA premium positioning corretto
+- Virtual Staging fal.ai costa $0,021/img → margine 93% possibile
+- APE realistico €130-180/cad nazionale, non €100 come pensava founder
+- Idealista/Immobiliare.it boost €29-59/mese → spazio per OMNIA al -25/45%
+
+### File creato
+- `/app/memory/PRICING_OMNIA.md` — riferimento ufficiale per landing/banner/demo/onboarding
+
+### Break-even
+- Costi fissi OMNIA ~€220/mese
+- Soglia "no-loss" = ~8-10 agenzie attive con mix realistico
+- Founders 50 pieno = €40.800/anno netti + crediti/boost extra
+
+---
+
+
 ## 2026-06-26 (mattina) — ✅ Resend Domain VERIFIED + primo invio ufficiale
 
 - ✅ NS Cloudflare propagati overnight (~10 ore): `brit.ns.cloudflare.com` + `jose.ns.cloudflare.com` attivi
