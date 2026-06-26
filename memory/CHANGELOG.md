@@ -1,5 +1,30 @@
 # OMNIA — Changelog
 
+## 2026-06-26 (sera) — 📋 Programma operativo aggiornato + decisioni rimandate
+
+### Aggiornamento programma OMNIA
+Definita la sequenza operativa post-Pricing v1.0 in `/app/memory/ROADMAP.md`:
+- **Fase 1**: Landing `/it/agenzie` + Banner CTA (2-4 sett.)
+- **Fase 2**: Demo letale 3 minuti cavallo di Troia (3-5 sett.)
+- **Fase 3**: Completamento features in parallelo (M5.S2 AL Knowledge, Manuale, ANNCSU, Code Review, M5.S4, M6)
+- **Fase 4**: Outreach Founders 50 — trigger go-live 15 paganti
+- **Fase 5**: Internazionalizzazione (Spagna→Portogallo→FR/DE→USA via partner)
+
+### ⏸️ Decisioni esplicitamente RIMANDATE (sessione separata futura)
+- **Tier Enterprise** (>20 utenti, multi-sede, SLA dedicato): founder vuole ragionarci ancora
+- **Custom API per clienti Enterprise**: modelli da valutare (per-call / flat contract / revenue share)
+
+Entrambe memorizzate nel pricing v1.0 come `⏸️ RIMANDATO` per non perdere il riferimento.
+
+### File aggiornati
+- `/app/memory/ROADMAP.md` — programma operativo aggiornato con sequenza 5 fasi
+- `/app/memory/PRICING_OMNIA.md` — Enterprise tier + Custom API marcati esplicitamente come rimandati
+- `/app/memory/PRD.md` — stato corrente + prossimi step
+- `/app/memory/CHANGELOG.md` — questa entry
+
+---
+
+
 ## 2026-06-26 (pomeriggio) — 💰 Pricing OMNIA v1.0 DEFINITIVO
 
 Sessione di calibrazione pricing con founder. Approvato dopo confronto coi competitor di mercato (Idealista, Immobiliare.it, Realgest, Gestim, fal.ai, APEFACILE, OpenAPI).

@@ -5,30 +5,75 @@
 
 ---
 
-## Stato attuale (25-Giu-2026 — PAUSA founder)
+## Stato attuale (26-Giu-2026 — Pricing v1.0 definitivo)
 
-🟢 **M1+M2+M3+M5.S1+M5.S3+M3.S6-pro ✅ DONE**
+🟢 **M1+M2+M3+M5.S1+M5.S3+M3.S6-pro ✅ DONE** + **Resend dominio VERIFIED** + **Pricing v1.0 definitivo memorizzato**
 
 ```
-M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  M4   M5.S2  M5.S4  M6
-✅   ✅   ✅   ✅         ✅     ✅     ⏸️   ⏸️     ⏸️     ⏸️
-100% 100% 100% 100%       100%   100%   0%   0%     0%     0%
+M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  Resend  Pricing  M4   M5.S2  M5.S4  M6
+✅   ✅   ✅   ✅         ✅     ✅     ✅      ✅       ⏸️   ⏸️     ⏸️     ⏸️
 ```
 
-### ✅ Completato 25-Giu-2026
-- **M3.S6-pro GIS Valuator Pro**: copertura nazionale (Nominatim province fallback), UNI 10750 commercial surface, coefficienti merito (piano/esposizione/affaccio/riscaldamento/ascensore/anno) + regionali + vincoli/locazione. 37/37 backend + 4/4 frontend E2E PASS.
-- **CTA Compare Market**: bottone dorato su pannello risultato → deep-link a `/it/cloud/search` con filtri precompilati (city + property_type + price ±20%) → funnel Valutazione → Lead.
+### ✅ Completato 26-Giu-2026
+- **Resend Domain**: verificato, primo invio ufficiale OK in INBOX Gmail
+- **Pricing OMNIA v1.0**: definitivo (vedi `/app/memory/PRICING_OMNIA.md`)
+  - Founders 50: €39/€99/€249 (lock-in 24m, post €59/€179/€349)
+  - Sistema crediti €0,30/cad
+  - Boost portale -25/45% vs Idealista
+  - Break-even reale: 10-12 agency / Trigger go-live: 15 Founders paganti / Profitto Founders 50 pieno: €29.460/anno
 
-### 🔴 Prossima sessione (post-pausa, 25-Giu-2026 sera)
-**Ordine consigliato**:
-1. ⏳ **Verifica Resend domain** (5 min): controllare propagazione NS Cloudflare → forzare verify Resend → test mail live in inbox (NON spam). Se OK, eliminare anche record temporanei DNS Aruba se servono.
-2. 🟢 **Banner CTA "Sei un agente immobiliare?"** sul Valuator e AL Legal (P1, ~2 ore): copy + design + landing `/it/agenzie` con form interesse + counter "X/100 posti rimasti".
-3. 📝 **Setup Founding pricing**: definire 3 livelli gestionale (canone + crediti inclusi) + 3 livelli portale (15/50/70 annunci + boost). Calcolo unit economics dettagliato.
-4. 📚 **Manuale OMNIA completo** (P1, 6-10 ore): scrittura strutturata per moduli → input per RAG M5.S2 AL Knowledge.
-5. 🟡 **ANNCSU Sprint 2** — autocomplete/validazione indirizzi nel Valuator (~1 giorno).
-6. 🔍 **Code Review pre-produzione** — analisi statica codebase prima di Stripe/M4 (~0.5 giorni).
-7. 🎨 **M5.S4 Virtual Staging** — fal.ai (SAM 2 + Flux Inpainting + Real-ESRGAN), **bloccato in attesa FAL_KEY founder**.
-8. 🌐 **Analisi mercati Cina + Paesi Arabi** (P2): costi-benefici, barriere legali, partner locali.
+### ⏸️ DECISIONI ESPLICITAMENTE RIMANDATE (sessione separata)
+- **Tier Enterprise** (>20 utenti, multi-sede, SLA dedicato) — founder: *"Voglio ragionarci ancora"*
+- **Custom API per clienti Enterprise** — modelli possibili: per-call pricing, flat enterprise contract, revenue share. Da decidere insieme al pricing Enterprise.
+
+### 🔴 Prossima sessione — Programma operativo aggiornato
+
+**Sequenza definita (tempo illimitato, qualità prima):**
+
+#### Fase 1 — Pre-launch foundation (2-4 settimane)
+1. ✅ Pricing v1.0 definitivo *(FATTO)*
+2. ✅ Resend setup completo *(FATTO)*
+3. 🟡 **Landing `/it/agenzie`** (3-4 giorni)
+   - Form interesse Founders 50 + counter X/50
+   - Sezioni: hook → 3 wow-moment statici → pricing tabella → form
+   - Video demo embed (placeholder per ora)
+4. 🟡 **Banner CTA** sul Valuator + AL Legal (mezza giornata)
+   - Footer sticky → link `/it/agenzie`
+   - Tracking click
+
+#### Fase 2 — Demo letale 3 minuti (3-5 settimane)
+5. 🎬 **Storyboard finale** (1 giorno insieme)
+6. 🛠️ **Dati demo realistici** su staging (2-3 giorni)
+7. 📹 **Screen recording 4K** (1-2 giorni)
+8. 🎙️ **Voice-over professionale** (Fiverr top-tier, ~€150, 1 settimana attesa)
+9. ✂️ **Editing + sottotitoli IT/EN/ES** (2-3 giorni)
+10. 📤 **Upload landing + YouTube + LinkedIn** (1 giorno)
+
+#### Fase 3 — Completamento features in parallelo (2-3 mesi)
+11. **M5.S2 AL Knowledge** (RAG sul manuale)
+12. **Manuale OMNIA strutturato** (input per RAG, 6-10 ore scrittura)
+13. **ANNCSU Sprint 2** (autocomplete indirizzi Valuator)
+14. **Code Review pre-produzione** (security audit)
+15. **M5.S4 Virtual Staging** (bloccato fino a `FAL_KEY` founder)
+16. **M6 Omnia Academy** (struttura base)
+
+#### Fase 4 — Outreach Founders 50 (3-6 mesi)
+17. Warm-up dominio 2 settimane progressive
+18. Cold outreach LinkedIn Sales Navigator (~€80/mese) + email a database segmentato
+19. 5 demo dirette/settimana
+20. Closing tracking + feedback loop bug-fix
+21. **Trigger go-live**: 15 Founders firmati & paganti
+
+#### Fase 5 — Internazionale (12+ mesi post go-live)
+- Spagna (i18n ES già pronto)
+- Portogallo (PT da aggiungere)
+- Francia + Germania (Phase 3, 24+ mesi)
+- USA via partnership MLS (Phase 4, 36+ mesi)
+- Cina + Paesi Arabi (Phase 5+, modello licensing)
+
+#### ⏸️ Sessioni separate da pianificare
+- **Tier Enterprise + Custom API**: pricing, struttura, SLA, modelli contrattuali
+- **Analisi mercati Cina + Paesi Arabi**: costi-benefici, partner locali, normative
 
 ### 🟡 Bug noti / TODO tecnico
 - CORS backend si aspetta `learn.omniarealestateecosystem.it` ma CNAME su Cloudflare è `cloud`. Allineare al prossimo accesso.

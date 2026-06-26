@@ -272,7 +272,8 @@ Sotto 15 paganti: continua il warm-up/beta privata con i Founders pilota, niente
 | Referral program | ❌ NO (per ora) | Founder vuole valutare dopo |
 | APE come servizio | ❌ Rimosso v1.0 | Margine troppo basso, ricomporre v2.0 con contratto enterprise |
 | Pricing a vita lock-in | ❌ NO | Solo lock-in 24 mesi + sconto 50% vita post-Founders |
-| Enterprise tier (>20 utenti) | ⏸️ Riservato sessione separata | "Voglio ragionarci ancora" |
+| **Enterprise tier (>20 utenti, multi-sede, SLA dedicato)** | ⏸️ **RIMANDATO a sessione separata futura** | *"Voglio ragionarci ancora"* (founder 26-Giu-2026) |
+| **Custom API per clienti Enterprise** | ⏸️ **RIMANDATO insieme a Enterprise tier** | Da definire insieme al pricing Enterprise — possibili modelli: per-call pricing, flat enterprise contract, revenue share |
 | Algoritmo boost granulare | ⏸️ Fase 2 (post 30 clienti) | YC principle: "do things that don't scale" |
 | Privati 1° annuncio | ❌ NO charge | 2 annunci gratis allineati Idealista/Immobiliare.it |
 

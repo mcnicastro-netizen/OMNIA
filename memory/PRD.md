@@ -9,9 +9,9 @@
   - ✅ **AL Chatbot SSE streaming** + inline `AlImproveButton` ("✨ Migliora con AL") per copywriting.
   - ✅ **AL Legal** con Tavily web-search e validator anti-hallucination su `/it/legal`.
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
-  - ✅ **26-Giu-2026 mattina**: Resend dominio VERIFIED. Primo invio ufficiale OK da `info@omniarealestateecosystem.it` arrivato in INBOX Gmail.
-  - ✅ **26-Giu-2026 pomeriggio**: PRICING DEFINITIVO v1.0 approvato dal founder (vedi `/app/memory/PRICING_OMNIA.md`). Founders 50 = €39/€99/€249 lock-in 24m, post-€59/€179/€349, sistema crediti €0,30/cad, boost portale -25/45% sotto Idealista, MVP fase 1 boost manuale (algoritmo granulare fase 2 a 30+ clienti).
-  - 🎯 **Prossimo accesso**: **demo letale 3 minuti (cavallo di Troia)** → poi **landing `/it/agenzie`** → poi **banner CTA**.
+  - ✅ **26-Giu-2026 pomeriggio**: PRICING DEFINITIVO v1.0 approvato (vedi `/app/memory/PRICING_OMNIA.md`). Break-even reale 10-12 agency, trigger go-live 15 Founders paganti, profitto Founders 50 pieno €29.460/anno.
+  - ⏸️ **26-Giu-2026 sera**: RIMANDATI a sessione separata futura: (1) Tier Enterprise (>20 utenti, multi-sede, SLA), (2) Custom API per clienti Enterprise. Founder: *"Voglio ragionarci ancora"*.
+  - 🎯 **Prossimo accesso**: programma operativo aggiornato in `/app/memory/ROADMAP.md`. Step 1 = **Landing `/it/agenzie`** + **Banner CTA**. Step 2 = **Demo letale 3 minuti**.
 
 ---
 
