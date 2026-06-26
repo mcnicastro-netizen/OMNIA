@@ -24,10 +24,13 @@ Sessione di calibrazione pricing con founder. Approvato dopo confronto coi compe
 ### File creato
 - `/app/memory/PRICING_OMNIA.md` — riferimento ufficiale per landing/banner/demo/onboarding
 
-### Break-even
-- Costi fissi OMNIA ~€220/mese
-- Soglia "no-loss" = ~8-10 agenzie attive con mix realistico
-- Founders 50 pieno = €40.800/anno netti + crediti/boost extra
+### Break-even (REVISIONE CRITICA)
+- ⚠️ Prima stima fornita al founder (€220 fissi → 8-10 agency) era INCOMPLETA
+- Costi fissi reali = €640-720/mese (tecnici + commercialista SRL + banking + LinkedIn Sales Nav + assicurazione + ammortamento apertura SRL + Stripe fee)
+- **Break-even reale**: **10-12 agenzie attive** (mix realistico 60/30/10)
+- Trigger go-live commerciale: **15 Founders firmati & paganti**
+- Founders 50 pieno = **€29.460/anno netti** (revised down da stima ottimistica precedente di €40.800)
+- Listino sostenibile confermato dopo verifica onesta tutti i costi
 
 ---
 

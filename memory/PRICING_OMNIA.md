@@ -151,34 +151,117 @@ Ogni agenzia ImmoWeb ha annunci portale gratis per tier:
 
 ---
 
-## 📈 Break-even & Proiezioni
+## 📈 Break-even & Proiezioni (numeri REALI — aggiornato 26-Giu-2026)
 
-### Costi fissi mensili OMNIA (no stipendi, no costo founder)
+### ⚠️ Premessa onestà
+Il primo calcolo presentato al founder considerava solo i costi tecnici (€220/mese → break-even 8-10 agenzie). Questo era **incompleto**. Il calcolo definitivo include TUTTI i costi reali di gestione società.
 
+### Costi fissi mensili TOTALI (no stipendi, no costo founder)
+
+#### Costi tecnici
 | Voce | €/mese |
 |---|---|
-| Server Emergent (preview + scale) | €60 |
-| Dominio Aruba + Cloudflare Free | €1 |
-| Resend (>3k mail piano paid) | €20 |
-| Tavily API (AL Legal) | €30 |
-| Emergent LLM key (Gemini/Claude) | €40 |
-| OpenAPI visure (abbonamento base) | €30 |
-| fal.ai virtual staging (anticipo) | €40 |
-| **TOTALE FISSO** | **~€220/mese** |
+| Server Emergent (preview + scale) | 60 |
+| Resend (>3k mail piano paid) | 20 |
+| Tavily API (AL Legal) | 30 |
+| Emergent LLM key (Gemini/Claude) | 40 |
+| OpenAPI visure (abbonamento base) | 30 |
+| fal.ai virtual staging (anticipo) | 40 |
+| Dominio Aruba + Cloudflare Free | 1 |
+| **Subtotale tecnici** | **€220** |
 
-### Scenari break-even (post lancio Founders 50)
+#### Costi business / società
+| Voce | €/mese |
+|---|---|
+| Commercialista mensile (SRL semplificata) | 150 |
+| Conto corrente business (Fineco/Hype Business) | 15 |
+| LinkedIn Sales Navigator (per outreach Founders 50) | 80 |
+| Calendly Pro + tools accessori | 20 |
+| Assicurazione professionale (cyber + RC) | 50 |
+| **Subtotale business** | **€315** |
 
-| Mix agenzie | # | MRR | Margine netto |
+#### Apertura società una-tantum (ammortizzata 24 mesi)
+| Voce | Totale | €/mese (su 24m) |
+|---|---|---|
+| Apertura SRL semplificata (notaio + bolli + setup) | 2.000 | 85 |
+| **Subtotale ammortamento** | | **€85** |
+
+#### Stripe fees (variabile, scala con MRR)
+| Scenario | MRR | Fee Stripe (~2,5%) |
+|---|---|---|
+| 10 agency mix | €700 | €20 |
+| 25 agency mix | €1.800 | €50 |
+| 50 agency (Founders 50 pieno) | €3.900 | €100 |
+
+### 🧮 TOTALE costi fissi mensili
+
+| Scaling | Tecnici | Business | Ammortam. | Stripe | **TOTALE** |
+|---|---|---|---|---|---|
+| 10 agency | €220 | €315 | €85 | €20 | **€640** |
+| 25 agency | €220 | €315 | €85 | €50 | **€670** |
+| 50 agency | €220 | €315 | €85 | €100 | **€720** |
+
+---
+
+### Margine netto per agenzia (Founders 50, costi vivi inclusi)
+
+Ogni agenzia consuma anche **crediti inclusi** nel canone (costi vivi OMNIA):
+
+| Tier | Canone Founders | Costi vivi medi | **Margine netto/mese** |
 |---|---|---|---|
-| 5 Starter | 5 | €195 | -€55 🔴 |
-| 8 Starter + 2 Pro | 10 | €510 | +€220 🟢 |
-| 10 Starter + 5 Pro + 1 Agency | 16 | €1.134 | +€800 🟢 |
-| 20 Starter + 10 Pro + 3 Agency | 33 | €2.517 | +€2.100 🎉 |
-| **30 Starter + 15 Pro + 5 Agency** (Founders 50 pieno) | **50** | **€3.900** | **+€3.400/mese** 🚀 |
+| Starter (€39) | €39 | €5 (1 visura + 5 staging) | **€34** |
+| Pro (€99) | €99 | €20 (5 visure + 30 staging) | **€79** |
+| Agency (€249) | €249 | €55 (15 visure + 1 planimetria + boost) | **€194** |
 
-🎯 **Soglia "no-loss"**: ~8-10 agenzie attive con mix realistico Starter+Pro+Agency.
-🎯 **Founders 50 pieno**: **€40.800/anno netti**, esclusi crediti pay-per-use, boost extra, pacchetti annunci.
-🎯 **Quando attivare go-live**: founder ha detto "solo quando avrà aderito numero minimo per non generare perdite" → target **15 agenzie paganti** prima go-live commerciale ufficiale.
+---
+
+### Scenari break-even REALI
+
+#### Scenario PEGGIORE (tutte Starter)
+- Coprire €640 con margine €34/Starter → **19 Starter** richieste
+- MRR break-even: €741
+
+#### Scenario REALISTICO (mix 60/30/10)
+- 6 Starter + 3 Pro + 1 Agency = **10 agency totali**
+- MRR: 6×39 + 3×99 + 1×249 = €780
+- Margine netto: 6×34 + 3×79 + 1×194 = **€633/mese** ≈ break-even ✅
+
+#### Scenario MIGLIORE (più tier Pro/Agency)
+- 4 Pro + 2 Agency = **6 agency totali**
+- MRR: 4×99 + 2×249 = €894
+- Margine netto: 4×79 + 2×194 = €704 ✅ (sopra €640)
+
+#### Scenario Founders 50 PIENO
+- 30 Starter + 15 Pro + 5 Agency = **50 agency**
+- MRR: €3.900
+- Margine netto: 30×34 + 15×79 + 5×194 = **€3.175/mese**
+- Costi: €720
+- **Profitto netto: €2.455/mese = €29.460/anno**
+
+---
+
+### 🎯 Numeri chiave da ricordare
+
+| Metrica | Valore |
+|---|---|
+| **Soglia "no-loss" minima** | **10-12 agenzie attive** (mix realistico) |
+| **Soglia per profitto serio** | 15+ agenzie attive |
+| **MRR break-even** | ~€700/mese |
+| **Trigger go-live commerciale** | 15 Founders firmati & paganti |
+| **Profitto Founders 50 pieno** | €29.460/anno netti (escluso crediti, boost extra, pacchetti annunci) |
+| **Revenue extra potenziale** (crediti, boost, annunci agency, privati B2C, perizie ufficiali se reintrodotte) | +30-60% sopra MRR base |
+
+---
+
+### 📌 Condizione attivazione sistema (decisa dal founder)
+
+> *"L'ecosistema entrerà in funzione solo quando avranno aderito il numero minimo necessario per non generare perdite."*
+
+**Numero magico**: **15 agenzie Founders firmate e paganti** (Stripe attivo, carta caricata, primo mese pagato).
+
+A 15 paganti: copri tutti i costi + generi €300-600/mese di buffer → go-live commerciale ufficiale.
+
+Sotto 15 paganti: continua il warm-up/beta privata con i Founders pilota, niente lancio massiccio.
 
 ---
 
