@@ -1,5 +1,45 @@
 # OMNIA — Changelog
 
+## 2026-06-27 (mattina) — 🚀 Landing `/it/agenzie` v0.1 (prima bozza) LIVE
+
+Fase 1 del programma operativo: landing Founders 50 + backend lead capture.
+
+### ✅ Implementato
+- **Backend `/api/founders`** in `/app/backend/apps/marketing/founders.py`:
+  - `GET /api/founders/spots` — counter posti rimanenti (real-time da MongoDB)
+  - `POST /api/founders/register` — lead capture con email validation, deduplication, dual email (founder welcome + admin notification)
+  - Collection MongoDB: `founders_50_leads`
+  - Costanti: FOUNDERS_TOTAL_SPOTS=50, ADMIN_NOTIFICATION_EMAIL=mcnicastro@gmail.com
+- **Template email Resend** (italiano):
+  - `/app/backend/shared/email/templates/founders_welcome.it.html` — mail benvenuto al lead con posizione #X/50
+  - `/app/backend/shared/email/templates/founders_admin_notification.it.html` — mail notifica admin con tutti i dati lead
+- **Frontend** in `/app/frontend/src/apps/landing/AgenziesLandingPage.jsx`:
+  - Hero scuro con titolo "50 strumenti AI per la tua agenzia. 6 mesi di vantaggio per i primi 50."
+  - Counter real-time 50/50
+  - 3 wow-moment statici (AI Lead Scoring · AL Legal · Valutatore Pro)
+  - Tabella pricing Founders 50 (€39 / €99 / €249) con Pro evidenziato
+  - Form 5 campi obbligatori (email, nome, agenzia, città, n° agenti) + tier interesse + note opzionali
+- **Route** registrata in `/app/frontend/src/App.js` come `/it/agenzie`, `/en/agenzie`, `/es/agenzie` (per ora copy solo IT)
+- **Server.py**: incluso `founders_router` nell'api_router
+
+### 🧪 Test eseguiti
+- `GET /spots` → 200 OK ✓
+- `POST /register` con payload valido → 200, posizione assegnata, email triggered ✓
+- Spots counter aggiornato real-time dopo registrazione ✓
+- Smoke test screenshot landing UI → hero/counter/wow/pricing/form tutti renderizzati ✓
+- Lead di test pulito dal DB ✓
+
+### Status founder
+- **v0.1 considerata "prima bozza"** — ritorneremo per refinement
+- Banner CTA sui pubblici Valuator + AL Legal → **rinviato** alla prossima sessione
+- i18n EN/ES → rinviato
+- Test reale end-to-end (mail in inbox) → rinviato
+
+### Sessione chiusa il 27-Giu-2026 mattina
+
+---
+
+
 ## 2026-06-26 (sera tardi) — 🎬 Concept reel Sora 2 — 3 clip pilota
 
 Founder ha voluto vedere "come sarebbe venuta fuori l'idea di ecosistema" tramite mini-video AI senza testo parlato. Generate 3/4 clip cinematic con Sora 2 (modello sora-2, 1280×720 HD landscape, 8 secondi cadauna).

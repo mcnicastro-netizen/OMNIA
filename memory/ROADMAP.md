@@ -31,15 +31,18 @@ M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  Resend  Pricing  M4   M5.S2  M5.S4  M6
 **Sequenza definita (tempo illimitato, qualità prima):**
 
 #### Fase 1 — Pre-launch foundation (2-4 settimane)
-1. ✅ Pricing v1.0 definitivo *(FATTO)*
-2. ✅ Resend setup completo *(FATTO)*
-3. 🟡 **Landing `/it/agenzie`** (3-4 giorni)
-   - Form interesse Founders 50 + counter X/50
-   - Sezioni: hook → 3 wow-moment statici → pricing tabella → form
-   - Video demo embed (placeholder per ora)
-4. 🟡 **Banner CTA** sul Valuator + AL Legal (mezza giornata)
+1. ✅ Pricing v1.0 definitivo *(FATTO 26-Giu)*
+2. ✅ Resend setup completo *(FATTO 26-Giu)*
+3. ✅ **Landing `/it/agenzie` v0.1** *(FATTO 27-Giu mattina, considerata "prima bozza")*
+   - Backend `/api/founders/{spots,register}` + 2 template email
+   - Frontend con hero, counter, 3 wow-moment, pricing table, form 5 campi
+   - File: `/app/backend/apps/marketing/founders.py`, `/app/frontend/src/apps/landing/AgenziesLandingPage.jsx`
+4. ⏳ **Landing v0.2 refinement** (al prossimo accesso): cambi richiesti da founder dopo review
+5. ⏳ **Banner CTA** sul Valuator + AL Legal (mezza giornata)
    - Footer sticky → link `/it/agenzie`
    - Tracking click
+6. ⏳ **i18n EN/ES** della landing (copy traduzione)
+7. ⏳ **Test reale E2E** mail in inbox (registrazione con vera email founder)
 
 #### Fase 2 — Demo letale 3 minuti (3-5 settimane)
 5. 🎬 **Storyboard finale** (1 giorno insieme)

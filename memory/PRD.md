@@ -9,9 +9,8 @@
   - ✅ **AL Chatbot SSE streaming** + inline `AlImproveButton` ("✨ Migliora con AL") per copywriting.
   - ✅ **AL Legal** con Tavily web-search e validator anti-hallucination su `/it/legal`.
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
-  - ✅ **26-Giu-2026 pomeriggio**: PRICING DEFINITIVO v1.0 approvato (vedi `/app/memory/PRICING_OMNIA.md`). Break-even reale 10-12 agency, trigger go-live 15 Founders paganti, profitto Founders 50 pieno €29.460/anno.
-  - ⏸️ **26-Giu-2026 sera**: RIMANDATI a sessione separata futura: (1) Tier Enterprise (>20 utenti, multi-sede, SLA), (2) Custom API per clienti Enterprise. Founder: *"Voglio ragionarci ancora"*.
-  - 🎯 **Prossimo accesso**: programma operativo aggiornato in `/app/memory/ROADMAP.md`. Step 1 = **Landing `/it/agenzie`** + **Banner CTA**. Step 2 = **Demo letale 3 minuti**.
+  - ✅ **27-Giu-2026 mattina**: Landing `/it/agenzie` v0.1 (prima bozza) LIVE. Backend `/api/founders/{spots,register}` + 2 template email Resend + frontend completo (hero, counter, 3 wow-moment, pricing table, form 5 campi). Test smoke + curl PASS. Considerata "prima bozza" dal founder, refinement futuro.
+  - 🎯 **Prossimo accesso**: (1) refinement landing v0.2 se richiesto, (2) **Banner CTA** sui pubblici Valuator + AL Legal → link a `/it/agenzie`, (3) i18n EN/ES landing, (4) test reale end-to-end mail in inbox, poi **Fase 2 Demo letale 3 minuti**.
 
 ---
 
