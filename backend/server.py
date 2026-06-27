@@ -136,6 +136,9 @@ api_router.include_router(public_feed_router)
 from apps.immoweb.site import router as public_site_router  # noqa: E402
 api_router.include_router(public_site_router)
 
+from apps.marketing.founders import router as founders_router  # noqa: E402
+api_router.include_router(founders_router)
+
 app.include_router(api_router)
 
 

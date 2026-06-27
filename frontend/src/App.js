@@ -17,6 +17,7 @@ import { AuthProvider } from "@/shared/lib/auth";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
 
 import LandingApp from "@/apps/landing/LandingApp";
+import AgenziesLandingPage from "@/apps/landing/AgenziesLandingPage";
 import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
 import ImmowebApp from "@/apps/immoweb/ImmowebApp";
 import DashboardPage from "@/apps/immoweb/DashboardPage";
@@ -99,6 +100,9 @@ function App() {
               <LangSync>
                 <Routes>
                   <Route index element={<LandingApp />} />
+
+                  {/* Founders 50 — landing for B2B agencies */}
+                  <Route path="agenzie" element={<AgenziesLandingPage />} />
 
                   {/* Auth pages (public) */}
                   <Route path="login" element={<LoginPage />} />
