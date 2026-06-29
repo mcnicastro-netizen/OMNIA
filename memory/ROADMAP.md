@@ -1,32 +1,49 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 25 Giugno 2026
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.3), `CHANGELOG.md` e `BUSINESS_MODEL.md`
+**Ultimo aggiornamento**: 29 Giugno 2026 — 🛑 **D-035 STOP PRE-LAUNCH, ritorno al programma operativo originale**
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.4), `CHANGELOG.md` e `DECISIONS.md`
 
 ---
 
-## Stato attuale (26-Giu-2026 — Pricing v1.0 definitivo)
+## 🛑 DECISIONE STRATEGICA VINCOLANTE — 29 Giu 2026 (D-035)
 
-🟢 **M1+M2+M3+M5.S1+M5.S3+M3.S6-pro ✅ DONE** + **Resend dominio VERIFIED** + **Pricing v1.0 definitivo memorizzato**
+Il Founder ha esplicitamente fermato il filone pre-launch. Citazione: *"abbiamo perso il filo inseguendo un pre-launch che a me non interessa per ora. Non ci sarà nessun pre-launch senza Academy e features funzionanti. Riprenderemo dal Programma Operativo originale"*.
+
+**Conseguenze immediate**:
+- ⏸️ **Filone commerciale CONGELATO** (Landing `/it/agenzie`, Banner CTA, warm-up Resend, outreach Founders 50, Sora 2 videos, pricing publishing)
+- ✅ **Si torna alla sequenza M2 → M3 → M4 → M5 → M6 del `PROGRAMMA_OMNIA.md`**, integrata da D-032 (M5 prima di M4)
+- 🔍 **Audit completo**: alla prossima sessione si ricostruisce l'elenco esatto dei TODO **saltati o fatti parzialmente** dentro M2/M3/M5 già "chiusi"
+- 📷 **MLS multi-agenzia** (M4.S1+S2) ha priorità di studio: Founder aveva fornito **screenshots Agestanet** (UX modulo MLS) + **screenshot box MLS nicastroimmobiliare.it** — da rilocalizzare o richiedere nuovo upload alla prossima sessione
+- 🌟 **Santo Graal PNG** (`ChatGPT Image 15 apr 2026`) torna **unica north-star di prodotto**
+- 📌 Tutto il codice già consegnato (M1/M2/M3/M5.S1/M5.S3/M3.S6-pro/ANNCSU) **resta in produzione**, nessun rollback
+
+---
+
+## Stato attuale (29-Giu-2026 — post-D-035)
+
+🟢 **DONE**: M1 · M2 · M3 (incl. ANNCSU autocomplete) · M5.S1 · M5.S3 · M3.S6-pro · Foundation commerciale (in stato dormiente)
 
 ```
-M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  Resend  Pricing  M4   M5.S2  M5.S4  M6
-✅   ✅   ✅   ✅         ✅     ✅     ✅      ✅       ⏸️   ⏸️     ⏸️     ⏸️
+M1   M2   M3   ANNCSU  M5.S1  M5.S3  M3.S6-pro    M4   M5.S2  M5.S4  M6    Pre-launch
+✅   ✅   ✅   ✅      ✅     ✅     ✅           ⏸️   ⏸️     ⏸️     ⏸️    🛑 CONGELATO
 ```
 
-### ✅ Completato 26-Giu-2026
-- **Resend Domain**: verificato, primo invio ufficiale OK in INBOX Gmail
-- **Pricing OMNIA v1.0**: definitivo (vedi `/app/memory/PRICING_OMNIA.md`)
-  - Founders 50: €39/€99/€249 (lock-in 24m, post €59/€179/€349)
-  - Sistema crediti €0,30/cad
-  - Boost portale -25/45% vs Idealista
-  - Break-even reale: 10-12 agency / Trigger go-live: 15 Founders paganti / Profitto Founders 50 pieno: €29.460/anno
+### ⏸️ DECISIONI ESPLICITAMENTE RIMANDATE (sessione separata, post-M6)
+- **Tier Enterprise** (>20 utenti, multi-sede, SLA dedicato) — *"Voglio ragionarci ancora"*
+- **Custom API per Enterprise** — per-call / flat / revenue-share
+- **Pre-launch + Founders 50** — riapertura solo dopo Academy + features complete (D-035)
 
-### ⏸️ DECISIONI ESPLICITAMENTE RIMANDATE (sessione separata)
-- **Tier Enterprise** (>20 utenti, multi-sede, SLA dedicato) — founder: *"Voglio ragionarci ancora"*
-- **Custom API per clienti Enterprise** — modelli possibili: per-call pricing, flat enterprise contract, revenue share. Da decidere insieme al pricing Enterprise.
+### 🔴 Prossima sessione — Riapertura al PROGRAMMA_OMNIA.md
 
-### 🔴 Prossima sessione — Programma operativo aggiornato
+**Sequenza obbligata (D-035)**:
+
+1. **Audit "lavori saltati o parziali"** dentro M2/M3/M5 già flaggati ✅ — fare lista esaustiva prima di partire
+2. **Recupero materiali Founder per MLS**:
+   - Cercare screenshots Agestanet negli asset del job
+   - Cercare screenshot box MLS nicastroimmobiliare.it
+   - Se non più disponibili → chiedere nuovo upload al Founder
+3. Continuare da dove si era effettivamente fermato il programma operativo, secondo la sequenza D-032: **M5.S4 Virtual Staging → M5.S5 Mutui → M5.S6 APE → M5.S2 AL Knowledge → M6 Academy → M4 MLS+Stripe+Crediti**
+
 
 **Sequenza definita (tempo illimitato, qualità prima):**
 

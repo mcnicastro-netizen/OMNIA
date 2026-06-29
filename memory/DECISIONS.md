@@ -600,3 +600,30 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **API key richiesta**: `FAL_KEY` da ottenere su https://fal.ai/dashboard/keys ($5 free credit = ~80 staging test gratis)
 - **Stato**: in attesa attivazione `FAL_KEY` da Founder, poi parte M5.S4.1
 
+
+### D-035 — STOP PRE-LAUNCH: ritorno al PROGRAMMA OPERATIVO originale (29-Giu-2026) 🛑
+
+- **Trigger**: il Founder constata che la traiettoria delle ultime 3-4 sessioni (Pricing v1.0 → Resend domain → Landing `/it/agenzie` → Sora 2 videos → Banner CTA proposto → ANNCSU autocomplete) ha **deviato dal programma operativo originale** in favore di una pre-launch commerciale **mai richiesta esplicitamente** dal Founder. Citazione: *"abbiamo perso il filo inseguendo un pre-launch che a me non interessa per ora"*.
+- **Decisione vincolante**:
+  1. ❌ **NESSUN pre-launch** finché:
+     - Tutte le **feature del Santo Graal** sono complete e funzionanti
+     - **Omnia Academy (M6)** è strutturata e operativa
+  2. ✅ **Si riprende il PROGRAMMA OPERATIVO originale** (`PROGRAMMA_OMNIA.md` v2.4) **passo passo, sequenziale, senza scorciatoie**
+  3. ✅ **Recupero dei lavori saltati o parziali**, in particolare:
+     - **MLS multi-agenzia** (M4.S1+S2) — Founder aveva fornito due materiali di riferimento ora da rianalizzare:
+       - **Screenshots Agestanet** (gestionale di riferimento) per studiare l'UX del modulo MLS
+       - **Screenshot box MLS di nicastroimmobiliare.it** per replicare la logica già in produzione su quel sito
+     - Altri lavori parziali da identificare al prossimo accesso (audit completo dei TODO non chiusi nei `M*.S*` originali)
+  4. ⏸️ **Tutto il filone commerciale è congelato**: Landing `/it/agenzie`, Banner CTA, warm-up Resend, outreach Founders 50, Sora 2 demo videos, pricing publishing → **restano in stato dormiente** finché Founder non riapre esplicitamente quel filone (dopo completamento M6)
+- **Implicazioni operative**:
+  - La **ROADMAP.md** torna a essere guidata dal sequencer originale M2 → M3 → M4 → M5 → M6 (con le decisioni intermedie ancora valide su sequenza M5 prima di M4 — D-032)
+  - Lo schema "Santo Graal" (ChatGPT Image 15 apr 2026) torna ad essere la **unica north-star** di prodotto
+  - Il **PRD.md** evidenzierà chiaramente l'inversione di rotta e gli item da recuperare
+- **Cosa NON cambia**:
+  - Tutto il lavoro tecnico già consegnato (M1 ✅ · M2 ✅ · M3 ✅ · M5.S1 ✅ · M5.S3 ✅ · M3.S6-pro ✅ · ANNCSU autocomplete ✅) **resta in produzione** — niente roll-back
+  - I documenti strategici (`PRICING_OMNIA.md`, `BUSINESS_MODEL.md`, `PROGRAMMA_OMNIA.md`) **restano validi come riferimento**, ma il loro contenuto NON guida le prossime sessioni finché Founder non riapre il filone commerciale
+- **Stato**: decisione vincolante, applicata a partire dalla prossima sessione
+- **Riferimento materiali Founder da recuperare**:
+  - Screenshots Agestanet (UX modulo MLS) — da rilocalizzare nella prossima sessione tra gli artifact del job
+  - Screenshot box MLS `nicastroimmobiliare.it` — da rilocalizzare o richiedere nuovo upload
+

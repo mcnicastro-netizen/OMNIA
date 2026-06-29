@@ -1,5 +1,39 @@
 # OMNIA — Changelog
 
+## 2026-06-29 (pomeriggio) — 🛑 D-035: STOP PRE-LAUNCH, ritorno al PROGRAMMA OPERATIVO originale
+
+**Tipo**: Decisione strategica vincolante del Founder (non implementazione)
+
+### Trigger
+Il Founder constata che le ultime 3-4 sessioni hanno deviato dal `PROGRAMMA_OMNIA.md` originale per inseguire un filone commerciale (Pricing v1.0 → Resend domain → Landing `/it/agenzie` → Sora 2 videos → Banner CTA proposto → ANNCSU autocomplete) **mai esplicitamente richiesto**. Citazione testuale: *"abbiamo perso il filo inseguendo un pre-launch che a me non interessa per ora. Non ci sarà nessun pre-launch senza Academy e features funzionanti"*.
+
+### Decisione
+1. ❌ **NESSUN pre-launch** finché Academy (M6) + tutte le features del Santo Graal non sono complete
+2. ✅ **Ritorno al `PROGRAMMA_OMNIA.md` v2.4** come **unica north-star di sviluppo**
+3. ✅ Sequenza obbligata D-032 confermata: **M5.S4 → M5.S5 → M5.S6 → M5.S2 → M6 → M4** (Stripe e MLS finali, post-SRL)
+4. ⏸️ Filone commerciale **CONGELATO** (codice in produzione resta, ma niente promozione)
+5. 🔍 Audit completo da fare al prossimo accesso: identificare i TODO **saltati o fatti parzialmente** dentro M2/M3/M5 chiusi
+
+### MLS multi-agenzia — recupero materiali Founder
+Il Founder ricorda di aver fornito in sessioni precedenti:
+- **Screenshots Agestanet** per studiare UX modulo MLS
+- **Screenshot box MLS di nicastroimmobiliare.it** per replicare la logica già in produzione
+
+Da rilocalizzare negli asset del job al prossimo accesso, o richiedere nuovo upload. Stato attuale codice MLS: **inesistente** (solo campo `privacy_level` sul modello Property, mai utilizzato).
+
+### Cosa NON cambia
+- Tutto il codice già consegnato (M1/M2/M3/M5.S1/M5.S3/M3.S6-pro/ANNCSU autocomplete) **resta in produzione**
+- I documenti `PRICING_OMNIA.md`, `BUSINESS_MODEL.md`, `RESEND_DOMAIN_GUIDE.md` **restano validi come riferimento**, ma non guidano sviluppo finché commercial filone non riapre
+
+### File aggiornati
+- `/app/memory/DECISIONS.md` (aggiunta D-035)
+- `/app/memory/ROADMAP.md` (riallineato a D-035)
+- `/app/memory/PRD.md` (riallineato a D-035)
+- `/app/memory/CHANGELOG.md` (questa entry)
+
+---
+
+
 ## 2026-06-29 — ✅ ANNCSU Autocomplete Indirizzi Valuator (Sprint 2)
 
 Wire frontend del lookup ANNCSU (già esistente backend) con UX live autocomplete in stile Idealista/Immobiliare.it.

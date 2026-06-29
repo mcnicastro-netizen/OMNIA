@@ -11,7 +11,9 @@
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
   - ✅ **27-Giu-2026 mattina**: Landing `/it/agenzie` v0.1 (prima bozza) LIVE. Backend `/api/founders/{spots,register}` + 2 template email Resend + frontend completo (hero, counter, 3 wow-moment, pricing table, form 5 campi). Test smoke + curl PASS. Considerata "prima bozza" dal founder, refinement futuro.
   - ✅ **29-Giu-2026**: **ANNCSU Sprint 2 DONE** — live autocomplete indirizzi stile Idealista/Immobiliare.it sul Valuator. Endpoint `/api/cloud/anncsu/suggest` (multi-candidati con doppio provider ANNCSU/Nominatim) + componente `AddressAutocomplete.jsx` (debounce, keyboard nav, badge validazione, autofill comune). Smoke E2E PASS.
-  - 🎯 **Prossimo accesso**: (1) refinement landing v0.2 se richiesto, (2) **Banner CTA** sui pubblici Valuator + AL Legal → link a `/it/agenzie`, (3) i18n EN/ES landing, (4) test reale end-to-end mail in inbox, poi **Fase 2 Demo letale 3 minuti**.
+  - 🛑 **29-Giu-2026 (POMERIGGIO) — D-035 STOP PRE-LAUNCH**: il Founder ferma il filone commerciale (landing/banner/founders 50/sora videos) e richiede ritorno al **PROGRAMMA_OMNIA.md originale**, sequenziale, **passo passo**. Citazione: *"Non ci sarà nessun pre-launch senza Academy e features funzionanti"*. Tutto il filone commerciale ENTRA IN STATO DORMIENTE (codice già in produzione resta, ma non si pubblicizza/promuove). Vedi `DECISIONS.md` D-035.
+  - 📷 **MLS multi-agenzia da recuperare**: Founder aveva fornito (sessioni precedenti) **screenshots Agestanet** (UX modulo MLS) + **screenshot box MLS nicastroimmobiliare.it**. Da rilocalizzare alla prossima sessione o richiedere nuovo upload.
+  - 🎯 **Prossimo accesso (D-035)**: (1) audit completo dei TODO saltati/parziali dentro M2/M3/M5 chiusi, (2) recupero materiali Founder per MLS, (3) ripartire dalla sequenza D-032: **M5.S4 Virtual Staging → M5.S5 Mutui → M5.S6 APE → M5.S2 AL Knowledge → M6 Academy → M4 MLS+Stripe+Crediti**.
 
 ---
 
