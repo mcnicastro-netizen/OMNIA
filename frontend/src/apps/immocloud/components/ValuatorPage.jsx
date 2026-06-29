@@ -11,6 +11,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api/cloud/valuator`;
@@ -84,6 +85,8 @@ export default function ValuatorPage() {
       });
       Object.keys(payload).forEach((k) => {
         if (payload[k] === "") delete payload[k];
+        // Strip internal-only fields (from autocomplete metadata)
+        if (k.startsWith("_")) delete payload[k];
       });
 
       // Pro mode: assemble commercial_surfaces + merit
@@ -177,11 +180,24 @@ export default function ValuatorPage() {
               </Field>
             </div>
             <Field label={t("valuator.f_address")} className="mt-3">
-              <input
-                data-testid="val-address" value={form.address}
-                onChange={(e) => upd("address", e.target.value)}
+              <AddressAutocomplete
+                testid="val-address"
+                value={form.address}
+                onChange={(v) => upd("address", v)}
+                onSelect={(rec) => {
+                  // Auto-fill comune/CAP/coords if not already filled
+                  setForm((f) => ({
+                    ...f,
+                    address: rec.normalized || f.address,
+                    city: rec.comune || f.city,
+                    _cap: rec.cap || undefined,
+                    _lat: rec.lat || undefined,
+                    _lon: rec.lon || undefined,
+                    _provincia: rec.provincia_sigla || undefined,
+                  }));
+                }}
                 placeholder={t("valuator.f_address_ph")}
-                className={inputCls}
+                inputClassName={inputCls}
               />
             </Field>
           </section>

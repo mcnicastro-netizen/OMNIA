@@ -55,7 +55,7 @@ M1   M2   M3   M3.S6-pro  M5.S1  M5.S3  Resend  Pricing  M4   M5.S2  M5.S4  M6
 #### Fase 3 — Completamento features in parallelo (2-3 mesi)
 11. **M5.S2 AL Knowledge** (RAG sul manuale)
 12. **Manuale OMNIA strutturato** (input per RAG, 6-10 ore scrittura)
-13. **ANNCSU Sprint 2** (autocomplete indirizzi Valuator)
+13. ~~**ANNCSU Sprint 2** (autocomplete indirizzi Valuator)~~ ✅ DONE 29-Giu-2026
 14. **Code Review pre-produzione** (security audit)
 15. **M5.S4 Virtual Staging** (bloccato fino a `FAL_KEY` founder)
 16. **M6 Omnia Academy** (struttura base)

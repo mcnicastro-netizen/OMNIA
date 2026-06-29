@@ -10,6 +10,7 @@
   - ✅ **AL Legal** con Tavily web-search e validator anti-hallucination su `/it/legal`.
   - 📄 **BUSINESS_MODEL.md** documentato — 7-stream revenue ecosystem.
   - ✅ **27-Giu-2026 mattina**: Landing `/it/agenzie` v0.1 (prima bozza) LIVE. Backend `/api/founders/{spots,register}` + 2 template email Resend + frontend completo (hero, counter, 3 wow-moment, pricing table, form 5 campi). Test smoke + curl PASS. Considerata "prima bozza" dal founder, refinement futuro.
+  - ✅ **29-Giu-2026**: **ANNCSU Sprint 2 DONE** — live autocomplete indirizzi stile Idealista/Immobiliare.it sul Valuator. Endpoint `/api/cloud/anncsu/suggest` (multi-candidati con doppio provider ANNCSU/Nominatim) + componente `AddressAutocomplete.jsx` (debounce, keyboard nav, badge validazione, autofill comune). Smoke E2E PASS.
   - 🎯 **Prossimo accesso**: (1) refinement landing v0.2 se richiesto, (2) **Banner CTA** sui pubblici Valuator + AL Legal → link a `/it/agenzie`, (3) i18n EN/ES landing, (4) test reale end-to-end mail in inbox, poi **Fase 2 Demo letale 3 minuti**.
 
 ---

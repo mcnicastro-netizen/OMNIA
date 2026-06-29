@@ -1,5 +1,35 @@
 # OMNIA — Changelog
 
+## 2026-06-29 — ✅ ANNCSU Autocomplete Indirizzi Valuator (Sprint 2)
+
+Wire frontend del lookup ANNCSU (già esistente backend) con UX live autocomplete in stile Idealista/Immobiliare.it.
+
+### ✅ Implementato
+- **Backend** `/app/backend/apps/immocloud/anncsu.py`:
+  - Nuovo endpoint `GET /api/cloud/anncsu/suggest?q=...&limit=5` (multi-candidati)
+  - Doppio provider: ANNCSU ArcGIS (ISTAT) primary → Nominatim OSM fallback
+  - Restituisce `{ok, candidates: [{normalized, comune, provincia_sigla, regione, cap, lat, lon, source}], input}`
+- **Frontend** nuovo componente `/app/frontend/src/apps/immocloud/components/AddressAutocomplete.jsx`:
+  - Debounce 350ms, min 3 caratteri, abort delle richieste in volo
+  - Navigazione tastiera (↑ ↓ Enter Esc)
+  - Badge verde "✓ Comune (PR) · CAP · Regione" dopo selezione
+  - Etichetta provider (ANNCSU/OSM) per trasparenza
+- **ValuatorPage** wire del componente sul campo indirizzo:
+  - On select → auto-fill `city` (Comune)
+  - Stora `_cap/_lat/_lon/_provincia` come metadata interna (strippati prima del POST)
+- Aggiunto strip dei campi `_*` (underscore-prefixed) prima dell'invio al `/api/cloud/valuator`
+
+### 🧪 Test eseguiti
+- Backend curl `/api/cloud/anncsu/suggest?q=Via Roma 12 Milano` → 6 candidati restituiti ✅
+- Screenshot E2E Playwright: dropdown live, click selezione, autofill città, badge validazione ✅
+
+### ⚠️ Note tecniche
+- L'host `geoservizi.istat.it` (ANNCSU primary) attualmente non risolve dal container preview Emergent
+- Il fallback Nominatim OSM serve già tutto correttamente; quando ISTAT torna accessibile, primary parte automatico
+
+---
+
+
 ## 2026-06-27 (mattina) — 🚀 Landing `/it/agenzie` v0.1 (prima bozza) LIVE
 
 Fase 1 del programma operativo: landing Founders 50 + backend lead capture.
