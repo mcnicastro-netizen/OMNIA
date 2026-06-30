@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
 **Ultimo aggiornamento**: 29 Giugno 2026 — 🛑 **D-035 STOP PRE-LAUNCH, ritorno al programma operativo originale**
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.4), `CHANGELOG.md` e `DECISIONS.md`
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.4), `CHANGELOG.md`, `DECISIONS.md` e `OPEN_SOURCE_FINDINGS.md` (audit GitHub 29-Giu)
 
 ---
 

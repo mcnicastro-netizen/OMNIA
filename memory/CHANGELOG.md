@@ -1,5 +1,34 @@
 # OMNIA — Changelog
 
+## 2026-06-29 (sera) — 🔍 Audit open-source GitHub per OMNIA
+
+**Tipo**: Ricerca strategica (no codice)
+
+Founder ha chiesto se su GitHub ci sono progetti utili a OMNIA che non richiedano GPU pesanti. Ricerca completata e memorizzata in **`/app/memory/OPEN_SOURCE_FINDINGS.md`**.
+
+### Highlights
+- 🟢 **3 game-changer** identificati: `zornade/visura-api` (sostituisce VisureItalia), Zornade platform (85M particelle catastali + OMI), `ondata/dati_catastali` (dati catastali ufficiali 2025 via DuckDB)
+- 🟡 **4 strong-add**: `SenatoDellaRepubblica/PArSe` (parser normativo per AL Legal), `italia/awesome-italian-public-datasets`, `AgID/cruscotto-italia`, `opendataloader-pdf`
+- 🔵 4 backlog interessanti
+- ❌ 5 esclusi (Stable Diffusion CPU = 30-90s/img, troppo lento; HouseCrafter/LayoutGMN richiedono GPU)
+
+### Risparmio potenziale a regime (50 agenzie)
+**€5.000-19.000/anno** + qualità prodotto significativamente superiore.
+
+### Ordine di integrazione (rispetta D-035 + D-032)
+1. Durante M5.S3 v2 (enhancement AL Legal): `PArSe` + `opendataloader-pdf`
+2. Durante M5.S6 APE: `ondata/dati_catastali` + `cruscotto-italia`
+3. Durante M5.S8 post-SRL: `zornade/visura-api`
+4. Continuo: lookup su `awesome-italian-public-datasets` per Valuator/Search
+
+### Action item Founder
+- Revisione legale `visura-api` (Playwright headless su SISTER è grey-area) insieme a T&C AL Legal
+- Account SISTER ufficiale (post-SRL)
+- Decisione fork in-house Zornade vs API dipendente
+
+---
+
+
 ## 2026-06-29 (pomeriggio) — 🛑 D-035: STOP PRE-LAUNCH, ritorno al PROGRAMMA OPERATIVO originale
 
 **Tipo**: Decisione strategica vincolante del Founder (non implementazione)
