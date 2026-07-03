@@ -69,6 +69,7 @@ export default function ValuatorPage() {
   const [proMode, setProMode] = useState(false);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
+  const [lastPayload, setLastPayload] = useState(null);
   const [error, setError] = useState("");
 
   const upd = (k, v) => setForm({ ...form, [k]: v });
@@ -125,6 +126,7 @@ export default function ValuatorPage() {
         setError(typeof d.detail === "string" ? d.detail : t("valuator.err_generic"));
       } else {
         setResult(d);
+        setLastPayload(payload);
       }
     } catch {
       setError(t("valuator.err_generic"));
@@ -388,7 +390,7 @@ export default function ValuatorPage() {
         </form>
       )}
 
-      {result && <ValuationResult result={result} onReset={reset} lang={lang} formCity={form.city} formType={form.property_type} />}
+      {result && <ValuationResult result={result} onReset={reset} lang={lang} formCity={form.city} formType={form.property_type} payload={lastPayload} />}
     </div>
   );
 }
@@ -414,8 +416,35 @@ function SelectField({ testid, label, value, onChange, options, t, ns }) {
   );
 }
 
-function ValuationResult({ result, onReset, lang, formCity, formType }) {
+function ValuationResult({ result, onReset, lang, formCity, formType, payload }) {
   const { t } = useTranslation();
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const downloadPdf = async () => {
+    if (!payload || pdfBusy) return;
+    setPdfBusy(true);
+    try {
+      const r = await fetch(`${API}/report-pdf`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error("pdf failed");
+      const blob = await r.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `valutazione-${(formCity || "immobile").toLowerCase().replace(/\s+/g, "-")}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF download failed:", e);
+    } finally {
+      setPdfBusy(false);
+    }
+  };
   const fmt = (n) => `€ ${Math.round(n).toLocaleString("it-IT")}`;
   const confColor = {
     high: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -458,6 +487,15 @@ function ValuationResult({ result, onReset, lang, formCity, formType }) {
           <span className={`text-xs uppercase tracking-widest px-3 py-1 rounded border ${confColor}`} data-testid="r-confidence">
             {t("valuator.confidence")}: {t(`valuator.conf_${result.confidence}`)}
           </span>
+          <button
+            type="button"
+            onClick={downloadPdf}
+            disabled={pdfBusy || !payload}
+            data-testid="r-download-pdf"
+            className="text-xs uppercase tracking-widest bg-[#C19A6B] hover:bg-[#a98354] disabled:opacity-50 text-white px-4 py-1.5 rounded transition-colors"
+          >
+            {pdfBusy ? "..." : `📄 ${t("valuator.r_pdf_btn", "Scarica report PDF")}`}
+          </button>
         </div>
       </div>
 

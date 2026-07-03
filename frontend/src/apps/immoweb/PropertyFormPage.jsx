@@ -66,12 +66,13 @@ export default function PropertyFormPage() {
     if (!isEdit) return;
     api.get(`/app/properties/${id}`).then((r) => {
       const d = r.data;
+      const nn = (obj) => Object.fromEntries(Object.entries(obj || {}).map(([k, v]) => [k, v === null ? "" : v]));
       setForm({
         ...empty,
-        ...d,
-        energy: { ...empty.energy, ...(d.energy || {}) },
-        features: { ...empty.features, ...(d.features || {}) },
-        owner: { ...empty.owner, ...(d.owner || {}) },
+        ...nn(d),
+        energy: { ...empty.energy, ...nn(d.energy) },
+        features: { ...empty.features, ...nn(d.features) },
+        owner: { ...empty.owner, ...nn(d.owner) },
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

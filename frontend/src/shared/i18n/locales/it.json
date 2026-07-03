@@ -624,8 +624,8 @@
     "hero_subtitle": "Migliaia di immobili in vendita e affitto in Italia. Cerca, confronta, contatta — gratis, senza barriere.",
     "search_placeholder": "Città (es. Roma, Milano, Firenze...)",
     "search_btn": "Cerca",
-    "op_sale": "Compra",
-    "op_rent": "Affitta",
+    "op_sale": "In vendita",
+    "op_rent": "In affitto",
     "total_listings": "{{n}} immobili attivi in tutta Italia",
     "popular_cities": "Città più cercate",
     "featured_title": "Ultimi inserimenti",
@@ -649,8 +649,6 @@
     "b2c_home_short": "Home",
     "search_label": "Ricerca",
     "price_on_request": "Prezzo su richiesta",
-    "op_rent": "In affitto",
-    "op_sale": "In vendita",
     "no_photos": "Nessuna foto disponibile",
     "info_surface": "Superficie",
     "info_rooms": "Locali",
@@ -892,7 +890,8 @@
     "elevator_presente": "Presente",
     "elevator_presente_piano_alto": "Presente (piano alto)",
     "elevator_assente_piano_basso": "Assente (piano basso)",
-    "elevator_assente_piano_alto": "Assente (piano alto)"
+    "elevator_assente_piano_alto": "Assente (piano alto)",
+    "r_pdf_btn": "Scarica report PDF"
   },
   "al": {
     "open_chat": "Apri chat con AL",
