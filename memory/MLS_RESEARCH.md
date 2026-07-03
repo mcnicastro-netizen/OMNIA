@@ -61,13 +61,48 @@
 
 ## ❌ MATERIALI NON TROVATI
 
-### Screenshot box MLS su nicastroimmobiliare.it
-- **Non presente negli artifact del job** `4aa47cb5-df58-42fd-a562-69c0b95bf989`
-- I file `3.jpg` e `4.jpg` sono screenshot di **Idealista.it Catania** (portale terzo), non nicastroimmobiliare
-- I file `.htm` (panel 1/2) sono pannelli DNS Aruba di `omniarealestateecosystem.it`, nulla di MLS
+### ~~Screenshot box MLS su nicastroimmobiliare.it~~ ✅ RICEVUTO 03-Lug-2026
+Founder ha caricato lo screenshot della home nicastroimmobiliare.it che mostra:
 
-### Action item Founder
-- [ ] Caricare screenshot del box MLS come visualizzato dal front-end di nicastroimmobiliare.it (il sito è probabilmente powered by Agesta.NET → potrebbe essere una vista pubblica del proprio inventory + delle collaborazioni)
+### Box MLS pubblico (a sinistra della home)
+- **Header verde**: **"130.000 immobili condivisi"** (in bianco) → CLAIM KILLER del network AgestaNet
+- **4 dropdown compatti**:
+  - Contratto: `Vendita` (default)
+  - Categoria: `Residenziale` (default)
+  - Provincia: `CATANIA` (pre-selezionato → contesto agenzia)
+  - Comune: `Scegli`
+- **Range Prezzo**: 2 input (min, max)
+- **CTA**: bottone grigio "avvia la ricerca"
+- **Footer badge**: "POWERED BY AGESTANET" (in nero, prominente)
+
+### Box "Cerca il tuo immobile" (a destra, verde grande)
+Inventory SOLO dell'agenzia Nicastro (non MLS):
+- Contratto, Categoria (Tutti/Tutti default)
+- Tipologia, Provincia
+- Comune, Prezzo (da-a)
+- Mq (da-a), Vani (da-a)
+- Camere (da-a), Riferimento
+- Ordine: Rilevanza
+- CTA: bottone nero "Avvia la ricerca"
+
+### 🎯 Insight strategico fondamentale
+**Il pattern MLS ha DUE facce**:
+1. **Backend agenzia** (dashboard Agesta.NET area riservata) → strumento operativo con contatori offerte/richieste/collaborazioni tra agenzie
+2. **Frontend pubblico** (home sito agenzia) → **vetrina promozionale** che sfrutta il volume del network come selling point: "130k immobili condivisi" attrae il buyer, poi lo canalizza sul sito dell'agenzia
+
+Il visitor sulla home ha **scelta binaria**:
+- Ricerca ristretta (inventory Nicastro) → form ricco a destra
+- Ricerca ampia (network MLS nazionale) → form semplificato a sinistra
+
+**Coesistenza dei due box** è la chiave: l'agenzia mostra ampiezza (network) MA canalizza il lead sul proprio dominio.
+
+### Traduzione OMNIA
+Sul sito white-label agenzia (`agenzia.omnia/{slug}` o custom domain):
+- Box "Cerca nel network OMNIA" a sx (con contatore live "N immobili condivisi")
+- Box "Cerca nella nostra agenzia" a destra (inventory proprio)
+- Badge "POWERED BY OMNIA" opzionale (Founders 50: gratis; free tier: obbligatorio)
+
+Screenshot memorizzato negli asset del job (Founder upload 03-Lug-2026).
 
 ---
 
@@ -83,6 +118,8 @@
 | "Registrazione in AgestaNET" | Onboarding wizard MLS → firma agreement + T&C | Estensione `apps/immoweb/agencies.py` |
 | Contatore "5.811 richieste" | `mls_events` collection audit log 5 anni retention | Nuovo modello |
 | Notifica scadenza contratto | Sistema notifiche in-app + email (Resend) | Estensione notifications |
+| **Box "130.000 immobili condivisi"** (frontend pubblico) | Widget "Cerca nel network OMNIA" (counter live + form semplice provincia/comune/prezzo) da inserire sui siti white-label agenzie | Nuovo componente in `apps/immoweb/themes.py` |
+| **Badge "POWERED BY AGESTANET"** (footer box) | Badge "POWERED BY OMNIA" (opzionale Founders 50, obbligatorio free tier) | Estensione themes.py |
 
 ---
 
