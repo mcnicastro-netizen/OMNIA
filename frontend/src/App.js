@@ -36,6 +36,7 @@ import PortalsPage from "@/apps/immoweb/PortalsPage";
 import WebsitePage from "@/apps/immoweb/WebsitePage";
 import ModerationPage from "@/apps/immoweb/ModerationPage";
 import VirtualStagingPage from "@/apps/immoweb/pages/VirtualStagingPage";
+import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -169,6 +170,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <PropertyFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/properties/:id/fascicolo"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <FascicoloPage />
                       </ProtectedRoute>
                     }
                   />

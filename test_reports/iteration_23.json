@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend testing of OMNIA Fase C (Fascicolo Immobile AI + Descrizione coordinata). All Fascicolo flows work end-to-end: navigation from property form via 'fascicolo-link', page rendering with title/price/valuation/badge/checklist/progress, document upload (0→1/5) + download link + delete (1→0/5), AL analysis via Gemini (1309 chars in Italian). Descrizione coordinata rewrite-description API returned 200 with 1178-char Italian description keyed off staging job. REGRESSION FOUND: saving the property form (Appartamento Centro Storico Roma) with no changes triggers a validation error 'Input should be a valid number, unable to parse string as a number' and does not redirect — likely a numeric field (blank string vs None) being posted from an existing seed record.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "PropertyFormPage save", "issue": "Clicking Salva Immobile on existing property Appartamento Centro Storico Roma without changing any field returns 'Input should be a valid number, unable to parse string as a number' and blocks save (no redirect). Regression on property edit save flow.", "selector": "[data-testid=prop-save-btn]", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_23.json"],
+  "action_items": [
+    "Fix Pydantic numeric field validation on property update — an existing field is being submitted as empty string. Check payload of PUT /api/app/properties/{id} from PropertyFormPage: convert '' → None (or omit) for numeric fields (price, surface_sqm, rooms, bathrooms, floor, year_built, cadastral_income, etc.) before submit, or make backend model accept empty strings and coerce to None.",
+    "Optional: display the exact field name in the frontend error, not just the raw Pydantic message."
+  ],
+  "critical_code_review_comments": [
+    "FascicoloPage.jsx: `useRef` scoped inside ChecklistItem is fine, but on `err` state, upload errors and delete errors share the same slot — after a failed delete + successful upload, stale error might persist. Minor.",
+    "Property save regression indicates PropertyFormPage submit does not sanitize empty numeric inputs. Consider a shared util `toNumOrNull()`.",
+    "FascicoloPage does not paginate/show more when documents.length > small (fine now, but future-proof)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped per request)", "frontend": "95% (1 regression on property save)"},
+  "test_credentials": "mcnicastro@gmail.com / Forzainter2026. (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None persistent — uploaded 1 test PDF (ape) then deleted it via UI. Fascicolo state restored to 0/5.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fascicolo Fase C is fully functional. Only outstanding issue: property save regression. Property id 3b81db11-2988-47a7-ae26-f4396913c3a7 (Appartamento Centro Storico Roma). Staging done job id used for rewrite-description test: 8d802d09-8d8d-468c-9019-ac0f32247914 (note: property_id is None on all staging jobs in history — the endpoint still works because property_id is passed in the request body).",
+  "rca of the issue": "PropertyFormPage sends numeric fields as empty strings to backend. FastAPI/Pydantic model expects Optional[float]/Optional[int] and cannot parse ''. Root cause is likely an <input type=number> whose value binding does not coerce '' to null before submit. Reproduction: open /it/app/properties/3b81db11-2988-47a7-ae26-f4396913c3a7, do not change anything, click Salva Immobile → error 'Input should be a valid number, unable to parse string as a number'. Mitigation: in PropertyFormPage submit handler, map all numeric fields with value === '' → null before POST/PUT."
+}

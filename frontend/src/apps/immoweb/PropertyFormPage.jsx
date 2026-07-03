@@ -135,6 +135,15 @@ export default function PropertyFormPage() {
           >
             {isEdit ? t("properties.form_title_edit") : t("properties.form_title_new")}
           </h1>
+          {isEdit && (
+            <Link
+              to={`/${lang}/app/properties/${id}/fascicolo`}
+              data-testid="fascicolo-link"
+              className="inline-block mt-3 text-xs uppercase tracking-widest border border-stone-300 hover:border-stone-900 px-4 py-2 text-stone-700"
+            >
+              📁 Fascicolo Immobile AI
+            </Link>
+          )}
         </div>
 
         <form onSubmit={submit} className="space-y-8 bg-white border border-stone-200 rounded-lg p-6 md:p-8">
@@ -443,6 +452,7 @@ export default function PropertyFormPage() {
               <StagingStudio
                 initialImage={stagingPhoto.url}
                 propertyId={isEdit ? id : null}
+                onApplyDescription={(text) => upd("description", text)}
                 onAddPhoto={(photo) => {
                   const cur = form.photos || [];
                   upd("photos", [
