@@ -47,6 +47,13 @@ async def lifespan(app: FastAPI):
     await ensure_indexes()
     _load_locales()
     await seed_admin()
+    try:
+        from apps.immoweb.virtual_staging import reap_stale_jobs
+        reaped = await reap_stale_jobs()
+        if reaped:
+            logger.info("Reaped %d stale virtual staging jobs", reaped)
+    except Exception as e:
+        logger.warning("Staging reaper failed: %s", e)
     logger.info("OMNIA backend ready.")
     yield
     # Shutdown

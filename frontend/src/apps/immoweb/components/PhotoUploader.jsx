@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
  *   onChange: (newPhotos) => void
  *   max: max number of photos (default 15)
  */
-export default function PhotoUploader({ photos = [], onChange, max = 15 }) {
+export default function PhotoUploader({ photos = [], onChange, max = 15, onStage = null }) {
   const { t } = useTranslation();
   const fileInput = useRef(null);
 
@@ -174,6 +174,17 @@ export default function PhotoUploader({ photos = [], onChange, max = 15 }) {
                 >
                   ✕
                 </button>
+                {onStage && (
+                  <button
+                    type="button"
+                    onClick={() => onStage(p, idx)}
+                    data-testid={`photo-stage-${idx}`}
+                    title="Arreda questa foto con l'AI (Virtual Staging)"
+                    className="bg-emerald-700 text-white text-xs px-2 py-1 rounded hover:bg-emerald-800"
+                  >
+                    🪄
+                  </button>
+                )}
               </div>
             </div>
           ))}

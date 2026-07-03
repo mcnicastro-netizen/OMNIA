@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import AgencyShell from "./components/AgencyShell";
 import PhotoUploader from "./components/PhotoUploader";
+import StagingStudio from "./components/StagingStudio";
 import PropertyMatchesPreview from "./components/PropertyMatchesPreview";
 import PublishingCenter from "./components/PublishingCenter";
 import AlImproveButton from "../../shared/components/AlImproveButton";
@@ -55,6 +56,7 @@ export default function PropertyFormPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [agency, setAgency] = useState(null);
+  const [stagingPhoto, setStagingPhoto] = useState(null);
 
   useEffect(() => {
     api.get(`/app/agencies/me`).then((r) => setAgency(r.data)).catch(() => {});
@@ -306,7 +308,15 @@ export default function PropertyFormPage() {
 
           {/* Photos */}
           <Section label="Foto immobile">
-            <PhotoUploader photos={form.photos || []} onChange={(photos) => upd("photos", photos)} max={15} />
+            <PhotoUploader
+              photos={form.photos || []}
+              onChange={(photos) => upd("photos", photos)}
+              max={15}
+              onStage={(p) => setStagingPhoto(p)}
+            />
+            <p className="text-xs text-stone-400 mt-2">
+              🪄 Passa il mouse su una foto e clicca la bacchetta per arredarla con il Virtual Staging AI.
+            </p>
           </Section>
 
           {/* Publishing Center (M3.S2) — toggle ImmobilCloud + Social share */}
@@ -405,6 +415,54 @@ export default function PropertyFormPage() {
           }
         `}</style>
       </section>
+
+      {/* Virtual Staging modal — inline "Arreda questa foto" (M5.S4.2) */}
+      {stagingPhoto && (
+        <div
+          data-testid="staging-modal"
+          className="fixed inset-0 z-50 bg-stone-900/70 flex items-start justify-center p-4 sm:p-8 overflow-y-auto"
+          onClick={(e) => e.target === e.currentTarget && setStagingPhoto(null)}
+        >
+          <div className="bg-stone-50 w-full max-w-4xl border border-stone-200 shadow-xl">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-white">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-amber-700">OMNIA · Virtual Staging AI</p>
+                <h3 className="text-lg font-semibold text-stone-900">🪄 Arreda questa foto</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStagingPhoto(null)}
+                data-testid="staging-modal-close"
+                className="text-stone-500 hover:text-stone-900 text-xl px-2"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-4 sm:p-6">
+              <StagingStudio
+                initialImage={stagingPhoto.url}
+                propertyId={isEdit ? id : null}
+                onAddPhoto={(photo) => {
+                  const cur = form.photos || [];
+                  upd("photos", [
+                    ...cur,
+                    {
+                      id: crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2),
+                      url: photo.url,
+                      caption: photo.caption,
+                      order: cur.length,
+                      is_cover: cur.length === 0,
+                    },
+                  ]);
+                }}
+              />
+              <p className="mt-4 text-xs text-stone-500">
+                Le varianti aggiunte compaiono tra le foto dell&apos;annuncio: ricorda di <strong>salvare l&apos;immobile</strong> per renderle definitive.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </AgencyShell>
   );
 }

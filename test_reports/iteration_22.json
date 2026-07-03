@@ -1,0 +1,40 @@
+{
+  "summary": "M5.S4.2 Virtual Staging Sprint 2 tested end-to-end. Backend: 18/18 baseline pytest tests pass (styles catalog with modes+reverse, validation 400/401/422/404, history shape, save-to-property 404, unit helpers, backward-compat, watermark, photo caption). Frontend: full UI flow verified — /it/app/staging renders correctly, upload reveals step-2 controls with all 5 mode/variant testids, 5 style + 6 room pills, multi-style click auto-selects 4 styles. Property form staging modal: uploading a photo enables photo-stage-{idx} button, clicking opens staging-modal with staging-source-preview, photo auto-uploads to fal.ai (✓ 'Foto pronta per il rendering'), CRM-aware banner shows when linked to property, modal closes correctly. The single LIVE FAL generation could NOT complete: FAL account balance is exhausted ('User is locked. Reason: Exhausted balance'). Pipeline error handling works correctly (SAM2 stage marked failed, job marked failed with error message).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "N/A", "issue": "FAL_KEY account balance exhausted despite review request saying 'active, topped up'. Blocked the ONE live e2e test (download/dataurl/save-to-property). Pipeline itself handled the error gracefully."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "PropertyFormPage", "issues": ["React warning: `value` prop on input should not be null (non-blocking, cosmetic console warning)"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_m5s4_virtual_staging.py",
+    "/app/backend/tests/test_m5s4_2_live.py",
+    "/app/test_reports/pytest/m5s4_baseline.xml",
+    "/app/test_reports/pytest/m5s4_live.xml"
+  ],
+  "action_items": [
+    "Top up FAL.AI balance to re-run the ONE live e2e test (test_m5s4_2_live.py with RUN_STAGING_LIVE=1). Estimated cost ~$0.11 for the num_variants=2 same_style standard job.",
+    "Fix minor React warning: 'value prop on input should not be null' in PropertyFormPage — use '' instead of null for controlled inputs."
+  ],
+  "critical_code_review_comments": [
+    "virtual_staging.py (751 lines) approaching the recommended 700-line threshold — consider splitting stages (SAM2/Flux/Upscale) into a separate pipeline.py module.",
+    "SaveToProperty enforces agency_id but the query for the properties collection then removes it in the second lookup — verify agency_id ACL is consistent (line 715-720).",
+    "In _run_pipeline stage 3 upscale, up_cost is charged only for successful upscales — good. But if ALL upscales fail, upscale stage is marked 'failed' yet the overall job still transitions to 'done'. Consider: should partial-upscale failure be surfaced to user?",
+    "CRM-aware Gemini call uses gemini-3-flash-preview — verify this is the correct/current model name."
+  ],
+  "updated_files": ["/app/backend/tests/test_m5s4_2_live.py (NEW)"],
+  "success_rate": {"backend": "100% (18/18 non-live) — live blocked by FAL balance", "frontend": "100%"},
+  "test_credentials": "mcnicastro@gmail.com / Forzainter2026. (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None (used existing property 'Appartamento Centro Storico Roma' for modal test; uploaded temporary photo which persists on that property)",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Baseline suite test_m5s4_virtual_staging.py is authoritative (18 passed). test_m5s4_2_live.py added for the single live generation but SKIPPED unless RUN_STAGING_LIVE=1. Once FAL balance is topped up, run: cd /app/backend && RUN_STAGING_LIVE=1 pytest tests/test_m5s4_2_live.py -v. Frontend testids all confirmed working: staging-property-select, staging-dropzone, staging-mode-standard/reverse, staging-variants-single/same4/multi4, staging-style-*, staging-room-*, photo-stage-{idx}, staging-modal, staging-source-preview, staging-modal-close.",
+  "rca of the issue": "FAL balance exhausted → SAM2 API returned 'User is locked'. Backend pipeline correctly catches the exception at _stage_sam2_mask, marks the sam2_mask stage failed with the error message, and marks the job as failed with a user-facing error. No code fix required — top up FAL account."
+}
