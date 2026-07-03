@@ -114,14 +114,22 @@ def test_dataurl_variant0(admin_session, live_job):
     assert raw[:3] == b"\xff\xd8\xff"
 
 
-def test_save_variant_to_property_full_lifecycle(admin_session, live_job):
+def test_save_variant_to_property_full_lifecycle(admin_session):
+    # 0) Reuse latest DONE live job from history (no extra FAL cost)
+    h = admin_session.get(f"{API}/app/staging/history", timeout=15)
+    assert h.status_code == 200
+    done_jobs = [j for j in h.json()["items"] if j["status"] == "done" and j.get("variants")]
+    if not done_jobs:
+        pytest.skip("No done staging job available in history")
+    job = done_jobs[0]
+
     # 1) Create test property
     payload = {
         "title": f"TEST Staging Prop {uuid.uuid4().hex[:6]}",
         "operation": "sale",
-        "property_type": "apartment",
+        "property_type": "appartamento",
         "city": "Catania",
-        "price": {"amount": 250000, "currency": "EUR"},
+        "price": 250000,
     }
     c = admin_session.post(f"{API}/app/properties", json=payload, timeout=20)
     assert c.status_code in (200, 201), c.text
@@ -131,7 +139,7 @@ def test_save_variant_to_property_full_lifecycle(admin_session, live_job):
     try:
         # 2) Save variant 0
         s = admin_session.post(
-            f"{API}/app/staging/jobs/{live_job['id']}/save-to-property",
+            f"{API}/app/staging/jobs/{job['id']}/save-to-property",
             json={"variant_index": 0, "property_id": prop_id},
             timeout=60,
         )
