@@ -43,7 +43,7 @@ MAX_TURNS = 30     # cap conversation history per session
 SOFT_RATE_LIMIT = 60  # max messages per user per hour
 
 
-SYSTEM_PROMPT = """Sei AL, l'assistente AI di OMNIA per agenti immobiliari italiani.
+SYSTEM_PROMPT = """Sei HAL, l'assistente AI di OMNIA per agenti immobiliari italiani.
 
 Aiuti l'agente a:
 - Cercare immobili, clienti, lead del suo CRM
@@ -58,7 +58,7 @@ REGOLE FONDAMENTALI:
    Tools disponibili: query_properties, query_clients, query_leads, monthly_performance, write_description
 3. Quando ricevi il risultato del tool, componi una risposta naturale in linguaggio umano
 4. NON inventare dati. Se non sai, rispondi "Non ho questa informazione nel tuo CRM"
-5. NON dare consigli legali. Se l'utente chiede di leggi/notai/contratti, suggerisci di usare AL Legal (in arrivo)
+5. NON dare consigli legali. Se l'utente chiede di leggi/notai/contratti, suggerisci di usare HAL Legal (in arrivo)
 6. NON eseguire azioni distruttive (delete, drop). Sei in modalità SOLA LETTURA
 
 TOOLS SCHEMA:
@@ -286,7 +286,7 @@ def _build_improve_prompt(req: ImproveRequest) -> str:
     current_block = f"TESTO ATTUALE DELL'AGENTE/PRIVATO (da migliorare/sostituire):\n\"{current}\"\n\n" if current else ""
 
     return (
-        f"Sei AL, copywriter immobiliare di OMNIA. Riscrivi in {lang_label} con {tone_hint}\n\n"
+        f"Sei HAL, copywriter immobiliare di OMNIA. Riscrivi in {lang_label} con {tone_hint}\n\n"
         f"{target_rules}\n\n"
         f"DATI IMMOBILE DISPONIBILI:\n{ctx}\n\n"
         f"{current_block}"
@@ -342,7 +342,7 @@ async def improve_text(req: ImproveRequest, user: dict = Depends(get_current_use
     chat_client = LlmChat(
         api_key=EMERGENT_LLM_KEY,
         session_id=f"improve-{user['id']}-{uuid4().hex[:8]}",
-        system_message="Sei AL, copywriter immobiliare di OMNIA. Rispondi sempre e solo con il testo finale richiesto, senza prefissi né spiegazioni.",
+        system_message="Sei HAL, copywriter immobiliare di OMNIA. Rispondi sempre e solo con il testo finale richiesto, senza prefissi né spiegazioni.",
     ).with_model("gemini", MODEL)
 
     try:

@@ -627,3 +627,22 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - Screenshots Agestanet (UX modulo MLS) — da rilocalizzare nella prossima sessione tra gli artifact del job
   - Screenshot box MLS `nicastroimmobiliare.it` — da rilocalizzare o richiedere nuovo upload
 
+
+### D-036 — Rebranding assistente AI: AL → HAL (03-Lug-2026) 🤖
+
+- **Trigger**: richiesta esplicita del Founder — *"correggi Al in Hal (il ns. chatbot non sarà da meno)"* — omaggio a HAL 9000 di "2001: Odissea nello spazio".
+- **Decisione**: tutte le occorrenze **user-facing** di "AL" diventano **"HAL"**: chat widget flottante, "HAL Legal", "Migliora con HAL", chiavi i18n IT/EN/ES (~14 per lingua), system prompt LLM ("Sei HAL..."), disclaimer legali.
+- **Cosa NON cambia (scelta tecnica)**: route API interne (`/api/app/al/...`), nomi file (`al_agent.py`, `AlChatWidget.jsx`), data-testid — zero rischio di regressione, il cambio è puramente di brand.
+- **Attenzione**: "AL" resta valido in `province_prices.py` (sigla provincia Alessandria) — NON toccare.
+- **Stato**: ✅ APPLICATA e verificata (screenshot dashboard: bottone HAL, menu HAL Legal, zero residui).
+
+### D-037 — Rimozione "Descrizione coordinata" staging + strategia Mutui/APE (03-Lug-2026) 🛡️
+
+- **Parte 1 — Descrizione coordinata RIMOSSA**: il Founder ha bocciato la feature "staging → descrizione annuncio coordinata con lo stile del render" perché *"l'annuncio dell'immobile renderizzato potrebbe creare confusione con la reale situazione manutentiva dell'originale"* — stesso principio AGCM che impone il watermark sui render. Rimossi: endpoint `POST /staging/jobs/{id}/rewrite-description`, bottone e pannello in `StagingStudio.jsx`, test relativi. **NON riproporre feature che descrivono l'immobile secondo lo stile del virtual staging.**
+- **Parte 2 — Comparatore Mutui (M5.S5), strategia decisa dopo ricerca**:
+  - MutuiOnline, Facile.it/Mutui.it, Segugio NON hanno API pubbliche → solo accordi di affiliazione commerciale (il Founder valuta in autonomia; sta guardando MutuiOnline)
+  - Approccio approvato in attesa: **motore in-house orientativo** — rata (ammortamento francese), TAN = benchmark + spread (Eurirs ~2,75-3,17% fisso, Euribor variabile), TAEG con spese, confronto fisso/variabile multi-durata, controllo soglia usura via TEGM Banca d'Italia (CSV open data `TEGM_SERIE_STORICA.CSV`), tabella offerte banche curata dall'admin. Informativo con disclaimer → nessuna licenza di mediazione creditizia. Predisposto per link-out affiliato futuro.
+- **Parte 3 — APE (M5.S6), strategia decisa dopo ricerca**:
+  - L'APE ufficiale richiede per legge tecnico abilitato ENEA + sopralluogo: APEFACILE/Apeadesso/VisureItalia sono solo piattaforme di ordine (€49-75, 48-72h), nessuna API pubblica. Il Founder valuta APEFACILE come partner esterno.
+  - M5.S6 resta **calcolatore orientativo in-house** (classe stimata da anno costruzione, impianti, infissi, isolamento) con disclaimer "non sostituisce l'APE ufficiale" + eventuale link-out per l'ordine ufficiale.
+- **Stato**: Parte 1 ✅ APPLICATA (25/25 test passati). Parti 2-3 = linee guida per M5.S5/M5.S6, in attesa di eventuale decisione Founder su affiliazioni esterne.

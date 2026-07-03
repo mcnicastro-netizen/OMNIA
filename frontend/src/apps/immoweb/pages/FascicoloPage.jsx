@@ -2,7 +2,7 @@
  * OMNIA — Fascicolo Immobile AI (precursore paperless del Santo Graal)
  *
  * Vista unica: dati immobile + valutazione AI + checklist documentale rogito
- * con upload/download + analisi AL dei documenti mancanti + render staging.
+ * con upload/download + analisi HAL dei documenti mancanti + render staging.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -147,7 +147,7 @@ export default function FascicoloPage() {
       const r = await api.post(`/app/fascicolo/${id}/analyze`);
       setData((d) => ({ ...d, last_analysis: r.data.analysis }));
     } catch {
-      setError("Analisi AL non riuscita, riprova");
+      setError("Analisi HAL non riuscita, riprova");
     } finally {
       setAnalyzing(false);
     }
@@ -245,28 +245,28 @@ export default function FascicoloPage() {
           </div>
         </div>
 
-        {/* AL analysis */}
+        {/* HAL analysis */}
         <div className="bg-white border border-stone-200 p-6">
           <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-700">Analisi AL — prontezza al rogito</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-700">Analisi HAL — prontezza al rogito</h2>
             <button
               onClick={analyze}
               disabled={analyzing}
               data-testid="fascicolo-analyze-btn"
               className="bg-stone-900 hover:bg-stone-700 disabled:bg-stone-300 text-white text-xs uppercase tracking-widest px-4 py-2"
             >
-              {analyzing ? "AL sta analizzando..." : "🤖 Analizza con AL"}
+              {analyzing ? "HAL sta analizzando..." : "🤖 Analizza con HAL"}
             </button>
           </div>
           {last_analysis ? (
             <div data-testid="fascicolo-analysis" className="text-sm text-stone-700 whitespace-pre-wrap bg-stone-50 border border-stone-100 p-4">
               {last_analysis.text}
               <p className="text-[10px] text-stone-400 mt-3">
-                {last_analysis.source === "al" ? "Analisi AL (Gemini)" : "Analisi automatica"} · {new Date(last_analysis.at).toLocaleString("it-IT")}
+                {last_analysis.source === "al" ? "Analisi HAL (Gemini)" : "Analisi automatica"} · {new Date(last_analysis.at).toLocaleString("it-IT")}
               </p>
             </div>
           ) : (
-            <p className="text-sm text-stone-400">Nessuna analisi eseguita. Clicca "Analizza con AL" per un report sulla prontezza al rogito.</p>
+            <p className="text-sm text-stone-400">Nessuna analisi eseguita. Clicca "Analizza con HAL" per un report sulla prontezza al rogito.</p>
           )}
         </div>
 

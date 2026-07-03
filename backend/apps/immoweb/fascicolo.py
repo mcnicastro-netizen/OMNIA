@@ -286,7 +286,7 @@ async def analyze_fascicolo(property_id: str, user=Depends(get_current_user)) ->
                 api_key=api_key,
                 session_id=f"fascicolo-{property_id}-{uuid4().hex[:6]}",
                 system_message=(
-                    "Sei AL, assistente esperto di compravendite immobiliari italiane di OMNIA. "
+                    "Sei HAL, assistente esperto di compravendite immobiliari italiane di OMNIA. "
                     "Analizza il fascicolo documentale di un immobile in vendita e produci un report "
                     "conciso in italiano (max 180 parole) per l'agente: 1) stato di prontezza al rogito, "
                     "2) documenti obbligatori mancanti in ordine di priorità con dove/come ottenerli "

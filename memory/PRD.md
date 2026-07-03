@@ -22,7 +22,13 @@
     - 🐛 Fix regressione salvataggio immobili (stringhe vuote → campi numerici Pydantic) introdotta dal fix del warning React: ora il submit ripulisce tutti i campi "" (top-level + features). Verificato: salvataggio OK, foto e prezzo persistono.
   - ✅ **03-Lug-2026 (fork)**: Test live pipeline M5.S4.2 SBLOCCATO e PASSATO (23/23): saldo FAL attivo (errore precedente transitorio), generazione reale 2 varianti + download + dataurl + save-to-property. Anche LLM key attiva (~60 crediti).
   - 📷 **MLS multi-agenzia**: pattern documentati in `MLS_RESEARCH.md` (Agestanet backend + nicastroimmobiliare box pubblico). Da NON costruire fino a M4.
-  - 🎯 **Prossimo accesso**: **M5.S5 Comparatore Mutui** (Fase C completata) → M5.S6 APE → M5.S2 → M6 → M4. Sequenza D-032 confermata.
+  - ✅ **03-Lug-2026 (fork, sera)**: **D-036 + D-037 applicate** —
+    - 🤖 **AL → HAL** ovunque user-facing (chat widget, HAL Legal, i18n IT/EN/ES, system prompt). Route API e nomi file invariati.
+    - 🗑️ **"Descrizione coordinata" RIMOSSA** su decisione Founder (rischio confusione tra stile render e reale stato manutentivo — principio AGCM). Endpoint + UI + test eliminati. NON riproporre.
+    - 🏦 **Strategia M5.S5 Mutui**: motore in-house orientativo (Eurirs/Euribor + spread, TAEG, soglia usura TEGM Banca d'Italia, offerte banche admin-curated). MutuiOnline/Facile/Segugio senza API pubbliche — Founder valuta affiliazioni esterne in autonomia.
+    - ⚡ **Strategia M5.S6 APE**: calcolatore orientativo in-house con disclaimer (APE ufficiale = solo tecnico ENEA; APEFACILE è piattaforma di ordine, no API). Dettagli in DECISIONS.md D-037.
+    - Test post-modifiche: 25/25 pytest, frontend compilato, screenshot HAL verificato.
+  - 🎯 **Prossimo accesso**: **M5.S5 Comparatore Mutui** (strategia già decisa in D-037) → M5.S6 APE → M5.S2 → M6 → M4. Sequenza D-032 confermata.
 
 ---
 

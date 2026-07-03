@@ -1,4 +1,4 @@
-/* OMNIA — AL Improve Button (inline AI suggestion for title/description)
+/* OMNIA — HAL Improve Button (inline AI suggestion for title/description)
  *
  * Reusable component shown next to title/description fields in:
  *  - ImmoWeb PropertyFormPage (agents)

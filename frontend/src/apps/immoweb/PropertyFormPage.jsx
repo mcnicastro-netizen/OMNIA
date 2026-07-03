@@ -460,7 +460,6 @@ export default function PropertyFormPage() {
               <StagingStudio
                 initialImage={stagingPhoto.url}
                 propertyId={isEdit ? id : null}
-                onApplyDescription={(text) => upd("description", text)}
                 onAddPhoto={(photo) => {
                   const cur = form.photos || [];
                   upd("photos", [

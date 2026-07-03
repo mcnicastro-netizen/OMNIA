@@ -19,8 +19,8 @@ const PRICING = [
     credits: 20,
     listings: 15,
     features: [
-      "AL Chatbot AI + Lead Scoring",
-      "AL Legal anti-hallucination",
+      "HAL Chatbot AI + Lead Scoring",
+      "HAL Legal anti-hallucination",
       "Valutatore Pro UNI 10750",
       "Multiposting 3 portali",
       "Supporto email 48h",
@@ -37,7 +37,7 @@ const PRICING = [
     highlight: true,
     features: [
       "Tutto di Starter +",
-      "AL Improve copywriter inline",
+      "HAL Improve copywriter inline",
       "White-label con tuo dominio",
       "Multiposting 8 portali",
       "Supporto email 24h + chat",
@@ -70,7 +70,7 @@ const WOW_MOMENTS = [
   },
   {
     icon: "⚖️",
-    title: "AL Legal",
+    title: "HAL Legal",
     text:
       "Chatbot specializzato in diritto immobiliare italiano. Cita Normattiva, Cassazione, Agenzia Entrate. Zero allucinazioni grazie al validator anti-hallucination.",
   },

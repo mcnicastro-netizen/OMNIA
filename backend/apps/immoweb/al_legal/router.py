@@ -40,8 +40,8 @@ SOFT_RATE_LIMIT = 30       # per-user / per-hour (lower than CRM chat — costli
 MAX_TURNS = 6
 
 DISCLAIMER_HEADER = (
-    "Le informazioni fornite da AL Legal hanno carattere orientativo e divulgativo. "
-    "AL Legal NON è un avvocato e NON sostituisce un parere legale ai sensi dell'art. 2 L. 247/2012. "
+    "Le informazioni fornite da HAL Legal hanno carattere orientativo e divulgativo. "
+    "HAL Legal NON è un avvocato e NON sostituisce un parere legale ai sensi dell'art. 2 L. 247/2012. "
     "Per il tuo caso specifico, rivolgiti sempre a un notaio o avvocato di fiducia."
 )
 
@@ -188,7 +188,7 @@ async def analyze_pdf(
     user: dict = Depends(get_current_user),
 ) -> Dict[str, Any]:
     """Upload a real-estate document PDF (proposta, preliminare, locazione)
-    and receive a structured analysis from AL Legal."""
+    and receive a structured analysis from HAL Legal."""
     db = Database.get()
     await _check_rate_limit(db, user["id"])
 

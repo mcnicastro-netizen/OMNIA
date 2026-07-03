@@ -35,7 +35,7 @@ const dataUrlToBlob = (dataUrl) => {
   return new Blob([arr], { type: mime });
 };
 
-export default function StagingStudio({ propertyId = null, initialImage = null, onAddPhoto = null, onApplyDescription = null }) {
+export default function StagingStudio({ propertyId = null, initialImage = null, onAddPhoto = null }) {
   const [styles, setStyles] = useState({ styles: [], room_types: [] });
   const [selectedStyle, setSelectedStyle] = useState("modern");
   const [selectedRoom, setSelectedRoom] = useState("living");
@@ -50,7 +50,6 @@ export default function StagingStudio({ propertyId = null, initialImage = null, 
   const [error, setError] = useState("");
   const [savedVariants, setSavedVariants] = useState({});
   const [savingVariant, setSavingVariant] = useState(null);
-  const [desc, setDesc] = useState(null); // {variant, loading, text, applied, error}
   const pollRef = useRef(null);
   const fileInputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
@@ -214,33 +213,6 @@ export default function StagingStudio({ propertyId = null, initialImage = null, 
       setError("Salvataggio fallito: " + (e.response?.data?.detail || e.message));
     } finally {
       setSavingVariant(null);
-    }
-  };
-
-  const handleRewriteDescription = async (variantIdx) => {
-    if (!currentJob?.id) return;
-    setDesc({ variant: variantIdx, loading: true, text: "", applied: false, error: "" });
-    try {
-      const r = await api.post(`/app/staging/jobs/${currentJob.id}/rewrite-description`, {
-        variant_index: variantIdx,
-      });
-      setDesc({ variant: variantIdx, loading: false, text: r.data.description, applied: false, error: "" });
-    } catch (e) {
-      setDesc({ variant: variantIdx, loading: false, text: "", applied: false, error: e.response?.data?.detail || "AL non disponibile" });
-    }
-  };
-
-  const handleApplyDescription = async () => {
-    if (!desc?.text) return;
-    try {
-      if (onApplyDescription) {
-        onApplyDescription(desc.text);
-      } else if (propertyId) {
-        await api.patch(`/app/properties/${propertyId}`, { description: desc.text });
-      }
-      setDesc((d) => ({ ...d, applied: true }));
-    } catch (e) {
-      setDesc((d) => ({ ...d, error: "Applicazione fallita" }));
     }
   };
 
@@ -505,16 +477,6 @@ export default function StagingStudio({ propertyId = null, initialImage = null, 
                           {savedVariants[i] ? "✓ Aggiunta all'annuncio" : savingVariant === i ? "Salvataggio..." : "➕ Aggiungi all'annuncio"}
                         </button>
                       )}
-                      {savedVariants[i] && (propertyId || onApplyDescription) && (
-                        <button
-                          onClick={() => handleRewriteDescription(i)}
-                          disabled={desc?.loading}
-                          data-testid={`staging-rewrite-desc-${i}`}
-                          className="text-xs uppercase tracking-widest px-3 py-2 border border-amber-700 text-amber-800 hover:bg-amber-50 disabled:opacity-50 transition"
-                        >
-                          {desc?.loading && desc?.variant === i ? "AL scrive..." : "✍️ Descrizione coordinata"}
-                        </button>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -522,49 +484,6 @@ export default function StagingStudio({ propertyId = null, initialImage = null, 
               <p className="mt-5 text-xs text-stone-500">
                 Costo totale: ${(currentJob.cost_total_usd || 0).toFixed(3)} · Job {currentJob.id.slice(0, 8)} · Watermark &quot;Render virtuale OMNIA&quot; applicato su download e salvataggio (conformità AGCM).
               </p>
-
-              {/* Descrizione coordinata (AL) */}
-              {desc && !desc.loading && (desc.text || desc.error) && (
-                <div data-testid="staging-desc-panel" className="mt-5 border border-amber-200 bg-amber-50/40 p-4">
-                  <p className="text-xs uppercase tracking-widest text-amber-800 mb-2">
-                    ✍️ Descrizione coordinata con lo stile della variante {desc.variant + 1}
-                  </p>
-                  {desc.error ? (
-                    <p className="text-sm text-red-600">{desc.error}</p>
-                  ) : (
-                    <>
-                      <textarea
-                        value={desc.text}
-                        onChange={(e) => setDesc((d) => ({ ...d, text: e.target.value }))}
-                        rows={6}
-                        data-testid="staging-desc-textarea"
-                        className="w-full border border-stone-300 p-3 text-sm bg-white"
-                      />
-                      <div className="mt-2 flex gap-2">
-                        <button
-                          onClick={handleApplyDescription}
-                          disabled={desc.applied}
-                          data-testid="staging-desc-apply"
-                          className={`text-xs uppercase tracking-widest px-4 py-2 ${
-                            desc.applied
-                              ? "bg-emerald-100 text-emerald-700 border border-emerald-300 cursor-default"
-                              : "bg-amber-700 hover:bg-amber-800 text-white"
-                          }`}
-                        >
-                          {desc.applied ? "✓ Applicata all'annuncio" : "Applica all'annuncio"}
-                        </button>
-                        <button
-                          onClick={() => setDesc(null)}
-                          data-testid="staging-desc-cancel"
-                          className="text-xs uppercase tracking-widest px-4 py-2 border border-stone-300 text-stone-600 hover:border-stone-500"
-                        >
-                          Chiudi
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
             </div>
           )}
         </section>

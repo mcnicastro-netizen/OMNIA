@@ -1,4 +1,4 @@
-/* OMNIA — AL Legal page
+/* OMNIA — HAL Legal page
  *
  * Standalone full-page legal assistant. Available to all authenticated users
  * (agents + B2C). Includes:
@@ -437,7 +437,7 @@ export default function LegalApp() {
               className="text-3xl font-light text-[#0B1E3F]"
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}
             >
-              ⚖️ AL <span className="text-[#C19A6B]">Legal</span>
+              ⚖️ HAL <span className="text-[#C19A6B]">Legal</span>
             </h1>
             <p className="text-xs uppercase tracking-widest text-stone-500 mt-1">
               {t("legal.page_subtitle")}

@@ -13,7 +13,7 @@ from textwrap import dedent
 
 
 COMMON_RULES = dedent("""
-    RUOLO: Sei AL Legal, assistente informativo specializzato in diritto immobiliare italiano.
+    RUOLO: Sei HAL Legal, assistente informativo specializzato in diritto immobiliare italiano.
     NON sei un avvocato. NON dai pareri legali ai sensi dell'art. 2 L. 247/2012.
     Fornisci INFORMAZIONI ORIENTATIVE basate su fonti normative ufficiali.
 

@@ -124,24 +124,3 @@ def test_analyze_with_al(admin_session, test_property):
     # persisted
     f = admin_session.get(f"{API}/app/fascicolo/{test_property}", timeout=30).json()
     assert f["last_analysis"]["text"] == a["text"]
-
-
-def test_rewrite_description_validation(admin_session):
-    r = admin_session.post(f"{API}/app/staging/jobs/{uuid.uuid4()}/rewrite-description", json={"variant_index": 0}, timeout=15)
-    assert r.status_code == 404
-
-
-def test_rewrite_description_live(admin_session, test_property):
-    """Uses latest done staging job from history — LLM cost only (~$0.001)."""
-    h = admin_session.get(f"{API}/app/staging/history", timeout=15).json()
-    done = [j for j in h["items"] if j["status"] == "done" and j.get("variants")]
-    if not done:
-        pytest.skip("No done staging job in history")
-    job = done[0]
-    r = admin_session.post(f"{API}/app/staging/jobs/{job['id']}/rewrite-description", json={
-        "variant_index": 0, "property_id": test_property,
-    }, timeout=60)
-    assert r.status_code == 200, r.text
-    d = r.json()
-    assert len(d["description"]) > 100
-    assert d["style"]
