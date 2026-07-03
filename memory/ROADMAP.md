@@ -239,6 +239,10 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [ ] 📚 **M5.S2 — AL Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
 - [x] ⚖️ **M5.S3 — AL Legal** ✅ (24 Giu) — 5 sub-agenti specializzati + Tavily web search (7 fonti normative IT) + anti-hallucination validator (confidence 0.85) + Chain of Thought + temperature 0.2 + upload PDF + disclaimer L.247/2012. Pagina `/it/legal`. Test 16/16 backend + 100% frontend (iteration_20).
 - [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
+  - [x] **S4.1** — Pipeline 3-stage + endpoint + frontend dropzone + watermark ✅ 03-Lug-2026
+  - [ ] S4.2 — Reverse Staging + 4-varianti parallele + prompt CRM-aware
+  - [ ] S4.3 — Micro-tour video 5s (Kling) + embed listing B2C + export Reels 9:16
+  - [ ] S4.4 — A/B testing portale + dashboard analytics
 - [ ] 💰 **M5.S5 — Comparatore mutui** (scraping banche IT)
 - [ ] 🌡️ **M5.S6 — Certificazione APE** (calcolo orientativo)
 - [ ] 📑 **M5.S7 — Modulistica AI** (post-società)

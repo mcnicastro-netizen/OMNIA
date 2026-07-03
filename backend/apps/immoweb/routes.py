@@ -22,6 +22,7 @@ from apps.immoweb.moderation import router as moderation_router
 from apps.immoweb.cron import router as cron_router
 from apps.immoweb.al_agent import router as al_agent_router
 from apps.immoweb.al_legal.router import router as al_legal_router
+from apps.immoweb.virtual_staging import router as virtual_staging_router
 
 router = APIRouter(prefix="/app", tags=["immoweb"])
 
@@ -54,3 +55,4 @@ router.include_router(moderation_router)
 router.include_router(cron_router)
 router.include_router(al_agent_router)
 router.include_router(al_legal_router)
+router.include_router(virtual_staging_router)

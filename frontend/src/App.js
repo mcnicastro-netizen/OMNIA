@@ -35,6 +35,7 @@ import MatchLeadScorePage from "@/apps/immoweb/MatchLeadScorePage";
 import PortalsPage from "@/apps/immoweb/PortalsPage";
 import WebsitePage from "@/apps/immoweb/WebsitePage";
 import ModerationPage from "@/apps/immoweb/ModerationPage";
+import VirtualStagingPage from "@/apps/immoweb/pages/VirtualStagingPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -248,6 +249,16 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
                         <WebsitePage />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  {/* Virtual Staging (M5.S4.1) — arreda foto vuote con AI */}
+                  <Route
+                    path="app/staging"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <VirtualStagingPage />
                       </ProtectedRoute>
                     }
                   />

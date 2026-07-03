@@ -1,5 +1,58 @@
 # OMNIA — Changelog
 
+## 2026-07-03 — ✅ M5.S4.1 Virtual Staging (Sprint 1) DONE
+
+**Tipo**: Feature completa, testata e navigabile.
+
+### Cosa è stato costruito
+- **Backend** `/app/backend/apps/immoweb/virtual_staging.py` (~420 righe)
+  - Router `/api/app/staging` con 6 endpoint: `/styles`, `/upload`, `/generate`, `/jobs/{id}`, `/jobs/{id}/download`, `/history`, `/jobs/{id}` (DELETE)
+  - Pipeline 3-stage async in background:
+    - Stage 1: SAM 2 (`fal-ai/sam2/auto-segment`) → maschera stanza (~5-10s, $0.001)
+    - Stage 2: Flux LoRA inpainting (`fal-ai/flux-lora/inpainting`) → arredamento (~4-8s, $0.05)
+    - Stage 3: Real-ESRGAN 4x (`fal-ai/esrgan`) → upscale (~5s, $0.005)
+  - Catalog stili (5: modern, classic, scandi, industrial, luxury) + tipi stanza (6: living, bedroom, kitchen, dining, bathroom, office)
+  - Prompt engineering CRM-aware baseline (S4.2 aggiungerà buyer persona)
+  - Watermark "Render virtuale OMNIA" applicato server-side via Pillow su download (conformità AGCM 2024 + Art. 21 Codice Consumo)
+  - Rate limit 20 render/ora/user
+- **Frontend** `/app/frontend/src/apps/immoweb/pages/VirtualStagingPage.jsx` (~380 righe)
+  - Dropzone drag&drop con validazione MIME + size (max 12 MB)
+  - Upload immediato preview locale + upload al fal storage
+  - Selettori stile + tipo stanza a pillole
+  - Progress bar 3-stage con status live, durata, costo
+  - Before/After side-by-side + bottone "Scarica con watermark"
+  - Cronologia render con thumbnails
+  - Integrato in AgencyShell (nav sinistra CRM)
+- **Route** `/it/app/staging` (protetta: super_admin/agency_admin/agent)
+- **Dependencies** aggiunte: `fal-client==1.0.0` + transitive (aiofiles, msgpack, httpx-sse, asyncstdlib)
+
+### Test eseguiti
+- Curl end-to-end: enqueue → polling → done → download watermark → 4K image OK
+- **Costo reale per render**: **$0.056** (esatto come stimato in D-033)
+- **Tempo reale**: ~19 secondi totali (SAM 5.7s + Flux 4.1s + ESRGAN 5s + orchestration overhead)
+- Screenshot UI live: nav + dropzone + history OK
+
+### Deviazioni tecniche da D-033
+- Cambiato `fal-ai/flux-general/inpainting` (D-033 originale) → `fal-ai/flux-lora/inpainting` perché il primo aveva coda >10 minuti su fal. Costo e qualità equivalenti, velocità 15-30x superiore.
+- Cambiato `fal-ai/real-esrgan` → `fal-ai/esrgan` (nome endpoint corretto dopo verifica docs fal).
+
+### File modificati
+- `/app/backend/apps/immoweb/virtual_staging.py` (NEW)
+- `/app/backend/apps/immoweb/routes.py` (mount router)
+- `/app/backend/requirements.txt` (fal-client + deps)
+- `/app/backend/.env` (FAL_KEY salvata)
+- `/app/frontend/src/apps/immoweb/pages/VirtualStagingPage.jsx` (NEW)
+- `/app/frontend/src/App.js` (nuova route)
+- `/app/frontend/src/apps/immoweb/components/AgencyShell.jsx` (nav item)
+
+### Prossimo sprint M5.S4.2 (D-033)
+- Reverse Staging (rimuovi + ri-arreda con stile diverso)
+- 4 varianti parallele in una singola generation
+- Prompt CRM-aware (legge zona/prezzo/buyer persona da CRM per prompt ottimale)
+
+---
+
+
 ## 2026-06-29 (sera) — 🔍 Audit open-source GitHub per OMNIA
 
 **Tipo**: Ricerca strategica (no codice)
