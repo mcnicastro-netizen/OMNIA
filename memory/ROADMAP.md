@@ -241,6 +241,7 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
   - [x] **S4.1** — Pipeline 3-stage + endpoint + frontend dropzone + watermark ✅ 03-Lug-2026
   - [ ] S4.2 — Reverse Staging + 4-varianti parallele + prompt CRM-aware
+    - [ ] Sub-task: **Inline "Arreda questa foto"** — bottone accanto a ogni foto nel form immobili → apre modale Virtual Staging pre-caricato con URL foto listing → risultato salvato come nuova foto dell'annuncio (senza uscire dal flusso di caricamento). Trasforma il tool da "usato occasionalmente" a "usato ogni giorno".
   - [ ] S4.3 — Micro-tour video 5s (Kling) + embed listing B2C + export Reels 9:16
   - [ ] S4.4 — A/B testing portale + dashboard analytics
 - [ ] 💰 **M5.S5 — Comparatore mutui** (scraping banche IT)

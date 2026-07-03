@@ -593,12 +593,12 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - D) **A/B test automatico sul portale B2C** (data-driven scelta stile vincente)
   - E) **Trasparenza normativa** (watermark obbligatorio + toggle "foto reale/render virtuale" — conformità AGCM 2024 + Codice Consumo art. 21)
 - **Sequenza sprint M5.S4**:
-  - S4.1 — Pipeline 3-stage + endpoint + frontend dropzone + watermark + i18n (1 sessione)
-  - S4.2 — Reverse Staging + 4-varianti parallele + prompt CRM-aware (1 sessione)
+  - S4.1 — Pipeline 3-stage + endpoint + frontend dropzone + watermark + i18n (1 sessione) ✅ DONE 03-Lug-2026
+  - S4.2 — Reverse Staging + 4-varianti parallele + prompt CRM-aware **+ inline "Arreda questa foto" nel form immobili** (1 sessione, sub-task aggiunto 03-Lug-2026 su idea Founder: bottone accanto a ogni foto listing → modale VS pre-caricato con URL foto → salva risultato come nuova foto annuncio senza uscire dal flusso di caricamento. Obiettivo: trasformare VS da "usato occasionalmente" a "usato ogni giorno")
   - S4.3 — Micro-tour video + embed listing B2C + export Reels 9:16 (1 sessione)
   - S4.4 — A/B testing portale + dashboard analytics (~0,5 sessione)
-- **API key richiesta**: `FAL_KEY` da ottenere su https://fal.ai/dashboard/keys ($5 free credit = ~80 staging test gratis)
-- **Stato**: in attesa attivazione `FAL_KEY` da Founder, poi parte M5.S4.1
+- **API key richiesta**: `FAL_KEY` ✅ ATTIVA su account Founder (top-up eseguito 03-Lug-2026)
+- **Stato**: S4.1 ✅ DONE, S4.2 next
 
 
 ### D-035 — STOP PRE-LAUNCH: ritorno al PROGRAMMA OPERATIVO originale (29-Giu-2026) 🛑
