@@ -100,6 +100,14 @@ export default function PropertyFormPage() {
       if (!Object.keys(payload.energy).length) delete payload.energy;
       payload.owner = cleanGroup(form.owner);
       if (!Object.keys(payload.owner).length) delete payload.owner;
+      if (form.features) {
+        payload.features = cleanGroup(form.features);
+        if (!Object.keys(payload.features).length) delete payload.features;
+      }
+      if (payload.description === "") payload.description = null;
+      Object.keys(payload).forEach((k) => {
+        if (payload[k] === "") delete payload[k];
+      });
       payload.seller_client_id = form.seller_client_id || null;
       payload.photos = form.photos || [];
 
