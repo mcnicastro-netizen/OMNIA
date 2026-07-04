@@ -448,8 +448,15 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - ✅ Persistenza sessioni (`al_sessions`) + audit (`al_audit`), rate limit 60/h chat + 60/h improve indipendenti
 - ✅ Tests: iteration_17.json (8/8 sync), iteration_18.json (6/6 streaming), iteration_19.json (13/13 improve) — **100%**
 
-### M5.S2 — 📚 AL Knowledge (chatbot how-to piattaforma)
-- **Prerequisito**: il manuale OMNIA sarà scritto da E1 a progetto completato (decisione Founder 23 Giu)
+### M5.S2-pre — 📖 MANUALE OPERATIVO OMNIA (prerequisito vincolante, richiesto dal Founder 03-Lug-2026)
+- **Cos'è**: il manuale utente completo della piattaforma, scritto da E1 — capitolo per modulo (Dashboard, Immobili, Clienti, Match, Portali, Sito web, Virtual Staging, HAL Legal, Fascicolo, Valuator, Collaboratori, Impostazioni)
+- **Formato**: Markdown strutturato in `/app/memory/manuale/` (un file per capitolo) — sarà la knowledge base RAG di M5.S2
+- **Contenuti per capitolo**: a cosa serve, flusso passo-passo con i nomi esatti dei bottoni/campi, FAQ, errori comuni, screenshot descritti testualmente
+- **Quando**: dopo M5.S6 (così documenta anche Mutui e APE), comunque PRIMA di M5.S2
+- **Tuo compito (Founder)**: revisione del manuale prima che diventi la base del chatbot
+
+### M5.S2 — 📚 HAL Knowledge (chatbot how-to piattaforma)
+- **Prerequisito**: ⬆️ M5.S2-pre Manuale Operativo completato e revisionato dal Founder
 - RAG su manuale curato + FAQ + (opzionale) database immobili pubblico
 - Vector DB: Mongo Atlas vector search, embeddings Google text-embedding-004
 - Lead capture conversazionale quando rilevante, handoff agente reale possibile

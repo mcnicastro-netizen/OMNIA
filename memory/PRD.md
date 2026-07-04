@@ -28,7 +28,7 @@
     - 🏦 **Strategia M5.S5 Mutui**: motore in-house orientativo (Eurirs/Euribor + spread, TAEG, soglia usura TEGM Banca d'Italia, offerte banche admin-curated). MutuiOnline/Facile/Segugio senza API pubbliche — Founder valuta affiliazioni esterne in autonomia.
     - ⚡ **Strategia M5.S6 APE**: calcolatore orientativo in-house con disclaimer (APE ufficiale = solo tecnico ENEA; APEFACILE è piattaforma di ordine, no API). Dettagli in DECISIONS.md D-037.
     - Test post-modifiche: 25/25 pytest, frontend compilato, screenshot HAL verificato.
-  - 🎯 **Prossimo accesso**: **M5.S5 Comparatore Mutui** (strategia già decisa in D-037) → M5.S6 APE → M5.S2 → M6 → M4. Sequenza D-032 confermata.
+  - 🎯 **Prossimo accesso**: **M5.S5 Comparatore Mutui** (strategia già decisa in D-037) → M5.S6 APE → **M5.S2-pre MANUALE OPERATIVO** (richiesto esplicitamente dal Founder 03-Lug: manuale utente completo in `/app/memory/manuale/`, un capitolo per modulo, prerequisito vincolante di M5.S2) → M5.S2 HAL Knowledge → M6 → M4. Sequenza D-032 confermata.
 
 ---
 

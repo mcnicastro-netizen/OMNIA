@@ -42,7 +42,7 @@ M1   M2   M3   ANNCSU  M5.S1  M5.S3  M3.S6-pro    M4   M5.S2  M5.S4  M6    Pre-l
    - Cercare screenshots Agestanet negli asset del job
    - Cercare screenshot box MLS nicastroimmobiliare.it
    - Se non più disponibili → chiedere nuovo upload al Founder
-3. Continuare da dove si era effettivamente fermato il programma operativo, secondo la sequenza D-032: **M5.S4 Virtual Staging → M5.S5 Mutui → M5.S6 APE → M5.S2 AL Knowledge → M6 Academy → M4 MLS+Stripe+Crediti**
+3. Continuare da dove si era effettivamente fermato il programma operativo, secondo la sequenza D-032: **M5.S4 Virtual Staging ✅ → M5.S5 Mutui → M5.S6 APE → M5.S2-pre MANUALE OPERATIVO (richiesto Founder 03-Lug) → M5.S2 HAL Knowledge → M6 Academy → M4 MLS+Stripe+Crediti**
 
 
 **Sequenza definita (tempo illimitato, qualità prima):**
@@ -70,8 +70,8 @@ M1   M2   M3   ANNCSU  M5.S1  M5.S3  M3.S6-pro    M4   M5.S2  M5.S4  M6    Pre-l
 10. 📤 **Upload landing + YouTube + LinkedIn** (1 giorno)
 
 #### Fase 3 — Completamento features in parallelo (2-3 mesi)
-11. **M5.S2 AL Knowledge** (RAG sul manuale)
-12. **Manuale OMNIA strutturato** (input per RAG, 6-10 ore scrittura)
+11. **M5.S2-pre MANUALE OPERATIVO OMNIA** (prerequisito vincolante — un capitolo per modulo in /app/memory/manuale/, 6-10 ore scrittura, revisione Founder)
+12. **M5.S2 HAL Knowledge** (RAG sul manuale)
 13. ~~**ANNCSU Sprint 2** (autocomplete indirizzi Valuator)~~ ✅ DONE 29-Giu-2026
 14. **Code Review pre-produzione** (security audit)
 15. **M5.S4 Virtual Staging** (bloccato fino a `FAL_KEY` founder)
@@ -236,7 +236,8 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 
 ### M5 — AI Suite (8 sprint, sequenza definita D-028 del 23 Giu)
 - [x] 🤖 **M5.S1 — AL for Agents** ✅ (24 Giu) — chatbot CRM con function-calling JSON, streaming SSE token-by-token, **inline ✨ "Migliora con AL" su titolo+descrizione (IT/EN/ES)** in ImmoWeb + ImmobilCloud. Test 100% (iteration_17/18/19).
-- [ ] 📚 **M5.S2 — AL Knowledge** (chatbot how-to piattaforma, prerequisito: manuale scritto da E1)
+- [ ] 📖 **M5.S2-pre — MANUALE OPERATIVO OMNIA** (prerequisito vincolante di M5.S2, richiesto Founder 03-Lug-2026)
+- [ ] 📚 **M5.S2 — HAL Knowledge** (chatbot how-to piattaforma, RAG sul manuale)
 - [x] ⚖️ **M5.S3 — AL Legal** ✅ (24 Giu) — 5 sub-agenti specializzati + Tavily web search (7 fonti normative IT) + anti-hallucination validator (confidence 0.85) + Chain of Thought + temperature 0.2 + upload PDF + disclaimer L.247/2012. Pagina `/it/legal`. Test 16/16 backend + 100% frontend (iteration_20).
 - [ ] 🎨 **M5.S4 — Virtual Staging** (Nano Banana arreda foto vuote)
   - [x] **S4.1** — Pipeline 3-stage + endpoint + frontend dropzone + watermark ✅ 03-Lug-2026
@@ -269,7 +270,7 @@ Dopo l'analisi business completa (vedi `BUSINESS_MODEL.md`):
 4. 🟡 **M4 Stripe + Crediti + Monetizzazione B2C** ← post M5.S4 (sblocca Stream 2, 3, 4)
 5. 🟡 **M5.S5 Comparatore Mutui** (sblocca Stream 5 marketplace, €150k/mese partner commission)
 6. 🟡 **M5.S6 APE certification** (altro Stream 5)
-7. 🟡 **M5.S2 AL Knowledge** (RAG manuale — quando il manuale è scritto)
+7. 🟡 **M5.S2-pre Manuale Operativo** → poi **M5.S2 HAL Knowledge** (RAG sul manuale)
 8. 🔴 **M6 Omnia Academy** (Stream 7)
 9. 🔴 Data insights B2B (Stream 6, anno 3+)
 
