@@ -6,6 +6,7 @@ import PropertyMapView from "./components/PropertyMapView";
 import PropertyDetailPage from "./components/PropertyDetailPage";
 import SellPage from "./components/SellPage";
 import ValuatorPage from "./components/ValuatorPage";
+import MutuiPage from "./components/MutuiPage";
 import AccountDashboard from "./components/AccountDashboard";
 import { api } from "../../shared/lib/api";
 import { useAuth } from "../../shared/lib/auth";
@@ -33,6 +34,7 @@ export default function ImmocloudApp() {
         <Route path="account/sell" element={<SellPage />} />
         <Route path="account" element={<AccountDashboard />} />
         <Route path="valutatore" element={<ValuatorPage />} />
+        <Route path="mutui" element={<MutuiPage />} />
       </Routes>
       <FooterB2C />
     </div>
@@ -58,6 +60,9 @@ function CloudTopNav() {
           </Link>
           <Link to={`/${lang}/cloud/valutatore`} data-testid="cloud-nav-valuator" className="text-stone-600 hover:text-stone-900">
             {t("cloud.nav_valuator")}
+          </Link>
+          <Link to={`/${lang}/cloud/mutui`} data-testid="cloud-nav-mutui" className="text-stone-600 hover:text-stone-900">
+            {t("cloud.nav_mutui")}
           </Link>
           <Link to={`/${lang}/cloud/register?intent=sell`} data-testid="cloud-nav-sell" className="text-stone-600 hover:text-stone-900">
             {t("cloud.nav_sell")}

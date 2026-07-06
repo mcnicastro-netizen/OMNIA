@@ -32,6 +32,14 @@ function formatPrice(p) {
     : `€ ${Number(v).toLocaleString("it-IT")}`;
 }
 
+// Stima rapida rata: mutuo 25 anni, LTV 80%, TAN indicativo 3.6% (allineato al comparatore)
+function estimateInstallment(price) {
+  const loan = price * 0.8;
+  const i = 0.036 / 12;
+  const n = 300;
+  return (loan * i) / (1 - Math.pow(1 + i, -n));
+}
+
 export default function PropertyDetailPage() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
@@ -112,6 +120,24 @@ export default function PropertyDetailPage() {
             <span className="text-xs uppercase tracking-widest text-stone-500">
               {prop.operation === "rent" ? t("cloud.op_rent") : t("cloud.op_sale")}
             </span>
+          )}
+          {prop.operation !== "rent" && prop.price > 20000 && (
+            <Link
+              to={`/${lang}/cloud/mutui?price=${prop.price}`}
+              data-testid="detail-mortgage-box"
+              className="mt-2 flex items-center gap-2 justify-end text-sm text-stone-600 hover:text-[#0B1E3F] group"
+              title={t("mutui.detail_box_note")}
+            >
+              <span>
+                {t("mutui.detail_box_title")} {t("mutui.detail_box_from")}{" "}
+                <strong className="text-[#0B1E3F]">
+                  € {Math.round(estimateInstallment(prop.price)).toLocaleString("it-IT")}/{t("mutui.month")}
+                </strong>
+              </span>
+              <span className="text-[11px] uppercase tracking-widest text-[#C19A6B] group-hover:underline">
+                {t("mutui.detail_box_cta")} →
+              </span>
+            </Link>
           )}
         </div>
       </div>

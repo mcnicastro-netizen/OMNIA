@@ -37,6 +37,7 @@ import WebsitePage from "@/apps/immoweb/WebsitePage";
 import ModerationPage from "@/apps/immoweb/ModerationPage";
 import VirtualStagingPage from "@/apps/immoweb/pages/VirtualStagingPage";
 import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
+import MutuiToolPage from "@/apps/immoweb/pages/MutuiToolPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -170,6 +171,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <PropertyFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/mutui"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
+                        <MutuiToolPage />
                       </ProtectedRoute>
                     }
                   />

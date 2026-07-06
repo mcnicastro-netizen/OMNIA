@@ -1,0 +1,18 @@
+{
+  "summary": "M5.S5 Mutui Comparator frontend E2E testing — all 9 requested flows PASSED. B2C page /it/cloud/mutui: nav link present, form submission produces 14 offers with correct loan €200.000/LTV 80%/sustainability 26.7% green, rank 1 shows ★ Migliore, disclaimer mentions art. 128-sexies TUB. Amortization plan toggles with 25 year rows. LTV error path shows anticipo minimo €40.000; enabling under-36 + first-home yields LTV 95% + Consap note. Lead capture confirmation OK. CRM /it/app/mutui: sidebar '💰 Mutui' visible, comparator renders without lead form. Property detail box shows 'Rata stimata da € 1012/mese' and navigates to /it/cloud/mutui?price=250000 with price=250000 and down=50000 prefilled. i18n /en/cloud/mutui shows 'Find the right mortgage' + 'Compare offers'. Regression /it/cloud and /it/cloud/valutatore load correctly.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "MortgageComparator.jsx: fetch/{API}/config error is silently swallowed — consider surfacing an error state if config load fails (durations fallback exists but banks_count/data_updated_at would render as undefined placeholders in mutui.data_note).",
+    "sendLead catch block silently discards errors and never sets sent=true — user gets stuck in busy state on network failure; consider surfacing error message."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped per request)", "frontend": "100%"},
+  "test_credentials": "mcnicastro@gmail.com / Forzainter2026. (used for CRM test)",
+  "seed_data_creation": "1 lead created (Test Lead / lead.mutui@test.it) in mortgage_leads collection — left as-is per instructions.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "M5.S5 Mutui fully verified frontend-side. All data-testids in MortgageComparator.jsx, MutuiPage.jsx, MutuiToolPage.jsx, PropertyDetailPage.jsx are wired correctly. Backend pytest suite at /app/backend/tests/test_m5s5_mutui.py is the source of truth for backend."
+}
