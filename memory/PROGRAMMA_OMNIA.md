@@ -482,12 +482,16 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - Costo in crediti (preparazione per M4)
 - **Tuo compito**: validare qualità render su 10 immobili reali
 
-### M5.S5 — 💰 Comparatore mutui
-- Form richiesta mutuo (LTV, durata, reddito, tipo tasso)
-- Scraping tassi banche IT (Intesa, Unicredit, BPER, Crédit Agricole, online banks) — costo zero
-- Tabella comparativa rate/TAEG/spread
-- Genera lead partner finanziari (preparazione per partner affiliate)
-- **Tuo compito**: 1-2 partner affiliate banche/mediatori creditizi
+### M5.S5 — 💰 Comparatore mutui ✅ **DONE — 06 Lug 2026 (motore in-house, D-037)**
+- ✅ Motore in-house: ammortamento francese, TAN = benchmark + spread (Eurirs per fisso per durata, Euribor 3M per variabile con floor 0), TAEG via IRR con spese (istruttoria, perizia, imposta sostitutiva 0,25%/2%, incasso rata), controllo soglia usura TEGM Banca d'Italia
+- ✅ 14 offerte curate di 8 banche (Intesa, UniCredit, BPER, Crédit Agricole, BNL, MPS, ING, Webank) in `data/mortgage_data.py` — NO scraping (fragile/grigio), NO pannello admin (scelta Founder): aggiornamento manuale del file dati (~5 min/trimestre)
+- ✅ Vincoli reali: LTV max 80% (95% under-36 prima casa via Consap, solo banche aderenti), sostenibilità rata ≤ 35% reddito
+- ✅ Piano di ammortamento completo per offerta (aggregato per anno + primi 12 mesi)
+- ✅ **Tre superfici**: portale B2C `/cloud/mutui` (con lead capture → `mortgage_leads`), CRM agenti `/app/mutui` (senza lead form), box "Rata stimata da €X/mese" sulle pagine pubbliche degli annunci → comparatore precompilato
+- ✅ i18n completa IT/EN/ES (~35 chiavi), disclaimer art. 128-sexies TUB (no mediazione creditizia)
+- ✅ Tests: 12/12 pytest backend + testing agent frontend 100% (iteration_24.json)
+- **Contesto**: MutuiOnline & co. hanno rifiutato partnership senza volumi di traffico → soluzione interna (decisione Founder 06-Lug)
+- **Tuo compito (quando ci saranno volumi)**: riaprire il discorso affiliazione per il link-out
 
 ### M5.S6 — 🌡️ Certificazione APE
 - Form input parametri termici (mq, anno costruzione, riscaldamento, isolamento, classe involucro...)

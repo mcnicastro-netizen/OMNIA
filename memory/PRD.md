@@ -28,7 +28,8 @@
     - 🏦 **Strategia M5.S5 Mutui**: motore in-house orientativo (Eurirs/Euribor + spread, TAEG, soglia usura TEGM Banca d'Italia, offerte banche admin-curated). MutuiOnline/Facile/Segugio senza API pubbliche — Founder valuta affiliazioni esterne in autonomia.
     - ⚡ **Strategia M5.S6 APE**: calcolatore orientativo in-house con disclaimer (APE ufficiale = solo tecnico ENEA; APEFACILE è piattaforma di ordine, no API). Dettagli in DECISIONS.md D-037.
     - Test post-modifiche: 25/25 pytest, frontend compilato, screenshot HAL verificato.
-  - 🎯 **Prossimo accesso**: **M5.S5 Comparatore Mutui** (strategia già decisa in D-037) → M5.S6 APE → **M5.S2-pre MANUALE OPERATIVO** (richiesto esplicitamente dal Founder 03-Lug: manuale utente completo in `/app/memory/manuale/`, un capitolo per modulo, prerequisito vincolante di M5.S2) → M5.S2 HAL Knowledge → M6 → M4. Sequenza D-032 confermata.
+  - ✅ **06-Lug-2026 (fork)**: **M5.S5 COMPARATORE MUTUI DONE** (motore in-house, D-037 — MutuiOnline & co. rifiutano partnership senza volumi): ammortamento francese, TAN=benchmark+spread (Eurirs/Euribor 3M), TAEG via IRR, soglia usura TEGM, LTV 80%/95% Consap under-36, sostenibilità 35%, 14 offerte curate 8 banche in `mortgage_data.py` (aggiornamento manuale, no admin panel). Tre superfici: B2C `/cloud/mutui` + lead capture (`mortgage_leads`), CRM `/app/mutui`, box "Rata stimata" su annunci pubblici → comparatore precompilato. i18n IT/EN/ES. Test: 12/12 pytest + testing agent 100%.
+  - 🎯 **Prossimo accesso**: **M5.S6 APE orientativo** (strategia in D-037) → **M5.S2-pre MANUALE OPERATIVO** → M5.S2 HAL Knowledge → M6 → M4. Sequenza D-032 confermata.
 
 ---
 
