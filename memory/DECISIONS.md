@@ -646,3 +646,13 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - L'APE ufficiale richiede per legge tecnico abilitato ENEA + sopralluogo: APEFACILE/Apeadesso/VisureItalia sono solo piattaforme di ordine (€49-75, 48-72h), nessuna API pubblica. Il Founder valuta APEFACILE come partner esterno.
   - M5.S6 resta **calcolatore orientativo in-house** (classe stimata da anno costruzione, impianti, infissi, isolamento) con disclaimer "non sostituisce l'APE ufficiale" + eventuale link-out per l'ordine ufficiale.
 - **Stato**: Parte 1 ✅ APPLICATA (25/25 test passati). Parti 2-3 = linee guida per M5.S5/M5.S6, in attesa di eventuale decisione Founder su affiliazioni esterne.
+
+### D-038 — Outreach partner APE: APEFACILE + Certificato-Energetico.it (06-Lug-2026) 📧
+
+- **Contesto**: per M5.S6, oltre al calcolatore orientativo in-house (D-037), il Founder vuole integrare l'ordine dell'APE ufficiale tramite partner esterno. MutuiOnline aveva rifiutato partnership senza volumi → approccio diverso: per i fornitori APE ogni ordine è fatturato immediato, quindi pay-per-use senza minimi è richiesta ragionevole.
+- **Azione**: preparate (analisi siti inclusa) due email di presentazione firmate Marco Nicastro:
+  1. **APEFACILE** (apefacile.it) — servizio diretto, consegna 24-48h, video-rilievo, già partner Immobiliare.it. Richieste: API con API key, listino B2B pay-per-use senza minimi/canoni, white label, SLA canale partner.
+  2. **Certificato-Energetico.it / EnUp S.r.l.** — marketplace tecnici certificatori, consegna 3-5gg, ha già programma "Collabora — Agenzie Immobiliari" con form embeddabile + APE digitale interattivo con confronto SIAPE (enHub). Richieste: API oltre il form, listino B2B, white label/co-branding, esposizione APE interattivo nel Fascicolo OMNIA.
+- **Clausola vincolante Founder (in entrambe)**: il prezzo al cliente finale NON dovrà mai superare il listino pubblico del fornitore; eventuali costi di integrazione assorbiti nel rapporto B2B. Leva negoziale: "stiamo selezionando un partner unico" in entrambe le email.
+- **Stato**: ⏳ IN ATTESA — email consegnate al Founder il 06-Lug-2026 per l'invio. Quando arrivano le risposte, impostare M5.S6 di conseguenza: calcolatore orientativo in-house + bottone "Ordina APE ufficiale" col partner scelto (idealmente dal Fascicolo Immobile e dalla scheda immobile CRM).
+- **Nota per M5.S6**: NON bloccare lo sviluppo del calcolatore orientativo in attesa dei partner — sono due binari indipendenti.
