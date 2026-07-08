@@ -656,3 +656,17 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Clausola vincolante Founder (in entrambe)**: il prezzo al cliente finale NON dovrà mai superare il listino pubblico del fornitore; eventuali costi di integrazione assorbiti nel rapporto B2B. Leva negoziale: "stiamo selezionando un partner unico" in entrambe le email.
 - **Stato**: ⏳ IN ATTESA — email consegnate al Founder il 06-Lug-2026 per l'invio. Quando arrivano le risposte, impostare M5.S6 di conseguenza: calcolatore orientativo in-house + bottone "Ordina APE ufficiale" col partner scelto (idealmente dal Fascicolo Immobile e dalla scheda immobile CRM).
 - **Nota per M5.S6**: NON bloccare lo sviluppo del calcolatore orientativo in attesa dei partner — sono due binari indipendenti.
+
+
+### D-039 — Rimozione calcolatore APE orientativo da M5.S6 (06-Lug-2026) ❌
+
+- **Contesto**: la strategia originaria di M5.S6 (D-037 parte 3) prevedeva un calcolatore APE orientativo in-house da affiancare al binario partner esterno (D-038). Il Founder ha rivalutato costi/benefici.
+- **Decisione**: **eliminato dalla roadmap** il calcolatore APE orientativo in-house. Motivazioni:
+  1. Rischio disclaimer/reputazionale: qualsiasi output OMNIA verrebbe confuso con l'APE ufficiale (che per legge richiede tecnico abilitato ENEA + sopralluogo).
+  2. Valore percepito basso: un numero "indicativo" non guida decisioni di acquisto/locazione.
+  3. Overhead di manutenzione (formule, tabelle DPR 412/93, verifica con certificatore) non giustificato.
+- **Cosa rimane in vita**: **binario partner esterno D-038** (APEFACILE + Certificato-Energetico.it/EnUp). Se un partner risponde positivamente, si integrerà **solo** un bottone "Ordina APE ufficiale" nel Fascicolo Immobile e nella scheda CRM immobile — nessun calcolo lato OMNIA. Nessun blocco della roadmap in attesa di risposte.
+- **Effetto sequenza (D-032 aggiornata)**: M5.S5 ✅ → **M5.S2-pre Manuale Operativo** → M5.S2 HAL Knowledge → M6 Omnia Academy → M4 (post-società). M5.S7/S8 (Modulistica, Firma, Visure) restano post-società.
+- **Stato D-037 parte 3**: superata da D-039. La parte 1 (rimozione descrizione coordinata staging) e parte 2 (strategia Mutui) restano valide.
+- **Stato D-038**: rimane ⏳ in attesa risposte partner, con scope ridotto a "ordine APE ufficiale via link-out/embed", non più abbinato a un calcolatore in-house.
+- **Stato**: ✅ APPLICATA. `PROGRAMMA_OMNIA.md` e `PRD.md` aggiornati.

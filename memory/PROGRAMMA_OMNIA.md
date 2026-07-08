@@ -452,7 +452,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - **Cos'è**: il manuale utente completo della piattaforma, scritto da E1 — capitolo per modulo (Dashboard, Immobili, Clienti, Match, Portali, Sito web, Virtual Staging, HAL Legal, Fascicolo, Valuator, Collaboratori, Impostazioni)
 - **Formato**: Markdown strutturato in `/app/memory/manuale/` (un file per capitolo) — sarà la knowledge base RAG di M5.S2
 - **Contenuti per capitolo**: a cosa serve, flusso passo-passo con i nomi esatti dei bottoni/campi, FAQ, errori comuni, screenshot descritti testualmente
-- **Quando**: dopo M5.S6 (così documenta anche Mutui e APE), comunque PRIMA di M5.S2
+- **Quando**: dopo M5.S5 (Mutui ✅ già consegnato), procede subito. APE non è più nel manuale (D-039). Comunque PRIMA di M5.S2.
 - **Tuo compito (Founder)**: revisione del manuale prima che diventi la base del chatbot
 
 ### M5.S2 — 📚 HAL Knowledge (chatbot how-to piattaforma)
@@ -493,12 +493,10 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - **Contesto**: MutuiOnline & co. hanno rifiutato partnership senza volumi di traffico → soluzione interna (decisione Founder 06-Lug)
 - **Tuo compito (quando ci saranno volumi)**: riaprire il discorso affiliazione per il link-out
 
-### M5.S6 — 🌡️ Certificazione APE
-- Form input parametri termici (mq, anno costruzione, riscaldamento, isolamento, classe involucro...)
-- Calcolo automatico classe energetica + tabella consumi
-- PDF brandizzato in stile certificato APE
-- **NB**: serve certificatore abilitato per firma legale, ma il calcolo orientativo è nostro
-- **Tuo compito**: convalidare formule con 1 certificatore di fiducia
+### M5.S6 — 🌡️ Certificazione APE — ❌ **RIMOSSO (D-039, 06-Lug-2026)**
+- **Decisione Founder**: eliminato il calcolatore APE orientativo in-house dalla roadmap. Rischio disclaimer + valore percepito basso + confusione con l'APE ufficiale (solo tecnico abilitato ENEA).
+- **Rimane attivo il binario partner esterno** (D-038): in attesa di risposta da APEFACILE e Certificato-Energetico.it/EnUp. Se un partner risponde positivamente, si integrerà **solo** un bottone "Ordina APE ufficiale" nel Fascicolo Immobile + scheda CRM — nessun calcolo lato OMNIA.
+- **Effetto sulla sequenza**: M5.S5 ✅ → **M5.S2-pre Manuale Operativo** (prossimo step) → M5.S2 HAL Knowledge → M5.S7/S8 (post-società).
 
 ### M5.S7 — 📑 Modulistica AI (post-società)
 - Template contratti italiani (proposta acquisto, mandato vendita/locazione, preliminare, lettera ai condòmini, disdetta)
@@ -519,7 +517,6 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - [ ] Al Legal: 95%+ risposte con citazione normativa, 0 false positive ad alta confidence
 - [ ] Virtual Staging produce render vendibili
 - [ ] Comparatore mutui genera primi lead reali
-- [ ] APE calcolo orientativo affidabile
 - [ ] Modulistica + Firma + Visure tutto integrato (post-società)
 
 ---

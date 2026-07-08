@@ -26,11 +26,12 @@
     - 🤖 **AL → HAL** ovunque user-facing (chat widget, HAL Legal, i18n IT/EN/ES, system prompt). Route API e nomi file invariati.
     - 🗑️ **"Descrizione coordinata" RIMOSSA** su decisione Founder (rischio confusione tra stile render e reale stato manutentivo — principio AGCM). Endpoint + UI + test eliminati. NON riproporre.
     - 🏦 **Strategia M5.S5 Mutui**: motore in-house orientativo (Eurirs/Euribor + spread, TAEG, soglia usura TEGM Banca d'Italia, offerte banche admin-curated). MutuiOnline/Facile/Segugio senza API pubbliche — Founder valuta affiliazioni esterne in autonomia.
-    - ⚡ **Strategia M5.S6 APE**: calcolatore orientativo in-house con disclaimer (APE ufficiale = solo tecnico ENEA; APEFACILE è piattaforma di ordine, no API). Dettagli in DECISIONS.md D-037.
+    - ⚡ **Strategia M5.S6 APE**: superata da **D-039 (06-Lug-2026)** — calcolatore in-house **eliminato dalla roadmap**. Resta solo il binario partner esterno (D-038, in attesa risposte).
     - Test post-modifiche: 25/25 pytest, frontend compilato, screenshot HAL verificato.
   - ✅ **06-Lug-2026 (fork)**: **M5.S5 COMPARATORE MUTUI DONE** (motore in-house, D-037 — MutuiOnline & co. rifiutano partnership senza volumi): ammortamento francese, TAN=benchmark+spread (Eurirs/Euribor 3M), TAEG via IRR, soglia usura TEGM, LTV 80%/95% Consap under-36, sostenibilità 35%, 14 offerte curate 8 banche in `mortgage_data.py` (aggiornamento manuale, no admin panel). Tre superfici: B2C `/cloud/mutui` + lead capture (`mortgage_leads`), CRM `/app/mutui`, box "Rata stimata" su annunci pubblici → comparatore precompilato. i18n IT/EN/ES. Test: 12/12 pytest + testing agent 100%.
-  - 📧 **06-Lug-2026 (fork)**: **D-038 — Outreach partner APE**: preparate email di presentazione per APEFACILE e Certificato-Energetico.it/EnUp (richieste: API key, pay-per-use senza minimi, white label, clausola prezzo finale ≤ listino pubblico). ⏳ In attesa di invio/risposte del Founder. M5.S6 (calcolatore orientativo) procede su binario indipendente.
-  - 🎯 **Prossimo accesso**: **M5.S6 APE orientativo** (strategia in D-037, partner in D-038) → **M5.S2-pre MANUALE OPERATIVO** → M5.S2 HAL Knowledge → M6 → M4. Sequenza D-032 confermata.
+  - 📧 **06-Lug-2026 (fork)**: **D-038 — Outreach partner APE**: preparate email di presentazione per APEFACILE e Certificato-Energetico.it/EnUp (richieste: API key, pay-per-use senza minimi, white label, clausola prezzo finale ≤ listino pubblico). ⏳ In attesa di invio/risposte del Founder. Scope ridotto a link-out/embed "Ordina APE ufficiale" (nessun calcolo lato OMNIA, vedi D-039).
+  - ❌ **06-Lug-2026 (fork)**: **D-039 — M5.S6 calcolatore APE orientativo RIMOSSO dalla roadmap**. Motivazioni: rischio disclaimer, valore percepito basso, overhead di manutenzione. Rimane solo il binario partner esterno (D-038).
+  - 🎯 **Prossimo accesso**: **M5.S2-pre MANUALE OPERATIVO** → M5.S2 HAL Knowledge → M6 Omnia Academy → M4 (post-società). Sequenza D-032 aggiornata da D-039.
 
 ---
 
