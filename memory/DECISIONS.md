@@ -688,3 +688,55 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Effetto UI**: entry point HAL nell'header/sidebar mostrerà 3 bottoni distinti con icone e tooltip che spiegano cosa fa ciascuno. Nessun widget flottante "HAL Home" unificato.
 - **Stato**: ✅ APPLICATA. Implementazione contestuale a M5.S2 (HAL Knowledge). Fino ad allora, gli entry point esistenti (CRM per Agents, `/legal` per Legal) restano invariati.
 
+
+### D-041 — Principio architetturale del Doppio Binario (Track A / Track B) (06-Lug-2026) 🏛️ **PILLAR**
+
+- **Contesto**: OMNIA finora era stato progettato prevalentemente per il target Track A (agenzie nuove/piccole turnkey). Il Founder chiarisce che il vero motore di crescita — sia per l'inventario di ImmoCloud (che sarà la fonte principale di ricavi via ADV) sia per il consumo di crediti — sono le **agenzie strutturate** già dotate di gestionale e sito. OMNIA deve quindi convivere con loro, non sostituirle.
+- **Decisione**: **doppio binario di consumo del prodotto**, elevato a principio architetturale.
+  - **Track A — Turnkey**: agenzia adotta l'intero stack OMNIA (CRM ImmoWeb + sito omnia_template + tutte le features + HAL). Barriere zero, ARPU medio-basso, volume elevato.
+  - **Track B — Headless / White Label**: agenzia mantiene il proprio CRM/gestionale + proprio sito e **consuma le features OMNIA** via 3 canali:
+    1. **API key + budget crediti** (server-to-server integration)
+    2. **Widget embeddabili brandizzati** (iframe con colori/logo cliente): Valuator, Mutui, Virtual Staging, HAL Legal pubblico
+    3. **Feed XML bidirezionale**: immobili out → ImmoCloud, lead in → loro CRM
+- **Regola di implementazione (Definition of Done aggiornata da qui in poi)**: **ogni feature nuova** (a partire da M5.S2) deve essere progettata con **3 modalità di consumo simultanee**: (a) UI dentro OMNIA, (b) API+crediti, (c) widget embeddabile. Se una modalità non è realizzabile va giustificata esplicitamente nello sprint plan.
+- **Impatto sul modello dati** (da M2.5 in poi): `agency` acquisisce campo `plan_type: turnkey | whitelabel | hybrid`. Widget e API key introdotte in modulo dedicato (probabilmente M4.S0 API Gateway).
+- **Impatto sui ricavi**: Track A → crediti + abbonamento; Track B → crediti pay-as-you-go + revenue share ADV su ImmoCloud + revenue share lead.
+- **Wedge di posizionamento**: **AI-first (B) + Zero-friction migration (D)** (vedi D-042).
+- **Stato**: ✅ APPLICATA. Diventa cornice di tutte le decisioni successive di roadmap.
+
+### D-042 — Wedge di posizionamento OMNIA: AI-first + Zero-friction migration (06-Lug-2026) 🎯
+
+- **Contesto**: analizzando il posizionamento, "essere competitivi con tutti su tutto" è strategia perdente. Serve un wedge chiaro.
+- **Analisi delle 4 opzioni sul tavolo** (A prezzo / B AI-first / C ecosistema chiuso / D zero-friction migration):
+  - A e C sono strategie difensive che portano race-to-the-bottom o time-to-market lunghissimo
+  - B e D combinati creano il pitch: "Vieni con qualsiasi gestionale, in 48h sei operativo, e sblocchi feature AI che nessun altro ha (HAL Legal, Fascicolo AI, Virtual Staging, Valuator UNI 10750, comparatore Mutui in-house)".
+- **Decisione**:
+  - **Wedge principale = B (AI-first)** — OMNIA vende ciò che gli altri non hanno.
+  - **Wedge di rinforzo = D (Zero-friction migration)** — OMNIA rimuove la barriera di ingresso più grossa del mercato B2B (paura di cambiare gestionale).
+  - **A (prezzo) resta requisito minimo** ("Entry policy" competitiva: prezzo + crediti welcome + annunci pubblicitari gratuiti al primo tier, con unit economics da definire in `PRICING_OMNIA.md` v2).
+  - **C (ecosistema chiuso) resta effetto collaterale**: si costruisce naturalmente completando M5-M6-M4, non è pitch primario.
+- **Implicazioni operative**:
+  - **Product marketing**: ogni landing page + email outbound insiste su AI + migrazione gratuita.
+  - **Tech**: le feature AI (HAL, Valuator, Virtual Staging) sono i **prodotti hero** — vanno curati come "vetrina" (qualità output > quantità di feature).
+  - **Ops**: la migrazione a carico OMNIA diventa **customer success promise**; strumentata dallo Universal Smart Importer (D-043).
+- **Anti-wedge (cose che dichiariamo di NON fare)**: NON diventiamo un CRM full-featured tipo Salesforce, NON copiamo Agestanet feature-per-feature, NON ci mettiamo a fare firma qualificata proprietaria (usiamo DocuSign/Yousign in M5.S8).
+- **Stato**: ✅ APPLICATA. Diventa criterio filtro per ogni feature futura ("è AI-first o abilita migrazione? Sì → priorità alta. No → backlog basso").
+
+### D-043 — Universal Smart Importer come strategia di migrazione (06-Lug-2026) 📥
+
+- **Contesto**: la promessa "migrazione a carico OMNIA" (parte del wedge D di D-042) richiede connettori per i gestionali dei prospect. Priorità gestionali non ancora definibile a priori dal Founder. Serve una strategia che non blocchi la roadmap.
+- **Decisione**: costruire **UN solo importer AI-powered universale** che digerisce qualsiasi export (CSV / XLSX / XML / JSON) usando HAL come mapper. Copre ~80% dei casi reali senza dover scegliere gestionali specifici in anticipo.
+- **Flusso**:
+  1. Cliente esporta dal proprio gestionale (obbligo legale GDPR portability — tutti hanno un export).
+  2. Carica file grezzo su OMNIA (`/it/app/properties/import` oppure `/it/app/clients/import`).
+  3. HAL analizza colonne, riconosce semantica anche con nomi non standard (`descr_lungo_1`, `col_23`, `IMM_TIPOL`, ecc.).
+  4. Preview mapping con confidence score, cliente conferma/corregge.
+  5. Import massivo con deduplica + validazione.
+- **Fondazioni esistenti**:
+  - **Custom Agestanet XML Parser** ✅ (M2.S2, testato con 65 immobili del Founder). Riferimento per parser gestionali che si esporrà come "connettore nativo" quando avremo 5+ paganti dallo stesso gestionale.
+  - **AI Smart Import clienti** ✅ (D-FUTURE-07) — già funzionante su CSV sporchi.
+  - **Import CSV/XML immobili** ✅ (base one-shot, da evolvere in pipeline continua per Track B).
+- **Evoluzione**: quando 5+ agenzie paganti provengono dallo stesso gestionale (metrica di validazione), quel gestionale diventa **connettore nativo dedicato** con feed continuo (webhook/polling). No prescelte in anticipo — lascia decidere al mercato.
+- **Caso Agestanet**: già coperto tecnicamente (parser XML M2.S2). Il Founder può migrare le sue 65 proprietà quando vuole. Per clienti Agestanet terzi la migrazione è cliente-mediata (Agestanet non collabora essendo competitor, ma i clienti hanno diritto legale all'export).
+- **Stato**: ✅ APPLICATA. Universal Smart Importer 2.0 diventa **M2.5.1** in roadmap (sprint prerequisito prima di attacco commerciale Track B).
+

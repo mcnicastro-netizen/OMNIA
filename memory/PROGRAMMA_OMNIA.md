@@ -292,6 +292,56 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
+# 🔗 MILESTONE 2.5 — WHITE LABEL / DOPPIO BINARIO (D-041) 🆕
+**Durata stimata**: 4-6 sessioni · **Stato**: 🟠 PIANIFICATA — nuova, entra prima di M4
+
+> **Cornice architetturale (D-041)**: da qui in avanti ogni feature deve essere consumabile in **3 modalità**: (a) UI diretta OMNIA, (b) API+crediti, (c) widget embeddabile brandizzato. M2.5 costruisce le fondazioni per la modalità (b) e (c) + il layer multi-filiale che sblocca il target franchising.
+>
+> **Wedge di posizionamento (D-042)**: AI-first + Zero-friction migration. M2.5 materializza la seconda gamba.
+
+### M2.5.1 — 📥 Universal Smart Importer 2.0 (D-043)
+- **Fondazioni esistenti**: Custom Agestanet XML Parser ✅ (M2.S2), AI Smart Import Clienti ✅ (D-FUTURE-07), Import CSV/XML immobili one-shot ✅
+- **Evoluzione**: HAL-powered universal mapper che digerisce CSV / XLSX / XML / JSON di qualsiasi gestionale con preview mapping + confidence score + deduplica + validazione
+- **UX**: wizard drop-file → auto-detect formato → preview mapping colonne → conferma → import massivo
+- **Migrazione Founder**: 65 immobili Agestanet già testati OK, procedura documentata in `COMPETITIVE_ANALYSIS_AGESTANET.md`
+- **Tuo compito**: fornire 2-3 file di export "sporchi" reali per stress-test del mapper
+
+### M2.5.2 — 🏢 Multi-branch / Franchising Layer
+- **Nuove entità dati**: `agency_group` (holding/franchising sopra) + `branch` (filiale sotto). Backward-compatible: le agenzie attuali diventano automaticamente "gruppo mono-filiale"
+- **Nuovi ruoli**: `group_admin` (visione consolidata), `branch_admin` (perimetro filiale), `branch_agent` (perimetro individuale)
+- **Reporting consolidato**: KPI per filiale + rollup per gruppo (immobili, clienti, lead, fatturato prospect)
+- **Contabilità crediti**: livello group vs branch (holding paga o filiale paga — sceglibile per gruppo)
+- **Casi d'uso target**: Tecnocasa, RE/MAX, Gabetti, Toscano, Frimm, Grimaldi + agenzie strutturate con 2-3 sedi cittadine
+- **Tuo compito**: validare il modello permessi con 1 agenzia franchising di riferimento prima del rilascio
+
+### M2.5.3 — 🔑 API Gateway + API Keys per Track B
+- Emissione **API key per agenzia white-label** con budget crediti collegato
+- Endpoint pubblici versionati (`/api/v1/*`) per: Valuator, Mutui, Virtual Staging, HAL Legal pubblico, Import Feed Immobili, Export Lead
+- Rate limit + audit + revocation dashboard
+- SDK reference (Node.js + Python) documentato in `/app/memory/API_DOCS_TRACK_B.md`
+
+### M2.5.4 — 🧩 Widget Embeddabili Brandizzati
+- Iframe leggeri (~50-100 KB) con customer colors/logo per: **Valuator**, **Comparatore Mutui**, **Virtual Staging demo**, **HAL Legal pubblico**
+- Snippet 1-line `<script src="https://widgets.omniarealestateecosystem.it/valuator.js" data-key="ak_..."></script>`
+- Lead capture on-widget → forward al CRM cliente via webhook
+- Dashboard analytics widget (impression, engagement, lead generati)
+
+### M2.5.5 — 🔄 Feed XML Bidirezionale continuo per Track B
+- **Outbound** (già esiste M2.S5): immobili agenzia → ImmoCloud + portali (feed OSF v1.0)
+- **Inbound continuo (NEW)**: pull schedulato ogni 15-60min da URL feed cliente (Agestanet, Getrix, gestionali custom) — deduplica, delta detection, aggiornamento immobili esistenti
+- **Handoff lead**: webhook OMNIA → CRM cliente per ogni nuovo lead ImmoCloud
+
+### ✅ Definition of Done M2.5
+- [ ] Universal Smart Importer digerisce 80%+ file di export testati
+- [ ] Multi-branch operativo su 1 agenzia franchising pilota
+- [ ] API Gateway con almeno 5 endpoint Track B live + 1 SDK
+- [ ] 2+ widget embeddabili in produzione su almeno 1 sito esterno
+- [ ] Feed bidirezionale continuo funzionante su almeno 1 cliente Track B
+
+---
+
+
+
 # 🌐 MILESTONE 3 — IMMOBILCLOUD (Portale B2C) ✅ DONE (S1→S6) — S7 ⏳
 **Durata reale**: 4 giorni (19-22 Giugno 2026) · **Sessioni**: 6 completate, 1 da fare
 
