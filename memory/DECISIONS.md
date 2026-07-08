@@ -670,3 +670,21 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Stato D-037 parte 3**: superata da D-039. La parte 1 (rimozione descrizione coordinata staging) e parte 2 (strategia Mutui) restano valide.
 - **Stato D-038**: rimane ⏳ in attesa risposte partner, con scope ridotto a "ordine APE ufficiale via link-out/embed", non più abbinato a un calcolatore in-house.
 - **Stato**: ✅ APPLICATA. `PROGRAMMA_OMNIA.md` e `PRD.md` aggiornati.
+
+### D-040 — HAL entry point: 3 bottoni fisici, no router LLM (06-Lug-2026) 🎛️
+
+- **Contesto**: HAL è splittato in 3 sub-chatbot (Agents, Legal, Knowledge — vedi D-028). Domanda architetturale aperta per M5.S2: unificare in un HAL Home con router LLM davanti oppure tenere 3 entry point espliciti.
+- **Analisi costo/beneficio del router LLM (Gemini 3 Flash)**:
+  - ~350 token input + ~15 token output per classificazione → ~$0.00003/call
+  - A 100k routes/mese → **~$0.30/mese** (rumore statistico vs. gli altri costi Emergent LLM Key).
+  - Latenza aggiunta: **+200-400ms** prima del primo token → percettibile.
+  - Accuratezza attesa: ~97% (vs. ~85% regole keyword, ~92% embeddings, 100% bottoni fisici).
+- **Decisione**: **3 bottoni fisici** ("Chiedi ai tuoi dati" / "Chiedi al manuale" / "Chiedi al legale"), nessun router LLM davanti.
+- **Motivazione**:
+  1. Trasparenza UX: l'utente sa sempre quale HAL sta parlando e con quali dati/regole (importante per la fiducia, soprattutto lato Legal).
+  2. Zero latenza router, zero costo router.
+  3. Isolamento dati: rende impossibile un HAL Knowledge che "per sbaglio" chiama un tool di HAL Agents leakando dati CRM cross-tenant.
+- **Revisione futura**: se dopo 2-3 mesi di M5.S2 in produzione vediamo >15% "wrong button" (utenti che scrivono domande legali dentro HAL Knowledge o viceversa), riapriamo il tema con **regole keyword + fallback LLM solo su mismatch** (accuratezza ~94%, costo ~zero).
+- **Effetto UI**: entry point HAL nell'header/sidebar mostrerà 3 bottoni distinti con icone e tooltip che spiegano cosa fa ciascuno. Nessun widget flottante "HAL Home" unificato.
+- **Stato**: ✅ APPLICATA. Implementazione contestuale a M5.S2 (HAL Knowledge). Fino ad allora, gli entry point esistenti (CRM per Agents, `/legal` per Legal) restano invariati.
+
