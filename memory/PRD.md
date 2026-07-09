@@ -37,7 +37,8 @@
   - 📥 **06-Lug-2026 (fork)**: **D-043 — Universal Smart Importer 2.0**: HAL-powered mapper universale CSV/XLSX/XML/JSON per ~80% dei gestionali. Connettori nativi solo dopo 5+ paganti dallo stesso gestionale. Agestanet già coperto (parser XML M2.S2). Diventa M2.5.1.
   - 🆕 **06-Lug-2026 (fork)**: **NUOVA MILESTONE M2.5 — WHITE LABEL / DOPPIO BINARIO** inserita in roadmap tra M3 e M4. Sub-sprint: **M2.5.1** Universal Smart Importer, **M2.5.2** Multi-branch/Franchising, **M2.5.3** API Gateway + API Keys, **M2.5.4** Widget Embeddabili, **M2.5.5** Feed XML bidirezionale continuo. Priorità dopo completamento fascia AI (M5.S2 HAL Knowledge) e prima di M4 (crediti).
   - 📖 **06-Lug-2026 (fork)**: **M5.S2-pre Manuale Operativo SOSPESO** su decisione Founder (Cap. 1 draft creato in `/app/memory/manuale/01-introduzione-primo-accesso.md`, rimandato). Ripreso dopo consolidamento M2.5 + definizione unit economics.
-  - 🎯 **Prossimo accesso**: **Documenti strategici** (`PRICING_OMNIA.md` v2 con unit economics + `GO_TO_MARKET.md` con Track A/B) → **M2.5 White Label** → M5.S2 HAL Knowledge → M6 → M4 (post-SRL).
+  - 🎯 **06-Lug-2026 (fork)**: **D-044 — PROGRAMMA_OMNIA.md riformulato in v3.0** con priorità approvate dal Founder: **P0** M2.5.0 docs strategici (`GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2) → **P1** M2.5 Doppio Binario (ordine interno: Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0) → **P2** Manuale Operativo + HAL Knowledge → **P3** M6 Academy → **P4** M4 MLS+Stripe (post-società, confermato dopo M6). `ROADMAP.md` allineato. Sub-sprint M2.5 rinumerati (Importer diventa M2.5.5).
+  - 🎯 **Prossimo accesso**: **P0 — M2.5.0 documenti strategici** (`GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 con unit economics Track A/B, cap free tier, crediti API group/branch) → revisione Founder → **P1 M2.5.1 Multi-branch**.
 
 ---
 

@@ -1,7 +1,21 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 29 Giugno 2026 — 🛑 **D-035 STOP PRE-LAUNCH, ritorno al programma operativo originale**
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v2.4), `CHANGELOG.md`, `DECISIONS.md` e `OPEN_SOURCE_FINDINGS.md` (audit GitHub 29-Giu)
+**Ultimo aggiornamento**: 06 Luglio 2026 — 🏛️ **Pivot "Doppio Binario" (D-041/D-042/D-043) — priorità v3.0 approvate dal Founder**
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.0 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md` e `OPEN_SOURCE_FINDINGS.md` (audit GitHub 29-Giu)
+
+---
+
+## 🎯 PRIORITÀ v3.0 (vincolanti — 06 Lug 2026)
+
+```
+P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2      ⏳ NEXT (documenti, no codice)
+P1 🟠  M2.5   — Doppio Binario: Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0
+P2 🟡  M5.S2-pre Manuale Operativo (riprende dal cap.2) → M5.S2 HAL Knowledge
+P3 🟢  M6     — Omnia Academy
+P4 🔵  M4     — MLS + Stripe + Crediti (post-società, prerequisito tecnico: M2.5.1)
+POST   M5.S7/S8 — Modulistica, Firma, Visure (post-società)
+🛑     Pre-launch commerciale — CONGELATO (D-035, riapre dopo M6)
+```
 
 ---
 
@@ -19,13 +33,15 @@ Il Founder ha esplicitamente fermato il filone pre-launch. Citazione: *"abbiamo 
 
 ---
 
-## Stato attuale (29-Giu-2026 — post-D-035)
+## Stato attuale (06-Lug-2026 — post pivot Doppio Binario)
 
-🟢 **DONE**: M1 · M2 · M3 (incl. ANNCSU autocomplete) · M5.S1 · M5.S3 · M3.S6-pro · Foundation commerciale (in stato dormiente)
+🟢 **DONE**: M1 · M2 (incl. Custom Domain) · M3 (incl. S7 Saved Searches + ANNCSU + M3.S6-pro) · M5.S1 HAL Agents · M5.S3 HAL Legal · M5.S4 Virtual Staging · M5.S5 Mutui
+❌ **RIMOSSO**: M5.S6 APE orientativo (D-039 — resta solo binario partner D-038)
 
 ```
-M1   M2   M3   ANNCSU  M5.S1  M5.S3  M3.S6-pro    M4   M5.S2  M5.S4  M6    Pre-launch
-✅   ✅   ✅   ✅      ✅     ✅     ✅           ⏸️   ⏸️     ⏸️     ⏸️    🛑 CONGELATO
+FATTO:   M1 ✅ → M2 ✅ → M3 ✅ → M5.S1/S3/S4/S5 ✅
+NEXT:    P0 🔴 M2.5.0 docs → P1 🟠 M2.5 → P2 🟡 Manuale+HAL Knowledge → P3 🟢 M6 → P4 🔵 M4
+POST-SOCIETÀ: M4 (Stripe) · M5.S7/S8 · Pre-launch 🛑 (congelato, D-035)
 ```
 
 ### ⏸️ DECISIONI ESPLICITAMENTE RIMANDATE (sessione separata, post-M6)
@@ -33,16 +49,13 @@ M1   M2   M3   ANNCSU  M5.S1  M5.S3  M3.S6-pro    M4   M5.S2  M5.S4  M6    Pre-l
 - **Custom API per Enterprise** — per-call / flat / revenue-share
 - **Pre-launch + Founders 50** — riapertura solo dopo Academy + features complete (D-035)
 
-### 🔴 Prossima sessione — Riapertura al PROGRAMMA_OMNIA.md
+### 🔴 Prossima sessione — Sequenza v3.0 (PROGRAMMA_OMNIA.md v3.0)
 
-**Sequenza obbligata (D-035)**:
-
-1. **Audit "lavori saltati o parziali"** dentro M2/M3/M5 già flaggati ✅ — fare lista esaustiva prima di partire
-2. **Recupero materiali Founder per MLS**:
-   - Cercare screenshots Agestanet negli asset del job
-   - Cercare screenshot box MLS nicastroimmobiliare.it
-   - Se non più disponibili → chiedere nuovo upload al Founder
-3. Continuare da dove si era effettivamente fermato il programma operativo, secondo la sequenza D-032: **M5.S4 Virtual Staging ✅ → M5.S5 Mutui → M5.S6 APE → M5.S2-pre MANUALE OPERATIVO (richiesto Founder 03-Lug) → M5.S2 HAL Knowledge → M6 Academy → M4 MLS+Stripe+Crediti**
+1. 🔴 **P0 — M2.5.0**: scrivere `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, crediti API group/branch) → revisione Founder
+2. 🟠 **P1 — M2.5.1 Multi-branch/Franchising** (primo sprint di codice: `agency_group`, `branch`, ruoli `group_admin`/`branch_admin`/`branch_agent`, `plan_type`)
+3. 🟠 **P1 — M2.5.2→5**: API Gateway Track B → Widget embeddabili → Feed XML bidirezionale → Universal Smart Importer 2.0
+4. 🟡 **P2 — Manuale Operativo** (riprende dal capitolo 2, cap.1 ✅ in `/app/memory/manuale/`) → **M5.S2 HAL Knowledge** (3 bottoni fisici, D-040)
+5. 🟢 **P3 — M6 Academy** → 🔵 **P4 — M4 MLS+Stripe** (materiali MLS Founder: screenshots Agestanet + box MLS nicastroimmobiliare.it da recuperare quando si arriva a M4)
 
 
 **Sequenza definita (tempo illimitato, qualità prima):**

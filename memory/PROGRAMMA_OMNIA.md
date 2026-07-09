@@ -1,12 +1,46 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 2.4
+**Versione**: 3.0
 **Data creazione**: Gennaio 2026
-**Ultimo aggiornamento**: 24 Giugno 2026 (post M3 ✅ + M5.S1 ✅ + M5.S3 ✅ — AI Suite operativa con chatbot CRM, copywriter inline e assistente legale)
+**Ultimo aggiornamento**: 06 Luglio 2026 (pivot "Doppio Binario" D-041/D-042/D-043 — riformulazione completa delle priorità, ordine P0→P4 approvato dal Founder)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: M1 ✅ · M2 ✅ · M3.S1→S7 ✅ · **M5.S1 ✅ · M5.S3 ✅** · M4/M5.S2/S4-S8/M6 backlog
+**Stato**: M1 ✅ · M2 ✅ · M3 ✅ · M5.S1/S3/S4/S5 ✅ · **NEXT → P0 Documenti strategici + M2.5 Doppio Binario** · M5.S2-pre/M5.S2/M6/M4 in coda
+
+---
+
+## 🎯 ORDINE DI ESECUZIONE v3.0 (vincolante — approvato dal Founder 06 Lug 2026)
+
+```
+P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2     (documenti strategici, NO codice)
+P1 🟠  M2.5   — White Label / Doppio Binario               (Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0)
+P2 🟡  M5.S2-pre Manuale Operativo → M5.S2 HAL Knowledge   (riprende dopo M2.5)
+P3 🟢  M6     — Omnia Academy
+P4 🔵  M4     — MLS + Stripe + Crediti                     (sbloccato dalla costituzione società)
+POST   M5.S7/S8 — Modulistica, Firma elettronica, Visure   (post-società)
+🛑     Pre-launch commerciale                              (CONGELATO — D-035, riapre solo dopo M6)
+```
+
+**Razionale dell'ordine**: i documenti P0 (unit economics Track A/B, cap free tier, logica crediti API group/branch) determinano lo schema dati di M2.5. M2.5 è prerequisito tecnico di M4 (tier Enterprise/franchising) e va prima del Manuale perché ogni capitolo dovrà documentare anche le modalità di consumo Track B (D-041). M6 prima di M4 come da D-035 ("nessun pre-launch senza Academy").
+
+---
+
+## 🔥 Cambiamenti strategici v3.0 (rispetto a v2.4) — PIVOT "DOPPIO BINARIO" 🏛️
+
+Sessione 06 Luglio: il Founder ha formalizzato il pivot strategico più importante dalla nascita del progetto (D-041/D-042/D-043). OMNIA non è più solo turnkey per agenzie nuove: diventa un ecosistema a **doppio binario** che serve anche le agenzie strutturate/franchising che mantengono il proprio gestionale e sito.
+
+| Cosa cambia | v2.4 | v3.0 |
+|---|---|---|
+| **Target primario revenue** | Agenzie piccole/nuove turnkey (Track A) | **Agenzie strutturate/franchising (Track B)**: consumano feature OMNIA via API+crediti, widget brandizzati, feed XML bidirezionale (D-041) |
+| **Definition of Done feature** | UI dentro OMNIA | **3 modalità simultanee**: (a) UI OMNIA, (b) API+crediti, (c) widget embeddabile — deroghe da giustificare nello sprint plan |
+| **Posizionamento (wedge)** | "Anti-Agestanet AI" generico | **B+D formalizzato (D-042)**: AI-first (prodotti hero: HAL, Valuator, Virtual Staging) + Zero-friction migration |
+| **Strategia migrazione** | Parser dedicati per gestionale | **Universal Smart Importer (D-043)**: 1 mapper HAL-powered per qualsiasi export; connettore nativo solo a 5+ paganti dallo stesso gestionale |
+| **Nuova milestone** | — | **M2.5 White Label/Doppio Binario** (multi-branch, API Gateway, widget, feed bidir., importer 2.0) — entra PRIMA di M4 |
+| **Sequenza finale** | M5.S2-pre → M5.S2 → M6 → M4 | **P0 docs → M2.5 → M5.S2-pre/S2 → M6 → M4** |
+| **M5.S6 APE** | Calcolatore orientativo in-house | ❌ **Rimosso** (D-039) — resta solo binario partner esterno (D-038, bottone "Ordina APE ufficiale") |
+| **Modello dati** | `agency` flat | `agency_group` + `branch` + ruoli `group_admin`/`branch_admin`/`branch_agent` + `plan_type: turnkey\|whitelabel\|hybrid` |
+| **HAL entry point** | Da decidere | **3 bottoni fisici** (Agents / Knowledge / Legal), no router LLM (D-040) |
 
 ---
 
@@ -149,17 +183,15 @@ A fine di ogni sessione ti consegno questo formato:
 ## 🗺️ PARTE II — La mappa completa delle 6 Milestone
 
 ```
-M1 ─→ M2 ─→ M3 ─→ M4 ─→ M5 ─→ M6
- │     │     │     │     │     │
-Fond. Immo  Immo  MLS   AI    Aca-
-azione Web  Cloud Stripe Suite demy
- │     │     │     │     │     │
-4 ses. 6     5     5     4     5
-1-2   3-4   2-3   3-4   2     3
-sett. sett. sett. sett. sett. sett.
+SEQUENZA v3.0 (post pivot Doppio Binario):
 
-Dopo M4 → prodotto vendibile (Founder/Pro €29-49)
-Dopo M6 → ecosistema completo OMNIA come da schema PDF
+M1 ✅ ─→ M2 ✅ ─→ M3 ✅ ─→ M5(S1/S3/S4/S5) ✅ ─→ M2.5 🟠 ─→ M5.S2 🟡 ─→ M6 🟢 ─→ M4 🔵
+Fond.    ImmoWeb  ImmoCloud  AI Suite core        Doppio     Manuale+     Academy   MLS+Stripe
+                                                  Binario    HAL Knowl.             (post-società)
+
+Dopo M2.5 → Track B vendibile (API+crediti, widget, franchising)
+Dopo M4   → monetizzazione completa end-to-end (subscription + crediti)
+Dopo M6   → ecosistema completo OMNIA come da schema PDF
 ```
 
 ---
@@ -207,8 +239,8 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🏢 MILESTONE 2 — IMMOWEB MVP (Gestionale Agenzia) 🟢 95% DONE
-**Durata**: 4-5 settimane · **Sessioni**: 7 · **Stato**: S1→S5 ✅ · S6 ⏳ + D-FUTURE-07 🔴 nuova priorità
+# 🏢 MILESTONE 2 — IMMOWEB MVP (Gestionale Agenzia) ✅ DONE
+**Durata**: 4-5 settimane · **Sessioni**: 7 · **Stato**: ✅ COMPLETATA (S1→S6 + D-FUTURE-07)
 
 ### M2.S1 ✅ — Dashboard agenzia + onboarding
 - Wizard setup agenzia (logo, dati fiscali, indirizzo, contatti)
@@ -271,8 +303,9 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 **v2 prevista — D-FUTURE-09**: PDF + screenshot via Gemini Vision (in backlog, memorizzato).
 
-### M2.S6 ⏳ — Custom domain + DNS verification (D-022)
-- Theme registry già operativo (Layer D Phase 2). Manca solo:
+### M2.S6 ✅ DONE (18 Giu 2026) — Custom domain + DNS verification (D-022)
+- ✅ Custom CNAME + host-based routing middleware operativi (`agenzia-rossi.it` → tema headless). Guida in `DNS_SETUP_GUIDE.md`.
+- Scope originale:
   - Custom domain (CNAME) per agenzie del piano Agency+
   - DNS verification con check TXT record (anti-takeover)
   - Wildcard SSL (Let's Encrypt o provider managed)
@@ -286,64 +319,75 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - [x] **Multiposting OSF + Site-as-Feed + Clone-from-URL operativi** (M2.S5)
 - [x] **Theme registry headless live + 4 temi applicabili** (M2.S5 Layer D Phase 2)
 - [x] **Social share + Smart Clients List + Click-to-call/WA + CSV Client Import**
-- [ ] **AI Smart Import Clienti** (D-FUTURE-07) — sblocca adoption
-- [ ] **Custom domain CNAME funzionante** (M2.S6)
+- [x] **AI Smart Import Clienti** (D-FUTURE-07) — sblocca adoption
+- [x] **Custom domain CNAME funzionante** (M2.S6)
 - [ ] 5 agenti in parallelo nella stessa agenzia (testabile ora)
 
 ---
 
-# 🔗 MILESTONE 2.5 — WHITE LABEL / DOPPIO BINARIO (D-041) 🆕
-**Durata stimata**: 4-6 sessioni · **Stato**: 🟠 PIANIFICATA — nuova, entra prima di M4
+# 🔗 MILESTONE 2.5 — WHITE LABEL / DOPPIO BINARIO (D-041) 🟠 P1 — PROSSIMA MILESTONE
+**Durata stimata**: 6-7 sessioni (1 doc + 5-6 codice) · **Stato**: 🔴 P0 (M2.5.0) → 🟠 P1 (M2.5.1→5)
 
 > **Cornice architetturale (D-041)**: da qui in avanti ogni feature deve essere consumabile in **3 modalità**: (a) UI diretta OMNIA, (b) API+crediti, (c) widget embeddabile brandizzato. M2.5 costruisce le fondazioni per la modalità (b) e (c) + il layer multi-filiale che sblocca il target franchising.
 >
 > **Wedge di posizionamento (D-042)**: AI-first + Zero-friction migration. M2.5 materializza la seconda gamba.
+>
+> **Ordine interno v3.0**: M2.5.0 (docs) → M2.5.1 (Multi-branch) → M2.5.2 (API Gateway) → M2.5.3 (Widget) → M2.5.4 (Feed bidir.) → M2.5.5 (Importer 2.0)
 
-### M2.5.1 — 📥 Universal Smart Importer 2.0 (D-043)
-- **Fondazioni esistenti**: Custom Agestanet XML Parser ✅ (M2.S2), AI Smart Import Clienti ✅ (D-FUTURE-07), Import CSV/XML immobili one-shot ✅
-- **Evoluzione**: HAL-powered universal mapper che digerisce CSV / XLSX / XML / JSON di qualsiasi gestionale con preview mapping + confidence score + deduplica + validazione
-- **UX**: wizard drop-file → auto-detect formato → preview mapping colonne → conferma → import massivo
-- **Migrazione Founder**: 65 immobili Agestanet già testati OK, procedura documentata in `COMPETITIVE_ANALYSIS_AGESTANET.md`
-- **Tuo compito**: fornire 2-3 file di export "sporchi" reali per stress-test del mapper
+### M2.5.0 — 🔴 P0 — Documenti strategici GTM + Pricing v2 (NO codice)
+- **`GO_TO_MARKET.md`**: segmentazione Track A/B, ICP (franchising: Tecnocasa, RE/MAX, Gabetti, Toscano, Frimm, Grimaldi + agenzie multi-sede), messaging wedge B+D, canali di acquisizione, funnel e metriche di validazione
+- **`PRICING_OMNIA.md` v2**: unit economics Track A vs Track B, cap free tier, logica crediti API (contabilità group vs branch), revenue share ADV ImmoCloud + lead per Track B, welcome credits
+- **Perché prima del codice**: cap free tier e contabilità crediti group/branch determinano lo schema dati di M2.5.1 e M2.5.2
+- **Tuo compito (Founder)**: revisione e approvazione dei 2 documenti prima di scrivere codice
 
-### M2.5.2 — 🏢 Multi-branch / Franchising Layer
+### M2.5.1 — 🏢 Multi-branch / Franchising Layer ⭐ primo sprint di codice
 - **Nuove entità dati**: `agency_group` (holding/franchising sopra) + `branch` (filiale sotto). Backward-compatible: le agenzie attuali diventano automaticamente "gruppo mono-filiale"
 - **Nuovi ruoli**: `group_admin` (visione consolidata), `branch_admin` (perimetro filiale), `branch_agent` (perimetro individuale)
+- **Campo `plan_type`** su agency: `turnkey | whitelabel | hybrid` (D-041)
 - **Reporting consolidato**: KPI per filiale + rollup per gruppo (immobili, clienti, lead, fatturato prospect)
-- **Contabilità crediti**: livello group vs branch (holding paga o filiale paga — sceglibile per gruppo)
-- **Casi d'uso target**: Tecnocasa, RE/MAX, Gabetti, Toscano, Frimm, Grimaldi + agenzie strutturate con 2-3 sedi cittadine
+- **Contabilità crediti**: livello group vs branch (holding paga o filiale paga — sceglibile per gruppo, regole definite in M2.5.0)
+- **Prerequisito per**: M4 (tier Enterprise/franchising)
 - **Tuo compito**: validare il modello permessi con 1 agenzia franchising di riferimento prima del rilascio
 
-### M2.5.3 — 🔑 API Gateway + API Keys per Track B
+### M2.5.2 — 🔑 API Gateway + API Keys per Track B
 - Emissione **API key per agenzia white-label** con budget crediti collegato
 - Endpoint pubblici versionati (`/api/v1/*`) per: Valuator, Mutui, Virtual Staging, HAL Legal pubblico, Import Feed Immobili, Export Lead
 - Rate limit + audit + revocation dashboard
 - SDK reference (Node.js + Python) documentato in `/app/memory/API_DOCS_TRACK_B.md`
 
-### M2.5.4 — 🧩 Widget Embeddabili Brandizzati
+### M2.5.3 — 🧩 Widget Embeddabili Brandizzati
 - Iframe leggeri (~50-100 KB) con customer colors/logo per: **Valuator**, **Comparatore Mutui**, **Virtual Staging demo**, **HAL Legal pubblico**
 - Snippet 1-line `<script src="https://widgets.omniarealestateecosystem.it/valuator.js" data-key="ak_..."></script>`
 - Lead capture on-widget → forward al CRM cliente via webhook
 - Dashboard analytics widget (impression, engagement, lead generati)
 
-### M2.5.5 — 🔄 Feed XML Bidirezionale continuo per Track B
+### M2.5.4 — 🔄 Feed XML Bidirezionale continuo per Track B
 - **Outbound** (già esiste M2.S5): immobili agenzia → ImmoCloud + portali (feed OSF v1.0)
 - **Inbound continuo (NEW)**: pull schedulato ogni 15-60min da URL feed cliente (Agestanet, Getrix, gestionali custom) — deduplica, delta detection, aggiornamento immobili esistenti
 - **Handoff lead**: webhook OMNIA → CRM cliente per ogni nuovo lead ImmoCloud
 
+### M2.5.5 — 📥 Universal Smart Importer 2.0 (D-043)
+- **Fondazioni esistenti**: Custom Agestanet XML Parser ✅ (M2.S2), AI Smart Import Clienti ✅ (D-FUTURE-07), Import CSV/XML immobili one-shot ✅
+- **Evoluzione**: HAL-powered universal mapper che digerisce CSV / XLSX / XML / JSON di qualsiasi gestionale con preview mapping + confidence score + deduplica + validazione
+- **UX**: wizard drop-file → auto-detect formato → preview mapping colonne → conferma → import massivo
+- **Migrazione Founder**: 65 immobili Agestanet già testati OK, procedura documentata in `COMPETITIVE_ANALYSIS_AGESTANET.md`
+- **Connettori nativi**: solo quando 5+ agenzie paganti provengono dallo stesso gestionale (metrica D-043)
+- **Tuo compito**: fornire 2-3 file di export "sporchi" reali per stress-test del mapper
+
 ### ✅ Definition of Done M2.5
-- [ ] Universal Smart Importer digerisce 80%+ file di export testati
+- [ ] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0)
 - [ ] Multi-branch operativo su 1 agenzia franchising pilota
 - [ ] API Gateway con almeno 5 endpoint Track B live + 1 SDK
 - [ ] 2+ widget embeddabili in produzione su almeno 1 sito esterno
 - [ ] Feed bidirezionale continuo funzionante su almeno 1 cliente Track B
+- [ ] Universal Smart Importer digerisce 80%+ file di export testati
 
 ---
 
 
 
-# 🌐 MILESTONE 3 — IMMOBILCLOUD (Portale B2C) ✅ DONE (S1→S6) — S7 ⏳
-**Durata reale**: 4 giorni (19-22 Giugno 2026) · **Sessioni**: 6 completate, 1 da fare
+# 🌐 MILESTONE 3 — IMMOBILCLOUD (Portale B2C) ✅ DONE (S1→S7)
+**Durata reale**: 19-23 Giugno 2026 · **Sessioni**: 7 completate
 
 ### M3.S1 — Home pubblica + Registrazione segmentata B2C ✅ DONE (19 Giu)
 - CloudTopNav (logo ImmobilCloud™, link cerca/vendi/valuta gratis/area riservata)
@@ -404,7 +448,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
   - Crotone periferia → €575/m² ✓
 - Test: iter_15 (50 pytest + 12 backend + 4 frontend) 100% PASS
 
-### M3.S7 — Account B2C completo: ricerche salvate + alert email ⏳ NEXT
+### M3.S7 ✅ DONE (23 Giu) — Account B2C completo: ricerche salvate + alert email
 - Backend: `POST /api/cloud/me/saved-searches`, `GET /api/cloud/me/saved-searches`, `DELETE .../{id}`
 - Schema: `{user_id, name, filters: SearchFilters, frequency: daily|weekly|instant, created_at, last_run_at}`
 - Cron job (APScheduler o cron Mongo) che ogni ora controlla matching tra ricerche salvate e proprietà nuove
@@ -420,7 +464,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - [x] Moderazione admin queue funzionante
 - [x] Valutatore GIS pubblico con 124 città verificate
 - [x] Lead arrivano in ImmoWeb (3 fonti: contact form, private listing, valutatore)
-- [ ] Saved searches + alert email B2C (M3.S7)
+- [x] Saved searches + alert email B2C (M3.S7) ✅ 23 Giu — 12 pytest + 11 Playwright PASS
 
 ### 🔮 Backlog M3 (post-S7)
 - **Upgrade valutatore**: caricare OMI 27k zone come override DB (granularità sub-quartiere)
@@ -434,8 +478,8 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 💎 MILESTONE 4 — MLS + STRIPE + KILLER FEATURES
-**Durata**: 3-4 settimane · **Sessioni**: 5
+# 💎 MILESTONE 4 — MLS + STRIPE + KILLER FEATURES 🔵 P4 — POST-M6, POST-SOCIETÀ
+**Durata**: 3-4 settimane · **Sessioni**: 5 · **Stato**: ⏸️ BLOCCATA — richiede costituzione società (Stripe/IBAN) e viene DOPO M6 Academy (ordine v3.0). **Prerequisito tecnico: M2.5.1 Multi-branch** (contabilità crediti group/branch per il tier Enterprise/franchising).
 
 ### M4.S1 — MLS Network multi-agenzia
 - Sistema invito agenzie a MLS
@@ -484,8 +528,8 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🤖 MILESTONE 5 — AI SUITE (Vantaggio competitivo)
-**Durata**: 2-3 settimane · **Sessioni**: 8 (sequenza definita 23 Giu 2026, vedi D-028)
+# 🤖 MILESTONE 5 — AI SUITE (Vantaggio competitivo) 🟢 CORE DONE
+**Durata**: 2-3 settimane · **Sessioni**: 8 · **Stato**: S1 ✅ · S3 ✅ · S4 ✅ · S5 ✅ · S6 ❌ rimosso (D-039) · **restano S2-pre + S2 (🟡 P2, dopo M2.5)** · S7/S8 post-società
 
 > **Decisione architetturale chiave (D-028)**: Il chatbot "Al" del santo graal è stato **split in 3 chatbot specializzati sequenziali** invece di un unico tuttofare. Stack: Gemini 3 Flash via Emergent LLM Key, web-search API gratuita in fase lancio, anti-hallucination layer, audit log 5 anni.
 
@@ -498,14 +542,15 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - ✅ Persistenza sessioni (`al_sessions`) + audit (`al_audit`), rate limit 60/h chat + 60/h improve indipendenti
 - ✅ Tests: iteration_17.json (8/8 sync), iteration_18.json (6/6 streaming), iteration_19.json (13/13 improve) — **100%**
 
-### M5.S2-pre — 📖 MANUALE OPERATIVO OMNIA (prerequisito vincolante, richiesto dal Founder 03-Lug-2026)
+### M5.S2-pre — 📖 MANUALE OPERATIVO OMNIA 🟡 P2 (riprende dopo M2.5)
 - **Cos'è**: il manuale utente completo della piattaforma, scritto da E1 — capitolo per modulo (Dashboard, Immobili, Clienti, Match, Portali, Sito web, Virtual Staging, HAL Legal, Fascicolo, Valuator, Collaboratori, Impostazioni)
 - **Formato**: Markdown strutturato in `/app/memory/manuale/` (un file per capitolo) — sarà la knowledge base RAG di M5.S2
 - **Contenuti per capitolo**: a cosa serve, flusso passo-passo con i nomi esatti dei bottoni/campi, FAQ, errori comuni, screenshot descritti testualmente
-- **Quando**: dopo M5.S5 (Mutui ✅ già consegnato), procede subito. APE non è più nel manuale (D-039). Comunque PRIMA di M5.S2.
+- **Quando**: 🟡 P2 — dopo M2.5 (ordine v3.0). Capitolo 1 già scritto (`/app/memory/manuale/01-introduzione-primo-accesso.md`), poi task messo in pausa dal Founder per il pivot Doppio Binario. Alla ripresa, ogni capitolo documenta anche le modalità di consumo Track B (API/widget) dove applicabile. Comunque PRIMA di M5.S2.
 - **Tuo compito (Founder)**: revisione del manuale prima che diventi la base del chatbot
 
-### M5.S2 — 📚 HAL Knowledge (chatbot how-to piattaforma)
+### M5.S2 — 📚 HAL Knowledge (chatbot how-to piattaforma) 🟡 P2
+- **Entry point**: 3 bottoni fisici HAL (Agents / Knowledge / Legal), no router LLM (D-040)
 - **Prerequisito**: ⬆️ M5.S2-pre Manuale Operativo completato e revisionato dal Founder
 - RAG su manuale curato + FAQ + (opzionale) database immobili pubblico
 - Vector DB: Mongo Atlas vector search, embeddings Google text-embedding-004
@@ -526,11 +571,12 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 - ✅ Tests: iteration_20.json — **16/16 backend + 100% frontend**
 - 🟡 **Tuo compito**: termini d'uso da revisionare con avvocato di fiducia (€200 una tantum) prima della commercializzazione
 
-### M5.S4 — 🎨 Virtual Staging foto immobili
-- Gemini Nano Banana arreda foto vuote / migliora illuminazione / suggerisce render
-- A/B "prima vs dopo" cliccabile
-- Costo in crediti (preparazione per M4)
-- **Tuo compito**: validare qualità render su 10 immobili reali
+### M5.S4 — 🎨 Virtual Staging foto immobili ✅ **DONE — 03 Lug 2026 (pipeline premium 3-stage, D-033)**
+- ✅ Pipeline 3 stadi via fal.ai: SAM 2 (segmentazione) → Flux.1 [dev] Inpainting + Depth ControlNet → Real-ESRGAN 4x + watermark "Render virtuale OMNIA" (conformità AGCM)
+- ✅ Costo ~€0,056/render vs competitor €15-29/img
+- ✅ Frontend Staging Studio con dropzone + A/B "prima vs dopo"
+- ❌ "Descrizione coordinata" rimossa (D-037 parte 1) — NON riproporre
+- 🔮 Backlog S4.2-S4.4: Reverse Staging avanzato, micro-tour video 5s, A/B testing sul portale B2C — anche come API/widget Track B (M2.5)
 
 ### M5.S5 — 💰 Comparatore mutui ✅ **DONE — 06 Lug 2026 (motore in-house, D-037)**
 - ✅ Motore in-house: ammortamento francese, TAN = benchmark + spread (Eurirs per fisso per durata, Euribor 3M per variabile con floor 0), TAEG via IRR con spese (istruttoria, perizia, imposta sostitutiva 0,25%/2%, incasso rata), controllo soglia usura TEGM Banca d'Italia
@@ -571,7 +617,7 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🎓 MILESTONE 6 — OMNIA ACADEMY
+# 🎓 MILESTONE 6 — OMNIA ACADEMY 🟢 P3 — PRIMA DI M4 (ordine v3.0, D-035)
 **Durata**: 2-3 settimane · **Sessioni**: 5
 
 ### M6.S1 — Struttura LMS base
@@ -707,12 +753,27 @@ Dopo M6 → ecosistema completo OMNIA come da schema PDF
 
 ## 🎯 PARTE VII — Prossimo passo IMMEDIATO
 
-**Stato al 18 Giugno 2026**: M1 ✅ · M2.S1→S5 ✅ DONE · M2.S6 + D-FUTURE-07 rimasti.
+**Stato al 06 Luglio 2026**: M1 ✅ · M2 ✅ · M3 ✅ · M5.S1/S3/S4/S5 ✅ · pivot Doppio Binario formalizzato (D-041/042/043) · priorità v3.0 approvate dal Founder.
 
 Quando rientri prossima sessione:
 
-1. 🔴 **D-FUTURE-07 — AI Smart Import Clienti** (P0): sblocca adoption reale, pattern brand-extractor-style. Stimato 1 sessione.
-2. 🟠 **M2.S6 — Custom Domain + DNS** (P1): chiusura white-label. Richiede decisione provider DNS prima di partire.
+1. 🔴 **P0 — M2.5.0 Documenti strategici**: scrivere `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, logica crediti API group/branch). 1 sessione, NO codice. Revisione Founder obbligatoria.
+2. 🟠 **P1 — M2.5.1 Multi-branch/Franchising Layer**: primo sprint di codice (agency_group + branch + nuovi ruoli + plan_type). Parte solo dopo approvazione dei documenti P0.
+3. 🟠 **P1 — M2.5.2→5**: API Gateway → Widget → Feed bidirezionale → Universal Smart Importer 2.0.
+4. 🟡 **P2 — Manuale Operativo** (riprende dal capitolo 2) → **HAL Knowledge**.
+
+Parole magiche per ripartire:
+- *"Partiamo con i documenti"* → M2.5.0 (GTM + Pricing v2)
+- *"Partiamo con Multi-branch"* → M2.5.1
+- *"Riprendiamo il manuale"* → M5.S2-pre (capitolo 2)
+- *"Dove siamo"* → riassunto stato
+
+---
+
+*Documento approvato v2.1: 18 Giugno 2026*
+*Documento approvato v3.0: 06 Luglio 2026 (ordine P0→P4 confermato dal Founder — pivot Doppio Binario)*
+*Prossima revisione: alla chiusura di M2.5*
+*M2.S6 — Custom Domain + DNS** (P1): chiusura white-label. Richiede decisione provider DNS prima di partire.
 3. 🟡 **M3.S1 — ImmobilCloud B2C** (P1, dopo M2 completo): portale pubblico, home + search box.
 
 Parole magiche per ripartire:

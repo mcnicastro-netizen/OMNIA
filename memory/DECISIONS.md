@@ -738,5 +738,19 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - **Import CSV/XML immobili** ✅ (base one-shot, da evolvere in pipeline continua per Track B).
 - **Evoluzione**: quando 5+ agenzie paganti provengono dallo stesso gestionale (metrica di validazione), quel gestionale diventa **connettore nativo dedicato** con feed continuo (webhook/polling). No prescelte in anticipo — lascia decidere al mercato.
 - **Caso Agestanet**: già coperto tecnicamente (parser XML M2.S2). Il Founder può migrare le sue 65 proprietà quando vuole. Per clienti Agestanet terzi la migrazione è cliente-mediata (Agestanet non collabora essendo competitor, ma i clienti hanno diritto legale all'export).
-- **Stato**: ✅ APPLICATA. Universal Smart Importer 2.0 diventa **M2.5.1** in roadmap (sprint prerequisito prima di attacco commerciale Track B).
+- **Stato**: ✅ APPLICATA. Universal Smart Importer 2.0 diventa **M2.5.5** in roadmap (rinumerato dalla v3.0 del programma: Multi-branch è il primo sprint di codice, l'Importer chiude la milestone — vedi D-044).
+
+### D-044 — Priorità v3.0 del Programma Operativo (06-Lug-2026) 🎯
+
+- **Contesto**: dopo il pivot Doppio Binario (D-041/D-042/D-043) il Founder ha chiesto di riformulare il `PROGRAMMA_OMNIA.md` stabilendo le priorità. Proposte 3 opzioni di sequenza via ask_human.
+- **Decisione del Founder** (ordine vincolante):
+  - **P0 🔴 — M2.5.0**: `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, logica crediti API group/branch) — PRIMA di scrivere codice
+  - **P1 🟠 — M2.5**: White Label/Doppio Binario, ordine interno: Multi-branch (M2.5.1) → API Gateway (M2.5.2) → Widget (M2.5.3) → Feed bidirezionale (M2.5.4) → Universal Smart Importer 2.0 (M2.5.5)
+  - **P2 🟡 — M5.S2-pre Manuale Operativo** (riprende dal cap.2) → **M5.S2 HAL Knowledge**
+  - **P3 🟢 — M6 Omnia Academy**
+  - **P4 🔵 — M4 MLS + Stripe + Crediti** (post-società; confermato DOPO M6 anche se la società fosse pronta prima)
+  - POST: M5.S7/S8 · 🛑 Pre-launch resta congelato (D-035)
+- **Formato documento**: update incrementale di `PROGRAMMA_OMNIA.md` → **v3.0** (storico "cambiamenti strategici" mantenuto in testa al file), `ROADMAP.md` allineato.
+- **Razionale sequenza**: i documenti P0 determinano lo schema dati crediti/free-tier di M2.5.1-2; M2.5.1 Multi-branch è prerequisito tecnico del tier Enterprise/franchising di M4; il Manuale dopo M2.5 così ogni capitolo documenta anche le modalità Track B.
+- **Stato**: ✅ APPLICATA — `PROGRAMMA_OMNIA.md` v3.0 + `ROADMAP.md` aggiornati il 06-Lug-2026.
 
