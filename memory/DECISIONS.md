@@ -754,3 +754,14 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Razionale sequenza**: i documenti P0 determinano lo schema dati crediti/free-tier di M2.5.1-2; M2.5.1 Multi-branch è prerequisito tecnico del tier Enterprise/franchising di M4; il Manuale dopo M2.5 così ogni capitolo documenta anche le modalità Track B.
 - **Stato**: ✅ APPLICATA — `PROGRAMMA_OMNIA.md` v3.0 + `ROADMAP.md` aggiornati il 06-Lug-2026.
 
+### D-045 — "Il nodo della domanda": strategia demand-generation + Marketing Autopilot (06-Lug-2026) 🧲
+
+- **Trigger**: contro-analisi esterna (ChatGPT su PDF listini) condivisa dal Founder. Critica valida accolta: OMNIA dà gli strumenti ma il 70% delle agenzie non sa/non vuole fare marketing; i portali hanno traffico, OMNIA deve crearlo. Founder: "sì mi torna".
+- **Decisioni (3 pilastri per GO_TO_MARKET.md)**:
+  1. **AND, non OR sui portali**: OMNIA non chiede MAI di abbandonare i portali (coerente con D-016 parallel-run). Pitch: "riduci e possiedi" — il multiposting OSF mantiene i portali come canale a scelta dell'agenzia; il risparmio reale documentato è ~€6.600/anno a regime (Fronte 8 analisi Track B), non l'azzeramento.
+  2. **Marketing Autopilot** (nuovo tema di prodotto, da schedulare post-M2.5): unifica D-FUTURE-11 (auto-post Facebook/Instagram), alert email B2C su saved searches (✅ live M3.S7), pagine SEO programmatiche locali del Valutatore (potenziale: migliaia di landing, copertura ~7.900 comuni), contenuti HAL (descrizioni/post/newsletter), Google Business Profile sync (da valutare). Promessa: "il marketing lo fa OMNIA in automatico" per il 70% senza competenze.
+  3. **Rampa ImmobilCloud dichiarata**: il cold-start del portale B2C va dichiarato onestamente nel GTM (si risolve con inventario Track B → traffico organico), mai nascosto.
+- **Regole di messaging vincolanti**: ① mai promettere "abbandona i portali"; ② mai vendere il costo/lead €2-8 come automatico (è condizionato all'uso degli strumenti); ③ Academy (M6) posizionata come risposta a "le leve funzionano solo se sai usarle".
+- **Correzione fattuale ricorrente** (richiesta Founder): il Valutatore NON è "124 città" — è **copertura nazionale 100%** (~7.900 comuni: 124 città curate + 107 province + fallback regionale, UNI 10750, M3.S6-pro/D-034). Regola aggiunta in AGENT_BOOTSTRAP.md (#11). Documenti corretti: PROGRAMMA (DoD M3, M3.S6, tabella Parte III), ROADMAP, COMPETITIVE_ANALYSIS_TRACK_B.
+- **Stato**: ✅ APPLICATA. I 3 pilastri entrano come sezione obbligatoria di `GO_TO_MARKET.md` (M2.5.0).
+

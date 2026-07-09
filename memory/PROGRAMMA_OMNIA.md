@@ -440,6 +440,7 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
   4. Comparables query db.properties stessa città + tipo
 - `POST /api/cloud/valuator` (pubblico): risposta con price_per_sqm{min,avg,max}, estimated_value{min,avg,max}, multipliers_applied (audit trail), confidence (high/medium/low), methodology, data_source, comparables, disclaimer
 - `GET /api/cloud/valuator/coverage` (meta): 124 città, 20 regioni
+- ⬆️ **UPGRADE M3.S6-pro (25 Giu, D-034)**: copertura estesa al **100% del territorio nazionale** (~7.900 comuni) — 124 città curate + 107 province + fallback regionale via Nominatim, superficie commerciale UNI 10750/DPR 138, coefficienti di merito, liquidità regionale. **"124 città" NON è la copertura: è solo il layer 1 di 3.**
 - Frontend `/it/cloud/valutatore` con hero dark gradient + form 3-sezioni + correttori auditabili + comparables clickabili + collapsible methodology
 - **Lead capture**: `db.valuation_leads` (high-intent — chi cerca stima ha decisione di vendere)
 - **Verifica congruenza prezzi su Italia intera**:
@@ -463,7 +464,7 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 - [x] Pagina dettaglio pubblica
 - [x] Privato pubblica annuncio in autonomia (B2C UGC)
 - [x] Moderazione admin queue funzionante
-- [x] Valutatore GIS pubblico con 124 città verificate
+- [x] Valutatore GIS pubblico — **copertura nazionale 100%** (~7.900 comuni: 124 città curate + 107 province + fallback regionale, UNI 10750 — M3.S6-pro)
 - [x] Lead arrivano in ImmoWeb (3 fonti: contact form, private listing, valutatore)
 - [x] Saved searches + alert email B2C (M3.S7) ✅ 23 Giu — 12 pytest + 11 Playwright PASS
 
@@ -663,15 +664,18 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 
 ## 📊 PARTE III — Quadro riassuntivo
 
-| M | Nome | Sessioni | Settimane | Costo infra cumulato | Output chiave |
+| Priorità | M | Nome | Sessioni | Stato | Output chiave |
 |---|---|---|---|---|---|
-| **M1** ✅ | Foundation | 4 | 1-2 | €0-50 | Auth + multi-tenant + DNS |
-| **M2** 🟢 95% | ImmoWeb | **7** | 4-5 | €50-150 | CRM + Matching+LeadScoring + Clone-from-URL + Theme Registry + Smart Clients · **resta: AI Smart Import + Custom Domain** |
-| **M3** ⏸️ | ImmobilCloud | 5 | 2-3 | €100-250 | Portale pubblico + privato carica + immobili segreti |
-| **M4** ⏸️ | MLS + Stripe | 5 | 3-4 | €150-350 | 🎉 **Vendibile** con pricing aggressivo |
-| **M5** ⏸️ | AI Suite | 4 | 1-2 | €200-500 | Copywriter + Chatbot + Mutui + Modulistica |
-| **M6** ⏸️ | Academy | 5 | 2-3 | €250-600 | 🏆 Ecosistema completo |
-| | **TOT** | **30** | **13-19 sett.** | | |
+| — | **M1** | Foundation | 4 | ✅ DONE | Auth + multi-tenant + DNS |
+| — | **M2** | ImmoWeb | 7 | ✅ DONE | CRM + Matching + Lead Scoring AI + Multiposting OSF + Theme Registry + Custom Domain + AI Smart Import |
+| — | **M3** | ImmobilCloud | 7 | ✅ DONE | Portale B2C + **valutatore GIS nazionale 100%** (~7.900 comuni, UNI 10750) + UGC privati + saved searches |
+| — | **M5** core | AI Suite | 8 | 🟢 4/6 | HAL Agents ✅ · HAL Legal ✅ · Virtual Staging ✅ · Mutui ✅ (S6 ❌ D-039) |
+| 🔴 P0 | **M2.5.0** | GTM + Pricing v2 | 1 | ⏳ **NEXT** | `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B) |
+| 🟠 P1 | **M2.5** | Doppio Binario | 5-6 | 🟠 pianificata | Multi-branch + API Gateway + Widget + Feed bidir. + Importer 2.0 |
+| 🟡 P2 | **M5.S2-pre + S2** | Manuale + HAL Knowledge | 2-3 | ⏸️ in pausa | 13 capitoli manuale + RAG chatbot (cap.1 ✅) |
+| 🟢 P3 | **M6** | Academy | 5 | ⏸️ in coda | LMS + certificazioni + marketplace agenti |
+| 🔵 P4 | **M4** | MLS + Stripe + Crediti | 5 | ⏸️ post-società | 🎉 Monetizzazione end-to-end |
+| POST | **M5.S7/S8** | Modulistica + Firma + Visure | 2 | ⏸️ post-società | Contratti AI + DocuSign/Yousign + VisureItalia |
 
 ### 🎯 Argomenti commerciali chiave dopo M4 (ricavati dall'analisi competitiva)
 1. **Risparmia il 95%** vs stack tradizionale (€10.000-12.000/anno → €348-948/anno)

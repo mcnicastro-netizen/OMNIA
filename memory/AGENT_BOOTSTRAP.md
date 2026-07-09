@@ -126,6 +126,8 @@ Quando l'utente scrive queste parole esatte, comportati così:
 8. **NON usare** SendGrid (D-009 dice Resend)
 9. **NON usare** repo IMMOWEB o Immocloud-2.0 (D-006 dice OMNIA)
 10. **NON chiedere** conferme su cose già decise
+11. **NON descrivere il Valutatore come "124 città"** — ⚠️ ERRORE RICORRENTE (corretto dal Founder 06-Lug-2026). La copertura reale è il **100% del territorio nazionale** (~7.900 comuni) su 3 layer: 124 città curate + 107 province + fallback regionale via Nominatim, con UNI 10750 e coefficienti di merito (M3.S6-pro, D-034). "124 città" è solo il layer 1.
+12. **NON promettere mai "abbandona i portali"** nel messaging (D-045): la strategia è AND-non-OR (riduci e possiedi). Il costo/lead €2-8 del valutatore NON va venduto come automatico.
 
 ---
 

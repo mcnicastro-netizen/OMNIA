@@ -42,7 +42,7 @@
 
 ### 1.3 Vantaggi tecnici OMNIA da mettere in vetrina
 - Pipeline 5-stage con **UNI 10750/DPR 138** (superficie commerciale ponderata) + coefficienti merito + liquidità regionale → output "stile perizia" che nessun widget IT fornisce
-- Copertura 100% Italia (124 città + 107 province + fallback regionale)
+- Copertura **100% del territorio nazionale** (~7.900 comuni: 124 città curate + 107 province + fallback regionale via Nominatim) — nessun competitor IT la offre con questo livello di dettaglio
 - Audit trail dei moltiplicatori (trasparenza vs "scatola nera" AI dei competitor)
 - Lead già qualificato dentro un CRM (per Track A) o forwardato via webhook (Track B)
 

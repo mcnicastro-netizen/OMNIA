@@ -244,7 +244,7 @@ Prossima azione: **M2.S3 — CRM clienti + matching engine**
 - [x] **M3.S4 — Pagina dettaglio pubblica + Form contatto** ✅ (22 Giu)
 - [x] **M3.S4.1 — Email lead notification via Resend** ✅ (22 Giu)
 - [x] **M3.S5 v2 — Annunci privati B2C + Moderazione admin** ✅ (22 Giu)
-- [x] **M3.S6 — Valutatore GIS pubblico (124 città IT, 50 pytest)** ✅ (22 Giu)
+- [x] **M3.S6 — Valutatore GIS pubblico** ✅ (22 Giu) + **M3.S6-pro copertura nazionale 100%** (~7.900 comuni: 124 città curate + 107 province + fallback regionale, UNI 10750) ✅ (25 Giu)
 - [x] **M3.S7 — Saved searches + Alert email matching B2C** ✅ (23 Giu) — 12 pytest + 11 Playwright PASS
 
 ### M5 — AI Suite (8 sprint, sequenza definita D-028 del 23 Giu)
