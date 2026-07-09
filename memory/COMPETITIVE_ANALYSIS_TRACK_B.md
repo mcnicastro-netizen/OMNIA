@@ -174,7 +174,61 @@
 
 ---
 
+## 📄 FRONTE 8 — BENCHMARK DOCUMENTALE: il caso reale del Founder (PDF "listini a confronto", Nov 2025)
+
+Dati estratti dai contratti/proposte REALI dell'agenzia del Founder (Nicastro Immobiliare, Catania). È la fotografia esatta di cosa paga oggi un'agenzia media italiana.
+
+### 8.1 Agestanet / BasicSoft (contratto attivo)
+| Voce | Listino | Pagato (sconto convenzione Catania) |
+|---|---|---|
+| AgestaNET gestionale (cod. 9491): CRM + MLS (1.500 agenzie, 280k immobili) + matching + Remail + AgestaMail 50 mail/mese + mobile | €350/anno | €350/anno |
+| AgestaWeb sito Ultimate (nicastroimmobiliare.it) €400 + Web MLS €100 | €500/anno | €300/anno (sconto €200) |
+| **Totale Agestanet** | **€850/anno** | **~€650/anno + IVA ≈ €793** (coerente con i €786/anno noti da D-016) |
+
+### 8.2 Immobiliare.it (proposta contratto #20251125, 14/11/2025→13/11/2026)
+| Aspetto | Dato reale |
+|---|---|
+| **Listino pieno** | **€2.268/anno** |
+| **Pagato (scontato)** | **€708/anno** (12 rate SEPA da €59) → **sconto 69%** |
+| Contenuto | Solo **5 annunci vendita + 5 affitto** (+ mirror Trovacasa/MioAffitto) + area Pro + app + report base + ImmoVisita + FotoPlan + Telefono Smart |
+| Rinnovo | No tacito rinnovo (art. 3.1) — ma il rinnovo negoziato riparte dal listino €2.268 |
+| Clausole | Penale 1/3 dell'importo + intero dovuto in caso di inadempimento (art. 7.4); foro Milano; responsabilità limitata |
+| **Costo per annuncio** | €5,90/annuncio/mese scontato → **€18,90/annuncio/mese a listino** |
+
+### 8.3 Pacchetto visibilità Idealista + Casa.it (proposta "Pack Max Basic")
+| | Opzione 1 | Opzione 2 "Consigliata" |
+|---|---|---|
+| Annunci indicizzati (idealista + Casa.it + Silver) | 10 | 15 |
+| Premium/Gold | 2 intercambiabili | 3 sempre attivi |
+| Evidenza | 1 | 1 |
+| **Prezzo primi 12 mesi** | **€179,50/mese** (€2.154/anno) | **€194,50/mese** (€2.334/anno) |
+| **Listino al rinnovo (AUTOMATICO)** | **€359/mese** (€4.308/anno) | **€389/mese** (€4.668/anno) |
+| Meccanica | ⚠️ "Sconto solo per i primi 12 mesi, poi il servizio si rinnova al valore del pacchetto" + **rinnovo automatico** + SEPA | idem |
+| **Salto di prezzo al 13° mese** | **+100%** | **+100%** |
+
+### 8.4 Il conto totale (stack completo di un'agenzia media, 10-15 annunci)
+| | Anno 1 (scontato) | Anno 2+ (a regime) |
+|---|---|---|
+| Agestanet (gestionale+sito+MLS) | €650 | €850 |
+| Immobiliare.it (10 annunci) | €708 | €2.268 |
+| Idealista+Casa.it pack (15 annunci) | €2.334 | €4.668 |
+| **TOTALE** | **€3.692/anno (€308/mese)** | **€7.786/anno (€649/mese)** |
+| **OMNIA Pro (Founders 50)** | **€1.188/anno (€99/mese)** | **€1.188/anno** (lock 24m, poi €124 sconto vita) |
+| **Risparmio con OMNIA** | **-68%** | **-85% (~€6.600/anno)** |
+
+### 8.5 Lezioni per GTM e Pricing v2
+1. **Il "bait & switch" è il modello di mercato**: sconto 50-69% anno 1, raddoppio automatico anno 2 (SEPA attivo → l'agenzia se ne accorge dall'estratto conto). Il nostro contro-posizionamento: *"il prezzo che vedi è il prezzo che pagherai anche tra 3 anni"* — Founders 50 blocca il prezzo IN BASSO, i competitor lo bloccano IN ALTO.
+2. **Il costo unitario dell'annuncio sui portali è folle**: €18,90/annuncio/mese (Immobiliare.it a listino), €26-31/annuncio/mese (pack idealista+Casa.it a regime). ImmobilCloud ne include 15-70 nel canone → argomento quantificabile per il B2C listing pricing.
+3. **L'agenzia media paga 3 fornitori scollegati** (gestionale + 2 contratti portali) con 3 scadenze, 3 SEPA, zero integrazione. "1 contratto, 1 fattura, 1 login" è un beneficio operativo da mettere nel pitch.
+4. **Agestanet è economico ma povero** (€350/anno il gestionale): il vero salasso sono i portali. Quindi il nostro nemico n.1 nel messaging non è il gestionale — è **la spesa portali a rinnovo raddoppiato**. ImmobilCloud (annunci inclusi) + Site-as-Feed è l'arma.
+5. Il claim "stack tradizionale €10-12k/anno" va calibrato: per un'agenzia media documentata è **~€7.800/anno a regime** (senza foto pro, senza extra). Restiamo credibili usando il range **€7.500-12.000** con questo PDF come pezza d'appoggio.
+
+**Fonte**: contratti/proposte reali agenzia Founder, PDF "listini a confronto" (artifact 06-Lug-2026).
+
+---
+
 ## 🗺️ MAPPA DI POSIZIONAMENTO TRACK B
+
 
 ```
                     VERTICALE IMMOBILIARE
