@@ -8,7 +8,7 @@
 ## 🎯 PRIORITÀ v3.0 (vincolanti — 06 Lug 2026)
 
 ```
-P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2      ⏳ NEXT (documenti, no codice)
+P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2      🟡 CONSEGNATO (in revisione Founder)
 P1 🟠  M2.5   — Doppio Binario: Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0
 P2 🟡  M5.S2-pre Manuale Operativo (riprende dal cap.2) → M5.S2 HAL Knowledge
 P3 🟢  M6     — Omnia Academy

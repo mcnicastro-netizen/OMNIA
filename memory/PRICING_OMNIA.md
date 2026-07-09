@@ -1,8 +1,8 @@
-# 💰 OMNIA — Pricing Ufficiale v1.0
+# 💰 OMNIA — Pricing Ufficiale v2.0
 
-**Approvato dal founder**: 26 Giugno 2026
-**Stato**: ✅ DEFINITIVO (base per landing, banner CTA, demo, onboarding)
-**Validità**: Fase 1 Founders 50 (lock-in 24 mesi)
+**v1.0 approvata dal founder**: 26 Giugno 2026 (Track A + crediti + B2C)
+**v2.0**: 06 Luglio 2026 — aggiunto **listino Track B** (widget, API, feed) + benchmark documentali · **Stato v2.0**: 🟡 BOZZA in revisione Founder (deliverable M2.5.0/P0)
+**Validità**: Fase 1 Founders 50 (lock-in 24 mesi) · Track B attivabile con M2.5
 
 ---
 
@@ -13,6 +13,8 @@
 3. **Sistema crediti** (€0,30/cad) per servizi pay-per-use.
 4. **Annunci agenzia gratis** sul portale ImmobilCloud (incentive parte del valore SaaS).
 5. **MVP fase 1 manuale**: nessun algoritmo complesso, billing manuale per primi 30 Founders. Algoritmo "boost per ogni 10 annunci" → fase 2 quando 30+ clienti.
+6. **[v2.0] Doppio Binario (D-041)**: ogni feature è vendibile anche via widget/API con wallet crediti (Track B). Regole d'oro dai benchmark: listino sempre pubblico · crediti chiari (mai coins opachi) · flat+overage (mai pay-per-call puro verso le agenzie) · badge "Powered by OMNIA" sul free tier = canale di acquisizione.
+7. **[v2.0] Anti bait&switch**: nessuno sconto-esca. I competitor scontano il 50-69% l'anno 1 e raddoppiano al 13° mese (caso documentato: pack Idealista+Casa.it €194,50 → €389/mese, rinnovo automatico). Da noi il prezzo mostrato è il prezzo mantenuto.
 
 ---
 
@@ -46,12 +48,16 @@
 
 | Servizio | Costo vivo OMNIA | Crediti consumati | Prezzo finale | Margine OMNIA |
 |---|---|---|---|---|
-| Virtual Staging (1 immagine) | €0,02 | 1 credito | €0,30 | **93%** |
+| Virtual Staging (1 render, pipeline 3-stage) | €0,056 | **3 crediti** *(v2.0: era 1)* | **€0,90** | **94%** |
 | Quotazione immobiliare base | €0,04 | 1 credito | €0,30 | **87%** |
+| Quotazione avanzata UNI 10750 *(v2.0)* | €0,08 | 2 crediti | €0,60 | **87%** |
+| Query HAL Legal *(v2.0)* | ~€0,03 | 2 crediti | €0,60 | **95%** |
+| Micro-tour video 5s *(v2.0, da M5.S4.3)* | €0,30 | 12 crediti | €3,60 | **92%** |
 | Visura catastale | €0,40 | 4 crediti | €1,20 | **67%** |
 | Planimetria catastale | €6,90 | 30 crediti | €9,00 | **23%** |
 | Ispezione ipotecaria | €23,70 | 100 crediti | €30,00 | **21%** |
-| Quotazione immobiliare advanced | €2,00 | 8 crediti | €2,40 | **17%** |
+
+> **Nota v2.0 — staging da 1 a 3 crediti**: a €0,30 eravamo sotto il minimo di mercato senza necessità (retail AI $0,53-2,67/foto; il più aggressivo, Stagently, sta a $0,20 con qualità inferiore alla pipeline 3-stage OMNIA). A €0,90 restiamo sotto il retail di qualità con margine 94%.
 
 ### Pacchetti top-up crediti (ricarica)
 
@@ -67,7 +73,60 @@
 
 ---
 
+## 🅱️ TRACK B — Listino Widget & API (v2.0, attivabile con M2.5)
+
+> Per agenzie strutturate/franchising che mantengono il proprio CRM/sito e consumano feature OMNIA via widget e API (D-041). Benchmark completi in `COMPETITIVE_ANALYSIS_TRACK_B.md`.
+
+### B1. Widget embeddabili (flat mensile per sito/filiale + overage a crediti)
+
+| Widget | Prezzo | Incluse/mese | Benchmark concorrenti | Posizionamento |
+|---|---|---|---|---|
+| **Valuator** (UNI 10750, copertura nazionale ~7.900 comuni) | **€39/mese** · €79/mese con API + PDF brandizzato | 50 · 150 valutazioni | DomusReport €50/€100 · RealAdvisor €50-150 · Sprengnetter ~€45 | -22% sotto DomusReport con motore superiore (perizia-style vs solo-OMI) |
+| **HAL Legal pubblico** | **€69/mese** | 100 query | Zero comparabili verticali; chatbot generici $99-399/mese | Prodotto hero, pricing power pieno |
+| **Mutui** (rata + comparatore) | **€19/mese** | illimitato | Inesistente in white-label in Italia | Lead magnet; profit futuro: rev-share mediatore OAM (~€750/pratica) |
+| **Virtual Staging demo** | solo in bundle | 10 render | Nessuno lo offre come widget | Differenziatore |
+| **🎁 Bundle Widget Suite** (tutti e 4) | **€119/mese** | quote singole +20% | ~costo del solo DomusReport Premium + un chatbot generico | Anchor price |
+
+Overage widget: a crediti, stessa tabella del Sistema Crediti (listino pubblico).
+
+### B2. API server-to-server (wallet crediti)
+
+- Stesso sistema crediti (€0,30/credito, pacchetti top-up con sconto fino a -31%) e stessa tabella servizi — **un solo listino, zero ambiguità**.
+- Contabilità crediti **group vs branch** per reti multi-sede (holding paga o filiale paga, sceglibile per gruppo — schema dati in M2.5.1).
+- Rate limit per tier, audit log, revoca API key da dashboard (M2.5.2).
+- Benchmark: valutazione €0,30-0,60 vs Sprengnetter €0,80/call e €47,80/valutazione pro · staging €0,90 vs retail $0,53-2,67.
+
+### B3. Feed & connettività
+
+| Servizio | Prezzo | Note |
+|---|---|---|
+| Feed OSF outbound (portali/sito) | incluso in tutti i piani | già live (M2.S5) |
+| **Feed inbound continuo** (dal gestionale cliente, sync 15-60 min) | **€49/mese per fonte** | deduplica + delta detection (M2.5.4) |
+| Webhook lead → CRM cliente | incluso con feed o bundle | |
+| **Free tier developer** | €0 — 25 azioni/mese | badge "Powered by OMNIA" obbligatorio (canale web agency) |
+| Enterprise / casa madre franchising (multi-branch, rollup, SLA) | ⏸️ custom | rimandato con tier Enterprise (decisione Founder 26-Giu) — si riapre con M2.5.1 |
+
+### B4. Benchmark documentale — il confronto che vende (Fronte 8)
+
+Stack reale di un'agenzia media (contratti documentati, Nov 2025):
+
+| | Anno 1 (scontato) | Anno 2+ (a regime) |
+|---|---|---|
+| Agestanet (gestionale+sito+WebMLS) | €650 | €850 |
+| Immobiliare.it (10 annunci) | €708 | €2.268 (listino) |
+| Pack Idealista+Casa.it (15 annunci, rinnovo automatico) | €2.334 | €4.668 (**+100% al 13° mese**) |
+| **Totale stack tradizionale** | **€3.692/anno** | **€7.786/anno** |
+| **OMNIA Pro Founders 50** | **€1.188/anno** | **€1.188/anno** (lock 24m → €124/mese a vita) |
+| **Risparmio** | **-68%** | **-85% (~€6.600/anno)** |
+
+Stack equivalente a OMNIA Pro comprato à la carte dai concorrenti: gestionale €47-150 + valutatore white-label €45-150 + staging €18-73 + chatbot €280+ + MLS €83-125 = **€473-878/mese** vs €99.
+
+⚠️ **Regola di messaging (D-045)**: il confronto NON promette l'abbandono dei portali — pitch "riduci e possiedi" (OMNIA + i soli portali che servono).
+
+---
+
 ## 🌐 ImmobilCloud — Portale B2C (privati)
+
 
 ### Pubblicazione annunci privati
 
@@ -313,6 +372,7 @@ Pricing sopra in EUR. Founders 50 sul territorio nazionale.
 
 | Data | Versione | Modifiche |
 |---|---|---|
+| 06-Lug-2026 | **v2.0** 🟡 bozza | Aggiunto listino **Track B** (widget €19-119/mese, API a crediti, feed inbound €49/mese, free tier dev 25 azioni). Staging 1→3 crediti (€0,90). Nuovi servizi a crediti: quotazione UNI 10750, query HAL Legal, micro-tour video. Benchmark documentale Fronte 8 (stack reale €7.786/anno a regime vs OMNIA -85%). Regole messaging D-045 |
 | 26-Giu-2026 | v1.0 | Pricing definitivo Founders 50 approvato dal founder |
 | 25-Giu-2026 | v0.9 (draft) | Prima proposta €29/€79/€199 |
 

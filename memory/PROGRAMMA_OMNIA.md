@@ -334,7 +334,9 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 >
 > **Ordine interno v3.0**: M2.5.0 (docs) → M2.5.1 (Multi-branch) → M2.5.2 (API Gateway) → M2.5.3 (Widget) → M2.5.4 (Feed bidir.) → M2.5.5 (Importer 2.0)
 
-### M2.5.0 — 🔴 P0 — Documenti strategici GTM + Pricing v2 (NO codice)
+### M2.5.0 — 🔴 P0 — Documenti strategici GTM + Pricing v2 (NO codice) 🟡 CONSEGNATO 06-Lug — in revisione Founder
+- ✅ `GO_TO_MARKET.md` v1.0 creato: posizionamento wedge B+D, ICP Track A/B (affiliate, casa madre, web agency), sezione obbligatoria "Il nodo della domanda" (D-045), motion bottom-up in 4 fasi, messaging kit con claims verificati (Fronte 8), metriche di validazione, vincolo D-035 (strategia sì, esecuzione solo post-M6)
+- ✅ `PRICING_OMNIA.md` aggiornato a v2.0 (bozza): listino Track B (widget €19-119/mese, bundle €119, API a crediti unificati, feed inbound €49/mese, free tier dev), staging 1→3 crediti (€0,90), nuovi servizi a crediti (UNI 10750, HAL Legal, micro-tour), benchmark documentale (-85% vs stack reale €7.786/anno)
 - **Prerequisito ✅ DONE (06 Lug)**: `COMPETITIVE_ANALYSIS_TRACK_B.md` — ricerca su 7 fronti con benchmark prezzi reali (valutatori white-label, staging SaaS, stack franchising, pricing API, MLS, chatbot, mutui). White space Track B confermato: nessuna suite headless integrata esiste in Italia.
 - **`GO_TO_MARKET.md`**: segmentazione Track A/B, ICP (franchising: Tecnocasa, RE/MAX, Gabetti, Toscano, Frimm, Grimaldi + agenzie multi-sede), messaging wedge B+D, canali di acquisizione, funnel e metriche di validazione
 - **`PRICING_OMNIA.md` v2**: unit economics Track A vs Track B, cap free tier, logica crediti API (contabilità group vs branch), revenue share ADV ImmoCloud + lead per Track B, welcome credits
@@ -376,7 +378,7 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 - **Tuo compito**: fornire 2-3 file di export "sporchi" reali per stress-test del mapper
 
 ### ✅ Definition of Done M2.5
-- [ ] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0)
+- [🟡] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0) — consegnati 06-Lug, in revisione
 - [ ] Multi-branch operativo su 1 agenzia franchising pilota
 - [ ] API Gateway con almeno 5 endpoint Track B live + 1 SDK
 - [ ] 2+ widget embeddabili in produzione su almeno 1 sito esterno
