@@ -335,6 +335,7 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 > **Ordine interno v3.0**: M2.5.0 (docs) → M2.5.1 (Multi-branch) → M2.5.2 (API Gateway) → M2.5.3 (Widget) → M2.5.4 (Feed bidir.) → M2.5.5 (Importer 2.0)
 
 ### M2.5.0 — 🔴 P0 — Documenti strategici GTM + Pricing v2 (NO codice)
+- **Prerequisito ✅ DONE (06 Lug)**: `COMPETITIVE_ANALYSIS_TRACK_B.md` — ricerca su 7 fronti con benchmark prezzi reali (valutatori white-label, staging SaaS, stack franchising, pricing API, MLS, chatbot, mutui). White space Track B confermato: nessuna suite headless integrata esiste in Italia.
 - **`GO_TO_MARKET.md`**: segmentazione Track A/B, ICP (franchising: Tecnocasa, RE/MAX, Gabetti, Toscano, Frimm, Grimaldi + agenzie multi-sede), messaging wedge B+D, canali di acquisizione, funnel e metriche di validazione
 - **`PRICING_OMNIA.md` v2**: unit economics Track A vs Track B, cap free tier, logica crediti API (contabilità group vs branch), revenue share ADV ImmoCloud + lead per Track B, welcome credits
 - **Perché prima del codice**: cap free tier e contabilità crediti group/branch determinano lo schema dati di M2.5.1 e M2.5.2
