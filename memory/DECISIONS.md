@@ -765,3 +765,14 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Correzione fattuale ricorrente** (richiesta Founder): il Valutatore NON è "124 città" — è **copertura nazionale 100%** (~7.900 comuni: 124 città curate + 107 province + fallback regionale, UNI 10750, M3.S6-pro/D-034). Regola aggiunta in AGENT_BOOTSTRAP.md (#11). Documenti corretti: PROGRAMMA (DoD M3, M3.S6, tabella Parte III), ROADMAP, COMPETITIVE_ANALYSIS_TRACK_B.
 - **Stato**: ✅ APPLICATA. I 3 pilastri entrano come sezione obbligatoria di `GO_TO_MARKET.md` (M2.5.0).
 
+### D-046 — Programma Partner Web Agency (06-Lug-2026) 🤝
+
+- **Contesto**: la ricerca Track B (ICP-B3) ha identificato le web agency locali come canale d'installazione reale dei widget (1 web agency = 5-15 siti di agenzie immobiliari). Approfondimento con benchmark 2026 (Shopify 20% a vita, HubSpot 30%×12m, media SaaS 10-25% MRR) presentato al Founder.
+- **Decisioni del Founder**:
+  - **(a) Rev-share: 20% ricorrente A VITA del cliente** (modello Shopify) per tier Registered; 25% per Certified; +10% sui crediti consumati dai clienti portati
+  - **(b) Tier Gold/White-Label Reseller (wholesale -35%): TENUTO DORMIENTE** — si valuta solo a 10+ partner attivi e fidati, per non perdere la relazione col cliente finale
+  - **(c) Formalizzazione**: sezione §4-bis in `GO_TO_MARKET.md` + nota tecnica `partner_id` in M2.5.2 (PROGRAMMA)
+- **Struttura**: 3 livelli (Registered → Certified → Gold dormiente), deal registration, decadenza tier a 90gg di inattività, certificazione via Academy (M6, primo caso d'uso reale), payout manuale trimestrale primi 12 mesi → Stripe Connect in M4.
+- **Attivazione**: Fase 2 del GTM (post-M6, D-035). Schema dati `partner_id` da prevedere SUBITO in M2.5.2 per non rifare le API.
+- **Stato**: ✅ APPLICATA (design). Implementazione con M2.5.2.
+

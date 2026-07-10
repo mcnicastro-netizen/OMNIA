@@ -354,6 +354,7 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 
 ### M2.5.2 — 🔑 API Gateway + API Keys per Track B
 - Emissione **API key per agenzia white-label** con budget crediti collegato
+- **`partner_id` su API key/snippet widget** (D-046): attribution automatica per il Programma Partner Web Agency (rev-share 20% a vita) + dashboard partner (clienti attivi, MRR, commissioni). Stima +0,5-1 sessione
 - Endpoint pubblici versionati (`/api/v1/*`) per: Valuator, Mutui, Virtual Staging, HAL Legal pubblico, Import Feed Immobili, Export Lead
 - Rate limit + audit + revocation dashboard
 - SDK reference (Node.js + Python) documentato in `/app/memory/API_DOCS_TRACK_B.md`

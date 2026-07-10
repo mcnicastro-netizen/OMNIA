@@ -95,6 +95,37 @@ FASE 3            → deal casa madre franchising (leva: trazione affiliate + mu
 
 ---
 
+## 4️⃣-bis PROGRAMMA PARTNER WEB AGENCY (D-046, approvato dal Founder 06-Lug-2026)
+
+> **Razionale**: l'agenzia immobiliare non installa codice — il suo sito lo fa una web agency locale che serve 10-50 clienti del territorio. Convincere 1 web agency = installare widget su 5-15 siti di agenzie senza vendita diretta (modello Shopify Partners). Benchmark 2026: rev-share ricorrente 10-25% MRR; i programmi maturi generano il 20-30% del fatturato totale; time-to-revenue del canale 6-12 mesi → definito ora, attivato in Fase 2.
+
+### Struttura a 3 livelli
+
+| | 🥉 **Registered** (entry) | 🥈 **Certified** | 🥇 **Gold / White-Label Reseller** ⏸️ DORMIENTE |
+|---|---|---|---|
+| Requisito | Registrazione gratuita | 3+ widget attivi installati | 10+ widget attivi + certificazione (si attiva solo a 10+ partner attivi) |
+| Free tier dev | ✅ sandbox illimitata (dati demo) | ✅ | ✅ |
+| **Rev-share widget/bundle** | **20% ricorrente A VITA del cliente** (Shopify-style) | **25% ricorrente a vita** | — wholesale: acquisto a -35% dal listino, rivende a prezzo proprio, fattura lui |
+| **Rev-share crediti** consumati dai clienti portati | 10% | 10% | — |
+| Directory pubblica "Partner OMNIA" | — | ✅ | ✅ in evidenza |
+| Lead da OMNIA ("chi mi installa il widget?") | — | ✅ | ✅ priorità |
+| Co-marketing / demo brandizzabili | — | ✅ | ✅ |
+
+### Regole del programma
+1. **Deal registration**: chi registra per primo il cliente lo tiene; se il cliente arriva direct, nessuna commissione ma il partner può candidarsi all'installazione.
+2. **Decadenza tier**: se i widget attivi scendono sotto soglia per 90gg.
+3. **Certificazione** = corso ~1h su Omnia Academy (M6) — il programma partner è il primo caso d'uso reale dell'Academy.
+4. **Payout**: manuale (bonifico trimestrale) i primi 12 mesi; Stripe Connect in M4.
+5. **Gold/wholesale DORMIENTE** (decisione Founder): si valuta solo a 10+ partner attivi e fidati, con contratto — per non perdere mai la relazione col cliente finale nella fase di costruzione.
+
+### Economics di riferimento
+Web agency Certified con 8 agenzie clienti a Bundle €119/mese → MRR OMNIA €952, commissione partner €238/mese (€2.856/anno passivi), netto OMNIA €714/mese. Il rev-share È il CAC: pay-for-performance, mai anticipato.
+
+### Implicazioni tecniche (→ M2.5.2)
+`partner_id` su API key/snippet widget (attribution automatica) + dashboard partner (clienti attivi, MRR, commissioni maturate). Stima +0,5-1 sessione dentro M2.5.2.
+
+---
+
 ## 5️⃣ MESSAGING KIT (claims verificati, Fronte 8)
 
 | Claim | Fonte | Uso |
