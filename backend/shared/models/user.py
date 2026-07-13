@@ -5,7 +5,17 @@ from pydantic import EmailStr, Field
 from shared.models.base import TimestampedModel, OmniaBaseModel, utcnow_iso
 from uuid import uuid4
 
-UserRole = Literal["super_admin", "agency_admin", "agent", "client", "student"]
+UserRole = Literal[
+    "super_admin",
+    "agency_admin",     # legacy alias — same permissions as branch_admin
+    "agent",            # legacy alias — same permissions as branch_agent
+    "client",
+    "student",
+    # M2.5.1 — Franchising layer (D-041)
+    "group_admin",      # sees + writes across all branches of the group
+    "branch_admin",     # perimeter = own branch (== agency_admin)
+    "branch_agent",     # perimeter = own listings/clients (== agent)
+]
 UserLang = Literal["it", "en", "es"]
 
 
@@ -20,6 +30,8 @@ class UserPublic(OmniaBaseModel):
     is_active: bool = True
     created_at: str
     updated_at: str
+    # M2.5.1 — Franchising
+    group_id: Optional[str] = None
 
 
 class UserInDB(TimestampedModel):
@@ -37,6 +49,8 @@ class UserInDB(TimestampedModel):
     intents: List[Literal["sell", "rent_out", "get_alerts"]] = Field(default_factory=list)
     notification_channels: List[Literal["email", "push"]] = Field(default_factory=lambda: ["email"])
     email_verified: bool = False
+    # M2.5.1 — Franchising layer (D-041) — populated for group_admin users
+    group_id: Optional[str] = None
 
 
 class RegisterRequest(OmniaBaseModel):

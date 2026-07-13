@@ -38,10 +38,24 @@ async def get_current_user(request: Request) -> dict:
 
 
 def require_roles(*allowed_roles: str):
-    """Dependency factory: returns a dependency that checks the role of current user."""
+    """Dependency factory: returns a dependency that checks the role of current user.
+
+    M2.S5.1 — Franchising role aliases (D-041):
+      - `agency_admin` implicitly includes `branch_admin` and `group_admin`
+      - `agent` implicitly includes `branch_agent`, `branch_admin`, and `group_admin`
+    Existing endpoints keep working without changes; new franchising roles inherit permissions.
+    """
+    role_aliases = {
+        "agency_admin": {"agency_admin", "branch_admin", "group_admin"},
+        "agent": {"agent", "branch_agent", "branch_admin", "group_admin"},
+    }
+    expanded: set = set()
+    for r in allowed_roles:
+        expanded.update(role_aliases.get(r, {r}))
+
     async def _guard(request: Request) -> dict:
         user = await get_current_user(request)
-        if user.get("role") not in allowed_roles:
+        if user.get("role") not in expanded:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="forbidden")
         return user
     return _guard

@@ -96,7 +96,28 @@
     "nav_logout": "Salir",
     "agency_label": "Agencia",
     "nav_website": "Sitio web",
-    "nav_portals": "Portales"
+    "nav_portals": "Portales",
+    "nav_group": "Grupo"
+  },
+  "group": {
+    "title": "Grupo / Franquicia",
+    "consolidated": "KPI consolidados",
+    "branches": "Sucursales",
+    "branches_active": "Activas",
+    "branches_list": "Sucursales del grupo",
+    "properties_active": "Inmuebles activos",
+    "properties_total": "Inmuebles totales",
+    "clients_total": "Clientes",
+    "leads_open": "Leads abiertos",
+    "total": "totales",
+    "branch_name": "Sucursal",
+    "branch_code": "Código",
+    "city": "Ciudad",
+    "plan_type": "Track",
+    "no_branches": "Ninguna sucursal vinculada. Como super_admin: POST /api/app/groups/{id}/branches.",
+    "empty_title": "Sin grupo activo",
+    "empty_hint": "Aún no perteneces a un grupo / holding. Un super_admin puede crear uno vía API.",
+    "footer_hint": "M2.5.1 (D-041) — vista consolidada del grupo. Creación/gestión de sucursales vía API en esta fase."
   },
   "onboarding": {
     "title": "Configura tu agencia",

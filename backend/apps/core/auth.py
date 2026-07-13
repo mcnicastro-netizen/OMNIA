@@ -66,6 +66,7 @@ def _public(user: dict) -> dict:
         "intents": user.get("intents", []),
         "notification_channels": user.get("notification_channels", []),
         "phone": user.get("phone"),
+        "group_id": user.get("group_id"),
         "created_at": user["created_at"],
         "updated_at": user["updated_at"],
     }

@@ -38,6 +38,7 @@ import ModerationPage from "@/apps/immoweb/ModerationPage";
 import VirtualStagingPage from "@/apps/immoweb/pages/VirtualStagingPage";
 import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
 import MutuiToolPage from "@/apps/immoweb/pages/MutuiToolPage";
+import GroupPage from "@/apps/immoweb/pages/GroupPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -131,6 +132,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "agent"]}>
                         <DashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/group"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "group_admin"]}>
+                        <GroupPage />
                       </ProtectedRoute>
                     }
                   />

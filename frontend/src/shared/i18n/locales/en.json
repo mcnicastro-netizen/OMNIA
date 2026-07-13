@@ -96,7 +96,28 @@
     "nav_logout": "Sign out",
     "agency_label": "Agency",
     "nav_website": "Website",
-    "nav_portals": "Portals"
+    "nav_portals": "Portals",
+    "nav_group": "Group"
+  },
+  "group": {
+    "title": "Group / Franchising",
+    "consolidated": "Consolidated KPIs",
+    "branches": "Branches",
+    "branches_active": "Active",
+    "branches_list": "Group branches",
+    "properties_active": "Active listings",
+    "properties_total": "Total listings",
+    "clients_total": "Clients",
+    "leads_open": "Open leads",
+    "total": "total",
+    "branch_name": "Branch",
+    "branch_code": "Code",
+    "city": "City",
+    "plan_type": "Track",
+    "no_branches": "No branches attached to this group yet. As super_admin: POST /api/app/groups/{id}/branches.",
+    "empty_title": "No active group",
+    "empty_hint": "You do not belong to a group / holding yet. A super_admin can create one via the API.",
+    "footer_hint": "M2.5.1 (D-041) — consolidated group view. Branch creation/management via API at this stage."
   },
   "onboarding": {
     "title": "Set up your agency",

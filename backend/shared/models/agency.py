@@ -9,6 +9,18 @@ from shared.models.base import TimestampedModel, OmniaBaseModel, utcnow_iso
 AgencyPlan = Literal["free", "starter", "pro", "enterprise"]
 InviteStatus = Literal["pending", "accepted", "revoked", "expired"]
 
+# M2.5.1 — Doppio Binario (D-041)
+# Each agency declares how it consumes OMNIA:
+#   turnkey    -> UI OMNIA end-to-end (Track A)
+#   whitelabel -> API + widgets, own CRM/site kept (Track B pure)
+#   hybrid     -> both UI OMNIA + API/widgets (default for existing agencies)
+PlanType = Literal["turnkey", "whitelabel", "hybrid"]
+
+# Where the credit budget lives:
+#   group  -> holding pays for all branches
+#   branch -> each branch pays its own (default — autonomous multi-sede)
+CreditsMode = Literal["group", "branch"]
+
 
 def _slugify(text: str) -> str:
     """Convert agency name to URL-safe slug."""
@@ -89,6 +101,10 @@ class AgencyInDB(TimestampedModel):
     owner_id: str  # user_id of the agency_admin who created it
     is_active: bool = True
     onboarding_completed: bool = False
+    # M2.5.1 — Franchising / Multi-branch layer (D-041)
+    group_id: Optional[str] = None                # attached to an AgencyGroup (None = standalone)
+    branch_code: Optional[str] = Field(default=None, max_length=30)  # internal code (e.g. "MI-01")
+    plan_type: PlanType = "hybrid"                # default: both UI + API access
 
 
 class AgencyPublic(OmniaBaseModel):
@@ -107,6 +123,10 @@ class AgencyPublic(OmniaBaseModel):
     onboarding_completed: bool
     created_at: str
     updated_at: str
+    # M2.5.1 — Franchising fields
+    group_id: Optional[str] = None
+    branch_code: Optional[str] = None
+    plan_type: PlanType = "hybrid"
 
 
 class AgencyCreate(OmniaBaseModel):
@@ -190,3 +210,86 @@ class DashboardKPI(OmniaBaseModel):
     delta_direction: Optional[Literal["up", "down", "flat"]] = None
     icon: Optional[str] = None
     locked: bool = False  # True means "coming in future milestone"
+
+
+# -------------------- AGENCY GROUP (M2.5.1 — Franchising Layer, D-041) --------------------
+
+class AgencyGroupInDB(TimestampedModel):
+    """
+    Holding / franchising layer that sits on top of one or more agencies.
+    A standalone agency has `group_id = None`. When multi-branch is enabled,
+    an AgencyGroup owns N agencies (branches) and consolidates KPIs + credits.
+    """
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    slug: str = Field(min_length=2, max_length=60, pattern=r"^[a-z0-9-]+$")
+    name: str = Field(min_length=2, max_length=120)
+    franchise_name: Optional[str] = Field(default=None, max_length=120)
+    # e.g. "Tecnocasa", "RE/MAX", "Gabetti" — free text; branded groups can leverage it in UI
+    owner_id: str                                    # user_id of the group_admin who created it
+    credits_mode: CreditsMode = "branch"             # who pays credits — default: each branch autonomous
+    is_active: bool = True
+    notes: Optional[str] = Field(default=None, max_length=500)
+
+
+class AgencyGroupPublic(OmniaBaseModel):
+    id: str
+    slug: str
+    name: str
+    franchise_name: Optional[str] = None
+    owner_id: str
+    credits_mode: CreditsMode
+    is_active: bool
+    notes: Optional[str] = None
+    created_at: str
+    updated_at: str
+    # Enrichments computed at read time (not persisted)
+    branches_count: Optional[int] = None
+
+
+class AgencyGroupCreate(OmniaBaseModel):
+    name: str = Field(min_length=2, max_length=120)
+    franchise_name: Optional[str] = Field(default=None, max_length=120)
+    credits_mode: CreditsMode = "branch"
+    notes: Optional[str] = Field(default=None, max_length=500)
+
+
+class AgencyGroupUpdate(OmniaBaseModel):
+    name: Optional[str] = Field(default=None, min_length=2, max_length=120)
+    franchise_name: Optional[str] = Field(default=None, max_length=120)
+    credits_mode: Optional[CreditsMode] = None
+    is_active: Optional[bool] = None
+    notes: Optional[str] = Field(default=None, max_length=500)
+
+
+class BranchAttachRequest(OmniaBaseModel):
+    """Attach an existing agency as a branch of this group."""
+    agency_id: str
+    branch_code: Optional[str] = Field(default=None, max_length=30)
+
+
+class BranchSummary(OmniaBaseModel):
+    """Compact branch view used in group dashboards."""
+    id: str
+    slug: str
+    display_name: str
+    branch_code: Optional[str] = None
+    plan_type: PlanType
+    plan: AgencyPlan
+    is_active: bool
+    city: Optional[str] = None
+    # Rollup counters
+    properties_active: int = 0
+    clients_total: int = 0
+    leads_open: int = 0
+
+
+class GroupConsolidatedKPIs(OmniaBaseModel):
+    """Consolidated KPIs across all branches of a group."""
+    group_id: str
+    branches_count: int
+    branches_active: int
+    properties_active: int = 0
+    properties_total: int = 0
+    clients_total: int = 0
+    leads_open: int = 0
+    leads_total: int = 0

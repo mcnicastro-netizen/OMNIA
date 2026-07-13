@@ -275,7 +275,28 @@
     "nav_settings": "Impostazioni",
     "nav_logout": "Esci",
     "agency_label": "Agenzia",
-    "nav_website": "Sito web"
+    "nav_website": "Sito web",
+    "nav_group": "Gruppo"
+  },
+  "group": {
+    "title": "Gruppo / Franchising",
+    "consolidated": "KPI consolidati",
+    "branches": "Filiali",
+    "branches_active": "Attive",
+    "branches_list": "Filiali del gruppo",
+    "properties_active": "Immobili attivi",
+    "properties_total": "Immobili totali",
+    "clients_total": "Clienti",
+    "leads_open": "Lead aperti",
+    "total": "totali",
+    "branch_name": "Filiale",
+    "branch_code": "Codice",
+    "city": "Città",
+    "plan_type": "Track",
+    "no_branches": "Nessuna filiale collegata al gruppo. Da super_admin: POST /api/app/groups/{id}/branches.",
+    "empty_title": "Nessun gruppo attivo",
+    "empty_hint": "Non appartieni ancora a un gruppo/holding. Un super_admin può crearne uno tramite l'API.",
+    "footer_hint": "M2.5.1 (D-041) — visione consolidata del gruppo. Creazione/gestione filiali via API in questa fase."
   },
   "onboarding": {
     "title": "Configura la tua agenzia",

@@ -7,6 +7,7 @@ from shared.utils.i18n import t, normalize_lang
 from shared.db.connection import set_current_lang
 
 from apps.immoweb.agencies import router as agencies_router
+from apps.immoweb.groups import router as groups_router
 from apps.immoweb.invites import router as invites_router
 from apps.immoweb.dashboard import router as dashboard_router
 from apps.immoweb.properties import router as properties_router
@@ -41,6 +42,7 @@ async def app_health(accept_language: Optional[str] = Header(None)):
 
 # Mount sub-routers
 router.include_router(agencies_router)
+router.include_router(groups_router)
 router.include_router(invites_router)
 router.include_router(dashboard_router)
 router.include_router(properties_router)

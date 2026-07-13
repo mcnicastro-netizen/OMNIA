@@ -776,3 +776,18 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Attivazione**: Fase 2 del GTM (post-M6, D-035). Schema dati `partner_id` da prevedere SUBITO in M2.5.2 per non rifare le API.
 - **Stato**: ✅ APPLICATA (design). Implementazione con M2.5.2.
 
+
+### D-047 — M2.5.1 default fields: `plan_type=hybrid`, `credits_mode=branch` (13-Lug-2026) 🏢
+
+- **Contesto**: al momento di implementare M2.5.1 (Multi-branch / Franchising Layer, D-041) servivano 2 scelte di default per il modello dati. Ask_human al Founder con 2 domande.
+- **Decisioni del Founder** (`1b + 2b`):
+  1. **`plan_type=hybrid` come default** per tutte le agenzie esistenti (retrocompat): permette sia UI OMNIA sia consumo via API/widget quando M2.5.2/3 andranno live. `turnkey` e `whitelabel` restano come override esplicito futuro.
+  2. **`credits_mode=branch` come default sui nuovi `AgencyGroup`**: ogni filiale paga i propri crediti (autonomia tipica del multi-sede indipendente). L'holding può switchare a `group` (paga la casa madre per tutte) da PATCH.
+- **Effetti implementativi**:
+  - `AgencyInDB.plan_type: PlanType = "hybrid"`, `AgencyGroupInDB.credits_mode: CreditsMode = "branch"`.
+  - Nuovi ruoli `group_admin`/`branch_admin`/`branch_agent` in `UserRole`. `require_roles()` estesa con alias: `agency_admin` include `branch_admin` e `group_admin`; `agent` include `branch_agent`+`branch_admin`+`group_admin`. Zero regressioni su endpoint esistenti.
+  - Il creatore del gruppo (originalmente `agency_admin` o `super_admin`) viene promosso a `group_admin` con `group_id` sul record utente.
+  - Backward-compat: agenzie senza `group_id` continuano a funzionare come "gruppo mono-filiale implicito"; nessuna migrazione DB richiesta.
+- **Contabilità crediti** (D-041): il campo `credits_mode` determina dove verrà scalato il budget (M2.5.2). Con `branch` di default rimane la configurazione "safe" fiscale/contabile per multi-sede; il tier Enterprise con holding paganti si configurerà via PATCH esplicito.
+- **Stato**: ✅ APPLICATA — backend + frontend + 15 pytest + smoke E2E screenshot verificati.
+
