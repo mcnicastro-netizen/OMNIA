@@ -791,3 +791,24 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Contabilità crediti** (D-041): il campo `credits_mode` determina dove verrà scalato il budget (M2.5.2). Con `branch` di default rimane la configurazione "safe" fiscale/contabile per multi-sede; il tier Enterprise con holding paganti si configurerà via PATCH esplicito.
 - **Stato**: ✅ APPLICATA — backend + frontend + 15 pytest + smoke E2E screenshot verificati.
 
+
+### D-048 — M2.5.2 API Gateway design: Bearer + hash-only + partner_id first-class (13-Lug-2026) 🔑
+
+- **Contesto**: implementare la porta d'ingresso Track B. Due scelte chiave da fare prima del codice — auth header e pricing crediti — condivise con Founder ("cosa suggerisci?").
+- **Decisioni approvate dal Founder** (`vai`):
+  1. **Auth = `Authorization: Bearer omk_live_<28 chars>`** (formato standard SaaS PropTech 2026, riusa `Bearer` già gestito per JWT nell'infrastruttura). Custom header scartato per zero valore aggiunto vs standard.
+  2. **Pricing MVP** (1 credito = €0,03, allineato PRICING_OMNIA.md v2): valuator=5, mortgages/compare=1, legal/ask=3, staging=15 (riservato), feed=0, me=0. Margini omogenei 85-100% grazie a Emergent LLM Key + motori in-house.
+- **Design tecnico applicato**:
+  - **Storage sicuro chiavi**: solo SHA-256 hash + prefix (12 char, searchable/UI-friendly) in DB. Il plaintext esiste UNA SOLA VOLTA nella response di `POST /api/app/api-keys` (show-once box verde in UI). Nessun endpoint espone il plaintext dopo l'issuance. Revoca via flag `is_active=False` + `revoked_at` timestamp.
+  - **Accounting per-call**: `require_api_key(endpoint_key)` valida chiave + saldo; il debito avviene DOPO il successo del handler via `charge_and_log(request)`. Su errore/eccezione il log riporta `credits_charged=0` con `error_code` (nessun debito). Latenza tracciata in ms per SLA future.
+  - **`partner_id` first-class** (D-046): campo su `ApiKeyInDB` (settabile all'issuance) e propagato in ogni riga di `api_usage_log` per attribuzione permanente delle commissioni Web Agency (20% ricorrente a vita). Fondamentale metterlo NEL DB DA SUBITO: rifare uno schema per aggiungere partner_id retroattivamente sarebbe stato costoso.
+  - **v1 versionato** (`/api/v1/*`): riusa direttamente i handler esistenti Immocloud/Immoweb (`estimate_value`, `compare_mortgages`, `_call_llm`), zero duplicazione business logic. Ogni endpoint ritorna `{data, credits_charged}` per UX predicible cliente.
+  - **Staging = 501 riservato**: la pipeline è async 3-stage, richiede più design (webhook callback? polling?). Rimandato a M2.5.3 (widget) dove è più naturale gestire callback.
+- **Impatto sui tier commerciali**: Track B (whitelabel/hybrid) può ora essere venduto realmente in demo — Founder dimostra flusso "chiave → chiamata reale → saldo scalato" in <1 min a un franchising. Pricing di `PRICING_OMNIA.md` v2 diventa fatturabile.
+- **Cosa NON abbiamo fatto in questo sprint** (per non allargare lo scope):
+  - Nessun rate limiter (basta 402 su saldo 0 come circuit breaker naturale)
+  - Nessun Stripe / ricariche automatiche (M4)
+  - Nessuna dashboard analytics avanzata (solo lista + usage log — sufficiente per MVP)
+  - Nessun webhook outbound per lead capture (arriva con M2.5.3 widget)
+- **Stato**: ✅ APPLICATA — 15 pytest + smoke E2E screenshot verificato (chiave `Widget Demo Web Agency` con partner_id `webagency_test_001` attiva, saldo 94/100 dopo 3 chiamate reali).
+

@@ -52,10 +52,17 @@ export default function AgencyShell({ children, current = "dashboard" }) {
   };
 
   const isGroupAdmin = user?.role === "group_admin" || user?.role === "super_admin";
+  const isAgencyAdmin =
+    user?.role === "agency_admin" ||
+    user?.role === "branch_admin" ||
+    isGroupAdmin;
   const navItems = [
     { key: "dashboard", to: `/${lang}/app/dashboard`, label: t("immoweb_app.nav_dashboard"), icon: "▦" },
     ...(isGroupAdmin
       ? [{ key: "group", to: `/${lang}/app/group`, label: t("immoweb_app.nav_group") || "Gruppo", icon: "🏢" }]
+      : []),
+    ...(isAgencyAdmin
+      ? [{ key: "api-keys", to: `/${lang}/app/api-keys`, label: t("immoweb_app.nav_api_keys") || "API Keys", icon: "🔑" }]
       : []),
     { key: "properties", to: `/${lang}/app/properties`, label: t("immoweb_app.nav_properties"), icon: "🏠" },
     { key: "clients", to: `/${lang}/app/clients`, label: t("immoweb_app.nav_clients"), icon: "👥" },

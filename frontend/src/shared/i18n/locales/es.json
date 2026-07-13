@@ -97,7 +97,24 @@
     "agency_label": "Agencia",
     "nav_website": "Sitio web",
     "nav_portals": "Portales",
-    "nav_group": "Grupo"
+    "nav_group": "Grupo",
+    "nav_api_keys": "API Keys"
+  },
+  "api_keys": {
+    "title": "Claves API",
+    "subtitle": "Emite claves API para que widgets o CRMs externos consuman las features OMNIA (Valorador, Hipotecas, HAL Legal). 1 crédito = €0,03.",
+    "create_title": "Emitir nueva clave",
+    "name": "Nombre",
+    "initial_credits": "Créditos iniciales",
+    "partner_id": "Partner ID",
+    "issue": "Emitir clave",
+    "issued_once": "Visible una sola vez",
+    "issued_hint": "Cópiala ahora — al cerrar este cuadro la clave no se podrá recuperar.",
+    "list_title": "Claves activas",
+    "empty": "Ninguna clave activa. Emite la primera con el formulario superior.",
+    "confirm_revoke": "¿Revocar esta clave? La operación es irreversible.",
+    "topup_prompt": "Créditos a añadir (positivo=recarga, negativo=descuenta):",
+    "docs_title": "Cómo se usa"
   },
   "group": {
     "title": "Grupo / Franquicia",

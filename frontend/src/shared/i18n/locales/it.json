@@ -276,7 +276,24 @@
     "nav_logout": "Esci",
     "agency_label": "Agenzia",
     "nav_website": "Sito web",
-    "nav_group": "Gruppo"
+    "nav_group": "Gruppo",
+    "nav_api_keys": "API Keys"
+  },
+  "api_keys": {
+    "title": "Chiavi API",
+    "subtitle": "Emetti chiavi API per far consumare le feature OMNIA (Valutatore, Mutui, HAL Legal) da widget o gestionali esterni. 1 credito = €0,03.",
+    "create_title": "Emetti nuova chiave",
+    "name": "Nome",
+    "initial_credits": "Crediti iniziali",
+    "partner_id": "Partner ID",
+    "issue": "Emetti chiave",
+    "issued_once": "Chiave visibile una sola volta",
+    "issued_hint": "Copiala ora — dopo aver chiuso questo box la chiave non sarà più recuperabile.",
+    "list_title": "Chiavi attive",
+    "empty": "Nessuna chiave attiva. Emetti la prima con il form sopra.",
+    "confirm_revoke": "Revocare questa chiave? L'operazione è irreversibile.",
+    "topup_prompt": "Crediti da aggiungere (positivo=carica, negativo=scala):",
+    "docs_title": "Come si usa"
   },
   "group": {
     "title": "Gruppo / Franchising",

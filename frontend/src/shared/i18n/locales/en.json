@@ -97,7 +97,24 @@
     "agency_label": "Agency",
     "nav_website": "Website",
     "nav_portals": "Portals",
-    "nav_group": "Group"
+    "nav_group": "Group",
+    "nav_api_keys": "API Keys"
+  },
+  "api_keys": {
+    "title": "API Keys",
+    "subtitle": "Issue API keys to let external widgets or CRMs consume OMNIA features (Valuator, Mortgages, HAL Legal). 1 credit = €0.03.",
+    "create_title": "Issue a new key",
+    "name": "Name",
+    "initial_credits": "Initial credits",
+    "partner_id": "Partner ID",
+    "issue": "Issue key",
+    "issued_once": "Shown only once",
+    "issued_hint": "Copy it now — once you close this box the key is not recoverable.",
+    "list_title": "Active keys",
+    "empty": "No active keys. Issue the first one via the form above.",
+    "confirm_revoke": "Revoke this key? Cannot be undone.",
+    "topup_prompt": "Credits to add (positive=top-up, negative=deduct):",
+    "docs_title": "How to use"
   },
   "group": {
     "title": "Group / Franchising",

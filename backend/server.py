@@ -146,6 +146,10 @@ api_router.include_router(public_site_router)
 from apps.marketing.founders import router as founders_router  # noqa: E402
 api_router.include_router(founders_router)
 
+# Public v1 API Gateway (M2.5.2 Track B, D-041) — Bearer API-key auth
+from apps.v1.gateway import router as v1_gateway_router  # noqa: E402
+api_router.include_router(v1_gateway_router)
+
 app.include_router(api_router)
 
 
