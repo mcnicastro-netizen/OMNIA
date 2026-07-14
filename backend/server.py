@@ -150,6 +150,10 @@ api_router.include_router(founders_router)
 from apps.v1.gateway import router as v1_gateway_router  # noqa: E402
 api_router.include_router(v1_gateway_router)
 
+# M2.5.3 — Widget assets (loader.js + widget HTML pages) served from backend.
+from apps.v1.widgets import router as v1_widgets_router  # noqa: E402
+api_router.include_router(v1_widgets_router)
+
 app.include_router(api_router)
 
 

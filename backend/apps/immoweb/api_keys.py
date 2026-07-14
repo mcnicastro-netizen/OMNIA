@@ -84,6 +84,7 @@ async def create_api_key(
         key_hash=hash_key(plaintext),
         credits_balance=payload.initial_credits,
         partner_id=payload.partner_id,
+        allowed_origins=payload.allowed_origins or [],
     ).model_dump()
     await db.api_keys.insert_one(doc)
     logger.info(
@@ -111,6 +112,35 @@ async def revoke_api_key(
         raise HTTPException(status_code=404, detail="api_key_not_found")
     logger.info("API key revoked: id=%s by=%s", key_id, user["email"])
     return {"status": "ok", "id": key_id, "revoked_at": now}
+
+
+# ---------------- ORIGINS (M2.5.3 widget security) ----------------
+
+from pydantic import BaseModel as _PydanticBase
+
+
+class AllowedOriginsUpdate(_PydanticBase):
+    allowed_origins: list = []
+
+
+@router.patch("/{key_id}/origins")
+async def update_allowed_origins(
+    key_id: str,
+    payload: AllowedOriginsUpdate,
+    user: dict = Depends(require_roles("agency_admin", "super_admin")),
+):
+    """Update the origin whitelist for a widget-facing API key."""
+    db = Database.get()
+    origins = [str(o).strip().rstrip("/") for o in (payload.allowed_origins or []) if o]
+    now = datetime.now(timezone.utc).isoformat()
+    r = await db.api_keys.update_one(
+        {"id": key_id, "agency_id": _agency_id_of(user)},
+        {"$set": {"allowed_origins": origins, "updated_at": now}},
+    )
+    if r.matched_count == 0:
+        raise HTTPException(status_code=404, detail="api_key_not_found")
+    updated = await db.api_keys.find_one({"id": key_id})
+    return _to_public(updated)
 
 
 # ---------------- CREDITS ADJUSTMENT (manual until M4/Stripe) ----------------

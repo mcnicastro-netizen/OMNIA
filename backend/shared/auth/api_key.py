@@ -30,6 +30,7 @@ CREDIT_COSTS: Dict[str, int] = {
     "legal_ask": 3,         # HAL Legal one-shot question
     "staging_render": 15,   # virtual staging (async, reserved)
     "feed_properties": 0,   # read-only export, free
+    "widget_lead": 0,       # widget lead capture — free (funds monetized separately)
 }
 
 
@@ -83,6 +84,26 @@ async def require_api_key(request: Request, endpoint_key: str) -> dict:
     if not key.get("is_active") or key.get("revoked_at"):
         raise HTTPException(status_code=403, detail="api_key_revoked")
 
+    # M2.5.3 — Origin whitelist: if the key declares allowed_origins, enforce them.
+    # Some ingresses/proxies rewrite the `Origin` header to internal hostnames,
+    # so we also accept a Referer that matches. Any match on either wins.
+    allowed = key.get("allowed_origins") or []
+    if allowed:
+        candidates = []
+        origin = request.headers.get("Origin")
+        if origin:
+            candidates.append(origin.rstrip("/"))
+        ref_origin = _origin_from_referer(request.headers.get("Referer", ""))
+        if ref_origin:
+            candidates.append(ref_origin.rstrip("/"))
+        matched = any(_origin_matches(c, allowed) for c in candidates)
+        if not matched:
+            logger.warning(
+                "origin_not_allowed key=%s candidates=%r allowed=%r",
+                key["id"], candidates, allowed,
+            )
+            raise HTTPException(status_code=403, detail="origin_not_allowed")
+
     # Verify owning agency is still active
     ag = await db.agencies.find_one({"id": key["agency_id"]}, {"_id": 0, "is_active": 1})
     if not ag or not ag.get("is_active", True):
@@ -99,6 +120,44 @@ async def require_api_key(request: Request, endpoint_key: str) -> dict:
     request.state.api_started_at = time.monotonic()
 
     return key
+
+
+def _origin_from_referer(referer: str) -> Optional[str]:
+    """Extract origin (scheme://host[:port]) from a Referer URL."""
+    if not referer:
+        return None
+    try:
+        from urllib.parse import urlparse
+        u = urlparse(referer)
+        if u.scheme and u.netloc:
+            return f"{u.scheme}://{u.netloc}"
+    except Exception:
+        return None
+    return None
+
+
+def _origin_matches(origin: str, allowed: list) -> bool:
+    """
+    Check origin against whitelist. Patterns:
+      - "https://example.com"        exact
+      - "https://*.example.com"      wildcard subdomain
+      - "*"                          allow all (escape hatch)
+    """
+    origin = (origin or "").rstrip("/")
+    for pat in allowed:
+        pat = (pat or "").rstrip("/")
+        if pat == "*" or pat == origin:
+            return True
+        # subdomain wildcard: "https://*.example.com"
+        if "://*." in pat:
+            scheme, rest = pat.split("://", 1)
+            base = rest[2:]  # after "*."
+            if origin.startswith(f"{scheme}://") and origin.endswith(base):
+                # ensure it's a subdomain, not the base itself
+                host_part = origin[len(scheme) + 3:]
+                if host_part == base or host_part.endswith("." + base):
+                    return True
+    return False
 
 
 def make_key_dep(endpoint_key: str):

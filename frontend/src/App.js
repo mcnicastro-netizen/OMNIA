@@ -18,6 +18,7 @@ import ErrorBoundary from "@/shared/components/ErrorBoundary";
 
 import LandingApp from "@/apps/landing/LandingApp";
 import AgenziesLandingPage from "@/apps/landing/AgenziesLandingPage";
+import WidgetsShowcasePage from "@/pages/WidgetsShowcasePage";
 import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
 import ImmowebApp from "@/apps/immoweb/ImmowebApp";
 import DashboardPage from "@/apps/immoweb/DashboardPage";
@@ -108,6 +109,9 @@ function App() {
 
                   {/* Founders 50 — landing for B2B agencies */}
                   <Route path="agenzie" element={<AgenziesLandingPage />} />
+
+                  {/* M2.5.3 — Track B widgets showcase (public) */}
+                  <Route path="widgets" element={<WidgetsShowcasePage />} />
 
                   {/* Auth pages (public) */}
                   <Route path="login" element={<LoginPage />} />

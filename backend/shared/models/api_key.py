@@ -25,6 +25,8 @@ class ApiKeyInDB(TimestampedModel):
     credits_balance: int = 0                          # remaining credits
     credits_spent: int = 0                            # cumulative spend (audit)
     partner_id: Optional[str] = None                  # Web Agency partner (D-046)
+    # M2.5.3 — Widget security: origins whitelist (empty = allow all, deployment gate at UI level)
+    allowed_origins: list = Field(default_factory=list)  # e.g. ["https://agenziarossi.it", "https://*.agenziarossi.it"]
     is_active: bool = True
     last_used_at: Optional[str] = None
     revoked_at: Optional[str] = None
@@ -40,6 +42,7 @@ class ApiKeyPublic(OmniaBaseModel):
     credits_balance: int
     credits_spent: int
     partner_id: Optional[str] = None
+    allowed_origins: list = []
     is_active: bool
     last_used_at: Optional[str] = None
     revoked_at: Optional[str] = None
@@ -51,6 +54,7 @@ class ApiKeyCreate(OmniaBaseModel):
     name: str = Field(min_length=1, max_length=120)
     initial_credits: int = Field(default=0, ge=0, le=1_000_000)
     partner_id: Optional[str] = Field(default=None, max_length=60)
+    allowed_origins: list = []                        # empty = permissive; recommended: set for widget keys
 
 
 class ApiKeyIssueResponse(OmniaBaseModel):

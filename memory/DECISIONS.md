@@ -812,3 +812,27 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - Nessun webhook outbound per lead capture (arriva con M2.5.3 widget)
 - **Stato**: ✅ APPLICATA — 15 pytest + smoke E2E screenshot verificato (chiave `Widget Demo Web Agency` con partner_id `webagency_test_001` attiva, saldo 94/100 dopo 3 chiamate reali).
 
+
+### D-049 — M2.5.3 Widget Track B: scope + security + install pattern (14-Lug-2026) 🧩
+
+- **Contesto**: dopo M2.5.2 (API Gateway live), servivano widget embeddabili per rendere le `/api/v1/*` **usabili senza codice** dai clienti Track B. 3 scelte discusse col Founder ("cosa suggerisci?") → approvato `1b + 2a + 3a`.
+- **Decisioni approvate**:
+  1. **Scope MVP** = **Valuator + Mutui** (i due widget di maggior impatto commerciale; HAL Legal Q&A rimandato a sprint successivo perché la UI conversazionale è più complessa e beneficia di stato di sessione).
+  2. **Install pattern** = **solo `<script>` loader** (crea l'iframe da sé; standard settore stile Stripe/Intercom/Cal.com). iframe diretto scartato: forzeremmo il cliente a scegliere altezza, gestire resize, ecc.
+  3. **Lead capture** = **direttamente nel CRM OMNIA** del cliente (`db.leads` con `source=widget_valuator` o `widget_mortgages`). Webhook esterno rimandato a M2.5.4 quando avremo il pattern feed bidirezionale.
+- **Design tecnico applicato**:
+  - **HTML single-file self-contained**: `apps/v1/assets/valuator.html` e `mortgages.html` sono file completi con CSS inline (no CDN, no build step). Placeholder `__BACKEND_BASE__`, `__PRIMARY_COLOR__`, `__API_KEY__`, `__LANG__` iniettati al serving. Vanilla JS per zero deps. **~13KB compressed per widget**, load time < 200ms.
+  - **Loader ~2KB**: legge `data-*` dallo `<script>` tag, crea iframe, ascolta `postMessage` per resize dinamico (`ResizeObserver` nel widget emette height al parent). Cache 5 minuti.
+  - **Security — `allowed_origins` whitelist** su `ApiKeyInDB` con supporto wildcard `https://*.example.com`. `require_api_key()` verifica **Origin OR Referer** — trade-off necessario perché il k8s ingress in preview riscrive `Origin` all'URL interno del cluster (test empirico: origin diventava `audit-tool-12.cluster-10.preview.emergentcf.cloud`). `Referer` è preservato dai browser e non riscritto dal proxy. Se la chiave ha whitelist vuota → permissive (server-side use case).
+  - **Backend URL da forwarded headers**: `_backend_base(request)` legge `X-Forwarded-Host`+`X-Forwarded-Proto` invece di `request.base_url` (che punta al cluster interno). Fallback a env `PUBLIC_BASE_URL` o `REACT_APP_BACKEND_URL` per override esplicito.
+  - **`X-Frame-Options: ALLOWALL`** + `Content-Security-Policy: frame-ancestors *` sulla response HTML del widget. Rende esplicito l'intent di embed (default sarebbe SAMEORIGIN).
+  - **Endpoint lead** `POST /api/v1/widgets/lead` = **0 crediti** (D-046: monetizziamo l'accesso alle feature AI, non l'ingestione dei lead che sono valore netto per l'agenzia). Validazioni: consent + almeno un contatto. `partner_id` propagato nel documento del lead.
+- **Showcase pubblico** `/it/widgets`: tab Valuator/Mortgages, iframe live che si aggiorna quando il visitatore incolla una chiave, snippet copiabile con backend URL corretto (letto da `window.location.origin` client-side). CTA "Accedi per emettere una chiave →" per non-loggati. Funge da **demo + landing commerciale + docs installazione** in un unico posto.
+- **Cosa NON abbiamo fatto in questo sprint** (contenimento scope):
+  - Nessun rate limit per chiave (basta 402 su saldo 0 come circuit breaker + whitelist origini come circuit breaker abuso)
+  - Nessun HAL Legal Q&A widget (rimandato — UI conversazionale merita sprint proprio)
+  - Nessun webhook uscente verso CRM esterni (arriva con M2.5.4 feed bidirezionale)
+  - Nessuna analytics widget-side (usage log server-side basta per l'MVP)
+  - Nessuna versione dark theme dei widget (solo primary color configurabile)
+- **Stato**: ✅ APPLICATA — 15/15 pytest M2.5.3, regressione totale 45/45 (M2.5.1+M2.5.2+M2.5.3), smoke E2E screenshot: showcase page renderizzata correttamente con anteprima iframe live per entrambi i widget.
+

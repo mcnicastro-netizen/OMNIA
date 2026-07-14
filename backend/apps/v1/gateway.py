@@ -206,6 +206,73 @@ async def v1_feed_properties(
         raise HTTPException(status_code=500, detail="internal_error")
 
 
+# ---------------- WIDGET LEAD CAPTURE (M2.5.3) ----------------
+
+class WidgetLeadBody(BaseModel):
+    widget: str = Field(pattern="^(valuator|mortgages|legal)$")
+    name: Optional[str] = Field(default=None, max_length=120)
+    email: Optional[str] = Field(default=None, max_length=200)
+    phone: Optional[str] = Field(default=None, max_length=40)
+    message: Optional[str] = Field(default=None, max_length=1000)
+    context: Optional[Dict[str, Any]] = None  # e.g. valuation result, mortgage details
+    consent: bool = False
+    source_url: Optional[str] = Field(default=None, max_length=500)
+
+
+@router.post("/widgets/lead")
+async def v1_widget_lead(
+    body: WidgetLeadBody,
+    request: Request,
+    key=Depends(make_key_dep("widget_lead")),
+) -> Dict[str, Any]:
+    """
+    Capture a lead from a Track B widget into the owning agency's CRM.
+    Cost: 0 credits (free — monetization via feature access, not lead ingestion).
+    """
+    try:
+        if not (body.email or body.phone):
+            raise HTTPException(status_code=400, detail="email_or_phone_required")
+        if not body.consent:
+            raise HTTPException(status_code=400, detail="consent_required")
+
+        db = Database.get()
+        now_iso = _now_iso()
+        lead_id = os.urandom(12).hex()
+        lead_doc = {
+            "id": lead_id,
+            "agency_id": key["agency_id"],
+            "group_id": key.get("group_id"),
+            "source": f"widget_{body.widget}",
+            "source_url": body.source_url,
+            "partner_id": key.get("partner_id"),
+            "api_key_id": key["id"],
+            "name": body.name,
+            "email": body.email,
+            "phone": body.phone,
+            "message": body.message,
+            "context": body.context or {},
+            "status": "new",
+            "score": None,
+            "created_at": now_iso,
+            "updated_at": now_iso,
+        }
+        await db.leads.insert_one(lead_doc)
+        await charge_and_log(request, status_code=201)
+        return {"data": {"id": lead_id, "status": "new"}, "credits_charged": 0}
+    except HTTPException as e:
+        await charge_and_log(request, status_code=e.status_code, error_code=str(e.detail)[:60])
+        raise
+    except Exception as e:
+        await charge_and_log(request, status_code=500, error_code=type(e).__name__)
+        logger.exception("v1_widget_lead failed")
+        raise HTTPException(status_code=500, detail="internal_error")
+
+
+def _now_iso() -> str:
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).isoformat()
+
+
 # ---------------- STAGING (placeholder) ----------------
 
 @router.post("/staging/render")

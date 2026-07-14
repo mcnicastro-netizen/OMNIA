@@ -13,7 +13,7 @@ export default function ApiKeysPage() {
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [issued, setIssued] = useState(null); // {key, api_key} — show-once
-  const [form, setForm] = useState({ name: "", initial_credits: 100, partner_id: "" });
+  const [form, setForm] = useState({ name: "", initial_credits: 100, partner_id: "", allowed_origins: "" });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
 
@@ -42,9 +42,13 @@ export default function ApiKeysPage() {
         name: form.name.trim(),
         initial_credits: parseInt(form.initial_credits, 10) || 0,
         partner_id: form.partner_id.trim() || null,
+        allowed_origins: form.allowed_origins
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter(Boolean),
       });
       setIssued(r.data);
-      setForm({ name: "", initial_credits: 100, partner_id: "" });
+      setForm({ name: "", initial_credits: 100, partner_id: "", allowed_origins: "" });
       load();
     } catch (e) {
       setError(e?.response?.data?.detail || "create_error");
@@ -201,6 +205,22 @@ export default function ApiKeysPage() {
               />
             </div>
           </div>
+          <div>
+            <label className="text-xs text-stone-500 block mb-1">
+              {t("api_keys.origins") || "Origins consentiti"} <span className="text-stone-400">(widget security, uno per riga)</span>
+            </label>
+            <textarea
+              data-testid="api-key-origins-input"
+              rows={2}
+              value={form.allowed_origins}
+              onChange={(e) => setForm({ ...form, allowed_origins: e.target.value })}
+              placeholder="https://agenziarossi.it&#10;https://*.agenziarossi.it"
+              className="w-full border border-stone-300 rounded px-3 py-2 text-sm font-mono text-xs"
+            />
+            <p className="text-xs text-stone-500 mt-1">
+              {t("api_keys.origins_hint") || "Vuoto = nessuna restrizione (chiave server-side). Popolato = solo widget su quei domini possono usarla."}
+            </p>
+          </div>
           {error && (
             <p data-testid="api-key-error" className="text-xs text-red-600">
               {error}
@@ -310,10 +330,18 @@ export default function ApiKeysPage() {
             Auth header: <code className="bg-white px-1.5 py-0.5 rounded font-mono">Authorization: Bearer omk_live_...</code>
           </p>
           <p>
-            Endpoint disponibili (v1): <code>/api/v1/valuator</code> (5 crediti) · <code>/api/v1/mortgages/compare</code> (1) · <code>/api/v1/legal/ask</code> (3) · <code>/api/v1/feed/properties</code> (0) · <code>/api/v1/me</code> (0)
+            Endpoint API v1: <code>/api/v1/valuator</code> (5cr) · <code>/api/v1/mortgages/compare</code> (1) · <code>/api/v1/legal/ask</code> (3) · <code>/api/v1/widgets/lead</code> (0) · <code>/api/v1/feed/properties</code> (0)
           </p>
           <p>
-            Costi aggiornati: <a href="/api/v1/health" target="_blank" rel="noreferrer" className="underline">GET /api/v1/health</a>
+            Widget embed (Track B, M2.5.3):
+          </p>
+          <pre className="bg-white border border-stone-200 rounded p-3 overflow-x-auto text-[11px] leading-snug">{`<script src="${window.location.origin}/api/widgets/v1/loader.js"
+  data-key="omk_live_..."
+  data-widget="valuator"
+  data-primary="#0b1e3f"
+  data-lang="it"></script>`}</pre>
+          <p>
+            Anteprima widget: <a href="/it/widgets" className="underline">/it/widgets</a> · Health API: <a href="/api/v1/health" target="_blank" rel="noreferrer" className="underline">/api/v1/health</a>
           </p>
         </div>
       </section>
