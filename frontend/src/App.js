@@ -41,6 +41,7 @@ import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
 import MutuiToolPage from "@/apps/immoweb/pages/MutuiToolPage";
 import GroupPage from "@/apps/immoweb/pages/GroupPage";
 import ApiKeysPage from "@/apps/immoweb/pages/ApiKeysPage";
+import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -153,6 +154,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
                         <ApiKeysPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/import"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
+                        <ImportXmlPage />
                       </ProtectedRoute>
                     }
                   />

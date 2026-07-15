@@ -64,6 +64,9 @@ export default function AgencyShell({ children, current = "dashboard" }) {
     ...(isAgencyAdmin
       ? [{ key: "api-keys", to: `/${lang}/app/api-keys`, label: t("immoweb_app.nav_api_keys") || "API Keys", icon: "🔑" }]
       : []),
+    ...(isAgencyAdmin
+      ? [{ key: "import", to: `/${lang}/app/import`, label: t("immoweb_app.nav_import") || "Importa", icon: "⇪" }]
+      : []),
     { key: "properties", to: `/${lang}/app/properties`, label: t("immoweb_app.nav_properties"), icon: "🏠" },
     { key: "clients", to: `/${lang}/app/clients`, label: t("immoweb_app.nav_clients"), icon: "👥" },
     { key: "matches", to: `/${lang}/app/matches`, label: t("immoweb_app.nav_matches"), icon: "✦" },

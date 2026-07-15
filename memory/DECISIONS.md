@@ -836,3 +836,46 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - Nessuna versione dark theme dei widget (solo primary color configurabile)
 - **Stato**: ✅ APPLICATA — 15/15 pytest M2.5.3, regressione totale 45/45 (M2.5.1+M2.5.2+M2.5.3), smoke E2E screenshot: showcase page renderizzata correttamente con anteprima iframe live per entrambi i widget.
 
+
+### D-050 — M2.5.4a Universal XML Importer (parser generico, zero brand-mention) (15-Lug-2026) ⇪
+
+- **Contesto**: dopo la scoperta del Domain Lock-in (D-051), il Founder ha approvato la strategia "Extraction-first" per aiutare le ~1.803 agenzie clienti Agestanet (+ altre ~4-6.000 clienti gestionali analoghi) a uscire dai propri fornitori. Prima consegna: importer XML universale.
+- **Decisione**: costruire un parser **schema-agnostic** che accetti qualsiasi feed XML del settore immobiliare italiano, con tabelle euristiche generiche (codici numerici tipologia/energia, testi multilingua, foto/piantine, boolean flags). **Zero menzioni di brand di competitor** in codice, log, UI, o materiale di supporto — anche il nome del modulo è deliberatamente generico (`universal_xml.py`, non nome-vendor).
+- **Design tecnico applicato**:
+  - **Two-phase flow preview→commit** con session in-memory TTL 10min: preview fa parsing e ritorna `ParseReport` completo senza scritture DB, commit riprende la session e inserisce in batch di 100.
+  - **Tabelle di mapping** per: 15+ tipologie con codice numerico (3/10/31/32/33/34/etc → PropertyType), 19 codici energetici (1-19 → A4-G + exempt), operation V/A/S/R/RB/ASTA → PropertyOperation, 25 feature con dictionary keyword-based fallback su testi liberi.
+  - **Foto vs piantine**: convention `titoloN/urlN/tipoN` ripetuta con `tipo=F` (Foto) → `photos[]`, `tipo=P` (Piantina) → `floor_plan_url`.
+  - **Multilingua**: preferenza lingua caller (default `it`) su tags `testo_it/eng/ted/fra/spa/rus`, con fallback su `testo` plain o `descrizione`.
+  - **Dedupe**: `skip_duplicates_by_ref` di default True → match su `reference_code` per evitare doppioni su re-import.
+  - **Guard**: file 50MB max, estensione `.xml`/`.txt` obbligatoria, 422 se root XML non contiene elementi che *"sembrano proprietà"* (≥3 tag indicatori).
+  - **Metadata traceability**: ogni immobile importato riceve `_import_source: universal_xml_importer_v1` + `_import_reference` originale → possibilità di rollback selettivo o re-sync futuro.
+- **UI copy 100% neutra** (regola Founder approvata a livello strategico):
+  - Titolo: *"Importa da altro gestionale"* (non "Importa da Agestanet")
+  - Subtitle: *"Il tuo attuale gestionale"* (non "Il tuo attuale Agestanet")
+  - Warning: *"il tuo attuale fornitore"* (non nomi specifici)
+- **Stato**: ✅ APPLICATA — 12/12 pytest, 57/57 regressione totale, smoke E2E screenshot verificato.
+
+
+### D-051 — Domain Lock-in strategy: "Extraction-first" + Regola "no brand mentions" (15-Lug-2026) 🔒
+
+- **Contesto**: il Founder Nicastro Immobiliare, cliente Agestanet, ha condiviso il contratto `agestanet_9491_[3-6-2026].pdf` (validità 29/06/2026-29/06/2027, €300+IVA annuo). Analisi dettagliata rivela lock-in strutturale via **titolarità del dominio** (Allegato A fattura "Dominio nicastroimmobiliare.it" a €400 listino → il dominio `.it` è verosimilmente registrato da BasicSoft, non a nome cliente). Nel suo pannello Aruba risultano registrati solo `.eu` e `omniarealestateecosystem.it` → conferma indiretta della tesi.
+- **Estensione del problema**: il modello è replicato dalla maggior parte dei gestionali immobiliari italiani (Gestim, Realgest, ImmoBox, etc.) → stima **~4-6.000 agenzie italiane** hanno il dominio ostaggio di un fornitore. Non è edge case, è **il mercato**.
+- **Decisione strategica del Founder** (`2 - Extraction-first`):
+  - Prima costruiamo l'**Extraction Kit** (aiuta chi è già in trappola, dove esiste domanda ATTIVA)
+  - Poi il **Domain Vault** (previene lock-in per nuovi OMNIA)
+  - Poi la **Wedge Marketing Campaign** (attiva la domanda tramite awareness)
+- **Regola operativa** (imposta dal Founder): **ZERO nomi di concorrenti** in qualsiasi contesto pubblico (landing, report, campagne, case study, materiale marketing, codice frontend/backend, log). Uso di placeholder `[FORNITORE]` nei template legali, "il tuo attuale gestionale/fornitore" nelle UI. Motivazione: evitare rischi legali (diffamazione, concorrenza sleale) + posizionare OMNIA come "la soluzione" e non "l'anti-X".
+- **Piano deliverable "Domain Sovereignty Kit"** approvato in ordine `a→b→c`:
+  - **M2.5.4a — Universal XML Importer** ✅ DONE (D-050)
+  - **M2.5.4b — Domain Ownership Checker** (landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture) — PROSSIMO
+  - **M2.5.4c — Legal Templates Pack** (4 PDF scaricabili: PEC transfer dominio, richiesta GDPR art. 20, disdetta contratto, ricorso CNR-IIT registrazione fiduciaria)
+  - **M2.5.5 — Domain Vault** (onboarding OMNIA che NON registra mai il dominio a proprio nome; slogan "OMNIA non tocca il tuo dominio")
+  - **Post-M2.5.5** — Migration Concierge Service (setup fee €299-499, gestita da OMNIA con partner legale) + Report pubblico "Trasparenza contrattuale nei gestionali immobiliari italiani 2027" con dati aggregati anonimi
+- **Piano personale Founder** parallelo:
+  - Non recedere anticipatamente (Art. 20.1 penali severe — deve pagare tutto residuo)
+  - Aspettare scadenza naturale **29/06/2027** con disdetta formale entro **29/05/2027** (30 gg preavviso Art. 20.2)
+  - Mandare PEC ad Agestanet con 3 richieste: (1) titolarità dominio + Auth-Info Code, (2) formato backup Art. 5.5, (3) inventario portali Art. 9.1
+  - Aprire ticket Aruba per conferma indipendente Registrante ufficiale
+  - Fallback: se dominio `.it` non recuperabile, migrazione su `nicastroimmobiliare.eu` (già suo, brand identico, TLD diverso)
+- **Stato**: ✅ APPLICATA — M2.5.4a consegnato. In attesa risposte Aruba/Agestanet per definire architettura di M2.5.4b/c.
+
