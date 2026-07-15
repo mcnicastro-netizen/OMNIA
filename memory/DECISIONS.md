@@ -859,19 +859,20 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 ### D-051 — Domain Lock-in strategy: "Extraction-first" + Regola "no brand mentions" (15-Lug-2026) 🔒
 
 - **Contesto**: il Founder Nicastro Immobiliare, cliente Agestanet, ha condiviso il contratto `agestanet_9491_[3-6-2026].pdf` (validità 29/06/2026-29/06/2027, €300+IVA annuo). Analisi dettagliata rivela lock-in strutturale via **titolarità del dominio** (Allegato A fattura "Dominio nicastroimmobiliare.it" a €400 listino → il dominio `.it` è verosimilmente registrato da BasicSoft, non a nome cliente). Nel suo pannello Aruba risultano registrati solo `.eu` e `omniarealestateecosystem.it` → conferma indiretta della tesi.
-- **Estensione del problema**: il modello è replicato dalla maggior parte dei gestionali immobiliari italiani (Gestim, Realgest, ImmoBox, etc.) → stima **~4-6.000 agenzie italiane** hanno il dominio ostaggio di un fornitore. Non è edge case, è **il mercato**.
+- **IMPORTANTE — Framing universale imposto dal Founder** (feedback 15-Lug-2026): OMNIA NON deve essere posizionato come "escape da Agestanet". Il caso Agestanet è **UN esempio concreto**, ma il problema da risolvere è **il lock-in strutturale dell'intera categoria dei gestionali immobiliari italiani** (una decina di player principali: Gestim, Realgest, ImmoBox, ImmoWare, Nomisma, GeCoRe, Immobiliare.it Studio, etc.). Ogni deliverable (parser, templates, landing, report, marketing) deve essere costruito **vendor-agnostic**: utile a qualsiasi agenzia italiana indipendentemente dal fornitore attuale.
+- **Estensione del problema**: il modello "vendor detiene dominio" è replicato dalla maggior parte dei gestionali immobiliari italiani → stima **decine di migliaia** di agenzie italiane hanno il dominio ostaggio di un fornitore. Non è edge case, è **il mercato**.
 - **Decisione strategica del Founder** (`2 - Extraction-first`):
   - Prima costruiamo l'**Extraction Kit** (aiuta chi è già in trappola, dove esiste domanda ATTIVA)
   - Poi il **Domain Vault** (previene lock-in per nuovi OMNIA)
   - Poi la **Wedge Marketing Campaign** (attiva la domanda tramite awareness)
-- **Regola operativa** (imposta dal Founder): **ZERO nomi di concorrenti** in qualsiasi contesto pubblico (landing, report, campagne, case study, materiale marketing, codice frontend/backend, log). Uso di placeholder `[FORNITORE]` nei template legali, "il tuo attuale gestionale/fornitore" nelle UI. Motivazione: evitare rischi legali (diffamazione, concorrenza sleale) + posizionare OMNIA come "la soluzione" e non "l'anti-X".
-- **Piano deliverable "Domain Sovereignty Kit"** approvato in ordine `a→b→c`:
-  - **M2.5.4a — Universal XML Importer** ✅ DONE (D-050)
-  - **M2.5.4b — Domain Ownership Checker** (landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture) — PROSSIMO
-  - **M2.5.4c — Legal Templates Pack** (4 PDF scaricabili: PEC transfer dominio, richiesta GDPR art. 20, disdetta contratto, ricorso CNR-IIT registrazione fiduciaria)
+- **Regola operativa** (imposta dal Founder): **ZERO nomi di concorrenti** in qualsiasi contesto pubblico (landing, report, campagne, case study, materiale marketing, codice frontend/backend, log). Uso di placeholder `[FORNITORE]` nei template legali, "il tuo attuale gestionale/fornitore" nelle UI. Motivazione doppia: evitare rischi legali (diffamazione, concorrenza sleale) + **evitare il posizionamento riduttivo** "OMNIA = anti-X". OMNIA è LA soluzione universale, non l'antagonista di uno specifico competitor.
+- **Piano deliverable "Domain Sovereignty Kit"** approvato in ordine `a→b→c`, tutti orizzontali:
+  - **M2.5.4a — Universal XML Importer** ✅ DONE (D-050) — parser schema-agnostic, funziona con feed di qualsiasi gestionale italiano
+  - **M2.5.4b — Domain Ownership Checker** (landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture) — utile a qualunque agenzia italiana, non specifico
+  - **M2.5.4c — Legal Templates Pack** (4 PDF scaricabili con placeholder `[FORNITORE]`: PEC transfer dominio, richiesta GDPR art. 20, disdetta contratto, ricorso CNR-IIT registrazione fiduciaria)
   - **M2.5.5 — Domain Vault** (onboarding OMNIA che NON registra mai il dominio a proprio nome; slogan "OMNIA non tocca il tuo dominio")
-  - **Post-M2.5.5** — Migration Concierge Service (setup fee €299-499, gestita da OMNIA con partner legale) + Report pubblico "Trasparenza contrattuale nei gestionali immobiliari italiani 2027" con dati aggregati anonimi
-- **Piano personale Founder** parallelo:
+  - **Post-M2.5.5** — Migration Concierge Service (setup fee €299-499, gestita da OMNIA con partner legale) + Report pubblico "Trasparenza contrattuale nei gestionali immobiliari italiani 2027" con dati aggregati anonimi su una decina di fornitori
+- **Piano personale Founder** parallelo (caso Agestanet):
   - Non recedere anticipatamente (Art. 20.1 penali severe — deve pagare tutto residuo)
   - Aspettare scadenza naturale **29/06/2027** con disdetta formale entro **29/05/2027** (30 gg preavviso Art. 20.2)
   - Mandare PEC ad Agestanet con 3 richieste: (1) titolarità dominio + Auth-Info Code, (2) formato backup Art. 5.5, (3) inventario portali Art. 9.1
