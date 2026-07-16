@@ -278,7 +278,8 @@
     "nav_website": "Sito web",
     "nav_group": "Gruppo",
     "nav_api_keys": "API Keys",
-    "nav_import": "Importa"
+    "nav_import": "Importa",
+    "nav_publishing": "Portali"
   },
   "import": {
     "title": "Importa da altro gestionale",

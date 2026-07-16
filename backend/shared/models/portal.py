@@ -80,3 +80,67 @@ class PortalSubscriptionPublic(BaseModel):
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+# ============================================================================
+# M2.6 Publishing Center models (D-052) — coexist with legacy PortalSubscription
+# ============================================================================
+from uuid import uuid4  # noqa: E402
+from typing import List, Dict, Any  # noqa: E402
+from shared.models.base import TimestampedModel, OmniaBaseModel  # noqa: E402
+
+
+class PortalCatalog(TimestampedModel):
+    """OMNIA-curated portal metadata (edited only by super_admin)."""
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    slug: str = Field(min_length=2, max_length=60, pattern=r"^[a-z0-9-]+$")
+    name: str
+    category: str = Field(default="gratuito")
+    dialect: str = Field(default="osf_federata")
+    integration_type: str = Field(default="feed_pull")
+    geographic_scope: str = Field(default="national")
+    credential_fields: List[Dict[str, Any]] = Field(default_factory=list)
+    logo_url: Optional[str] = None
+    traffic_score: int = Field(default=3, ge=1, le=5)
+    is_active: bool = True
+    notes: Optional[str] = None
+
+
+class AgencyPortalConnection(TimestampedModel):
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    agency_id: str
+    portal_slug: str
+    status: str = Field(default="pending")
+    credentials_encrypted: Optional[str] = None
+    last_sync_at: Optional[str] = None
+    next_sync_at: Optional[str] = None
+    last_error: Optional[str] = None
+    items_published: int = 0
+    items_failed: int = 0
+    is_all_properties: bool = True
+    notes: Optional[str] = None
+
+
+class PortalSyncLog(TimestampedModel):
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    agency_id: str
+    portal_slug: str
+    started_at: str
+    ended_at: Optional[str] = None
+    status: str = "running"
+    items_ok: int = 0
+    items_failed: int = 0
+    error_message: Optional[str] = None
+
+
+class PortalConnectionCreate(OmniaBaseModel):
+    portal_slug: str
+    credentials: Dict[str, str] = Field(default_factory=dict)
+    is_all_properties: bool = True
+
+
+class PortalConnectionUpdate(OmniaBaseModel):
+    credentials: Optional[Dict[str, str]] = None
+    is_all_properties: Optional[bool] = None
+    status: Optional[str] = None
+

@@ -99,7 +99,8 @@
     "nav_portals": "Portals",
     "nav_group": "Group",
     "nav_api_keys": "API Keys",
-    "nav_import": "Import"
+    "nav_import": "Import",
+    "nav_publishing": "Portals"
   },
   "import": {
     "title": "Import from another CRM",

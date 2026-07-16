@@ -48,6 +48,11 @@ async def lifespan(app: FastAPI):
     _load_locales()
     await seed_admin()
     try:
+        from apps.immoweb.publishing import seed_publishing_catalog
+        await seed_publishing_catalog()
+    except Exception as e:
+        logger.warning("publishing_catalog seed failed: %s", e)
+    try:
         from apps.immoweb.virtual_staging import reap_stale_jobs
         reaped = await reap_stale_jobs()
         if reaped:
