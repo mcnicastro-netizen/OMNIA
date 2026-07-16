@@ -365,26 +365,38 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 - Lead capture on-widget → forward al CRM cliente via webhook
 - Dashboard analytics widget (impression, engagement, lead generati)
 
-### M2.5.4 — 🔄 Feed XML Bidirezionale continuo per Track B
-- **Outbound** (già esiste M2.S5): immobili agenzia → ImmoCloud + portali (feed OSF v1.0)
-- **Inbound continuo (NEW)**: pull schedulato ogni 15-60min da URL feed cliente (Agestanet, Getrix, gestionali custom) — deduplica, delta detection, aggiornamento immobili esistenti
-- **Handoff lead**: webhook OMNIA → CRM cliente per ogni nuovo lead ImmoCloud
+### M2.5.4 — 🔒 Domain Sovereignty Kit (D-051, riformulato 15-Lug-2026)
+> Nato dalla scoperta "Domain Lock-in" nel settore gestionali immobiliari italiani. Strategia **Extraction-first**: aiuta prima chi è già in trappola, poi previeni per i nuovi. Regola: **zero brand mentions** in materiale pubblico.
+- **M2.5.4a ✅ DONE (15-Lug)** — Universal XML Importer: parser schema-agnostic per feed di qualsiasi gestionale italiano, preview→commit two-phase, UI `/it/app/import`
+- **M2.5.4b** — Domain Ownership Checker: landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture
+- **M2.5.4c** — Legal Templates Pack: 4 PDF con placeholder `[FORNITORE]` (PEC transfer dominio · GDPR art. 20 export dati · disdetta contratto · ricorso CNR-IIT registrazione fiduciaria)
 
-### M2.5.5 — 📥 Universal Smart Importer 2.0 (D-043)
-- **Fondazioni esistenti**: Custom Agestanet XML Parser ✅ (M2.S2), AI Smart Import Clienti ✅ (D-FUTURE-07), Import CSV/XML immobili one-shot ✅
-- **Evoluzione**: HAL-powered universal mapper che digerisce CSV / XLSX / XML / JSON di qualsiasi gestionale con preview mapping + confidence score + deduplica + validazione
-- **UX**: wizard drop-file → auto-detect formato → preview mapping colonne → conferma → import massivo
-- **Migrazione Founder**: 65 immobili Agestanet già testati OK, procedura documentata in `COMPETITIVE_ANALYSIS_AGESTANET.md`
-- **Connettori nativi**: solo quando 5+ agenzie paganti provengono dallo stesso gestionale (metrica D-043)
-- **Tuo compito**: fornire 2-3 file di export "sporchi" reali per stress-test del mapper
+### M2.5.5 — 🛡️ Domain Vault (Prevention layer per nuovi OMNIA)
+- Onboarding OMNIA che NON registra mai il dominio a proprio nome
+- 3 opzioni al signup: (a) domain già mio verifica WHOIS, (b) guida a registrarlo su Aruba/GoDaddy in autonomia, (c) attiva Domain Sovereignty Kit se dominio del vecchio fornitore
+- Slogan pubblico: *"OMNIA non tocca il tuo dominio. È tuo. Lo era, lo resta."*
 
-### ✅ Definition of Done M2.5
-- [🟡] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0) — consegnati 06-Lug, in revisione
-- [ ] Multi-branch operativo su 1 agenzia franchising pilota
-- [ ] API Gateway con almeno 5 endpoint Track B live + 1 SDK
-- [ ] 2+ widget embeddabili in produzione su almeno 1 sito esterno
-- [ ] Feed bidirezionale continuo funzionante su almeno 1 cliente Track B
-- [ ] Universal Smart Importer digerisce 80%+ file di export testati
+### M2.6 — 📡 Publishing Center (Multi-portal Outbound, NUOVO 15-Lug-2026)
+> Match funzionale con l'area "Portali" dei gestionali legacy: OMNIA deve pubblicare gli annunci su tutti i portali gratuiti/paganti italiani con setup one-click e sync automatica. Senza questo layer OMNIA non è sostituibile all'esistente.
+- **M2.6a — Foundation** (P0, ~5h): modelli `PortalCatalog` (catalogo curato) + `AgencyPortalConnection` (join agenzia-portale con credenziali crittografate AES) + feed generator multi-dialetto (`osf_federata`, `generic_rss`, `facebook_catalog`, `google_merchant`) + UI dashboard `/it/app/portali` a 3 stati (attivi/disponibili/da-aggiornare)
+- **M2.6b — Sync engine + Compliance** (P1, ~4h): APScheduler ricorrente giornaliero + trigger manuale, `PortalSyncLog` per audit, compliance validator (classe energetica L. Boschi obbligatoria, min-foto, prezzo) hard/soft
+- **M2.6c — Social Publisher** (P2, ~3h): Facebook Pages + Instagram Business (Graph API) + Telegram broadcast + scheduler settimanale con template auto-generati (immagine + testo + prezzo)
+- **M2.6d — Universal Portal Wizard self-service** (P3, ~1h): agenzia aggiunge portali non nel catalogo curato con setup guidato
+- **Coverage MVP Fase 1**: 5-8 portali gratis top (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business Profile, Attico, Case24) — copre ~60% traffico lead gratuito italiano
+- **3 decisioni pending** prima di M2.6a: (1) sicurezza credenziali AES/vault/token-only, (2) compliance hard-vs-soft, (3) 5-8 portali priorità Fase 1
+
+### ✅ Definition of Done M2.5 + M2.6
+- [✅] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0) — 13-Lug
+- [✅] Multi-branch operativo (M2.5.1) — 13-Lug
+- [✅] API Gateway con 5+ endpoint Track B live (M2.5.2) — 13-Lug
+- [✅] 2+ widget embeddabili in produzione (M2.5.3) — 14-Lug
+- [✅] Universal XML Importer (M2.5.4a) — 15-Lug
+- [ ] Domain Ownership Checker + Legal Templates (M2.5.4b/c) — bloccato su input offline
+- [ ] Domain Vault onboarding (M2.5.5)
+- [ ] Publishing Center — Foundation (M2.6a)
+- [ ] Publishing Center — Sync engine + Compliance (M2.6b)
+- [ ] Publishing Center — Social Publisher (M2.6c)
+- [ ] Publishing Center — Universal Wizard (M2.6d)
 
 ---
 
