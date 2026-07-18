@@ -49,6 +49,9 @@ POST-SOCIETÀ: M4 (Stripe) · M5.S7/S8 · Pre-launch 🛑 (congelato, D-035)
 - **Custom API per Enterprise** — per-call / flat / revenue-share
 - **Pre-launch + Founders 50** — riapertura solo dopo Academy + features complete (D-035)
 
+### 🔬 ASPETTI DA APPROFONDIRE (non decisioni — vedi `ASPETTI_DA_APPROFONDIRE.md`)
+- **A-001 BNPL B2B** (05-Feb-2026) — pagamento rateale per contratti annuali OMNIA (Scalapay / Stripe Payment Plans / Klarna Business / Soisy). Timing: dopo M2.6b + primo push commerciale.
+
 ### 🔴 Prossima sessione — Sequenza v3.0 (PROGRAMMA_OMNIA.md v3.0)
 
 1. 🔴 **P0 — M2.5.0**: scrivere `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, crediti API group/branch) → revisione Founder
