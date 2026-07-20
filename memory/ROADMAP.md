@@ -53,6 +53,9 @@ POST-SOCIETÀ: M4 (Stripe) · M5.S7/S8 · Pre-launch 🛑 (congelato, D-035)
 - **A-001 BNPL B2B** (05-Feb-2026) — pagamento rateale per contratti annuali OMNIA (Scalapay / Stripe Payment Plans / Klarna Business / Soisy). Timing: dopo M2.6b + primo push commerciale.
 - **A-002 NVIDIA API Catalog** (05-Feb-2026) — provider LLM complementare a Emergent LLM Key. Use case: (1) Vision auto-tagging foto immobili (candidato killer feature M2.7/M3.S8), (2) Embedding gratuiti per HAL Knowledge RAG (prerequisito M5.S2).
 
+### ✅ COMPLETATI IN QUESTA SESSIONE (05-Feb-2026)
+- **M2.6b Sync Engine + Compliance Validator** DONE (D-053). APScheduler daily job 06:00 UTC + retry backoff + endpoint manual sync + dashboard compliance con top-5 reasons e lista bloccati. 20/20 pytest nuovi + 93/93 regressione totale.
+
 ### 🔴 Prossima sessione — Sequenza v3.0 (PROGRAMMA_OMNIA.md v3.0)
 
 1. 🔴 **P0 — M2.5.0**: scrivere `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, crediti API group/branch) → revisione Founder

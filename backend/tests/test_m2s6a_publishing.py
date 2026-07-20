@@ -118,7 +118,10 @@ class TestFeedAndCompliance:
 
     def test_is_publishable_helper(self):
         from apps.immoweb.publishing import is_publishable
+        # Full compliance property (M2.6b stricter rules: adds surface + address)
         ok, r = is_publishable({"operation": "sale", "price": 250000,
+                                "surface_sqm": 90,
+                                "city": "Napoli", "province": "NA",
                                 "energy": {"energy_class": "B"},
                                 "photos": [{"url": "a"}, {"url": "b"}, {"url": "c"}]})
         assert ok and r == []

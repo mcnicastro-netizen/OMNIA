@@ -1,15 +1,19 @@
-"""OMNIA — Publishing Center router (M2.6a, D-052).
+"""OMNIA — Publishing Center router (M2.6a, D-052 + M2.6b, D-053).
 
-New multi-portal outbound publishing layer. Coexists with legacy portals.py
-(M2.S5 "portal subscriptions" concept, kept intact).
+M2.6a: multi-portal outbound publishing layer + compliance HARD filter on feed.
+M2.6b: adds sync engine (scheduled + manual) + rich compliance dashboard.
+Coexists with legacy portals.py (M2.S5 "portal subscriptions" concept, kept intact).
 
 Endpoints under /api/app/publishing:
-    GET    /catalog                     list of supported portals (OMNIA-curated)
-    GET    /connections                 my agency's activations
-    POST   /connections                 activate a portal
-    PATCH  /connections/{id}            update creds / toggle
-    DELETE /connections/{id}            deactivate
-    GET    /connections/{id}/logs       recent sync logs
+    GET    /catalog                             list of supported portals
+    GET    /connections                         my agency's activations
+    POST   /connections                         activate a portal
+    PATCH  /connections/{id}                    update creds / toggle
+    DELETE /connections/{id}                    deactivate
+    GET    /connections/{id}/logs               recent sync logs
+    POST   /connections/{id}/sync-now           M2.6b — trigger sync manually
+    GET    /connections/{id}/compliance         M2.6b — compliance snapshot for this agency
+    POST   /sync/run-all                        M2.6b — admin cron endpoint (super_admin)
 """
 import logging
 import re
@@ -25,6 +29,9 @@ from shared.models.portal import (
     PortalConnectionCreate, PortalConnectionUpdate, AgencyPortalConnection,
 )
 from shared.utils.crypto import encrypt_dict
+from shared.validators.compliance import (
+    validate_property, summarize_agency_compliance, is_publishable as _validator_is_publishable,
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/publishing", tags=["publishing"])
@@ -189,20 +196,88 @@ async def connection_logs(
     return {"items": logs, "total": len(logs)}
 
 
-# ---------- COMPLIANCE (HARD, D-052) ----------
+# ---------- COMPLIANCE (HARD, D-052 + D-053) ----------
 
 def is_publishable(prop: dict) -> tuple:
-    reasons: list = []
-    op = prop.get("operation", "sale")
-    if op == "sale" and not prop.get("price"):
-        reasons.append("missing_price")
-    if op == "rent" and not prop.get("rent_monthly"):
-        reasons.append("missing_rent")
-    if not (prop.get("energy") or {}).get("energy_class"):
-        reasons.append("missing_energy_class")
-    if len([p for p in (prop.get("photos") or []) if p.get("url")]) < 3:
-        reasons.append("less_than_3_photos")
-    return (len(reasons) == 0, reasons)
+    """Backwards-compatible wrapper around shared.validators.compliance.
+
+    Kept as a module-level export so existing imports (tests, feed generator)
+    keep working. All logic lives in shared/validators/compliance.py now.
+    """
+    return _validator_is_publishable(prop)
+
+
+# ---------- M2.6b — SYNC ENDPOINTS ----------
+
+@router.post("/connections/{conn_id}/sync-now")
+async def sync_now(
+    conn_id: str,
+    user: dict = Depends(require_roles("agency_admin", "super_admin")),
+):
+    """Trigger a manual sync for one connection. No retry (snappy response)."""
+    db = Database.get()
+    aid = _agency_id(user)
+    conn = await db.publishing_connections.find_one({"id": conn_id, "agency_id": aid})
+    if not conn:
+        raise HTTPException(status_code=404, detail="connection_not_found")
+    if conn.get("status") == "disabled":
+        raise HTTPException(status_code=409, detail="connection_disabled")
+    from apps.immoweb.sync_engine import sync_connection_with_retry
+    result = await sync_connection_with_retry(conn, trigger="manual")
+    return {
+        "ok": result.get("ok"),
+        "publishable": result.get("publishable_count", 0),
+        "blocked": result.get("blocked_count", 0),
+        "integration_type": result.get("integration_type"),
+        "log": result.get("log"),
+    }
+
+
+@router.get("/connections/{conn_id}/compliance")
+async def connection_compliance(
+    conn_id: str,
+    user: dict = Depends(require_roles("agency_admin", "super_admin")),
+):
+    """Aggregated compliance snapshot for the agency behind this connection.
+
+    Returns which properties would be blocked / warned if we synced right now.
+    Useful to show a "5 immobili non pubblicabili" alert on the dashboard.
+    """
+    db = Database.get()
+    aid = _agency_id(user)
+    conn = await db.publishing_connections.find_one({"id": conn_id, "agency_id": aid})
+    if not conn:
+        raise HTTPException(status_code=404, detail="connection_not_found")
+    props = await db.properties.find(
+        {"agency_id": aid, "status": "active"}, {"_id": 0}
+    ).limit(2000).to_list(2000)
+    summary = summarize_agency_compliance(props)
+    # Also give the per-property status for the top 20 blocked ones (so the UI
+    # can list them with a "vai a correggere" link).
+    blocked_details = []
+    for p in props:
+        r = validate_property(p)
+        if not r["publishable"]:
+            blocked_details.append({
+                "id": p.get("id"),
+                "reference": p.get("reference_code"),
+                "title": p.get("title") or "",
+                "reasons": r["hard_violations"],
+            })
+            if len(blocked_details) >= 20:
+                break
+    return {
+        "portal_slug": conn["portal_slug"],
+        "summary": summary,
+        "blocked_details": blocked_details,
+    }
+
+
+@router.post("/sync/run-all")
+async def sync_run_all(user: dict = Depends(require_roles("super_admin"))):
+    """Admin trigger to run all active syncs immediately (bypasses scheduler)."""
+    from apps.immoweb.sync_engine import run_all_active_syncs
+    return await run_all_active_syncs(trigger="admin_manual")
 
 
 # ---------- FEED GENERATOR (public, no auth) ----------

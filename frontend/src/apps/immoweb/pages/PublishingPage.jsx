@@ -18,6 +18,9 @@ export default function PortalsPage() {
   const [modal, setModal] = useState(null); // {portal, creds:{}}
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [complianceModal, setComplianceModal] = useState(null); // {connection, data}
+  const [syncing, setSyncing] = useState(null); // connection id currently syncing
+  const [syncResult, setSyncResult] = useState(null); // last sync result banner
 
   const load = async () => {
     setLoading(true);
@@ -71,6 +74,29 @@ export default function PortalsPage() {
     } catch (e) { setError(e?.response?.data?.detail || "delete_error"); }
   };
 
+  const syncNow = async (conn) => {
+    setSyncing(conn.id);
+    setError(null);
+    setSyncResult(null);
+    try {
+      const r = await api.post(`/app/publishing/connections/${conn.id}/sync-now`);
+      setSyncResult({ portal: conn.portal_slug, ...r.data });
+      await load();
+    } catch (e) {
+      setError(e?.response?.data?.detail || "sync_error");
+    } finally { setSyncing(null); }
+  };
+
+  const openCompliance = async (conn) => {
+    setError(null);
+    try {
+      const r = await api.get(`/app/publishing/connections/${conn.id}/compliance`);
+      setComplianceModal({ connection: conn, data: r.data });
+    } catch (e) {
+      setError(e?.response?.data?.detail || "compliance_error");
+    }
+  };
+
   return (
     <AgencyShell current="publishing">
       <section data-testid="portals-page" className="space-y-8">
@@ -86,7 +112,7 @@ export default function PortalsPage() {
               "Attiva i portali su cui vuoi pubblicare gli annunci. OMNIA genera un feed XML aggiornato in tempo reale — ogni portale scarica autonomamente ogni notte."}
           </p>
           <div className="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded px-3 py-2 max-w-2xl">
-            ⚠️ <strong>Compliance HARD attiva</strong>: solo gli annunci con prezzo, classe energetica e almeno 3 foto vengono pubblicati. Gli altri sono esclusi dal feed automaticamente.
+            ⚠️ <strong>Compliance HARD attiva + Sync automatico</strong>: solo gli annunci con prezzo, superficie, indirizzo, classe energetica valida e almeno 3 foto vengono pubblicati. Il sync gira automaticamente ogni notte alle 06:00 UTC su tutti i portali attivi. Clicca "Compliance" per vedere quali immobili sono bloccati e perché.
           </div>
         </div>
 
@@ -98,6 +124,17 @@ export default function PortalsPage() {
         </div>
 
         {error && <div data-testid="portals-error" className="text-sm text-red-700 bg-red-50 border border-red-300 rounded p-3">{error}</div>}
+
+        {syncResult && (
+          <div data-testid="sync-result-banner" className={`text-sm border rounded p-3 flex items-start gap-3 ${syncResult.ok ? "text-emerald-800 bg-emerald-50 border-emerald-200" : "text-amber-800 bg-amber-50 border-amber-200"}`}>
+            <div className="flex-1">
+              <strong>Sync {syncResult.portal}</strong> — {syncResult.publishable ?? 0} immobili pubblicabili, {syncResult.blocked ?? 0} bloccati dal validatore compliance.
+              {syncResult.log?.error_message && <div className="text-xs mt-1 text-stone-600">{syncResult.log.error_message}</div>}
+              {syncResult.integration_type === "api_push" && <div className="text-xs mt-1 text-stone-600">ℹ️ Portale push: integrazione reale in arrivo con M2.6c/d — per ora simulata.</div>}
+            </div>
+            <button onClick={() => setSyncResult(null)} className="text-xs text-stone-500 hover:text-stone-800">✕</button>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-6 border-b border-stone-200">
@@ -138,17 +175,53 @@ export default function PortalsPage() {
                   </td></tr>
                 ) : connections.map((c) => {
                   const p = portalMap[c.portal_slug] || {};
+                  const lastSync = c.last_sync_at ? new Date(c.last_sync_at).toLocaleString("it-IT") : "mai";
                   return (
                     <tr key={c.id} data-testid={`portal-conn-${c.portal_slug}`} className="border-t border-stone-200 hover:bg-stone-50">
-                      <td className="px-4 py-3 font-medium">{p.name || c.portal_slug}</td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium">{p.name || c.portal_slug}</div>
+                        <div className="text-[10px] text-stone-500 mt-0.5" data-testid={`portal-lastsync-${c.portal_slug}`}>
+                          Ultimo sync: {lastSync}
+                          {c.items_published > 0 && ` · ${c.items_published} pubblicati`}
+                          {c.items_failed > 0 && ` · ${c.items_failed} bloccati`}
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-stone-600 text-xs">{p.category || "—"}</td>
                       <td className="px-4 py-3 text-stone-600 text-xs">{p.integration_type || "—"}</td>
                       <td className="px-4 py-3 text-stone-600">{"★".repeat(p.traffic_score || 0)}</td>
                       <td className="px-4 py-3">
                         <StatusBadge status={c.status} />
+                        {c.last_error && (
+                          <div className="text-[10px] text-red-600 mt-1 max-w-[180px] truncate" title={c.last_error} data-testid={`portal-lasterror-${c.portal_slug}`}>
+                            ⚠ {c.last_error}
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <button onClick={() => deactivate(c.id)} data-testid={`portal-deactivate-${c.portal_slug}`} className="text-xs uppercase tracking-widest text-red-600 hover:text-red-800">disattiva</button>
+                        <div className="flex justify-end gap-2 items-center">
+                          <button
+                            onClick={() => syncNow(c)}
+                            disabled={syncing === c.id || c.status === "disabled"}
+                            data-testid={`portal-sync-${c.portal_slug}`}
+                            className="text-[10px] uppercase tracking-widest bg-stone-800 text-white px-2 py-1 rounded hover:bg-stone-900 disabled:opacity-40"
+                          >
+                            {syncing === c.id ? "…" : "Sync"}
+                          </button>
+                          <button
+                            onClick={() => openCompliance(c)}
+                            data-testid={`portal-compliance-${c.portal_slug}`}
+                            className="text-[10px] uppercase tracking-widest border border-stone-300 text-stone-700 px-2 py-1 rounded hover:bg-stone-100"
+                          >
+                            Compliance
+                          </button>
+                          <button
+                            onClick={() => deactivate(c.id)}
+                            data-testid={`portal-deactivate-${c.portal_slug}`}
+                            className="text-[10px] uppercase tracking-widest text-red-600 hover:text-red-800"
+                          >
+                            Disattiva
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -177,11 +250,77 @@ export default function PortalsPage() {
           <summary className="cursor-pointer">Come funziona</summary>
           <div className="mt-2 space-y-1 bg-stone-50 border border-stone-200 rounded p-3">
             <p>1. Attivi un portale qui e (se richiesto) inserisci le credenziali del tuo account presso quel portale</p>
-            <p>2. OMNIA genera automaticamente un feed XML alla tua URL agenzia</p>
-            <p>3. Il portale scarica il feed ogni notte e sincronizza gli annunci sul suo sito</p>
-            <p>4. Solo gli annunci "compliance HARD" (prezzo + classe energetica + 3+ foto) finiscono nel feed</p>
+            <p>2. OMNIA genera automaticamente un feed XML alla tua URL agenzia (per portali "pull") o pubblica via API (per portali "push")</p>
+            <p>3. Il <strong>sync automatico</strong> gira ogni notte alle 06:00 UTC e sincronizza tutti i portali attivi. Puoi anche forzare un sync manuale con il pulsante "Sync"</p>
+            <p>4. Il validatore <strong>Compliance</strong> controlla ogni immobile prima della pubblicazione: se manca prezzo, superficie, APE, indirizzo o 3+ foto viene escluso automaticamente (regola HARD, obbligo D.Lgs 192/2005 + AGCM)</p>
+            <p>5. Clicca "Compliance" su un portale attivo per vedere il dettaglio degli immobili bloccati e i motivi</p>
           </div>
         </details>
+
+        {/* Compliance dashboard modal (M2.6b) */}
+        {complianceModal && (
+          <div data-testid="portal-compliance-modal" className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={() => setComplianceModal(null)}>
+            <div className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-stone-500 mb-1">Compliance</p>
+                  <h3 className="text-xl" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
+                    {portalMap[complianceModal.connection.portal_slug]?.name || complianceModal.connection.portal_slug}
+                  </h3>
+                </div>
+                <button onClick={() => setComplianceModal(null)} className="text-stone-500 hover:text-stone-800">✕</button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-3 mb-6" data-testid="compliance-metrics">
+                <MetricBox label="Totale" value={complianceModal.data.summary.total} testid="compliance-total" />
+                <MetricBox label="Pubblicabili" value={complianceModal.data.summary.publishable} testid="compliance-publishable" />
+                <MetricBox label="Bloccati" value={complianceModal.data.summary.blocked} testid="compliance-blocked" />
+                <MetricBox label="Con warning" value={complianceModal.data.summary.with_warnings} testid="compliance-warnings" />
+              </div>
+
+              {complianceModal.data.summary.top_hard_reasons?.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-[10px] uppercase tracking-widest text-stone-500 mb-2">Motivi blocco più frequenti</p>
+                  <div className="space-y-1">
+                    {complianceModal.data.summary.top_hard_reasons.map(([reason, count]) => (
+                      <div key={reason} className="flex justify-between text-xs bg-red-50 border border-red-200 rounded px-3 py-1.5">
+                        <span className="font-medium">{REASON_LABELS[reason] || reason}</span>
+                        <span className="text-red-700">{count} immobili</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {complianceModal.data.blocked_details?.length > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-stone-500 mb-2">
+                    Immobili bloccati (primi {complianceModal.data.blocked_details.length})
+                  </p>
+                  <div className="space-y-1" data-testid="compliance-blocked-list">
+                    {complianceModal.data.blocked_details.map((b) => (
+                      <div key={b.id} className="text-xs border border-stone-200 rounded px-3 py-2">
+                        <div className="flex justify-between">
+                          <span className="font-medium truncate">{b.title || b.reference || b.id}</span>
+                          <a href={`/it/app/properties/${b.id}/edit`} className="text-emerald-700 hover:underline ml-2 shrink-0">Correggi →</a>
+                        </div>
+                        <div className="text-stone-500 mt-1">
+                          {b.reasons.map((r) => REASON_LABELS[r] || r).join(" · ")}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {complianceModal.data.summary.publishable === complianceModal.data.summary.total && complianceModal.data.summary.total > 0 && (
+                <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded p-3">
+                  ✅ Tutti gli immobili attivi sono conformi e pubblicabili.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Activation modal */}
         {modal && (
@@ -243,3 +382,20 @@ function StatusBadge({ status }) {
     </span>
   );
 }
+
+// M2.6b — human-readable labels for compliance reasons.
+// Kept in Italian; i18n keys can wrap these later if EN/ES are needed.
+const REASON_LABELS = {
+  missing_price: "Prezzo mancante",
+  missing_rent: "Canone mensile mancante",
+  missing_surface: "Superficie (mq) mancante",
+  missing_energy_class: "Classe energetica APE mancante",
+  invalid_energy_class: "Classe energetica non valida",
+  less_than_3_photos: "Meno di 3 foto",
+  no_valid_photo_url: "Foto senza URL valido",
+  missing_address: "Indirizzo incompleto (città/provincia)",
+  title_too_short: "Titolo troppo corto (<10 caratteri)",
+  description_too_short: "Descrizione troppo corta (<50 caratteri)",
+  rooms_not_specified: "Numero locali non indicato",
+  ipe_missing: "IPE (indice prestazione) non indicato",
+};

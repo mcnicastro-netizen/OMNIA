@@ -880,3 +880,24 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
   - Fallback: se dominio `.it` non recuperabile, migrazione su `nicastroimmobiliare.eu` (già suo, brand identico, TLD diverso)
 - **Stato**: ✅ APPLICATA — M2.5.4a consegnato. In attesa risposte Aruba/Agestanet per definire architettura di M2.5.4b/c.
 
+
+### D-053 — M2.6b Sync Engine + Compliance Validator scope (05-Feb-2026) ⚙️
+
+- **Contesto**: M2.6a ha consegnato la fondazione del Publishing Center (catalog + connections + feed pubblico statico). Manca il motore che sincronizza automaticamente ogni notte e il gate che blocca gli annunci non conformi PRIMA che raggiungano un portale (rischio multe AGCM/APE + degrado credibilità agenzia).
+- **Decisioni tecniche approvate**:
+  - **Compliance rules** (hard, blocca pubblicazione): prezzo/canone > 0, superficie mq > 0, classe APE presente E valida (whitelist `VALID_ENERGY_CLASSES` inclusi A4-G e due categorie EXEMPT esplicite), almeno 3 foto con URL non vuoto, indirizzo minimo città+provincia. Soft rules (warning, non blocca): titolo <10 chars, descrizione <50 chars, IPE mancante, locali non indicati.
+  - **Modulo dedicato** `shared/validators/compliance.py` (pure functions, testabile senza DB). `publishing.py.is_publishable()` diventa wrapper backwards-compatible.
+  - **Scheduler** APScheduler AsyncIOScheduler, job giornaliero `06:00 UTC` (07:00 CET inverno / 08:00 CEST estate), max_instances=1, coalesce=True, idempotent all'avvio (protegge da hot-reload dev).
+  - **Retry** su fallimento: 3 tentativi con backoff `[60s, 300s, 1800s]`. Bypass retry per trigger manuale (`sync-now`) per response snappy < 3s.
+  - **Trigger sources**: `scheduled` (job APScheduler), `manual` (agenzia da UI), `admin_manual` (super_admin `/sync/run-all`). Persistito in ogni `PortalSyncLog`.
+  - **Integration types**: `feed_pull` → success con solo refresh timestamp (i portali chiamano il nostro endpoint pubblico); `api_push` → stato `simulated_push` fino a M2.6c/d (integrazioni reali FB/IG/Telegram e Universal Portal Wizard).
+  - **Dashboard compliance**: endpoint aggregato per agenzia con top-5 motivi blocco + lista primi 20 immobili bloccati con reasons array. UI modale traduce ogni reason in italiano leggibile via `REASON_LABELS` (dizionario centralizzato in `PublishingPage.jsx`, no i18n key per ora — extension point futuro).
+- **NON incluso in M2.6b** (rimandato esplicitamente):
+  - Push reale via FTP/API a portali specifici → M2.6d Universal Portal Wizard
+  - Social auto-posting FB/IG/Telegram → M2.6c
+  - Notifiche email/SMS agenti su blocchi → arriva insieme a Resend expansion futura
+  - Retry configuration per-portale → tenuto fisso `[60s, 300s, 1800s]` per ora (semplice > flessibile)
+- **Stato**: ✅ APPLICATA — 20/20 pytest specifici, 93/93 regressione totale, smoke E2E verificato con screenshot compliance modal (lista dettagli + motivi frequenti + link "Correggi").
+
+
+

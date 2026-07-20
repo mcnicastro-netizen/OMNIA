@@ -53,6 +53,11 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning("publishing_catalog seed failed: %s", e)
     try:
+        from apps.immoweb.sync_engine import start_scheduler
+        start_scheduler()
+    except Exception as e:
+        logger.warning("publishing sync scheduler failed to start: %s", e)
+    try:
         from apps.immoweb.virtual_staging import reap_stale_jobs
         reaped = await reap_stale_jobs()
         if reaped:
@@ -62,6 +67,11 @@ async def lifespan(app: FastAPI):
     logger.info("OMNIA backend ready.")
     yield
     # Shutdown
+    try:
+        from apps.immoweb.sync_engine import stop_scheduler
+        stop_scheduler()
+    except Exception:  # pragma: no cover
+        pass
     await Database.close()
     logger.info("OMNIA backend stopped.")
 
