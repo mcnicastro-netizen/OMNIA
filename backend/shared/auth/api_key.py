@@ -31,6 +31,7 @@ CREDIT_COSTS: Dict[str, int] = {
     "staging_render": 15,   # virtual staging (async, reserved)
     "feed_properties": 0,   # read-only export, free
     "widget_lead": 0,       # widget lead capture — free (funds monetized separately)
+    "domain_check": 1,      # RDAP domain ownership check (M2.5.4b, D-054)
 }
 
 

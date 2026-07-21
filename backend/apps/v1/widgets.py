@@ -63,7 +63,7 @@ async def widget_page(widget: str, request: Request,
                       primary: Optional[str] = None,
                       lang: str = "it") -> HTMLResponse:
     """Serve a single-file widget HTML. Query params: key, primary color, lang."""
-    if widget not in {"valuator", "mortgages"}:
+    if widget not in {"valuator", "mortgages", "domain-check"}:
         raise HTTPException(status_code=404, detail="widget_not_found")
 
     path = ASSETS_DIR / f"{widget}.html"

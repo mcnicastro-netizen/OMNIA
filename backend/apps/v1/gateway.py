@@ -284,3 +284,38 @@ async def v1_staging_render(request: Request,
         status_code=501,
         detail="staging_via_api_available_in_m2_5_3",
     )
+
+
+# ---------------- DOMAIN CHECK (M2.5.4b, D-054) ----------------
+
+class DomainCheckV1Body(BaseModel):
+    domain: str = Field(min_length=3, max_length=253)
+    agency_name: Optional[str] = Field(default=None, max_length=200)
+
+
+@router.post("/domain/check")
+async def v1_domain_check(
+    body: DomainCheckV1Body,
+    request: Request,
+    key=Depends(make_key_dep("domain_check")),
+) -> Dict[str, Any]:
+    """RDAP domain ownership check (1 credit). Same output as `/api/domain/check`
+    but authenticated + billed. Useful for partner web agencies embedding the
+    checker in their own sales flow with white-label branding."""
+    try:
+        from apps.marketing.domain_check import run_check
+        result = await run_check(
+            domain_raw=body.domain,
+            agency_name=body.agency_name,
+            source=f"apikey_{key.get('partner_id') or 'direct'}",
+            client_ip=None,  # keep IP out of billed logs
+        )
+        await charge_and_log(request, status_code=200)
+        return {"data": result, "credits_charged": request.state.api_cost}
+    except HTTPException as e:
+        await charge_and_log(request, status_code=e.status_code, error_code=str(e.detail)[:60])
+        raise
+    except Exception as e:
+        await charge_and_log(request, status_code=500, error_code=type(e).__name__)
+        logger.exception("v1_domain_check failed")
+        raise HTTPException(status_code=500, detail="internal_error")

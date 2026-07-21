@@ -55,6 +55,11 @@ POST-SOCIETÀ: M4 (Stripe) · M5.S7/S8 · Pre-launch 🛑 (congelato, D-035)
 
 ### ✅ COMPLETATI IN QUESTA SESSIONE (05-Feb-2026)
 - **M2.6b Sync Engine + Compliance Validator** DONE (D-053). APScheduler daily job 06:00 UTC + retry backoff + endpoint manual sync + dashboard compliance con top-5 reasons e lista bloccati. 20/20 pytest nuovi + 93/93 regressione totale.
+- **M2.5.4b Domain Ownership Checker** DONE (D-054). Landing pubblica `/it/verifica-dominio` + v1 API Gateway `/api/v1/domain/check` (1 credito) + widget embeddabile — **3 modalità Track A/B consegnate insieme**. RDAP client universale via `rdap.org` + fallback TLD IT/EU/COM/NET/ORG. Euristica generica su keyword categoriali (D-051 no brand mentions). Lead delivery 100% digitale via email (no paper). 24/24 pytest nuovi + **117/117 regressione totale**.
+
+### 🔒 VINCOLI PERMANENTI (attivi da 05-Feb-2026 su TUTTE le feature future)
+- **🏷️ White Label / Doppio Binario** (D-041): ogni nuova feature deve nascere in 3 modalità → UI OMNIA + API v1 in crediti + widget embeddabile
+- **📄 No Paper / Santo Graal** (D-035): delivery 100% digitale (email + PDF + firma digitale SPID/PEC), MAI stampa cartacea o firma su carta
 
 ### 🔴 Prossima sessione — Sequenza v3.0 (PROGRAMMA_OMNIA.md v3.0)
 

@@ -901,3 +901,34 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 
 
 
+
+### D-054 — M2.5.4b Domain Ownership Checker scope + White Label / No Paper constraints (05-Feb-2026) 🔍
+
+- **Contesto**: dopo M2.6b (Sync Engine), il Founder ha chiesto di riprendere la scaletta con **due vincoli permanenti** attivi da qui in avanti su ogni nuova feature:
+  1. **White Label / Doppio Binario** (D-041): ogni feature nuova nasce in 3 modalità di consumo — UI in OMNIA + API pubblica in crediti + widget embeddabile.
+  2. **No Paper / Santo Graal** (D-035): tutti i deliverable devono essere paperless — email + PDF scaricabili + firma digitale (SPID/OTP/PEC), MAI stampa cartacea o firma su carta.
+- **Scope M2.5.4b**: pubblicare il primo lead magnet del "Domain Sovereignty Kit" (D-051) — uno strumento che permette a qualsiasi agenzia immobiliare italiana di verificare in 5 secondi se il proprio dominio web è a suo nome o intestato al fornitore del gestionale.
+- **Decisioni tecniche approvate**:
+  - **RDAP come sorgente unica** (non whois testuale — è il protocollo standard IANA per query domini strutturate). Bootstrap universale via `rdap.org` con fallback per TLD IT/EU/COM/NET/ORG. Timeout aggressivo (5s connect, 8s read) e fail-closed.
+  - **Euristica generica su categorie di parole chiave** — MAI nomi concreti di competitor. Il matching "questo dominio è del fornitore" avviene su token categoriali che compaiono nei nomi legali della maggior parte dei provider italiani ("hosting", "web agency", "software solutions", "servizi web", "unipersonale", "informatica", "editoria"). Motivazione doppia: (a) resilienza — nuovi provider entrano senza toccare il codice, (b) rispetto D-051 — nessun rischio diffamatorio e nessun posizionamento riduttivo "OMNIA anti-X".
+  - **3 modalità di consumo consegnate insieme** (White Label da subito, non retrofit):
+    - Landing pubblica `/it/verifica-dominio` — IP-rate-limit 30/h, no auth, lead capture con consenso GDPR obbligatorio
+    - v1 API Gateway `POST /api/v1/domain/check` — 1 credito (€0,03), Bearer API key, `partner_id` propagato in usage log (rev-share D-046)
+    - Widget embeddabile `/api/widgets/v1/domain-check.html` — single-file HTML+JS, `data-key` opzionale (senza key parla al pubblico, con key `omk_...` parla al v1 billed), auto-resize postMessage, CSP `frame-ancestors *`
+  - **Delivery lead 100% digitale (No Paper esplicito)**:
+    - Il kit legale (attivato da M2.5.4c) sarà inviato via **email con PDF allegati**, MAI stampato o spedito
+    - I template useranno placeholder digitali per firma: PEC dell'agenzia, SPID/CIE per autenticazione, modelli GDPR digitali (art. 20 diritto alla portabilità)
+    - Copy della landing esplicita "**tutto digitale, zero carta**" come promessa di brand
+    - Il widget menziona esplicitamente "kit legale via email" nel CTA lead capture
+  - **Rate limit conservativo ma non punitivo** (30/h/IP): sufficiente per un utente reale che testa più domini, bloccante per scraping automatico. Persistenza `domain_checks` con `client_ip` + `created_ts` per rolling window.
+  - **Nessuna PII nella response**: `client_ip` scritto in DB per rate limit ma sempre `pop()` prima del ritorno al chiamante.
+  - **Persistenza minima**: `domain_checks` (per rate limit + audit + collegare eventuali lead) + `domain_leads` (con `verdict_status` snapshot per analytics conversion per status).
+- **NON incluso in M2.5.4b** (rimandato):
+  - Generazione automatica dei PDF legali → **M2.5.4c** (già pianificata)
+  - Onboarding OMNIA che garantisce di non registrare domini a proprio nome → **M2.5.5 Domain Vault**
+  - Integrazione con registrar (transfer automatico, generazione Auth-Info Code) → non pianificato, richiederebbe partnership con registrar Aruba/Register.it
+  - Verifica DNS/hosting oltre RDAP → non pianificato per MVP
+- **Stato**: ✅ APPLICATA — 24/24 pytest specifici, 117/117 regressione totale, smoke E2E screenshot verificato (query `google.com` → verdict `redacted` corretto con registrar MarkMonitor + expiry visualizzati).
+
+
+
