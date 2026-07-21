@@ -11,7 +11,12 @@ sono Marco Nicastro, titolare di Nicastro Immobiliare (Catania) e founder di **O
 
 Ho studiato con attenzione il vostro programma **"Collabora — Agenzie Immobiliari"** e in particolare due elementi che trovo distintivi: il form embeddabile per la richiesta dell'APE e l'**APE digitale interattivo con confronto SIAPE (enHub)** — quest'ultimo si sposerebbe perfettamente con il nostro "Fascicolo Immobile", il dossier digitale che generiamo per ogni proprietà.
 
-Stiamo selezionando **un partner unico** per integrare l'ordine dell'APE ufficiale direttamente nella piattaforma: l'agente, dalla scheda immobile del CRM, ordina il certificato in un click con i dati già precompilati, e il vostro network di tecnici certificatori gestisce sopralluogo ed emissione.
+Stiamo selezionando **un partner unico** per integrare l'ordine dell'APE ufficiale direttamente nella piattaforma. Il servizio è pensato per **due canali di richiesta**:
+
+- 🏢 **B2B / Agente**: dalla scheda immobile del CRM ordina il certificato in un click con i dati già precompilati;
+- 👤 **B2C / Privato**: anche il proprietario che pubblica un annuncio sul nostro portale ImmobilCloud (o che utilizza il valutatore online) può richiedere l'APE direttamente, senza passare da un'agenzia.
+
+In entrambi i casi, il vostro network di tecnici certificatori gestisce sopralluogo ed emissione.
 
 Nel concreto, ci interessa capire se potete offrirci:
 

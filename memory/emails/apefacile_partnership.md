@@ -9,7 +9,10 @@ Buongiorno,
 
 sono Marco Nicastro, titolare di Nicastro Immobiliare (Catania) e founder di **OMNIA Real Estate Ecosystem**, una piattaforma SaaS per agenzie immobiliari che integra gestionale CRM, portale annunci e una suite di servizi AI (valutazioni immobiliari, virtual staging, assistente normativo).
 
-Vi scrivo perché stiamo selezionando **un partner unico** per l'ordine dell'APE ufficiale direttamente dall'interno della piattaforma: l'agente, dalla scheda dell'immobile, dovrebbe poter ordinare il certificato in un click, con i dati dell'immobile già precompilati dal nostro CRM.
+Vi scrivo perché stiamo selezionando **un partner unico** per l'ordine dell'APE ufficiale direttamente dall'interno della piattaforma. Il servizio è pensato per **due canali di richiesta**:
+
+- 🏢 **B2B / Agente**: dalla scheda dell'immobile del CRM ordina il certificato in un click, con i dati già precompilati dal nostro sistema;
+- 👤 **B2C / Privato**: anche il proprietario che pubblica un annuncio sul nostro portale ImmobilCloud (o che utilizza il valutatore online) può richiedere l'APE direttamente, senza passare da un'agenzia.
 
 Abbiamo analizzato il vostro servizio e ci ha convinto per tre ragioni: la consegna in 24-48h, il rilievo in videochiamata (perfetto per il flusso digitale delle agenzie nostre clienti) e la vostra esperienza come partner di Immobiliare.it, che dimostra la capacità di lavorare su canali B2B integrati.
 
