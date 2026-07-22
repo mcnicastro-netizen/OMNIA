@@ -144,4 +144,100 @@ Contenuti creativi (annunci, email)     → Claude (Emergent LLM Key) — attual
 
 ---
 
-<!-- Aggiungere qui nuovi aspetti da approfondire con progressivo A-003, A-004, ... -->
+## 🟠 A-003 — AI Creative Studio (Brand Analysis + Multi-format Generation + Editor Integrato)
+
+**Data inserimento**: 20-Feb-2026
+**Segnalato da**: Founder (Nicastro)
+**Contesto**: Il Founder ha condiviso la specifica di un "AI Creative Studio" per agenzie immobiliari — evoluzione naturale del Marketing Autopilot già previsto nel pilastro D-045.
+
+### 🎯 Cosa fa
+Un modulo che permette a un'agenzia (o a un privato B2C su ImmobilCloud) di generare in automatico tutti i materiali marketing di una campagna partendo dal proprio sito web.
+
+### 🧩 Le 3 componenti chiave
+
+**1️⃣ Analisi del Brand automatica**
+- Input: URL del sito web dell'agenzia
+- L'AI estrae automaticamente:
+  - 🎨 **Identità visiva** — palette colori, font, stile grafico
+  - ✍️ **Tono di voce** — formale/informale, tecnico/emotivo, tagline ricorrenti
+  - 🏷️ **Elementi brand** — logo, valori, target implicito
+
+**2️⃣ Generazione Multiformato**
+Da un singolo brief l'AI produce contemporaneamente:
+- 📸 **Inserzioni pubblicitarie statiche** (Facebook Ads, Instagram Feed, Instagram Stories)
+- 📱 **Post social media** (formato quadrato, verticale 9:16, carosello)
+- ✉️ **Sequenze email** (welcome, nurturing, follow-up post-visita)
+- 🎬 **Script video UGC** (User-Generated Content style, ottimizzati per TikTok/Reels)
+- Ogni asset è ottimizzato per la piattaforma target (dimensioni, hook, CTA, copy length)
+
+**3️⃣ Editor integrato**
+- 🔀 **Browser proposte** — sfogliare varianti grafiche multiple per lo stesso brief
+- 💬 **Chat di personalizzazione** — modificare hook, tagline, CTA via conversazione naturale con HAL
+- ✂️ **Rifinitura pre-export** — micro-editing su testi, colori, immagini prima di scaricare/pubblicare
+
+### 🏗️ Base già disponibile in OMNIA (precursore in casa)
+Il **Brand Profile Extractor** (M2.S5 Layer D Phase 1, D-023) fa già il 60% del punto 1️⃣:
+- `POST /api/app/website/extract-from-url` accetta un URL
+- Usa BeautifulSoup + Gemini via Emergent LLM Key
+- Restituisce: palette (4 hex), typography (family+scale), structure, voice (tone+tagline), logo_hint, confidence 0-100
+- Persistito in `agency.website.extracted_profile`
+- Testato su tecnocasa.it con confidence 95
+
+Quando svilupperemo A-003 ripartiremo da QUESTO endpoint estendendolo, non da zero.
+
+### 🎯 Modalità di consumo (D-041 White Label — 3 modalità obbligatorie)
+- **UI OMNIA** — sezione "Studio Creativo" dentro CRM agenzia con wizard 3-step (Brand → Brief → Editor)
+- **API v1 pubblica** — `POST /api/v1/creative/generate` con crediti (verosimilmente 10-25 per generazione full-set)
+- **Widget embeddabile** — "Studio Creativo mini" per privati sul portale ImmobilCloud (generazione post social per l'annuncio del proprio immobile)
+
+### 📄 No Paper (D-035) — implicito
+Delivery 100% digitale: file scaricabili (PNG/MP4/PDF email), pubblicazione diretta su FB/IG/Telegram via M2.6c Social Publisher (quando pronto), zero output cartaceo.
+
+### 🤖 Stack AI candidato (da valutare al momento dello sviluppo)
+- **Estrazione brand**: Emergent LLM Key (Gemini) — già in uso
+- **Copy generation** (annunci, post, email): Claude Sonnet via Emergent (miglior naming/tono in italiano)
+- **Immagini/creativity**: 
+  - Nano Banana (Gemini image gen) per varianti rapide
+  - GPT Image 1 per output pubblicitario più curato
+  - fal.ai (già in casa per Virtual Staging) per composizioni immobile+creativo
+- **Script video UGC**: Claude per lo storyboard + Sora 2 per la generazione video (opzionale, alto costo)
+
+### 🔗 Sinergie forti con moduli esistenti/pianificati
+- 🧠 **HAL Copywriter** (M5.S1) — già scrive titolo/descrizione immobili → estenderlo a copy adv
+- 🎨 **Virtual Staging** (M5.S4) — già genera visual immobili → riusare come "base immagine" per ads
+- 📤 **M2.6c Social Publisher** — quando pronto, publish diretto dagli asset generati qui
+- 🏢 **Multi-branch/Franchise** (M2.5.1) — asset con brand della singola filiale, non del gruppo (co-branding)
+- 🤝 **Partner Web Agency** (D-046) — potente killer widget per la loro offerta ai clienti finali
+
+### ⚠️ Contro / rischi da studiare
+- **Costo compute alto** su generazione video (Sora 2 = €0,50-1,50/clip) → serve pricing "à la carte"
+- **Qualità output pubblicitario** vs strumenti dedicati (Canva Magic Studio, AdCreative.ai) → dobbiamo essere "buoni abbastanza" non "i migliori", vantaggio è integrazione con il CRM immobiliare
+- **Rights management immagini** — le foto dell'immobile sono dell'agenzia, ma se rigeneriamo con AI (stile, mix) chi le possiede? Serve TOS chiaro
+- **AGCM/pubblicità comparativa** — attenzione a claim generati automaticamente ("il migliore", "il più", ecc.) che potrebbero violare regole pubblicità immobiliare
+
+### Domande aperte per il Founder
+1. Target primario: **agente professionista** (uso quotidiano nel CRM) o **privato B2C** (uso occasionale sul portale)? Cambia sostanzialmente le UX e il pricing.
+2. Formato prioritario di lancio: **statici Facebook/Instagram** (più semplice, valore immediato) o **video UGC TikTok/Reels** (più wow, più costoso)?
+3. Vogliamo pubblicare direttamente sui social (richiede token FB/IG dell'utente) o solo generare + scaricare per pubblicazione manuale?
+4. Pricing: pay-per-generation (crediti) o piano mensile "creative studio" separato?
+
+### Timing consigliato
+**NON ora**. Prerequisiti tecnici e strategici:
+- ✅ M2.5.4c Legal Templates (in coda)
+- ✅ M2.5.5 Domain Vault (in coda)
+- 🎯 **M2.6c Social Publisher** — auto-post FB/IG/Telegram (dà il canale di delivery)
+- 🎯 **M5.S2 HAL Knowledge** — HAL deve conoscere la voice della singola agenzia via RAG
+- Idealmente: dopo aver definito pricing v3 (unit economics stabili) e aver validato i primi 20 clienti Track A
+
+### Stato
+🟠 **DA APPROFONDIRE** — Founder ha esplicitamente chiesto di memorizzare per svilupparlo più avanti. Nessuna implementazione avviata.
+
+### Trigger di ripresa
+- Completamento M2.6c Social Publisher (dà il canale di distribuzione)
+- Feedback dai primi clienti su carenza di materiale creativo
+- Feedback da web agency partner interessate a rivendere il modulo
+- Definizione pricing v3 con "creative credits" separati dal wallet API
+
+---
+
+<!-- Aggiungere qui nuovi aspetti da approfondire con progressivo A-004, A-005, ... -->
