@@ -33,14 +33,19 @@ class TestCatalog:
         r = session.get(f"{BASE_URL}/api/app/publishing/catalog")
         assert r.status_code == 200
         data = r.json()
-        assert data["total"] == 8
-        slugs = {p["slug"] for p in data["items"]}
+        # M2.6d: catalog can also include agency-owned custom portals (is_custom=True).
+        # This test guards ONLY the 8 seeded system portals.
+        system_items = [p for p in data["items"] if not p.get("is_custom")]
+        assert len(system_items) == 8
+        slugs = {p["slug"] for p in system_items}
         assert slugs == {"subito", "bakeca", "kijiji", "wikicasa",
                          "facebook-marketplace", "google-business", "attico", "case24"}
 
     def test_catalog_sorted_by_traffic_score(self, session):
         r = session.get(f"{BASE_URL}/api/app/publishing/catalog")
-        scores = [p["traffic_score"] for p in r.json()["items"]]
+        # Only system portals honor the traffic_score sort (custom portals appear last).
+        system_items = [p for p in r.json()["items"] if not p.get("is_custom")]
+        scores = [p["traffic_score"] for p in system_items]
         assert scores == sorted(scores, reverse=True)
 
 

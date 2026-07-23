@@ -990,3 +990,29 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Stato**: ✅ APPLICATA (23-Feb-2026). Prossimo Sprint 1 item: **M2.6c Social Publisher** (⚠️ Founder deve fornire Meta Developer App ID/Secret).
 
 
+
+### D-057 — M2.6d Universal Portal Wizard scope (23-Feb-2026) 🧙
+
+- **Contesto**: Sprint 1 · Item #3 (item #2 M2.6c Social Publisher rinviato: bloccato su Meta App ID/Secret non ancora forniti dal Founder). Il catalogo OMNIA copre 8 portali di sistema (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business, Attico, Case24). Le agenzie strutturate di Track B lavorano spesso con portali di **nicchia** (regionali come "immobiliareveneto.it", di franchising interno, portali locali) che non entreranno mai nel catalogo di sistema per motivi di scala. Servivano tre cose: (a) permettere self-service delle agenzie senza intervento OMNIA, (b) mantenere tenant isolation forte, (c) riusare l'infrastruttura di pubblicazione esistente (feed XML + connection + sync engine).
+- **Scope IN**:
+  1. Estensione `PortalCatalog` con `owner_agency_id: Optional[str]` + `is_custom: bool = False` + `endpoint_url` + `site_url`.
+  2. Endpoint `GET /publishing/custom-portals` (lista custom dell'agenzia caller).
+  3. Endpoint `GET /publishing/custom-portals/feed-info?dialect={osf_federata|generic_rss}` — URL feed pronto-copia per-agenzia.
+  4. Endpoint `POST /publishing/custom-portals` — crea catalog entry + connection attiva in una call.
+  5. Endpoint `PATCH /publishing/custom-portals/{slug}` per update.
+  6. Endpoint `DELETE /publishing/custom-portals/{slug}` — cascading delete su connection (sync logs preservati per audit).
+  7. Slug namespacing `x-{agency_id[:8]}-{user_slug}` — previene collisioni cross-tenant.
+  8. `GET /publishing/catalog` esteso: system + own custom, esclusi custom di altre agenzie (tenant isolation via `$or`).
+  9. Frontend `/it/app/publishing/wizard` — 4-step wizard (Identità → Formato → Endpoint → Conferma), auto-slug da nome, radio dialect, notice feed_pull, URL feed con clipboard copy button.
+  10. CTA verde emerald "+ Aggiungi portale personalizzato" nell'header di `PublishingPage`.
+  11. i18n IT/EN/ES completa (35+ chiavi `portal_wizard.*`).
+  12. Fix retrocompat: `test_m2s6a_publishing.py::test_catalog_seeded_8_portals` aggiornato per filtrare `is_custom=false`.
+- **Scope OUT** (Sprint 2+ o backlog):
+  - **Modalità push/API** (`push_url`, `api_push`) — richiede credenziali cifrate + retry + gestione webhook. Rinviato: >90% dei portali custom accetta pull.
+  - **Test connessione live** (HEAD/GET verso endpoint_url) — utile ma non essenziale; si scopre al primo sync.
+  - **Field mapping avanzato** custom → OSF — non richiesto: usiamo direttamente OSF federata o RSS 2.0.
+  - **Endpoint pubblico `/api/v1/custom-portals`** (Track B API) — non richiesto: la configurazione portali è UI-only per l'agenzia.
+- **Coerenza D-041** (Doppio Binario): la feature è **Track A** (UI OMNIA) — deroga giustificata perché "riguarda l'infrastruttura di sync dell'agenzia stessa, non è servizio consumabile da terzi". Track B partner useranno API Gateway M2.5.2 per altre feature (Valuator, Mutui, HAL Legal).
+- **Test coverage**: 13/13 pytest (`test_m2s6d_portal_wizard.py`). Regressione totale: **164/164**.
+- **Stato**: ✅ APPLICATA (23-Feb-2026). Sprint 1 completato a **2/3** items (M2.5.5 + M2.6d). M2.6c pending Meta credentials.
+

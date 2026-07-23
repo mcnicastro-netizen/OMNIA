@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { api } from "../../../shared/lib/api";
 import AgencyShell from "../components/AgencyShell";
 import Brand from "../../../shared/components/Brand";
@@ -10,7 +11,8 @@ import Brand from "../../../shared/components/Brand";
  * Activation: 1-click for portals without credentials, modal form otherwise.
  */
 export default function PortalsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language || "it").slice(0, 2);
   const [catalog, setCatalog] = useState([]);
   const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,9 +106,18 @@ export default function PortalsPage() {
           <p className="text-[10px] uppercase tracking-[0.3em] text-stone-500 mb-2">
             <Brand>ImmoWeb · Publishing Center</Brand>
           </p>
-          <h1 className="text-3xl md:text-4xl tracking-tight" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
-            {t("portals.title") || "Portali Immobiliari"}
-          </h1>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <h1 className="text-3xl md:text-4xl tracking-tight" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
+              {t("portals.title") || "Portali Immobiliari"}
+            </h1>
+            <Link
+              to={`/${lang}/app/publishing/wizard`}
+              data-testid="add-custom-portal-btn"
+              className="px-4 py-2 text-xs uppercase tracking-widest bg-[#1F6B5C] text-white hover:bg-[#0B1E3F] transition"
+            >
+              {t("portal_wizard.add_custom_portal_cta")}
+            </Link>
+          </div>
           <p className="text-sm text-stone-600 mt-2 max-w-2xl">
             {t("portals.subtitle") ||
               "Attiva i portali su cui vuoi pubblicare gli annunci. OMNIA genera un feed XML aggiornato in tempo reale — ogni portale scarica autonomamente ogni notte."}

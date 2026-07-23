@@ -91,9 +91,16 @@ from shared.models.base import TimestampedModel, OmniaBaseModel  # noqa: E402
 
 
 class PortalCatalog(TimestampedModel):
-    """OMNIA-curated portal metadata (edited only by super_admin)."""
+    """OMNIA-curated portal metadata (edited only by super_admin).
+
+    M2.6d Universal Portal Wizard extension:
+    - `owner_agency_id`: None for system portals, set for custom agency portals.
+    - `is_custom`: True for portals created by an agency via the wizard.
+    - `endpoint_url`: optional URL where the portal expects the feed (for
+      documentation / copy-to-clipboard on push_url integrations later).
+    """
     id: str = Field(default_factory=lambda: str(uuid4()))
-    slug: str = Field(min_length=2, max_length=60, pattern=r"^[a-z0-9-]+$")
+    slug: str = Field(min_length=2, max_length=80, pattern=r"^[a-z0-9-]+$")
     name: str
     category: str = Field(default="gratuito")
     dialect: str = Field(default="osf_federata")
@@ -104,6 +111,11 @@ class PortalCatalog(TimestampedModel):
     traffic_score: int = Field(default=3, ge=1, le=5)
     is_active: bool = True
     notes: Optional[str] = None
+    # M2.6d — Universal Portal Wizard fields
+    owner_agency_id: Optional[str] = None
+    is_custom: bool = False
+    endpoint_url: Optional[str] = None
+    site_url: Optional[str] = None
 
 
 class AgencyPortalConnection(TimestampedModel):

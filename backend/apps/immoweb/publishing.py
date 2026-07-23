@@ -16,17 +16,22 @@ Endpoints under /api/app/publishing:
     POST   /sync/run-all                        M2.6b — admin cron endpoint (super_admin)
 """
 import logging
+import os
 import re
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Optional
+from uuid import uuid4
 from xml.sax.saxutils import escape as xml_escape
 
 from fastapi import APIRouter, HTTPException, Depends, Response
+from pydantic import Field, HttpUrl
 
 from shared.db.connection import Database
 from shared.auth.dependencies import require_roles
+from shared.models.base import OmniaBaseModel
 from shared.models.portal import (
     PortalConnectionCreate, PortalConnectionUpdate, AgencyPortalConnection,
+    PortalCatalog,
 )
 from shared.utils.crypto import encrypt_dict
 from shared.validators.compliance import (
@@ -103,8 +108,26 @@ def _public(doc: dict) -> dict:
 
 @router.get("/catalog")
 async def catalog(user: dict = Depends(require_roles("agency_admin", "super_admin"))):
+    """List active portals visible to the caller.
+
+    Returns:
+      - system portals (owner_agency_id absent/None), sorted by traffic_score DESC
+      - this agency's custom portals (M2.6d), sorted after system ones
+    Other agencies' custom portals are ALWAYS filtered out (tenant isolation).
+    """
     db = Database.get()
-    docs = await db.publishing_catalog.find({"is_active": True}, {"_id": 0}).sort("traffic_score", -1).to_list(200)
+    aid = _agency_id(user)
+    docs = await db.publishing_catalog.find(
+        {
+            "is_active": True,
+            "$or": [
+                {"owner_agency_id": {"$in": [None, ""]}},
+                {"owner_agency_id": {"$exists": False}},
+                {"owner_agency_id": aid},
+            ],
+        },
+        {"_id": 0},
+    ).sort([("is_custom", 1), ("traffic_score", -1)]).to_list(500)
     return {"items": docs, "total": len(docs)}
 
 
@@ -278,6 +301,243 @@ async def sync_run_all(user: dict = Depends(require_roles("super_admin"))):
     """Admin trigger to run all active syncs immediately (bypasses scheduler)."""
     from apps.immoweb.sync_engine import run_all_active_syncs
     return await run_all_active_syncs(trigger="admin_manual")
+
+
+# =====================================================================
+# M2.6d — Universal Portal Wizard (self-service custom portal setup)
+# =====================================================================
+#
+# Track B agencies often work with regional / franchise / niche portals that
+# are NOT in the OMNIA catalog. This block lets them register a custom portal
+# in 4 steps without OMNIA intervention:
+#
+#   1. Name + site URL + category
+#   2. Dialect (osf_federata XML | generic_rss) + integration mode
+#   3. Endpoint URL (optional, informational for the wizard's copy screen)
+#   4. Confirm → creates PortalCatalog entry + auto-creates connection
+#
+# Custom portals are visible only to the owning agency (tenant isolation via
+# `owner_agency_id`). System portals stay untouched.
+
+
+_SUPPORTED_DIALECTS = {"osf_federata", "generic_rss"}
+_SUPPORTED_INTEGRATIONS = {"feed_pull"}  # push_url / api_push arrive in Sprint 2+
+_CUSTOM_SLUG_PREFIX = "x-"
+
+
+def _agency_short(aid: str) -> str:
+    """First 8 chars of the agency uuid — enough for slug uniqueness."""
+    return (aid or "").replace("-", "")[:8]
+
+
+def _custom_slug(agency_id: str, user_slug: str) -> str:
+    """Build the definitive slug: x-{agency8}-{user_slug}.
+
+    Prevents cross-tenant collisions (two agencies with a "portale-locale"
+    still get distinct slugs) while remaining URL-safe.
+    """
+    base = re.sub(r"[^a-z0-9]+", "-", (user_slug or "").lower()).strip("-")
+    if not base:
+        raise HTTPException(status_code=422, detail="invalid_slug")
+    if base.startswith(_CUSTOM_SLUG_PREFIX):
+        base = base[len(_CUSTOM_SLUG_PREFIX):]
+    slug = f"{_CUSTOM_SLUG_PREFIX}{_agency_short(agency_id)}-{base}"
+    return slug[:80]
+
+
+class CustomPortalCreate(OmniaBaseModel):
+    name: str = Field(min_length=2, max_length=80)
+    slug: str = Field(min_length=2, max_length=60)
+    dialect: str = Field(default="osf_federata")
+    integration_type: str = Field(default="feed_pull")
+    category: str = Field(default="freemium")
+    site_url: Optional[str] = Field(default=None, max_length=300)
+    endpoint_url: Optional[str] = Field(default=None, max_length=300)
+    geographic_scope: str = Field(default="local")
+    notes: Optional[str] = Field(default=None, max_length=500)
+
+
+class CustomPortalUpdate(OmniaBaseModel):
+    name: Optional[str] = Field(default=None, min_length=2, max_length=80)
+    dialect: Optional[str] = None
+    integration_type: Optional[str] = None
+    category: Optional[str] = None
+    site_url: Optional[str] = Field(default=None, max_length=300)
+    endpoint_url: Optional[str] = Field(default=None, max_length=300)
+    geographic_scope: Optional[str] = None
+    notes: Optional[str] = Field(default=None, max_length=500)
+    is_active: Optional[bool] = None
+
+
+def _validate_wizard_choices(dialect: str, integration_type: str) -> None:
+    if dialect not in _SUPPORTED_DIALECTS:
+        raise HTTPException(status_code=422, detail="unsupported_dialect")
+    if integration_type not in _SUPPORTED_INTEGRATIONS:
+        raise HTTPException(status_code=422, detail="unsupported_integration_type")
+
+
+async def _agency_slug(db, aid: str) -> str:
+    doc = await db.agencies.find_one({"id": aid}, {"slug": 1, "_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="agency_not_found")
+    return doc["slug"]
+
+
+def _feed_urls(agency_slug: str, dialect: str) -> dict:
+    """Return the ready-to-copy feed URLs for the wizard confirmation step."""
+    base = os.environ.get("FRONTEND_URL", "").rstrip("/")
+    # Public agency feed already exposed by feed_router below.
+    path = f"/api/publishing/feed/{agency_slug}.xml"
+    return {
+        "primary": f"{base}{path}?dialect={dialect}" if base else f"{path}?dialect={dialect}",
+        "fallback_generic_rss": f"{base}{path}?dialect=generic_rss" if base else f"{path}?dialect=generic_rss",
+        "note": "public_no_auth_cache_30min",
+    }
+
+
+@router.get("/custom-portals")
+async def list_custom_portals(
+    user: dict = Depends(require_roles("agency_admin", "super_admin", "branch_admin", "group_admin")),
+):
+    """List custom portals owned by this agency (M2.6d)."""
+    db = Database.get()
+    aid = _agency_id(user)
+    docs = await db.publishing_catalog.find(
+        {"owner_agency_id": aid, "is_custom": True}, {"_id": 0}
+    ).sort("created_at", -1).to_list(200)
+    return {"items": docs, "total": len(docs)}
+
+
+@router.get("/custom-portals/feed-info")
+async def custom_portal_feed_info(
+    dialect: str = "osf_federata",
+    user: dict = Depends(require_roles("agency_admin", "super_admin", "branch_admin", "group_admin")),
+):
+    """Return the ready-to-copy feed URL for this agency (wizard confirmation).
+
+    Independent from any specific custom portal — the feed is per-agency.
+    """
+    if dialect not in _SUPPORTED_DIALECTS:
+        raise HTTPException(status_code=422, detail="unsupported_dialect")
+    db = Database.get()
+    aid = _agency_id(user)
+    slug = await _agency_slug(db, aid)
+    return {"agency_slug": slug, "dialect": dialect, **_feed_urls(slug, dialect)}
+
+
+@router.post("/custom-portals", status_code=201)
+async def create_custom_portal(
+    payload: CustomPortalCreate,
+    user: dict = Depends(require_roles("agency_admin", "super_admin", "branch_admin", "group_admin")),
+):
+    """Create a custom portal + auto-create the agency connection.
+
+    Idempotent-per-name: a second call with the same user-provided slug for the
+    same agency returns 409.
+    """
+    _validate_wizard_choices(payload.dialect, payload.integration_type)
+    db = Database.get()
+    aid = _agency_id(user)
+    full_slug = _custom_slug(aid, payload.slug)
+
+    existing = await db.publishing_catalog.find_one({"slug": full_slug})
+    if existing:
+        raise HTTPException(status_code=409, detail="slug_already_used")
+
+    now = datetime.now(timezone.utc).isoformat()
+    portal = PortalCatalog(
+        slug=full_slug,
+        name=payload.name.strip(),
+        category=payload.category,
+        dialect=payload.dialect,
+        integration_type=payload.integration_type,
+        geographic_scope=payload.geographic_scope,
+        credential_fields=[],
+        traffic_score=1,
+        is_active=True,
+        notes=payload.notes,
+        owner_agency_id=aid,
+        is_custom=True,
+        endpoint_url=payload.endpoint_url,
+        site_url=payload.site_url,
+    )
+    doc = portal.model_dump()
+    await db.publishing_catalog.insert_one(doc)
+
+    # Auto-create the connection so the agent doesn't have to click again.
+    conn = AgencyPortalConnection(
+        agency_id=aid,
+        portal_slug=full_slug,
+        status="active",  # feed_pull → no credentials, always active
+        credentials_encrypted=None,
+        is_all_properties=True,
+    )
+    conn_doc = conn.model_dump()
+    await db.publishing_connections.insert_one(conn_doc)
+
+    logger.info(
+        "custom_portal_created agency=%s slug=%s dialect=%s",
+        aid, full_slug, payload.dialect,
+    )
+
+    agency_slug_val = await _agency_slug(db, aid)
+    return {
+        "portal": {k: v for k, v in doc.items() if k != "_id"},
+        "connection": {k: v for k, v in conn_doc.items() if k not in ("_id", "credentials_encrypted")},
+        "feed": _feed_urls(agency_slug_val, payload.dialect),
+    }
+
+
+@router.patch("/custom-portals/{slug}")
+async def update_custom_portal(
+    slug: str,
+    payload: CustomPortalUpdate,
+    user: dict = Depends(require_roles("agency_admin", "super_admin", "branch_admin", "group_admin")),
+):
+    db = Database.get()
+    aid = _agency_id(user)
+    portal = await db.publishing_catalog.find_one({"slug": slug, "owner_agency_id": aid, "is_custom": True})
+    if not portal:
+        raise HTTPException(status_code=404, detail="custom_portal_not_found")
+
+    update = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    data = payload.model_dump(exclude_unset=True)
+    if "dialect" in data or "integration_type" in data:
+        _validate_wizard_choices(
+            data.get("dialect", portal["dialect"]),
+            data.get("integration_type", portal["integration_type"]),
+        )
+    for k, v in data.items():
+        if v is not None:
+            update[k] = v
+
+    await db.publishing_catalog.update_one({"slug": slug}, {"$set": update})
+    refreshed = await db.publishing_catalog.find_one({"slug": slug}, {"_id": 0})
+    return refreshed
+
+
+@router.delete("/custom-portals/{slug}")
+async def delete_custom_portal(
+    slug: str,
+    user: dict = Depends(require_roles("agency_admin", "super_admin", "branch_admin", "group_admin")),
+):
+    """Delete a custom portal + its associated connection.
+
+    Deletion of the portal cascades to the connection (same agency, same slug).
+    Sync logs are preserved for audit.
+    """
+    db = Database.get()
+    aid = _agency_id(user)
+    r = await db.publishing_catalog.delete_one(
+        {"slug": slug, "owner_agency_id": aid, "is_custom": True}
+    )
+    if r.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="custom_portal_not_found")
+    await db.publishing_connections.delete_many(
+        {"agency_id": aid, "portal_slug": slug}
+    )
+    logger.info("custom_portal_deleted agency=%s slug=%s", aid, slug)
+    return {"status": "ok", "slug": slug}
 
 
 # ---------- FEED GENERATOR (public, no auth) ----------
