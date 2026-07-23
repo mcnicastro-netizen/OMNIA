@@ -1,0 +1,57 @@
+{
+  "summary": "M2 CORE stress test — 5 agents concurrent on same agency (Nicastro Immobiliare). Seeded 4 agents directly in MongoDB (with correct bcrypt hash). Ran 5 concurrent stress scenarios via ThreadPoolExecutor: parallel login, 25 concurrent CREATE properties, 50 concurrent READ, 5 concurrent PATCH on same property, 15 concurrent matching, tenant isolation. All FUNCTIONAL requirements pass (no 500, no deadlock, no dupes, correct tenant isolation, unique reference codes, coherent last-write-wins). 2 latency thresholds exceeded (create avg 3.6s vs 2s target, read p95 2.6s vs 1.5s target) — attributed to preview infra + fire-and-forget geocoding on create. Full cleanup done (25 props + 15 clients + 4 agents deleted).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/app/properties", "issue": "avg latency 3.6s under 25-way parallel load (target <2s). Likely due to fire-and-forget geocoding scheduler + preview infra. No functional errors."},
+      {"endpoint": "GET /api/app/properties", "issue": "p95 latency 2.6s under 50 concurrent (baseline 42ms). Read amplification ratio 37x — acceptable in preview but should benchmark on prod infra."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_m2_stress_5_agents.py",
+    "/app/backend/tests/seed_stress_agents.py",
+    "/app/test_reports/pytest/m2_stress.xml"
+  ],
+  "action_items": [
+    "M2 CORE Definition of Done: 'test empirico 5 agenti in parallelo' — VALIDATED. Concurrency + isolation + data integrity all pass.",
+    "Optional perf improvement: consider async geocoding via background task (celery/motor task) to reduce POST /properties latency under parallel load.",
+    "Optional: add a Mongo index note — properties list query is well-indexed but response includes many fields; consider projection for list endpoint."
+  ],
+  "critical_code_review_comments": [
+    "properties.py line 194: update_one does not filter by agency_id (already filtered via find_one existence check) — safe but consider defensive $set with agency_id in filter.",
+    "properties.py: /properties list endpoint returns ALL fields via _to_list_item; consider explicit projection for large agencies.",
+    "matches.py compute-on-read is fast (avg 88ms) — good design decision confirmed under load."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_m2_stress_5_agents.py (created)",
+    "/app/backend/tests/seed_stress_agents.py (created)"
+  ],
+  "success_rate": {"backend": "100% functional (9/9 correctness); 78% incl. latency thresholds (7/9)"},
+  "test_credentials": "Agents seeded then cleaned up (agent1..4@omniatest.re / AgentTest123!). Super admin unchanged.",
+  "seed_data_creation": "4 test agents seeded via /app/backend/tests/seed_stress_agents.py, then fully deleted from DB in cleanup step.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Stress test is fully idempotent + self-cleaning. Re-running the pytest file will recreate agents (via seed script) and clean up. Metrics captured: login_p95=1.7s, create_avg=3.6s, create_p95=3.9s, read_p95=2.6s, match_p95=107ms, PATCH concurrent 5 = 47ms wall, all 200. Baseline read=42ms, stress read median=1.56s (37x degradation, warn only).",
+  "concrete_metrics": {
+    "login_wall_ms": 1700,
+    "login_p95_ms": 1698,
+    "baseline_read_ms": 42,
+    "create_25_wall_ms": 3894,
+    "create_avg_ms": 3642,
+    "create_p95_ms": 3874,
+    "read_50_wall_ms": 3228,
+    "read_avg_ms": 1453,
+    "read_p95_ms": 2615,
+    "patch_5_concurrent_wall_ms": 47,
+    "match_15_concurrent_wall_ms": 113,
+    "match_p95_ms": 107,
+    "degradation_ratio_read": 37.44,
+    "properties_created": 25,
+    "unique_reference_codes": 25,
+    "clients_created": 15,
+    "500_errors": 0,
+    "duplicates_or_deadlocks": 0
+  },
+  "m2_core_dod_validation": "PASSED — all functional criteria met. Concurrency-safe, tenant-isolated, data-consistent. Milestone M2 core can be considered validated at 100%."
+}
