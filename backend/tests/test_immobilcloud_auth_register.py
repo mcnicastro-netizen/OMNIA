@@ -14,7 +14,7 @@ import pytest
 import requests
 from pymongo import MongoClient
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://audit-tool-12.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://vault-signup-flow.preview.emergentagent.com").rstrip("/")
 CLOUD_API = f"{BASE_URL}/api/cloud"
 
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")

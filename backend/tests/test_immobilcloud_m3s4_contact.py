@@ -5,7 +5,7 @@ import pytest
 import requests
 from pymongo import MongoClient
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://audit-tool-12.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://vault-signup-flow.preview.emergentagent.com").rstrip("/")
 PROPERTY_ID = "3b81db11-2988-47a7-ae26-f4396913c3a7"  # Appartamento Centro Storico Roma
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "omnia")

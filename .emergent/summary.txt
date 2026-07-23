@@ -1,0 +1,153 @@
+<analysis>**original_problem_statement**: 
+The user is building OMNIA, a comprehensive B2C, B2B, and LMS Real Estate Ecosystem to compete with legacy Italian real estate CRMs (Track A for new agencies, Track B as headless APIs/Widgets for structured agencies).
+PRODUCT REQUIREMENTS: 
+- Logical Monorepo architecture (FastAPI backend, React frontend).
+- Multi-tenancy with a shared MongoDB schema using .
+- Native i18n (Italian, English, Spanish).
+- Track B ecosystem requiring API Gateways, embeddable widgets, and seamless migration from legacy platforms.
+- Strict Constraints: **White Label** (Features must be available via UI, API, and Widget), **No Paper** (100% digital delivery), **No Brand Mentions** (Never mention competitors), and **Mediterranean Future 2035** (Specific visual aesthetic rules).
+
+**User's preferred language**: 🇮🇹 **Italian (Italiano)**. (INSTRUCT NEXT AGENT: You MUST respond in Italian only).
+
+**what currently exists?** 
+Core CRM, B2C Portal ImmobilCloud, HAL Chatbot, Virtual Staging, Multi-branch/Franchising, API Gateway, Universal XML Importer, Publishing Center Foundation, Sync Engine with Compliance Validator, Domain Ownership Checker, Legal Templates Pack, and an internal Brand Lab. The core M2 module is 100% validated against a concurrency stress test.
+
+**Last working item**: 
+    - Last item agent was working: Preparing a strict handoff protocol () and a formal execution plan () because the project was experiencing scope creep. The user mandated a Focus Mode ON sequence to finish the project without deviations. The next technical item to start is **Sprint 1, Item 1: M2.5.5 Domain Vault**.
+    - Status: NOT STARTED
+    - Agent Testing Done: Y (Stress test for M2 completed via testing subagent prior to handoff setup)
+    - Which testing method agent to use? backend testing agent for APIs / frontend testing agent for UI changes / pytest / curl.
+    - User Testing Done: N
+
+**All Pending/In progress Issue list**: 
+  Issue 1: Performance hardening for M2 Core (Backlogged intentionally)
+     - Attempted fixes: Identified during testing subagent stress test.
+     - Next debug checklist: 
+       1. Async geocoding via background task Motor for property creation.
+       2. Explicit projection on list properties endpoint to reduce payload size.
+     - Why fix this issue and what will be achieved with the fix? Will improve latency under heavy load (20+ agents concurrently). 
+     - Status: BLOCKED (User explicitly ordered to put this in the Sprint 4 backlog to focus on Sprint 1 features first).
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? Backend
+     - Blocked on other issue: Complete Sprints 1, 2, and 3 first.
+
+**In progress Task List**: 
+  None actively in coding. The previous session completely finished its tasks and prepared for a clean start on Sprint 1.
+
+**Upcoming and Future Tasks**
+  *CRITICAL: The user has mandated a strict sequential execution plan (). DO NOT DEVIATE OR PROPOSE NEW FEATURES.*
+  - **Sprint 1 (Close M2.5 completely) - P0**
+    1. **M2.5.5 Domain Vault**: Signup flow that contractually guarantees OMNIA never registers the domain under its name.
+    2. **M2.6c Social Publisher**: Auto-post to FB/IG/Telegram (Requires real API tokens).
+    3. **M2.6d Universal Portal Wizard**: Self-service custom portal sync setup.
+  - **Sprint 2 (HAL Knowledge) - P1**
+    - M5.S2 HAL Knowledge: RAG implementation using PRD, ROADMAP, and DECISIONS as the initial corpus.
+  - **Sprint 3 (Close M3 and M5.S4) - P2**
+    - M3 Advanced search (multi-zone, map drawing).
+    - M3 Privacy audit (4 levels).
+    - M5.S4 Reverse Staging, Micro-tour video, A/B testing.
+  - **Sprint 4 (Perf & Deploy) - P3**
+    - Apply the backlogged performance hardening tasks (async geocoding, property list projection).
+
+**Completed work in this session**
+- M2.6b Sync Engine + Compliance Validator (APScheduler background job +  rules) (DONE)
+- M2.5.4b Domain Ownership Checker (RDAP client, public landing ) (DONE)
+- M2.5.4c Legal Templates Pack (PDF generation using ) (DONE)
+- Internal Brand Lab () and Mediterranean Future 2035 design guidelines (DONE)
+- M2 Core Stress Testing (5 concurrent agents via testing subagent) (DONE)
+- Handoff and strictly ordered execution plans (, ) (DONE)
+- Idea capturing for future (A-001 BNPL, A-002 NVIDIA API, A-003 AI Creative Studio) logged to  (DONE)
+
+**Earlier issues found/mentioned but not fixed**
+   - Issue 1: Async geocoding and List Projection optimization. (See Pending Issue list, explicitly deferred).
+
+**Known issue recurrence from previous fork**
+  - Issue recurrence in previous fork: None
+  - Recurrence count: 0
+  - Status: NA
+
+**Code Architecture**
+Logical Monorepo:  (FastAPI, MongoDB Motor) +  (React, Tailwind, Shadcn).
+
+**Key Technical Concepts**
+FastAPI, React, MongoDB (Motor), i18n, AES-based credential encryption (), Widget serving, XML parsing, PDF Generation (, ), Background Jobs (), RDAP queries. 
+
+**key DB schema**
+  - : 
+  - : 
+  - : 
+
+**changes in tech stack**
+  - Installed  for daily backend synchronization jobs.
+  - Installed  and  for legal template PDF generation.
+
+**All files of reference** 
+  -  (CRITICAL: Read this first to understand strict rules)
+  -  (CRITICAL: Strict execution order)
+  - , , 
+  -  (Contains login info)
+  -  (Idea parking lot)
+  - 
+  - 
+  - 
+
+**Areas that need refactoring**: 
+  - Async geocoding for property creation and database projection for the property list endpoint (documented for Sprint 4).
+
+**key api endpoints**
+  - 
+  - 
+  - 
+  - 
+
+**Critical Info for New Agent**
+- **READ  IMMEDIATELY**.
+- **NO DEVIATIONS**: The user firmly requested to stop adding nice-to-have features and adhere strictly to the sequential plan in . Do not suggest video promos, external LLM tweaks, or UI overhauls. 
+- You are starting at **Sprint 1, Item 1: M2.5.5 Domain Vault**.
+- Always verify changes against 132/132 Pytest suite tests before confirming completion.
+- GitHub integration is unidirectional (Emergent to GitHub). Never run  or push manually, do not commit  files.
+
+**documents and test reports created in this job** 
+  - 
+  - 
+  -  (M2 Stress test report)
+  - 
+  - 
+
+**Last 10 User Messages and any pending HUMAN messages** 
+ 1. User asked to evaluate AI-generated video frames using Pippit.
+ 2. Agent analyzed it, showing it lost the brand aesthetic, and offered alternatives (Sora 2, Veo 3).
+ 3. User asked what is currently used for property micro-tour videos.
+ 4. Agent clarified that no video tools are active yet (M5.S4.3 is pending) and suggested testing Sora 2 for both promo and micro-tours.
+ 5. User got concerned about scope creep (putting too much meat on the fire) and requested a strict audit of the program vs what has been done.
+ 6. Agent provided a brutal, honest audit showing derivations, missing core items (M2.5.5, M5.S2), and proposed a strict recovery plan (Sprints 1 to 4).
+ 7. User agreed, ordering to focus ONLY on Sprint 1 and 3, queuing 2 and 4, and asked what was missing from M1-M5.
+ 8. Agent provided detailed M1-M5 audit.
+ 9. User ordered to complete M2 core and run the missing stress test.
+ 10. Agent ran the stress test via .
+ 11. User asked what the performance backlog items meant (async geocoding, projection).
+ 12. Agent explained them simply and asked if they should be done now or backlogged.
+ 13. User ordered them backlogged: strict adherence to the project completion plan with NO deviations.
+ 14. User noted Emmy's fork recommendation due to credit usage and requested a meticulous handoff summary for the next agent to prevent wasting the work done.
+ 15. Agent created  and detailed the onboarding sequence.
+
+**Project Health Check:**
+Healthy. 132/132 Pytests passing.
+
+**3rd Party Integrations** 
+ - MongoDB (Database) — Env variable
+ - Resend (Emails) — requires User API Key
+ - fal.ai (Virtual Staging) — requires User API Key
+ - Emergent LLM Key (Gemini/Claude) — uses Emergent LLM Key
+
+**Testing status**
+  - Testing agent used after significant changes: YES (testing_agent_v3_fork used for M2 concurrency stress test).
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: Yes (, , , )
+  - Known regressions: None. 
+
+**Credentials to test flow:**
+Available in . (Super Admin: mcnicastro@gmail.com).
+
+**What agent forgot to execute**
+Nothing. The agent successfully paused scope creep, locked down the roadmap, and prepared a pristine environment for the fork.</analysis>
