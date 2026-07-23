@@ -165,6 +165,10 @@ api_router.include_router(founders_router)
 from apps.marketing.domain_check import router as domain_check_router  # noqa: E402
 api_router.include_router(domain_check_router)
 
+# Legal Kit — public PDF generator (M2.5.4c, D-055)
+from apps.marketing.legal_kit import router as legal_kit_router  # noqa: E402
+api_router.include_router(legal_kit_router)
+
 # Public v1 API Gateway (M2.5.2 Track B, D-041) — Bearer API-key auth
 from apps.v1.gateway import router as v1_gateway_router  # noqa: E402
 api_router.include_router(v1_gateway_router)

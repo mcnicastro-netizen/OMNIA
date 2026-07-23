@@ -80,6 +80,10 @@ export default function AgencyShell({ children, current = "dashboard" }) {
     { key: "legal", to: `/${lang}/legal`, label: "HAL Legal", icon: "⚖" },
     { key: "members", to: `/${lang}/app/members`, label: t("immoweb_app.nav_members"), icon: "✉" },
     { key: "settings", to: `/${lang}/app/settings`, label: t("immoweb_app.nav_settings"), icon: "⚙" },
+    // Brand Lab — internal creative repository (super_admin only)
+    ...(user?.role === "super_admin"
+      ? [{ key: "brand-lab", to: `/${lang}/app/brand-lab`, label: "Brand Lab", icon: "◈" }]
+      : []),
   ];
 
   if (agency === null) {

@@ -44,6 +44,7 @@ import GroupPage from "@/apps/immoweb/pages/GroupPage";
 import ApiKeysPage from "@/apps/immoweb/pages/ApiKeysPage";
 import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
 import PublishingPage from "@/apps/immoweb/pages/PublishingPage";
+import BrandLabPage from "@/apps/immoweb/pages/BrandLabPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
 
@@ -175,6 +176,15 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
                         <PublishingPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* Brand Lab — internal creative repository (super_admin only) */}
+                  <Route
+                    path="app/brand-lab"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin"]}>
+                        <BrandLabPage />
                       </ProtectedRoute>
                     }
                   />

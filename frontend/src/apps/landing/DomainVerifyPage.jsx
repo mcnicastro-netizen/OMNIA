@@ -214,8 +214,123 @@ function VerdictBlock({ data, lang }) {
         </div>
       </div>
 
+      {showLead && <LegalKitBlock domain={data.domain} />}
       {showLead && <LeadForm checkId={data.id} lang={lang} />}
     </section>
+  );
+}
+
+function LegalKitBlock({ domain }) {
+  const [downloading, setDownloading] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+  const [err, setErr] = useState(null);
+  // Optional context — pre-fill domain from the check just done
+  const [agencyName, setAgencyName] = useState("");
+  const [signerName, setSignerName] = useState("");
+  const [agencyPec, setAgencyPec] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const download = async () => {
+    if (!consent) { setErr("Devi accettare il trattamento dati per proseguire."); return; }
+    if (!email.trim()) { setErr("Email obbligatoria per ricevere il kit."); return; }
+    setErr(null); setDownloading(true);
+    try {
+      const r = await fetch(`${BACKEND}/api/legal/kit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          name: signerName.trim() || "—",
+          agency: agencyName.trim() || null,
+          consent: true,
+          source: "landing_verifica_dominio",
+          context: {
+            signer_name: signerName.trim() || undefined,
+            agency_name: agencyName.trim() || undefined,
+            agency_pec: agencyPec.trim() || undefined,
+            domain,
+          },
+        }),
+      });
+      if (!r.ok) {
+        const errData = await r.json().catch(() => ({}));
+        throw new Error(errData?.detail || `HTTP ${r.status}`);
+      }
+      // r is a ZIP blob — trigger download
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "omnia_legal_kit.zip";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setDownloaded(true);
+    } catch (e) {
+      setErr(e?.message || "Errore durante il download");
+    } finally { setDownloading(false); }
+  };
+
+  if (downloaded) {
+    return (
+      <div className="mt-6 bg-emerald-50 border border-emerald-300 rounded-lg p-5 text-emerald-900" data-testid="legal-kit-success">
+        <p className="font-medium mb-1">✅ Kit Legale scaricato con successo</p>
+        <p className="text-sm">Trovi 4 template PDF pronti da inviare via PEC — GDPR art. 20, Titolarità dominio, Disdetta fornitore, Reclamo CNR-IIT. Nessun invio cartaceo necessario. Compila i placeholder <strong>[DA COMPILARE]</strong> con i tuoi dati e sei a posto.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6 bg-amber-50 border border-amber-300 rounded-lg p-6" data-testid="legal-kit-block">
+      <div className="flex items-start gap-4 mb-4">
+        <div className="w-10 h-10 rounded-lg bg-amber-500 text-white flex items-center justify-center text-xl shrink-0">📥</div>
+        <div>
+          <h3 className="text-lg font-medium mb-1" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
+            Scarica subito il Legal Kit gratuito (PDF)
+          </h3>
+          <p className="text-sm text-amber-900 leading-relaxed">
+            <strong>4 template PDF pronti</strong> per riprendere il controllo del tuo dominio e dei tuoi dati.
+            100% digitale — invio via PEC, mai cartaceo. Compili i placeholder e sei a posto.
+          </p>
+        </div>
+      </div>
+
+      <ul className="text-xs text-amber-900 mb-5 space-y-1 pl-4">
+        <li>1️⃣ Richiesta portabilità dati (GDPR art. 20)</li>
+        <li>2️⃣ Richiesta titolarità dominio al registrar</li>
+        <li>3️⃣ Disdetta contratto fornitore</li>
+        <li>4️⃣ Reclamo / info Registro .it (CNR-IIT)</li>
+      </ul>
+
+      <div className="grid md:grid-cols-2 gap-3 mb-3">
+        <input type="email" data-testid="kit-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email (obbligatoria)" maxLength={200} className="px-3 py-2 border border-amber-300 rounded text-sm bg-white" />
+        <input type="text" data-testid="kit-agency" value={agencyName} onChange={(e) => setAgencyName(e.target.value)} placeholder="Nome agenzia (opz.)" maxLength={200} className="px-3 py-2 border border-amber-300 rounded text-sm bg-white" />
+        <input type="text" data-testid="kit-signer" value={signerName} onChange={(e) => setSignerName(e.target.value)} placeholder="Nome legale rappresentante (opz.)" maxLength={200} className="px-3 py-2 border border-amber-300 rounded text-sm bg-white" />
+        <input type="email" data-testid="kit-pec" value={agencyPec} onChange={(e) => setAgencyPec(e.target.value)} placeholder="PEC agenzia (opz.)" maxLength={200} className="px-3 py-2 border border-amber-300 rounded text-sm bg-white" />
+      </div>
+      <label className="flex items-start gap-2 text-xs text-amber-900 mb-3">
+        <input type="checkbox" data-testid="kit-consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5" />
+        <span>Acconsento al trattamento dei dati per ricevere il kit e comunicazioni OMNIA (revoca in qualsiasi momento via email). GDPR 2016/679.</span>
+      </label>
+
+      {err && <p className="text-sm text-red-700 mb-3" data-testid="kit-error">{err}</p>}
+
+      <div className="flex flex-wrap gap-3 items-center">
+        <button
+          onClick={download}
+          disabled={downloading || !email.trim() || !consent}
+          data-testid="kit-download-btn"
+          className="px-6 py-3 bg-amber-600 text-white text-xs uppercase tracking-widest rounded-lg hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {downloading ? "Genero PDF…" : "📥 Scarica il Legal Kit (ZIP)"}
+        </button>
+        <span className="text-xs text-amber-900">
+          Nessun invio cartaceo. Delivery digitale al 100%.
+        </span>
+      </div>
+    </div>
   );
 }
 

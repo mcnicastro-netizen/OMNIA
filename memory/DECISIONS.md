@@ -932,3 +932,37 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 
 
 
+
+### D-055 — M2.5.4c Legal Templates Pack scope + 3 modalità + no paper (23-Feb-2026) 📄
+
+- **Contesto**: chiudere il "Domain Sovereignty Kit" iniziato con M2.5.4b Domain Checker. Chi scopre col checker RDAP che il suo dominio è in mano al fornitore deve avere IMMEDIATAMENTE gli strumenti legali per riprenderlo — altrimenti il lead magnet perde metà del suo valore.
+- **Scope**: 4 template PDF generici (D-051 no brand mentions) generati on-the-fly con placeholder Jinja2 sostituiti dai dati dell'agenzia:
+  1. `gdpr_20` — Richiesta portabilità dati ex art. 20 GDPR al fornitore attuale
+  2. `pec_titolarita_dominio` — Richiesta formale titolarità dominio al registrar (Aruba/Register.it/OVH/…)
+  3. `disdetta_fornitore` — Disdetta contrattuale al fornitore attuale con richiesta cancellazione dati + trasferimento servizi accessori
+  4. `reclamo_cnr_iit` — Reclamo/richiesta info Registro .it (CNR-IIT Pisa) se il registrar non risponde
+- **Decisioni tecniche approvate**:
+  - **PDF generation server-side** con ReportLab platypus (già in casa 5.0.0, no dep aggiuntive). Layout editoriale coerente Brand Lab: header strip Deep Navy + Gold wordmark, palette hex code strict, disclaimer footer standard.
+  - **Placeholder come [DA COMPILARE] visibili** (non nascosti) quando l'utente non fornisce il dato — sa esattamente cosa deve completare prima dell'invio via PEC.
+  - **Delivery 100% digitale in-browser** (D-035 No Paper esplicito):
+    - Landing pubblica → download istantaneo del ZIP via blob URL (NO email inviata al server, NO PDF via SMTP)
+    - Copy "Nessun invio cartaceo. Delivery digitale al 100%" ben visibile
+    - Il template stesso indica canale PEC come modalità d'invio consigliata
+    - Copia il template a nulla se non a mandarlo via posta certificata elettronica — mai stampa
+  - **Rate limit collection-based** (`legal_kit_events` con `client_ip` + `created_ts`, window 1h, max 20 download/h/IP): dedicato al kit legale, separato dal rate limit domain_check per non "punire" chi fa entrambe le azioni sulla landing.
+  - **Consenso GDPR obbligatorio solo sul kit completo** (endpoint `/kit`) — il singolo PDF (`/download/{slug}`) resta liberamente scaricabile senza email (utile per web agency partner che embedded il flusso).
+  - **v1 API Gateway a 2 crediti** (vs 1 credito domain_check): giustificato dal compute cost PDF significativamente superiore alla RDAP query.
+  - **3 modalità di consumo** (D-041 White Label da subito):
+    - Landing pubblica `/it/verifica-dominio` → `LegalKitBlock` React component post-verdict
+    - API pubblica no-auth `/api/legal/*` (rate-limited)
+    - v1 API-key billed `/api/v1/legal/render`
+- **NON incluso in M2.5.4c** (rimandato):
+  - Invio automatico via email con Resend → più avanti (rimane in-browser download istantaneo per ora, così eliminiamo dipendenza da Resend + evitiamo problemi deliverability)
+  - Firma digitale integrata (SPID/CIE/OTP) → M2.5.5 Domain Vault fase 2 o dopo integrazione partner
+  - Legal review avvocato dei template → l'attuale disclaimer "non costituisce parere legale" copre il rischio, ma la Fondazione APE (D-038) potrebbe includere revisione legale come benefit
+  - Custom templates per specifiche region/comune → non prioritario, i 4 attuali coprono il 95% dei casi
+- **Modello architetturale riusabile**: pattern `shared/legal_kit/templates.py` (metadata + Jinja2 body) + `pdf_generator.py` (ReportLab renderer) può essere replicato per altri PDF futuri (contratti mandati, procure, ecc.) senza rifare l'infrastruttura.
+- **Stato**: ✅ APPLICATA — 15/15 pytest specifici, 132/132 regressione totale, smoke E2E screenshot verificato con flow completo landing → check → download ZIP.
+
+
+

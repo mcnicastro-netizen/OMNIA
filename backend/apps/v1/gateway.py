@@ -319,3 +319,42 @@ async def v1_domain_check(
         await charge_and_log(request, status_code=500, error_code=type(e).__name__)
         logger.exception("v1_domain_check failed")
         raise HTTPException(status_code=500, detail="internal_error")
+
+
+# ---------------- LEGAL KIT (M2.5.4c, D-055) ----------------
+
+class LegalRenderBody(BaseModel):
+    slug: str = Field(min_length=3, max_length=50)
+    context: Optional[Dict[str, Any]] = None
+
+
+@router.post("/legal/render")
+async def v1_legal_render(
+    body: LegalRenderBody,
+    request: Request,
+    key=Depends(make_key_dep("legal_render")),
+):
+    """Generate a filled Legal Kit PDF (2 credits). Returns raw application/pdf."""
+    try:
+        from shared.legal_kit.templates import TEMPLATES
+        from shared.legal_kit.pdf_generator import render_pdf
+        if body.slug not in TEMPLATES:
+            raise HTTPException(status_code=404, detail="template_not_found")
+        pdf_bytes = render_pdf(body.slug, body.context or {})
+        await charge_and_log(request, status_code=200)
+        from fastapi.responses import Response as _Response
+        return _Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'attachment; filename="omnia_legal_{body.slug}.pdf"',
+                "X-Credits-Charged": str(request.state.api_cost),
+            },
+        )
+    except HTTPException as e:
+        await charge_and_log(request, status_code=e.status_code, error_code=str(e.detail)[:60])
+        raise
+    except Exception as e:
+        await charge_and_log(request, status_code=500, error_code=type(e).__name__)
+        logger.exception("v1_legal_render failed")
+        raise HTTPException(status_code=500, detail="internal_error")
