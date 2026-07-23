@@ -7,6 +7,21 @@
 
 ## 🎯 PRIORITÀ v3.0 (vincolanti — 06 Lug 2026)
 
+**🚨 ORDINE TASSATIVO 23-Feb-2026 — vedi `PIANO_ESECUZIONE.md`** (documento autoritativo, sostituisce ogni altra priorità fino a Sprint 4 chiuso)
+
+```
+SPRINT 1 🔴  Chiusura M2.5 al 100% → M2.5.5 Domain Vault + M2.6c Social Publisher + M2.6d Universal Portal Wizard
+SPRINT 2 🟡  M5.S2 HAL Knowledge (RAG su PRD+ROADMAP+DECISIONS)
+SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
+SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness
+```
+
+🛑 **Fuori scope fino a Sprint 4 chiuso**: video promo brand, nuove landing marketing, aspetti da approfondire A-001/A-002/A-003, APE integration, manuale operativo cap. 3-20, M4, M6, pre-launch commerciale.
+
+---
+
+## 📚 Priorità precedente (archiviata, sostituita da PIANO_ESECUZIONE.md)
+
 ```
 P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2      🟡 CONSEGNATO (in revisione Founder)
 P1 🟠  M2.5   — Doppio Binario: Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0
