@@ -83,7 +83,7 @@ const WOW_MOMENTS = [
 ];
 
 export default function AgenziesLandingPage() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
 
   const [spots, setSpots] = useState({ remaining: 50, total: 50, registered: 0 });
@@ -365,6 +365,21 @@ export default function AgenziesLandingPage() {
       <footer className="bg-[#080d1c] text-white/60 px-6 sm:px-12 py-12 text-center text-xs">
         <p style={{ fontFamily: "'Fraunces', Georgia, serif" }} className="text-lg text-white mb-2">OMNIA</p>
         <p className="uppercase tracking-widest">Real Estate Ecosystem</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-5 text-white/70">
+          <Link
+            to={`/${lang}/domain-sovereignty-policy`}
+            className="uppercase tracking-widest hover:text-white underline decoration-white/20 hover:decoration-white transition"
+            data-testid="agenzie-footer-domain-sovereignty-link"
+          >
+            🛡️ {t("domain_vault.policy_link")}
+          </Link>
+          <Link
+            to={`/${lang}/verifica-dominio`}
+            className="uppercase tracking-widest hover:text-white underline decoration-white/20 hover:decoration-white transition"
+          >
+            {t("domain_vault.existing_domain_verify_cta")}
+          </Link>
+        </div>
         <p className="mt-6 text-white/40">
           © 2026 OMNIA — Founders 50 program · Riservato a operatori del settore immobiliare
         </p>

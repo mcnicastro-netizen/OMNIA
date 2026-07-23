@@ -98,6 +98,8 @@ async def register(req: RegisterRequest, request: Request, response: Response,
         name=req.name.strip(),
         role=req.role or "client",
         lang=lang,
+        signup_domain_sovereignty_confirmed=bool(req.domain_sovereignty_confirmed),
+        signup_existing_domain=(req.existing_domain or "").strip().lower() or None,
     )
     doc = user.model_dump()
     await db.users.insert_one(doc)

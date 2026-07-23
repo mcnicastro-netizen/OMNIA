@@ -966,3 +966,27 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 
 
 
+### D-056 — M2.5.5 Domain Vault scope (23-Feb-2026) 🛡️
+
+- **Contesto**: Sprint 1 · Item #1 del `PIANO_ESECUZIONE.md`. Punto finale di chiusura M2.5. Il Founder ha esplicitamente richiesto che il signup contenga la promessa contrattuale "OMNIA non registra mai domini a proprio nome" — leva anti-lock-in fondamentale per l'ICP "agenzia strutturata già col proprio dominio" (Track B) e differenziatore forte vs competitor legacy.
+- **Scope IN**:
+  1. `AgencyInDB` estesa con `domain_sovereignty_confirmed: bool` + `domain_sovereignty_confirmed_at: str (ISO)` + `existing_domain: str (max 253)`.
+  2. `UserInDB` estesa con `signup_domain_sovereignty_confirmed` + `signup_existing_domain` (transient al signup, copiati sull'agenzia dentro `create_agency`).
+  3. `RegisterRequest` accetta i due campi opzionali `domain_sovereignty_confirmed` + `existing_domain` (normalizzati lowercase server-side).
+  4. Nuovo router `apps/immoweb/domain_vault.py` — endpoint `GET /agencies/me/domain-sovereignty` + `POST /agencies/me/domain-sovereignty` (ruoli agency_admin/super_admin/branch_admin/group_admin). Idempotente: la prima confermazione fissa `confirmed_at`, le successive lo preservano.
+  5. Validazione dominio via regex FQDN (labels + almeno un punto + ≤253 chars) — 400 su formato invalido.
+  6. Audit trail append-only in collection `domain_vault_events` (agency_id, user_id, user_email, confirmed, existing_domain, at) — mai eliminato al toggle off, GDPR-compatible retention.
+  7. UI signup (`RegisterPage.jsx`) — badge shield emerald "Il tuo dominio resta tuo" + sottotitolo, campo dominio opzionale con link `/verifica-dominio`, checkbox policy con link `target=_blank` a `/domain-sovereignty-policy`. Blocco submit se ruolo agenzia + policy non accettata.
+  8. Nuova pagina pubblica `/it/domain-sovereignty-policy` (`DomainSovereigntyPolicyPage.jsx`) — palette Mediterranean Future 2035 (`#0B1E3F` navy · `#1F6B5C` emerald · `#C8A653` gold · `#F5F1E8` off-white), Fraunces serif, 6 sezioni contrattuali (dominio del cliente, no blocco tecnico, no blocco legale AuthInfo/EPP, portabilità totale, trasparenza operativa, wind-down 90gg preavviso).
+  9. Link nel footer di `LandingApp` (public) e `AgenziesLandingPage` (Founders 50) — icona shield + `data-testid="footer-domain-sovereignty-link"`.
+  10. i18n IT/EN/ES — blocco `domain_vault.*` con 40+ chiavi (badge, subtitle, checkbox `<Trans>` con placeholder `<policy>`, 6 titoli+testi policy, footer legale). Wording legale rispetta D-051 (no brand mentions competitor — usiamo "il tuo Registrar di fiducia", "provider alternativo").
+- **Scope OUT** (memorizzato per fase 2 o backlog):
+  - Firma digitale della policy via SPID/CIE/OTP → richiede integrazione partner (D-055 già identifica come "M2.5.5 fase 2").
+  - Cron di reminder alle agenzie con `confirmed=false` da >30gg → non richiesto dal Founder, sarebbe scope creep.
+  - Dashboard analytics interna "quanti confirmed vs opt-out" → memorizza in audit ma no UI dedicata al momento.
+  - Endpoint pubblico `GET /api/v1/domain-sovereignty/status/{agency_slug}` per widget/API partner → utile per Track B ma non richiesto in Sprint 1; il verify di dominio esistente è già coperto dal Domain Ownership Checker (D-054).
+- **Modalità Track B** (D-041): la Domain Vault è per ora una policy contrattuale visualizzata solo dentro OMNIA (UI signup + landing pubblica). Le modalità **API v1** e **widget** sono deliberatamente escluse dallo Sprint 1 perché la conferma è specifica dell'agenzia OMNIA — non è una feature vendibile a partner terzi. Deroga giustificata dal Founder come "componente del branding, non prodotto Track B".
+- **Test coverage**: 11/11 pytest (`test_m2s5_5_domain_vault.py`): signup capture (3) + endpoint idempotency + timestamp preservation + invalid format 400 + auth boundary anonymous (2) + audit trail count. Regressione totale: 151/151 (132 originali + 11 nuovi + 8 immobilcloud auth).
+- **Stato**: ✅ APPLICATA (23-Feb-2026). Prossimo Sprint 1 item: **M2.6c Social Publisher** (⚠️ Founder deve fornire Meta Developer App ID/Secret).
+
+

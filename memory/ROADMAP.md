@@ -10,11 +10,13 @@
 **🚨 ORDINE TASSATIVO 23-Feb-2026 — vedi `PIANO_ESECUZIONE.md`** (documento autoritativo, sostituisce ogni altra priorità fino a Sprint 4 chiuso)
 
 ```
-SPRINT 1 🔴  Chiusura M2.5 al 100% → M2.5.5 Domain Vault + M2.6c Social Publisher + M2.6d Universal Portal Wizard
+SPRINT 1 🔴  Chiusura M2.5 al 100% → M2.5.5 Domain Vault ✅ + M2.6c Social Publisher + M2.6d Universal Portal Wizard
 SPRINT 2 🟡  M5.S2 HAL Knowledge (RAG su PRD+ROADMAP+DECISIONS)
 SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
 SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness
 ```
+
+**Ultimo item chiuso**: ✅ **M2.5.5 Domain Vault** (23-Feb-2026) — signup con garanzia dominio + policy `/it/domain-sovereignty-policy` + audit trail + 11/11 pytest + regressione 151/151.
 
 🛑 **Fuori scope fino a Sprint 4 chiuso**: video promo brand, nuove landing marketing, aspetti da approfondire A-001/A-002/A-003, APE integration, manuale operativo cap. 3-20, M4, M6, pre-launch commerciale.
 

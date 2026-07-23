@@ -105,6 +105,11 @@ class AgencyInDB(TimestampedModel):
     group_id: Optional[str] = None                # attached to an AgencyGroup (None = standalone)
     branch_code: Optional[str] = Field(default=None, max_length=30)  # internal code (e.g. "MI-01")
     plan_type: PlanType = "hybrid"                # default: both UI + API access
+    # M2.5.5 — Domain Vault / Domain Sovereignty (D-051/D-054)
+    # Contractual promise: OMNIA never registers domains in its own name.
+    domain_sovereignty_confirmed: bool = False
+    domain_sovereignty_confirmed_at: Optional[str] = None
+    existing_domain: Optional[str] = Field(default=None, max_length=253)
 
 
 class AgencyPublic(OmniaBaseModel):
@@ -127,6 +132,10 @@ class AgencyPublic(OmniaBaseModel):
     group_id: Optional[str] = None
     branch_code: Optional[str] = None
     plan_type: PlanType = "hybrid"
+    # M2.5.5 — Domain Vault
+    domain_sovereignty_confirmed: bool = False
+    domain_sovereignty_confirmed_at: Optional[str] = None
+    existing_domain: Optional[str] = None
 
 
 class AgencyCreate(OmniaBaseModel):

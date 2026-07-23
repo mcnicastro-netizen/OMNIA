@@ -19,6 +19,7 @@ import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import LandingApp from "@/apps/landing/LandingApp";
 import AgenziesLandingPage from "@/apps/landing/AgenziesLandingPage";
 import DomainVerifyPage from "@/apps/landing/DomainVerifyPage";
+import DomainSovereigntyPolicyPage from "@/apps/landing/DomainSovereigntyPolicyPage";
 import WidgetsShowcasePage from "@/pages/WidgetsShowcasePage";
 import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
 import ImmowebApp from "@/apps/immoweb/ImmowebApp";
@@ -116,6 +117,9 @@ function App() {
 
                   {/* M2.5.4b — Domain Ownership Checker (Domain Sovereignty Kit) */}
                   <Route path="verifica-dominio" element={<DomainVerifyPage />} />
+
+                  {/* M2.5.5 — Domain Sovereignty Policy (public) */}
+                  <Route path="domain-sovereignty-policy" element={<DomainSovereigntyPolicyPage />} />
 
                   {/* M2.5.3 — Track B widgets showcase (public) */}
                   <Route path="widgets" element={<WidgetsShowcasePage />} />

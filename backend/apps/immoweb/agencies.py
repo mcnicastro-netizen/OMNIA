@@ -73,6 +73,13 @@ async def create_agency(
         contact=payload.contact or {},
         branding=payload.branding or {},
         owner_id=user["id"],
+        # M2.5.5 — Transfer Domain Vault preferences captured at signup
+        domain_sovereignty_confirmed=bool(user.get("signup_domain_sovereignty_confirmed")),
+        domain_sovereignty_confirmed_at=(
+            datetime.now(timezone.utc).isoformat()
+            if user.get("signup_domain_sovereignty_confirmed") else None
+        ),
+        existing_domain=user.get("signup_existing_domain") or None,
     )
     doc = agency.model_dump()
     await db.agencies.insert_one(doc)

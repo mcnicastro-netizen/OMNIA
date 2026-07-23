@@ -51,6 +51,10 @@ class UserInDB(TimestampedModel):
     email_verified: bool = False
     # M2.5.1 — Franchising layer (D-041) — populated for group_admin users
     group_id: Optional[str] = None
+    # M2.5.5 — Domain Vault (D-054): captured during signup, transferred to
+    # the agency doc when the user creates their agency (onboarding).
+    signup_domain_sovereignty_confirmed: bool = False
+    signup_existing_domain: Optional[str] = None
 
 
 class RegisterRequest(OmniaBaseModel):
@@ -59,6 +63,9 @@ class RegisterRequest(OmniaBaseModel):
     name: str = Field(min_length=1, max_length=120)
     role: Optional[UserRole] = "client"
     lang: Optional[UserLang] = "it"
+    # M2.5.5 — Domain Vault (optional at signup)
+    domain_sovereignty_confirmed: Optional[bool] = False
+    existing_domain: Optional[str] = Field(default=None, max_length=253)
 
 
 class LoginRequest(OmniaBaseModel):

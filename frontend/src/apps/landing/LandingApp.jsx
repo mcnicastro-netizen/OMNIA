@@ -103,8 +103,23 @@ export default function LandingApp() {
       </section>
 
       <footer className="border-t border-stone-200">
-        <div className="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:justify-between">
+        <div className="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-3 sm:gap-6 sm:justify-between sm:items-center">
           <span>© 2026 <Brand>OMNIA Real Estate Ecosystem</Brand></span>
+          <div className="flex flex-wrap gap-4 sm:gap-6">
+            <Link
+              to={`/${lang}/domain-sovereignty-policy`}
+              className="hover:text-stone-900 underline decoration-transparent hover:decoration-current transition"
+              data-testid="footer-domain-sovereignty-link"
+            >
+              🛡️ {t("domain_vault.policy_link")}
+            </Link>
+            <Link
+              to={`/${lang}/verifica-dominio`}
+              className="hover:text-stone-900 underline decoration-transparent hover:decoration-current transition"
+            >
+              {t("domain_vault.existing_domain_verify_cta")}
+            </Link>
+          </div>
           <Brand className="truncate">omniarealestateecosystem.it</Brand>
         </div>
       </footer>
