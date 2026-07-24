@@ -25,10 +25,10 @@
 | # | Item | Effort | Stato |
 |:-:|---|:-:|---|
 | 1 | **M2.5.5 Domain Vault** | ~1g | ✅ **DONE (23-Feb-2026)** — signup con garanzia contrattuale + policy pubblica + audit trail + 11/11 pytest. Vedi D-056. |
-| 2 | **M2.6c Social Publisher** (FB Graph + Instagram Business + Telegram Bot APIs) | ~2g | ⏸️ **BLOCCATO** — Founder deve fornire Meta Developer App ID/Secret + Telegram Bot Token |
+| 2 | **M2.6c Social Publisher** (FB Graph + Instagram Business + Telegram Bot APIs) | ~2g | ✅ **DONE (24-Feb-2026)** — adapter async httpx FB/IG/Telegram + credenziali cifrate AES-GCM + audit trail social_posts + 16/16 pytest. Vedi D-058. |
 | 3 | **M2.6d Universal Portal Wizard** (self-service custom portali) | ~1g | ✅ **DONE (23-Feb-2026)** — 4-step wizard + tenant isolation + 13/13 pytest. Vedi D-057. |
 
-**Sprint 1 status: 2/3 items completati.** M2.6c pending solo per credenziali esterne.
+**Sprint 1 status: 3/3 items completati ✅.** Prossimo: Sprint 2 · M5.S2 HAL Knowledge.
 
 **Definition of Done Sprint 1**: M2.5.5 + M2.6c + M2.6d in produzione, testati con pytest e smoke E2E screenshot. Regressione totale 100% pass.
 

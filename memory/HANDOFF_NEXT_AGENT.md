@@ -1,7 +1,7 @@
 # 🚨 HANDOFF AL NUOVO AGENTE — LEGGI PRIMA DI FARE QUALSIASI COSA
 
-**Fork da**: sessione E1 chiusa il **24-Feb-2026**
-**Motivo fork**: consumo crediti — Founder ha esplicitamente richiesto handoff pulito
+**Fork da**: sessione E1 chiusa il **24-Feb-2026 (evening — Sprint 1 chiuso)**
+**Motivo fork**: passaggio pulito a Sprint 2 · M5.S2 HAL Knowledge dopo chiusura Sprint 1
 **Founder**: Marco Nicastro (mcnicastro-netizen · mcnicastro@gmail.com)
 **Lingua di risposta OBBLIGATORIA**: 🇮🇹 **ITALIANO**. Il Founder è italiano madrelingua.
 
@@ -37,10 +37,10 @@ sudo supervisorctl status
 ### 3️⃣ Esegui la regressione test PRIMA di toccare qualsiasi cosa
 ```bash
 cd /app/backend && export REACT_APP_BACKEND_URL=$(grep REACT_APP_BACKEND_URL /app/frontend/.env | cut -d'=' -f2)
-python -m pytest tests/test_m2s5_1_groups.py tests/test_m2s5_2_api_gateway.py tests/test_m2s5_3_widgets.py tests/test_m2s5_4a_xml_importer.py tests/test_m2s5_4b_domain_checker.py tests/test_m2s5_4c_legal_kit.py tests/test_m2s5_5_domain_vault.py tests/test_m2s6a_publishing.py tests/test_m2s6b_sync_engine.py tests/test_m2s6d_portal_wizard.py tests/test_immobilcloud_auth_register.py --tb=short -q
-# Atteso: 164/164 passed
+python -m pytest tests/test_m2s5_1_groups.py tests/test_m2s5_2_api_gateway.py tests/test_m2s5_3_widgets.py tests/test_m2s5_4a_xml_importer.py tests/test_m2s5_4b_domain_checker.py tests/test_m2s5_4c_legal_kit.py tests/test_m2s5_5_domain_vault.py tests/test_m2s6a_publishing.py tests/test_m2s6b_sync_engine.py tests/test_m2s6c_social_publisher.py tests/test_m2s6d_portal_wizard.py tests/test_immobilcloud_auth_register.py --tb=short -q
+# Atteso: 180/180 passed
 ```
-**Se non passa 164/164 → STOP, apri ticket al Founder. NON cominciare a "aggiustare" senza discutere.**
+**Se non passa 180/180 → STOP, apri ticket al Founder. NON cominciare a "aggiustare" senza discutere.**
 
 ### 4️⃣ Chiedi conferma al Founder via `ask_human` prima di partire
 Mostra al Founder:
@@ -85,23 +85,20 @@ Mostra al Founder:
 - BUSINESS_MODEL.md
 - PIANO_ESECUZIONE.md (23-Feb-2026 — ordine tassativo Sprint 1-4)
 
-**Test suite**: **164/164 pytest pass** (132 originali + 11 Domain Vault + 13 Portal Wizard + 8 immobilcloud auth) + stress test M2 concorrenza validato.
+**Test suite**: **180/180 pytest pass** (132 originali + 11 Domain Vault + 13 Portal Wizard + 8 immobilcloud auth + 16 Social Publisher) + stress test M2 concorrenza validato.
 
-### 🔴 NEXT — Sprint 1 stato + prossime priorità
+### 🔴 NEXT — Sprint 1 CHIUSO al 100%, prossimo Sprint 2
 
-**Sprint 1 · 2/3 items completati**:
-1. ✅ M2.5.5 Domain Vault (fatto)
-2. ⏸️ **M2.6c Social Publisher** — BLOCCATO in attesa credenziali (vedi sotto)
-3. ✅ M2.6d Universal Portal Wizard (fatto)
+**Sprint 1 · 3/3 items completati**:
+1. ✅ M2.5.5 Domain Vault (fatto 23-Feb-2026)
+2. ✅ **M2.6c Social Publisher** (fatto 24-Feb-2026, D-058) — Facebook Page + Instagram Business + Telegram con adapter async httpx, credenziali cifrate AES-256-GCM, audit trail. 16/16 pytest verdi + regressione totale **180/180 verdi**.
+3. ✅ M2.6d Universal Portal Wizard (fatto 23-Feb-2026)
 
-**Item bloccante**: **M2.6c Social Publisher** richiede al Founder:
-- 📗 Telegram Bot Token (5 min via @BotFather — canale meno onerose, parti da qui)
-- 📘 Meta Developer App ID + App Secret (20 min)
-- 📗 Chat ID Telegram + Facebook Page ID + Instagram Business ID
+**Sprint 2 — prossima priorità (nessun blocker)**: **M5.S2 HAL Knowledge** — RAG su corpus `/app/memory/PRD.md` + `ROADMAP.md` + `DECISIONS.md` + eventuale doc utente. Emergent LLM key già disponibile (Gemini/Claude embeddings + generation). Zero credenziali esterne richieste.
 
-**Alternativa senza blocker**: **Sprint 2 · M5.S2 HAL Knowledge** (RAG su PRD/ROADMAP/DECISIONS) — usa Emergent LLM key già disponibile, zero credenziali esterne.
+**Item bloccante residuo (solo per uso reale IG, non blocca Sprint 2)**: il Founder deve collegare l'account Instagram Business alla Facebook Page "Omnia real estate lab" (ID `1275173392335417`) — richiede solo qualche clic nel Meta Business Manager. Fino ad allora, il canale IG è configurabile ma il primo `POST /channels/{id}/validate` restituirà errore Meta. Nessun impatto su FB Page (già funzionante) o Telegram (in attesa di bot token).
 
-Dopo Sprint 1: Sprint 2 (M5.S2 HAL Knowledge) → Sprint 3 (M3 backlog + M5.S4) → Sprint 4 (Perf + deploy).
+Dopo Sprint 2: Sprint 3 (M3 backlog + M5.S4) → Sprint 4 (Perf + deploy).
 
 ### 🛑 ESPLICITAMENTE FUORI SCOPE fino a Sprint 4 chiuso
 
@@ -230,41 +227,34 @@ Se crei/modifichi utenti di test, aggiorna SUBITO `/app/memory/test_credentials.
 ## 🎯 PROSSIMA AZIONE CONCRETA
 
 **Sprint 1 · Item #1 · M2.5.5 Domain Vault ✅ FATTO (23-Feb-2026)** — vedi D-056.
+**Sprint 1 · Item #2 · M2.6c Social Publisher ✅ FATTO (24-Feb-2026)** — vedi D-058.
 **Sprint 1 · Item #3 · M2.6d Universal Portal Wizard ✅ FATTO (23-Feb-2026)** — vedi D-057.
 
-### 🔴 Item corrente: **Sprint 1 · Item #2 · M2.6c Social Publisher (BLOCCATO)**
+### 🟢 Item corrente: **Sprint 2 · M5.S2 HAL Knowledge**
 
-**Cosa fa Social Publisher**:
-Pubblicazione automatica di ogni immobile OMNIA su 3 canali social (D-041 Doppio Binario: disponibile via UI + API + widget):
+**Cosa fa HAL Knowledge**:
+Chatbot "how-to" della piattaforma OMNIA che risponde su come usare le funzionalità del CRM. RAG (Retrieval Augmented Generation) su corpus di documenti già scritti:
+- `/app/memory/PRD.md` (cosa fa OMNIA, feature per feature)
+- `/app/memory/ROADMAP.md` (stato + backlog)
+- `/app/memory/DECISIONS.md` (57+ decisioni tecniche/business, ognuna con contesto)
+- Manuale utente (se scritto entro il momento) — altrimenti si può partire senza
 
-1. **Facebook Pages** — post automatico su pagina agenzia via Facebook Graph API v20
-2. **Instagram Business** — post con immagine principale + caption via Instagram Graph API (richiede IG Business account collegato a FB Page)
-3. **Telegram** — post su canale/gruppo via Bot API (il più semplice, no review, gratis)
+**Stack tecnico raccomandato**:
+- Embeddings: Emergent LLM Key (Gemini `text-embedding-004` o alternativa)
+- Vector store: MongoDB Atlas Vector Search (già disponibile) oppure in-memory se il corpus resta <1MB
+- Generation: Gemini 3 Flash via Emergent LLM Key (economico, veloce)
+- Retrieval: top-k=5 chunk + reranking soglia coseno >0.6
+- Guardrails: se confidence <0.7 → "Non ho abbastanza contesto, chiedi al team OMNIA"
 
-**Bloccante — al primo messaggio del prossimo agente chiedi al Founder**:
-- 📗 **Telegram Bot Token** (5 min via @BotFather + Chat ID canale)
-- 📘 **Meta Developer App ID + App Secret** (Founder deve creare app su developers.facebook.com in modalità "Business")
-- 📘 **Facebook Page ID + Instagram Business ID** (dal pannello Meta Business)
+**Definition of Done Sprint 2**: HAL Knowledge risponde a 10 domande how-to di test con confidence ≥0.85 e citazione fonte. 15+ pytest. UI accessibile dal CRM come 3° bottone HAL (D-040 — 3 bottoni fisici, no router LLM).
 
-**Suggerimento operativo**: proponi al Founder di partire da **Telegram-first** (5 min di credenziali, 30 min di codice) — permette di sbloccare 1/3 dello Sprint mentre lui completa la app Meta.
+**⚠️ OBBLIGO — Prima di scrivere una riga di codice RAG**: chiama `integration_playbook_expert_v2` con query mirata su embeddings + vector search + RAG pattern con Emergent LLM Key.
 
-**File probabilmente coinvolti** (verifica prima di modificare):
-- `/app/backend/apps/immoweb/publishing.py` (integra come nuovo dialect / integration_type)
-- `/app/backend/apps/immoweb/social_publisher.py` (NEW)
-- `/app/frontend/src/apps/immoweb/pages/PublishingPage.jsx` (nuova sezione "Social channels")
-- i18n IT/EN/ES
+### 🔴 Blocker residuo M2.6c (non blocca Sprint 2)
 
-**⚠️ OBBLIGO — Prima di scrivere una riga di codice social**: chiama `integration_playbook_expert_v2` con query "Facebook Graph API v20 pubblicazione posts + Instagram Business Publishing + Telegram Bot API sendPhoto" per ottenere la playbook aggiornata.
+Il canale Instagram in M2.6c è pronto ma richiede che il Founder colleghi l'IG Business Account alla sua Facebook Page "Omnia real estate lab" (ID `1275173392335417`) dal Meta Business Manager. Fino ad allora, `POST /channels/{id}/validate` su IG restituirà errore Meta. Zero impatto su FB Page e Telegram, zero impatto su Sprint 2.
 
-### 🟢 Alternativa senza blocker: **Sprint 2 · M5.S2 HAL Knowledge**
-
-Se il Founder non ha ancora le credenziali Meta pronte, si può saltare temporaneamente M2.6c e partire su Sprint 2:
-- RAG (Retrieval Augmented Generation) su corpus iniziale `/app/memory/PRD.md` + `ROADMAP.md` + `DECISIONS.md`
-- HAL assistente AI che risponde a "cosa sa OMNIA di X" con citazioni tracciabili
-- Emergent LLM key già disponibile (Gemini/Claude)
-- Zero credenziali esterne richieste
-
-**In questo caso**: chiedi conferma esplicita al Founder che è OK saltare M2.6c temporaneamente. Non decidere da solo.
+Telegram: canale progettato ma configurabile solo quando il Founder fornisce Bot Token da @BotFather + Chat ID. UI self-service pronta a riceverli.
 
 
 ---

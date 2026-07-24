@@ -1016,3 +1016,32 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Test coverage**: 13/13 pytest (`test_m2s6d_portal_wizard.py`). Regressione totale: **164/164**.
 - **Stato**: ✅ APPLICATA (23-Feb-2026). Sprint 1 completato a **2/3** items (M2.5.5 + M2.6d). M2.6c pending Meta credentials.
 
+
+### D-058 — M2.6c Social Publisher scope (Facebook Page + Instagram Business + Telegram) (24-Feb-2026) 📣
+
+- **Contesto**: Sprint 1 · Item #2 — sbloccato dal Founder alle 13:20 del 24-Feb-2026 con la fornitura delle credenziali Meta (App ID `1748513343018905`, App Secret, Page Access Token non-scadente con scopes `pages_manage_posts` + `instagram_content_publish` + `instagram_basic` + `pages_read_engagement` + `pages_show_list`, granular target `1275173392335417` = Facebook Page "Omnia real estate lab"). L'IG Business account non risulta ancora collegato alla Page → validazione IG differita al momento del collegamento. Credenziali Telegram non ancora fornite → il canale è progettato ma resta configurabile self-service.
+- **Playbook seguita**: `integration_playbook_expert_v2` con Facebook Graph API v20 (`/{page_id}/photos` per post con foto, `/{page_id}/feed` per fallback testo/link) + Instagram Business (`/{ig_user_id}/media` container + `/{ig_user_id}/media_publish`) + Telegram Bot API (`sendPhoto` con caption, `sendMessage` fallback).
+- **Scope IN**:
+  1. Nuovo modulo `apps/immoweb/social_publisher.py` con adapter async httpx per FB Page, IG Business e Telegram (retry lasciato al chiamante, errori Meta classificati con codice+message).
+  2. Nuove collezioni MongoDB: `social_channels` (tenant, cifratura AES-256-GCM via `shared.utils.crypto.encrypt_dict`) e `social_posts` (audit log per-post con external_id/error).
+  3. Router `/api/app/publishing/social/*`: `GET /catalog`, `GET|POST /channels`, `PATCH|DELETE /channels/{id}`, `POST /channels/{id}/validate` (chiama `/debug_token` / `/me` / IG `/{id}` / Telegram `getMe`), `POST /publish` (per property_id o payload esplicito), `GET /posts` (con filtro canale).
+  4. Frontend `/it/app/publishing/social` — `SocialPublisherPage.jsx` con 3 sezioni (canali configurati, catalog da aggiungere, storico post) + modale credenziali + bottone "Testa" per validazione live.
+  5. CTA "Canali social" nella header di `PublishingPage` accanto a "+ Aggiungi portale personalizzato" (D-057).
+  6. Route protetta in `App.js` per `agency_admin`, `super_admin`, `branch_admin`, `group_admin`.
+  7. Caption builder default in italiano (titolo · 📍 città · 💶 prezzo · 📐 mq/locali · descrizione), truncation safe per FB (4900), IG (2100), TG (1024).
+- **Scope OUT** (backlog):
+  - Publish scheduling / batch giornaliero → per ora on-demand.
+  - Refresh token flow lato UI (il token Founder è non-scadente; refresh Page↔User token è manuale).
+  - Auto-cropping IG 4:5 / 1:1 / 1.91:1 lato server → responsabilità del listing (foto già in ratio compatibile).
+  - Multi-account per canale (una sola Page/IG/Chat per agenzia in v1).
+  - Metriche engagement (likes, reach) tramite Insights API → post-Sprint 4.
+- **Coerenza D-041** (Doppio Binario): la feature è **Track A + Track B parziale** — UI dentro OMNIA (A), API `/publish` chiamabile con Bearer API key (B, riuso auth API Gateway). Widget embed non applicabile (pubblicare social è azione autenticata dell'agenzia, non consumabile da web-agency terzi).
+- **Sicurezza**:
+  - Credenziali sempre cifrate a riposo, `credentials_encrypted` filtrato dal response payload.
+  - Tenant isolation su ogni query (`agency_id` obbligatorio).
+  - Nessun log del token in chiaro nei logger (ma va comunque monitorato).
+  - `validate` scrive `status=error` + `last_error` sul canale se il token è invalido → UI mostra badge rosso.
+- **Test coverage**: 16/16 pytest nuovi (`test_m2s6c_social_publisher.py`). Coprono catalog, CRUD, tenant isolation, missing/invalid creds, error-path publish (`channel_not_configured`, 404 su property inesistente), audit trail. Chiamate reali a Meta/Telegram testate manualmente dal Founder in produzione con la sua Page.
+- **Regressione totale**: **180/180 pytest verdi** (164 pre + 16 nuovi, zero regressioni).
+- **Sprint 1 chiuso**: ✅ 3/3 items completati (M2.5.5 + M2.6c + M2.6d). Prossimo → Sprint 2 M5.S2 HAL Knowledge.
+- **Stato**: ✅ APPLICATA (24-Feb-2026).

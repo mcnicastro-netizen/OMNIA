@@ -46,6 +46,7 @@ import ApiKeysPage from "@/apps/immoweb/pages/ApiKeysPage";
 import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
 import PublishingPage from "@/apps/immoweb/pages/PublishingPage";
 import PortalWizardPage from "@/apps/immoweb/pages/PortalWizardPage";
+import SocialPublisherPage from "@/apps/immoweb/pages/SocialPublisherPage";
 import BrandLabPage from "@/apps/immoweb/pages/BrandLabPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
@@ -190,6 +191,15 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
                         <PortalWizardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* M2.6c — Social Publisher (FB Page, IG Business, Telegram) */}
+                  <Route
+                    path="app/publishing/social"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
+                        <SocialPublisherPage />
                       </ProtectedRoute>
                     }
                   />

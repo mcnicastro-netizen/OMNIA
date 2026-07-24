@@ -110,13 +110,22 @@ export default function PortalsPage() {
             <h1 className="text-3xl md:text-4xl tracking-tight" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
               {t("portals.title") || "Portali Immobiliari"}
             </h1>
-            <Link
-              to={`/${lang}/app/publishing/wizard`}
-              data-testid="add-custom-portal-btn"
-              className="px-4 py-2 text-xs uppercase tracking-widest bg-[#1F6B5C] text-white hover:bg-[#0B1E3F] transition"
-            >
-              {t("portal_wizard.add_custom_portal_cta")}
-            </Link>
+            <div className="flex gap-2 flex-wrap">
+              <Link
+                to={`/${lang}/app/publishing/social`}
+                data-testid="open-social-publisher-btn"
+                className="px-4 py-2 text-xs uppercase tracking-widest border border-[#1F6B5C] text-[#1F6B5C] hover:bg-[#1F6B5C] hover:text-white transition"
+              >
+                Canali social
+              </Link>
+              <Link
+                to={`/${lang}/app/publishing/wizard`}
+                data-testid="add-custom-portal-btn"
+                className="px-4 py-2 text-xs uppercase tracking-widest bg-[#1F6B5C] text-white hover:bg-[#0B1E3F] transition"
+              >
+                {t("portal_wizard.add_custom_portal_cta")}
+              </Link>
+            </div>
           </div>
           <p className="text-sm text-stone-600 mt-2 max-w-2xl">
             {t("portals.subtitle") ||
