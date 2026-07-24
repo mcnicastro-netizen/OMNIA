@@ -14,11 +14,11 @@ import requests
 
 BASE_URL = os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://vault-signup-flow.preview.emergentagent.com",
+    "https://headless-crm.preview.emergentagent.com",
 ).rstrip("/")
 ADMIN_EMAIL = "mcnicastro@gmail.com"
 ADMIN_PASSWORD = "Forzainter2026."
-ALLOWED_ORIGIN = "https://vault-signup-flow.preview.emergentagent.com"
+ALLOWED_ORIGIN = "https://headless-crm.preview.emergentagent.com"
 
 
 @pytest.fixture(scope="module")

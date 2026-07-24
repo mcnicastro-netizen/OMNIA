@@ -193,7 +193,7 @@ Prossima azione: **D-FUTURE-07 AI Smart Import Clienti** (P0 next session), poi 
      - 🅱️ "Crea sito con OMNIA" → galleria template (placeholder per ora)
 
 **Cosa è pronto da testare/caricare sul Founder PREVIEW**:
-- Preview URL: https://vault-signup-flow.preview.emergentagent.com/it/login
+- Preview URL: https://headless-crm.preview.emergentagent.com/it/login
 - Login: `mcnicastro@gmail.com` / `Forzainter2026.`
 - Flusso da testare: Login → Onboarding → Crea Agenzia → Properties → Nuovo Immobile (con foto JPEG drag&drop)
 - DB locale è stato **pulito** alla fine sessione → pronto per primo onboarding pulito
