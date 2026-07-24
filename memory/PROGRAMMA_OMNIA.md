@@ -1,28 +1,93 @@
 # 📘 PROGRAMMA OPERATIVO — Progetto OMNIA
 ## Dal MVP all'ecosistema completo · 6 Milestone · ~30 sessioni · 3-6 mesi
 
-**Versione**: 3.0
+**Versione**: 3.1
 **Data creazione**: Gennaio 2026
-**Ultimo aggiornamento**: 06 Luglio 2026 (pivot "Doppio Binario" D-041/D-042/D-043 — riformulazione completa delle priorità, ordine P0→P4 approvato dal Founder)
+**Ultimo aggiornamento**: 24 Febbraio 2026 (audit onesto M1→M5 vs realtà, chiusura Sprint 1 M2.5/M2.6 3/3)
 **Founder / Product Owner**: mcnicastro-netizen
 **Lead Developer**: E1 (Emergent Agent)
-**Stato**: M1 ✅ · M2 ✅ · M3 ✅ · M5.S1/S3/S4/S5 ✅ · **NEXT → P0 Documenti strategici + M2.5 Doppio Binario** · M5.S2-pre/M5.S2/M6/M4 in coda
+**Stato**: M1 ✅ · M2 ✅ · M2.5 ✅ (5/5) · M2.6 ✅ (4/4) · M3 ✅ (7/7 core, 2 backlog) · M5.S1/S3/S4.1/S5 ✅ · **NEXT → Sprint 2: M5.S2 HAL Knowledge (RAG)** · M6/M4 in coda post-M5 · Sprint 3 (M3 backlog + M5.S4.2-4) · Sprint 4 (perf hardening)
 
 ---
 
-## 🎯 ORDINE DI ESECUZIONE v3.0 (vincolante — approvato dal Founder 06 Lug 2026)
+## 🎯 ORDINE DI ESECUZIONE v3.1 (vincolante — audit 24-Feb-2026)
 
 ```
-P0 🔴  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2     (documenti strategici, NO codice)
-P1 🟠  M2.5   — White Label / Doppio Binario               (Multi-branch → API Gateway → Widget → Feed bidir. → Importer 2.0)
-P2 🟡  M5.S2-pre Manuale Operativo → M5.S2 HAL Knowledge   (riprende dopo M2.5)
-P3 🟢  M6     — Omnia Academy
-P4 🔵  M4     — MLS + Stripe + Crediti                     (sbloccato dalla costituzione società)
-POST   M5.S7/S8 — Modulistica, Firma elettronica, Visure   (post-società)
-🛑     Pre-launch commerciale                              (CONGELATO — D-035, riapre solo dopo M6)
+✅ DONE  M2.5.0 — GO_TO_MARKET.md + PRICING_OMNIA.md v2                (13-Lug-2026)
+✅ DONE  M2.5.1 — Multi-branch / Franchising Layer                     (13-Lug-2026)
+✅ DONE  M2.5.2 — API Gateway + API Keys Track B                       (13-Lug-2026)
+✅ DONE  M2.5.3 — Widget Embeddabili Brandizzati                       (14-Lug-2026)
+✅ DONE  M2.5.4a — Universal XML Importer                              (15-Lug-2026, D-050)
+✅ DONE  M2.5.4b — Domain Ownership Checker                            (05-Feb-2026, D-054)
+✅ DONE  M2.5.4c — Legal Templates Pack (4 PDF)                        (23-Feb-2026, D-055)
+✅ DONE  M2.5.5 — Domain Vault                                          (23-Feb-2026, D-056)
+✅ DONE  M2.6a — Publishing Center Foundation                          (Feb-2026, D-052)
+✅ DONE  M2.6b — Sync Engine + Compliance Validator                    (05-Feb-2026, D-053)
+✅ DONE  M2.6c — Social Publisher (FB Page + IG Business + Telegram)   (24-Feb-2026, D-058)
+✅ DONE  M2.6d — Universal Portal Wizard                                (23-Feb-2026, D-057)
+
+🟡 NEXT  Sprint 2 · M5.S2 HAL Knowledge (RAG su PRD/ROADMAP/DECISIONS + Manuale)
+         → prerequisito: completare M5.S2-pre Manuale Operativo (cap 1 fatto, 11 capitoli restanti)
+🟢 P2    Sprint 3 · M3 backlog (ricerca avanzata + privacy audit 4 livelli) + M5.S4.2/S4.3/S4.4
+🔵 P3    Sprint 4 · Perf hardening (async geocoding, list projection) + Deploy readiness
+🟠 P4    M6 Omnia Academy (post-Sprint 4, D-035)
+🔴 P5    M4 MLS + Stripe + Crediti (post-società)
+⏳ POST  M5.S7/S8 — Modulistica, Firma elettronica, Visure (post-società)
+🛑        Pre-launch commerciale (CONGELATO — D-035, riapre dopo M6)
 ```
 
-**Razionale dell'ordine**: i documenti P0 (unit economics Track A/B, cap free tier, logica crediti API group/branch) determinano lo schema dati di M2.5. M2.5 è prerequisito tecnico di M4 (tier Enterprise/franchising) e va prima del Manuale perché ogni capitolo dovrà documentare anche le modalità di consumo Track B (D-041). M6 prima di M4 come da D-035 ("nessun pre-launch senza Academy").
+**Razionale ordine v3.1 (post-audit 24-Feb-2026)**: Sprint 1 chiuso 3/3 al 100% (M2.5.5 + M2.6c + M2.6d). Il pilastro Publishing Center + Doppio Binario Track B è completo. Prossimo focus: Sprint 2 HAL Knowledge — mission critical perché diventa il "how-to" della piattaforma e sblocca l'onboarding self-service delle agenzie strutturate.
+
+---
+
+## 🔥 Cambiamenti strategici v3.1 (rispetto a v3.0) — AUDIT M1→M5 (24-Feb-2026)
+
+Sessione 24 Febbraio: chiuso Sprint 1 M2.5/M2.6 al 3/3 (M2.5.5 Domain Vault + M2.6c Social Publisher + M2.6d Universal Portal Wizard). Fatto audit onesto del programma vs realtà del codice per allineare la roadmap allo stato effettivo.
+
+### 📊 Tabella riassuntiva stato (24-Feb-2026)
+
+| Milestone | Status | DoD coverage | Test coverage | Note |
+|---|:-:|:-:|:-:|---|
+| **M1 Foundation** | ✅ | 4/4 (100%) | Auth JWT + multi-tenant testati | Deploy preview stabile |
+| **M2 ImmoWeb MVP** | ✅ | 8/8 (100%) | 30+ pytest core + stress 5 agenti | Custom domain funzionante |
+| **M2.5 White Label / Doppio Binario** | ✅ | 8/8 (100%) | 132 pytest cumulativi | Multi-branch, API Gateway, Widget, Universal Importer, Domain Ownership Checker, Legal Kit, Domain Vault |
+| **M2.6 Publishing Center** | ✅ | 4/4 (100%) | 42 pytest cumulativi (16 M2.6a + 13 sync/compliance + 16 social + 13 wizard) | Feed multi-portale, sync scheduler, social auto-post, custom portal wizard |
+| **M3 ImmobilCloud B2C** | ✅ | 7/9 (78%) | 60+ pytest (public, map, contact, private listings, valuator 50 pytest, saved searches) | ⚠️ Backlog: M3.S8 ricerca avanzata multi-zona/disegno mappa, M3.S9 privacy audit 4 livelli |
+| **M5.S1 AL for Agents** | ✅ | 100% | 27 pytest (8 sync + 6 stream + 13 improve) | Streaming SSE + inline "Migliora con AL" |
+| **M5.S2-pre Manuale Operativo** | 🟡 | 1/12 capitoli | — | Solo `01-introduzione-primo-accesso.md`; 11 capitoli residui prerequisiti di M5.S2 |
+| **M5.S2 HAL Knowledge** | 🔴 | 0% | — | **Prossimo Sprint 2** (RAG su PRD/ROADMAP/DECISIONS + capitoli manuale disponibili) |
+| **M5.S3 AL Legal** | ✅ | 100% | 16 pytest | Tavily + 5 sub-agenti + anti-hallucination + PDF upload |
+| **M5.S4.1 Virtual Staging base** | ✅ | 100% | 5 pytest live | Pipeline 3-stage SAM 2 + Flux + Real-ESRGAN |
+| **M5.S4.2 Reverse Staging + 4 varianti + prompt CRM-aware** | 🔴 | 0% | — | Sprint 3 |
+| **M5.S4.3 Micro-tour video 5s** | 🔴 | 0% | — | Sprint 3 |
+| **M5.S4.4 A/B testing portale** | 🔴 | 0% | — | Sprint 3 |
+| **M5.S5 Comparatore Mutui** | ✅ | 100% | 12 pytest | Motore in-house + 14 offerte curate + 3 superfici (B2C/CRM/inline listing) |
+| **M5.S6 APE** | ❌ | Rimosso (D-039) | — | Solo binario partner esterno (D-038, ⏳ risposta APEFACILE/EnUp) |
+| **M5.S7 Modulistica AI** | 🛑 | — | — | Post-società |
+| **M5.S8 Firma elettronica + Visure** | 🛑 | — | — | Post-società |
+| **M6 Omnia Academy** | 🛑 | 0% | — | Prossimo grande blocco dopo Sprint 4 |
+| **M4 MLS + Stripe + Crediti** | 🛑 | 0% | — | Post-società, post-M6 (D-035) |
+
+**Test suite totale**: **180/180 pytest verdi** (backend). Frontend E2E validato da testing_agent_v3_fork su tutte le feature UI critiche.
+
+### 🎯 Cosa cambia in v3.1
+
+| Cosa cambia | v3.0 (Lug-2026) | v3.1 (Feb-2026 post-audit) |
+|---|---|---|
+| **M2.5 Doppio Binario** | 5 item pianificati, 4 fatti (mancava M2.5.4b/c e M2.5.5) | **8/8 completi** (M2.5.1→M2.5.5 tutti chiusi) |
+| **M2.6 Publishing Center** | Nuova sotto-milestone (M2.6a→d) | **4/4 completi** (Foundation + Sync + Social + Wizard) |
+| **Sprint model** | Ordine P0→P4 milestone-based | **Sprint 1/2/3/4** granulari, ognuno con DoD + regressione totale |
+| **Prossima priorità** | M2.5 White Label | **Sprint 2 · M5.S2 HAL Knowledge** (M2.5 chiuso, blocca solo il Manuale prerequisito) |
+| **Perf hardening** | Menzionato in backlog | **Sprint 4 dedicato** (async geocoding <500ms, list projection p95 <200ms) |
+| **Sprint 3 residui** | Mescolati in M3/M5 | Estratti in Sprint 3 dedicato: M3.S8 ricerca avanzata + M3.S9 privacy audit + M5.S4.2/S4.3/S4.4 |
+
+### 🧭 Punti di attenzione emersi dall'audit
+
+1. **Manuale Operativo bloccante**: M5.S2 (HAL Knowledge) usa il manuale come corpus RAG primario. Serve completare almeno i capitoli chiave (Immobili, Clienti, Publishing, Portali, Virtual Staging, HAL Legal, Valuator) prima di lanciare S2 in produzione. Alternativa provvisoria (approvata): usare PRD.md + ROADMAP.md + DECISIONS.md come corpus di **cold start** e arricchire progressivamente con i capitoli man mano che vengono scritti.
+2. **Sprint 3 M3 backlog** (ricerca avanzata + privacy 4 livelli): esplicitato come tale nella `DoD M3`, non ancora consegnato — resta P2 dopo Sprint 2.
+3. **APE post-partnership** (D-038): rimane in attesa risposta APEFACILE + EnUp; non blocca sviluppo — quando arriva la risposta, integrazione via link-out (nessun calcolo lato OMNIA, D-039).
+4. **Meta Instagram Business Account non collegato** alla Facebook Page "Omnia real estate lab": M2.6c IG è pronto ma serve un click in Meta Business Manager dal Founder per abilitarlo end-to-end.
+5. **Consumo crediti Emergent LLM Key**: monitorare in Sprint 2 (embeddings + RAG). Se il budget si avvicina alla soglia, valutare cache aggressiva.
 
 ---
 
@@ -325,8 +390,8 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🔗 MILESTONE 2.5 — WHITE LABEL / DOPPIO BINARIO (D-041) 🟠 P1 — PROSSIMA MILESTONE
-**Durata stimata**: 6-7 sessioni (1 doc + 5-6 codice) · **Stato**: 🔴 P0 (M2.5.0) → 🟠 P1 (M2.5.1→5)
+# 🔗 MILESTONE 2.5 — WHITE LABEL / DOPPIO BINARIO (D-041) ✅ DONE 100% (5/5)
+**Durata effettiva**: Lug-2026 → Feb-2026 · **Sessioni**: 7 · **Stato**: ✅ tutti gli item chiusi (M2.5.0→M2.5.5). Rollup in M2.6 anch'essa 100%.
 
 > **Cornice architetturale (D-041)**: da qui in avanti ogni feature deve essere consumabile in **3 modalità**: (a) UI diretta OMNIA, (b) API+crediti, (c) widget embeddabile brandizzato. M2.5 costruisce le fondazioni per la modalità (b) e (c) + il layer multi-filiale che sblocca il target franchising.
 >
@@ -365,38 +430,42 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 - Lead capture on-widget → forward al CRM cliente via webhook
 - Dashboard analytics widget (impression, engagement, lead generati)
 
-### M2.5.4 — 🔒 Domain Sovereignty Kit (D-051, riformulato 15-Lug-2026)
+### M2.5.4 — 🔒 Domain Sovereignty Kit (D-051, riformulato 15-Lug-2026) ✅ **DONE**
 > Nato dalla scoperta "Domain Lock-in" nel settore gestionali immobiliari italiani. Strategia **Extraction-first**: aiuta prima chi è già in trappola, poi previeni per i nuovi. Regola: **zero brand mentions** in materiale pubblico.
-- **M2.5.4a ✅ DONE (15-Lug)** — Universal XML Importer: parser schema-agnostic per feed di qualsiasi gestionale italiano, preview→commit two-phase, UI `/it/app/import`
-- **M2.5.4b** — Domain Ownership Checker: landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture
-- **M2.5.4c** — Legal Templates Pack: 4 PDF con placeholder `[FORNITORE]` (PEC transfer dominio · GDPR art. 20 export dati · disdetta contratto · ricorso CNR-IIT registrazione fiduciaria)
+- **M2.5.4a ✅ DONE (15-Lug-2026, D-050)** — Universal XML Importer: parser schema-agnostic per feed di qualsiasi gestionale italiano, preview→commit two-phase, UI `/it/app/import`
+- **M2.5.4b ✅ DONE (05-Feb-2026, D-054)** — Domain Ownership Checker: landing pubblica `/it/verifica-dominio` con query RDAP live + lead capture + IP rate-limit
+- **M2.5.4c ✅ DONE (23-Feb-2026, D-055)** — Legal Templates Pack: 4 PDF con placeholder `[FORNITORE]` (PEC transfer dominio · GDPR art. 20 export dati · disdetta contratto · ricorso CNR-IIT registrazione fiduciaria)
 
-### M2.5.5 — 🛡️ Domain Vault (Prevention layer per nuovi OMNIA)
-- Onboarding OMNIA che NON registra mai il dominio a proprio nome
-- 3 opzioni al signup: (a) domain già mio verifica WHOIS, (b) guida a registrarlo su Aruba/GoDaddy in autonomia, (c) attiva Domain Sovereignty Kit se dominio del vecchio fornitore
+### M2.5.5 — 🛡️ Domain Vault (Prevention layer per nuovi OMNIA) ✅ **DONE (23-Feb-2026, D-056)**
+- ✅ Onboarding OMNIA con badge emerald 🛡️ "Il tuo dominio resta tuo" nel signup (visibile solo per ruoli agenzia)
+- ✅ Campo opzionale dominio esistente con link a `/verifica-dominio` (integrazione con M2.5.4b)
+- ✅ Checkbox obbligatoria "Ho letto e accetto la Domain Sovereignty Policy" con blocco submit
+- ✅ Pagina pubblica `/it/domain-sovereignty-policy` (Mediterranean Future 2035) con 6 sezioni contrattuali
+- ✅ Audit trail append-only `domain_vault_events` (agency_id, user_id, confirmed, existing_domain, ts)
+- ✅ Endpoint `/api/app/agencies/me/domain-sovereignty` (GET + POST idempotent) + 11/11 pytest
 - Slogan pubblico: *"OMNIA non tocca il tuo dominio. È tuo. Lo era, lo resta."*
 
-### M2.6 — 📡 Publishing Center (Multi-portal Outbound, NUOVO 15-Lug-2026)
+### M2.6 — 📡 Publishing Center (Multi-portal Outbound, NUOVO 15-Lug-2026) ✅ **DONE 4/4**
 > Match funzionale con l'area "Portali" dei gestionali legacy: OMNIA deve pubblicare gli annunci su tutti i portali gratuiti/paganti italiani con setup one-click e sync automatica. Senza questo layer OMNIA non è sostituibile all'esistente.
-- **M2.6a — Foundation** (P0, ~5h): modelli `PortalCatalog` (catalogo curato) + `AgencyPortalConnection` (join agenzia-portale con credenziali crittografate AES) + feed generator multi-dialetto (`osf_federata`, `generic_rss`, `facebook_catalog`, `google_merchant`) + UI dashboard `/it/app/portali` a 3 stati (attivi/disponibili/da-aggiornare)
-- **M2.6b — Sync engine + Compliance** (P1, ~4h): APScheduler ricorrente giornaliero + trigger manuale, `PortalSyncLog` per audit, compliance validator (classe energetica L. Boschi obbligatoria, min-foto, prezzo) hard/soft
-- **M2.6c — Social Publisher** (P2, ~3h): Facebook Pages + Instagram Business (Graph API) + Telegram broadcast + scheduler settimanale con template auto-generati (immagine + testo + prezzo)
-- **M2.6d — Universal Portal Wizard self-service** (P3, ~1h): agenzia aggiunge portali non nel catalogo curato con setup guidato
-- **Coverage MVP Fase 1**: 5-8 portali gratis top (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business Profile, Attico, Case24) — copre ~60% traffico lead gratuito italiano
-- **3 decisioni pending** prima di M2.6a: (1) sicurezza credenziali AES/vault/token-only, (2) compliance hard-vs-soft, (3) 5-8 portali priorità Fase 1
+- **M2.6a ✅ DONE (Feb-2026, D-052)** — Foundation: modelli `PortalCatalog` (8 portali di sistema) + `AgencyPortalConnection` con credenziali AES-256-GCM + feed generator multi-dialetto (`osf_federata`, `generic_rss`) + UI dashboard `/it/app/publishing` a tab attivi/disponibili
+- **M2.6b ✅ DONE (05-Feb-2026, D-053)** — Sync engine + Compliance: APScheduler daily job 06:00 UTC + trigger manuale, `PortalSyncLog` audit, compliance validator HARD (classe energetica L. Boschi obbligatoria, min-foto ≥3, prezzo, superficie, indirizzo) + dashboard compliance per-portale
+- **M2.6c ✅ DONE (24-Feb-2026, D-058)** — Social Publisher: Facebook Page + Instagram Business + Telegram broadcast via API ufficiali (Graph v20 + Bot API), credenziali cifrate, audit trail `social_posts`, caption builder italiano automatico, UI `/it/app/publishing/social` + 16/16 pytest
+- **M2.6d ✅ DONE (23-Feb-2026, D-057)** — Universal Portal Wizard self-service: agenzia aggiunge portali non nel catalogo curato con setup guidato 4-step + tenant isolation via slug namespacing + 13/13 pytest
+- **Coverage MVP Fase 1**: 8 portali di sistema (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business Profile, Attico, Case24) + self-service illimitato via Wizard + 3 canali social — copre >70% traffico lead gratuito italiano
 
-### ✅ Definition of Done M2.5 + M2.6
-- [✅] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0) — 13-Lug
-- [✅] Multi-branch operativo (M2.5.1) — 13-Lug
-- [✅] API Gateway con 5+ endpoint Track B live (M2.5.2) — 13-Lug
-- [✅] 2+ widget embeddabili in produzione (M2.5.3) — 14-Lug
-- [✅] Universal XML Importer (M2.5.4a) — 15-Lug
-- [ ] Domain Ownership Checker + Legal Templates (M2.5.4b/c) — bloccato su input offline
-- [ ] Domain Vault onboarding (M2.5.5)
-- [ ] Publishing Center — Foundation (M2.6a)
-- [ ] Publishing Center — Sync engine + Compliance (M2.6b)
-- [ ] Publishing Center — Social Publisher (M2.6c)
-- [ ] Publishing Center — Universal Wizard (M2.6d)
+### ✅ Definition of Done M2.5 + M2.6 (chiusa 100% al 24-Feb-2026)
+- [x] GO_TO_MARKET.md + PRICING_OMNIA.md v2 approvati dal Founder (M2.5.0) — 13-Lug-2026
+- [x] Multi-branch operativo (M2.5.1) — 13-Lug-2026
+- [x] API Gateway con 5+ endpoint Track B live (M2.5.2) — 13-Lug-2026
+- [x] 2+ widget embeddabili in produzione (M2.5.3) — 14-Lug-2026
+- [x] Universal XML Importer (M2.5.4a) — 15-Lug-2026 (D-050)
+- [x] Domain Ownership Checker (M2.5.4b) — 05-Feb-2026 (D-054)
+- [x] Legal Templates Pack 4 PDF (M2.5.4c) — 23-Feb-2026 (D-055)
+- [x] Domain Vault onboarding (M2.5.5) — 23-Feb-2026 (D-056)
+- [x] Publishing Center — Foundation (M2.6a) — Feb-2026 (D-052)
+- [x] Publishing Center — Sync engine + Compliance (M2.6b) — 05-Feb-2026 (D-053)
+- [x] Publishing Center — Social Publisher FB/IG/Telegram (M2.6c) — 24-Feb-2026 (D-058)
+- [x] Publishing Center — Universal Wizard (M2.6d) — 23-Feb-2026 (D-057)
 
 ---
 
@@ -545,8 +614,8 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 
 ---
 
-# 🤖 MILESTONE 5 — AI SUITE (Vantaggio competitivo) 🟢 CORE DONE
-**Durata**: 2-3 settimane · **Sessioni**: 8 · **Stato**: S1 ✅ · S3 ✅ · S4 ✅ · S5 ✅ · S6 ❌ rimosso (D-039) · **restano S2-pre + S2 (🟡 P2, dopo M2.5)** · S7/S8 post-società
+# 🤖 MILESTONE 5 — AI SUITE (Vantaggio competitivo) 🟢 CORE DONE (4/8) — Sprint 2/3 residui
+**Durata**: 2-3 settimane · **Sessioni**: 8 · **Stato**: S1 ✅ · S2-pre 🟡 1/12 · S2 🔴 (Sprint 2 NEXT) · S3 ✅ · S4.1 ✅ · S4.2/S4.3/S4.4 🔴 (Sprint 3) · S5 ✅ · S6 ❌ rimosso (D-039) · S7/S8 post-società
 
 > **Decisione architetturale chiave (D-028)**: Il chatbot "Al" del santo graal è stato **split in 3 chatbot specializzati sequenziali** invece di un unico tuttofare. Stack: Gemini 3 Flash via Emergent LLM Key, web-search API gratuita in fase lancio, anti-hallucination layer, audit log 5 anni.
 
@@ -773,36 +842,28 @@ Dopo M6   → ecosistema completo OMNIA come da schema PDF
 
 ## 🎯 PARTE VII — Prossimo passo IMMEDIATO
 
-**Stato al 06 Luglio 2026**: M1 ✅ · M2 ✅ · M3 ✅ · M5.S1/S3/S4/S5 ✅ · pivot Doppio Binario formalizzato (D-041/042/043) · priorità v3.0 approvate dal Founder.
+**Stato al 24 Febbraio 2026**: M1 ✅ · M2 ✅ · M2.5 ✅ (5/5) · M2.6 ✅ (4/4) · M3 ✅ (7/9 DoD, 2 backlog Sprint 3) · M5.S1/S3/S4.1/S5 ✅ · Sprint 1 Publishing Center + Doppio Binario CHIUSO 3/3 · 180/180 pytest verdi.
 
 Quando rientri prossima sessione:
 
-1. 🔴 **P0 — M2.5.0 Documenti strategici**: scrivere `GO_TO_MARKET.md` + `PRICING_OMNIA.md` v2 (unit economics Track A/B, cap free tier, logica crediti API group/branch). 1 sessione, NO codice. Revisione Founder obbligatoria.
-2. 🟠 **P1 — M2.5.1 Multi-branch/Franchising Layer**: primo sprint di codice (agency_group + branch + nuovi ruoli + plan_type). Parte solo dopo approvazione dei documenti P0.
-3. 🟠 **P1 — M2.5.2→5**: API Gateway → Widget → Feed bidirezionale → Universal Smart Importer 2.0.
-4. 🟡 **P2 — Manuale Operativo** (riprende dal capitolo 2) → **HAL Knowledge**.
+1. 🟡 **P1 — Sprint 2 · M5.S2 HAL Knowledge (RAG)**: 3° bottone fisico HAL (D-040) su corpus PRD + ROADMAP + DECISIONS (cold start) + capitoli manuale disponibili. Emergent LLM Key già in `.env`, zero credenziali esterne. Prerequisito: chiamare `integration_playbook_expert_v2` prima di scrivere codice RAG.
+2. 🟡 **P1b — M5.S2-pre Manuale Operativo**: completare i restanti 11 capitoli (Immobili, Clienti, Match, Publishing, Portali, Sito web, Virtual Staging, HAL Legal, Fascicolo, Valuator, Impostazioni). Può procedere in parallelo con S2 (arricchisce il corpus RAG progressivamente).
+3. 🟢 **P2 — Sprint 3 · Chiusura backlog M3 + M5.S4.2/3/4**: ricerca avanzata multi-zona/disegno mappa (M3.S8), privacy audit 4 livelli (M3.S9), Reverse Staging + 4 varianti + prompt CRM-aware (M5.S4.2), micro-tour video 5s (M5.S4.3), A/B testing portale (M5.S4.4).
+4. 🔵 **P3 — Sprint 4 · Perf hardening + Deploy readiness**: async geocoding via Motor background task (POST /properties da 3.6s → <500ms), projection esplicito su list properties (p95 da 2.6s → <200ms), stress test finale, deployment_agent pre-produzione.
+5. 🟠 **P4 — M6 Omnia Academy**: LMS base + Quiz + Chatbot tutor + Marketplace agenti (post-Sprint 4).
+6. 🔴 **P5 — M4 MLS + Stripe** (post-società, D-035).
 
 Parole magiche per ripartire:
-- *"Partiamo con i documenti"* → M2.5.0 (GTM + Pricing v2)
-- *"Partiamo con Multi-branch"* → M2.5.1
-- *"Riprendiamo il manuale"* → M5.S2-pre (capitolo 2)
-- *"Dove siamo"* → riassunto stato
+- *"Sprint 2"* / *"Partiamo con HAL Knowledge"* → M5.S2 RAG
+- *"Riprendiamo il manuale"* → M5.S2-pre (capitolo 2 e successivi)
+- *"Sprint 3"* → M3 backlog + M5.S4.2/3/4
+- *"Sprint 4"* → Perf hardening
+- *"Dove siamo"* → riassunto stato completo
+- *"Audit"* → riassunto tabella stato M1→M5 in Cambiamenti strategici v3.1
 
 ---
 
 *Documento approvato v2.1: 18 Giugno 2026*
 *Documento approvato v3.0: 06 Luglio 2026 (ordine P0→P4 confermato dal Founder — pivot Doppio Binario)*
-*Prossima revisione: alla chiusura di M2.5*
-*M2.S6 — Custom Domain + DNS** (P1): chiusura white-label. Richiede decisione provider DNS prima di partire.
-3. 🟡 **M3.S1 — ImmobilCloud B2C** (P1, dopo M2 completo): portale pubblico, home + search box.
-
-Parole magiche per ripartire:
-- *"Partiamo con AI Smart Import Clienti"* → D-FUTURE-07
-- *"Partiamo con Custom Domain"* → M2.S6
-- *"Partiamo con M3"* → ImmobilCloud B2C
-- *"Dove siamo"* → riassunto stato
-
----
-
-*Documento approvato v2.1: 18 Giugno 2026*
-*Prossima revisione: alla fine di M2.S6 (completamento Milestone 2)*
+*Documento aggiornato v3.1: 24 Febbraio 2026 (audit M1→M5 vs realtà, chiusura Sprint 1 M2.5/M2.6 3/3)*
+*Prossima revisione: alla chiusura di Sprint 2 (M5.S2 HAL Knowledge)*
