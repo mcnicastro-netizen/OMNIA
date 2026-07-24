@@ -1,9 +1,17 @@
 # 🚨 HANDOFF AL NUOVO AGENTE — LEGGI PRIMA DI FARE QUALSIASI COSA
 
-**Fork da**: sessione E1 chiusa il 23-Feb-2026
-**Motivo fork**: consumo anomalo crediti (segnalato da Emmy/Emergent Platform)
+**Fork da**: sessione E1 chiusa il **24-Feb-2026**
+**Motivo fork**: consumo crediti — Founder ha esplicitamente richiesto handoff pulito
 **Founder**: Marco Nicastro (mcnicastro-netizen · mcnicastro@gmail.com)
 **Lingua di risposta OBBLIGATORIA**: 🇮🇹 **ITALIANO**. Il Founder è italiano madrelingua.
+
+---
+
+## ⛔ REGOLA D'ORO — RIPETUTA DUE VOLTE STASERA DAL FOUNDER
+
+**"NIENTE PIÙ DEVIAZIONI. SI COMPLETA IL PROGRAMMA."**
+
+Non proporre nuove feature "nice-to-have", non suggerire enhancement fuori Sprint corrente, non deviare mai da `PIANO_ESECUZIONE.md`. Ogni idea che emerge va parcheggiata in `ASPETTI_DA_APPROFONDIRE.md` e amen. Se hai dubbi, RILEGGI questa riga.
 
 ---
 
@@ -12,7 +20,7 @@
 ### 1️⃣ NON scrivere codice prima di aver letto QUESTI file
 ```
 1. /app/memory/PIANO_ESECUZIONE.md    ← ordine tassativo Sprint 1-4
-2. /app/memory/DECISIONS.md           ← D-035, D-041, D-042, D-043, D-051, D-053, D-054, D-055
+2. /app/memory/DECISIONS.md           ← D-035, D-041, D-042, D-043, D-051, D-053, D-054, D-055, D-056, D-057
 3. /app/memory/PRD.md                 ← cosa è stato fatto e quando
 4. /app/memory/ROADMAP.md             ← stato + backlog
 5. /app/memory/test_credentials.md    ← credenziali test (mcnicastro@gmail.com / Forzainter2026.)
@@ -29,22 +37,22 @@ sudo supervisorctl status
 ### 3️⃣ Esegui la regressione test PRIMA di toccare qualsiasi cosa
 ```bash
 cd /app/backend && export REACT_APP_BACKEND_URL=$(grep REACT_APP_BACKEND_URL /app/frontend/.env | cut -d'=' -f2)
-python -m pytest tests/test_m2s5_1_groups.py tests/test_m2s5_2_api_gateway.py tests/test_m2s5_3_widgets.py tests/test_m2s5_4a_xml_importer.py tests/test_m2s5_4b_domain_checker.py tests/test_m2s5_4c_legal_kit.py tests/test_m2s6a_publishing.py tests/test_m2s6b_sync_engine.py --tb=short -q
-# Atteso: 132/132 passed
+python -m pytest tests/test_m2s5_1_groups.py tests/test_m2s5_2_api_gateway.py tests/test_m2s5_3_widgets.py tests/test_m2s5_4a_xml_importer.py tests/test_m2s5_4b_domain_checker.py tests/test_m2s5_4c_legal_kit.py tests/test_m2s5_5_domain_vault.py tests/test_m2s6a_publishing.py tests/test_m2s6b_sync_engine.py tests/test_m2s6d_portal_wizard.py tests/test_immobilcloud_auth_register.py --tb=short -q
+# Atteso: 164/164 passed
 ```
-**Se non passa 132/132 → STOP, apri ticket al Founder. NON cominciare a "aggiustare" senza discutere.**
+**Se non passa 164/164 → STOP, apri ticket al Founder. NON cominciare a "aggiustare" senza discutere.**
 
 ### 4️⃣ Chiedi conferma al Founder via `ask_human` prima di partire
 Mostra al Founder:
-- "Ho letto il PIANO_ESECUZIONE, siamo su Sprint 1 item #1 = **M2.5.5 Domain Vault**"
-- "132/132 regressione passa" (o segnala eventuali falliti)
+- "Ho letto il PIANO_ESECUZIONE, siamo su **Sprint 1 item #2 = M2.6c Social Publisher** (bloccato) OPPURE possiamo saltare a Sprint 2 · M5.S2 HAL Knowledge senza blocker"
+- "164/164 regressione passa" (o segnala eventuali falliti)
 - "Confermi che parto da Domain Vault senza deviazioni?"
 
 ### 5️⃣ Solo dopo il "vai" del Founder inizia a scrivere codice
 
 ---
 
-## 🎯 STATO ATTUALE DEL PROGETTO (fotografia al 23-Feb-2026)
+## 🎯 STATO ATTUALE DEL PROGETTO (fotografia al 24-Feb-2026)
 
 ### ✅ COMPLETATO (non toccare, non riscrivere)
 
@@ -61,31 +69,47 @@ Mostra al Founder:
 - M2.5.4a Universal XML Importer ✅
 - M2.5.4b Domain Ownership Checker ✅ (landing `/it/verifica-dominio` + API v1 + widget)
 - M2.5.4c Legal Templates Pack ✅ (4 PDF: GDPR/PEC/disdetta/CNR-IIT)
+- **M2.5.5 Domain Vault ✅ NEW (23-Feb-2026, D-056)** — signup con garanzia contrattuale "il tuo dominio resta tuo" + policy pubblica `/it/domain-sovereignty-policy` + audit trail append-only `domain_vault_events` + 11/11 pytest
 - M2.6a Publishing Center Foundation ✅
 - M2.6b Sync Engine + Compliance ✅
+- **M2.6d Universal Portal Wizard ✅ NEW (23-Feb-2026, D-057)** — 4-step wizard self-service per portali custom (regionali/franchising/nicchia) + tenant isolation via slug namespacing `x-{agency8}-{slug}` + feed URL clipboard-copy + 13/13 pytest
+
+**Setup produzione (fuori codice — 24-Feb-2026)**
+- 📧 **Cloudflare Email Routing** attivato su `omniarealestateecosystem.it` — MX Aruba orfano rimosso, regola `info@ → mcnicastro@gmail.com` attiva, test end-to-end **delivered** confermato in inbox Gmail dal Founder
+- 📘 **Pagina Facebook OMNIA Real Estate Lab** in creazione — Founder ha ricevuto 3 varianti di descrizione (bio breve/media/lunga) rispettose di D-051 (no brand mentions)
 
 **Documenti strategici**
 - PROGRAMMA_OMNIA v3.0 (approvato Founder 06-Lug-2026)
 - GO_TO_MARKET.md
 - PRICING_OMNIA.md v2
 - BUSINESS_MODEL.md
+- PIANO_ESECUZIONE.md (23-Feb-2026 — ordine tassativo Sprint 1-4)
 
-**Test suite**: 132/132 pytest pass + stress test M2 concorrenza validato.
+**Test suite**: **164/164 pytest pass** (132 originali + 11 Domain Vault + 13 Portal Wizard + 8 immobilcloud auth) + stress test M2 concorrenza validato.
 
-### 🔴 NEXT — Sprint 1 (in questo ORDINE tassativo)
+### 🔴 NEXT — Sprint 1 stato + prossime priorità
 
-1. **M2.5.5 Domain Vault** — signup che garantisce "il tuo dominio resta tuo", nessuna registrazione a nome OMNIA (~1 giorno)
-2. **M2.6c Social Publisher** — auto-post FB Graph + Instagram Business + Telegram Bot (~2 giorni). ⚠️ **Prima di scrivere codice** chiedi al Founder App ID/Secret Meta Developer.
-3. **M2.6d Universal Portal Wizard** — self-service configurazione custom portali (~1 giorno)
+**Sprint 1 · 2/3 items completati**:
+1. ✅ M2.5.5 Domain Vault (fatto)
+2. ⏸️ **M2.6c Social Publisher** — BLOCCATO in attesa credenziali (vedi sotto)
+3. ✅ M2.6d Universal Portal Wizard (fatto)
+
+**Item bloccante**: **M2.6c Social Publisher** richiede al Founder:
+- 📗 Telegram Bot Token (5 min via @BotFather — canale meno onerose, parti da qui)
+- 📘 Meta Developer App ID + App Secret (20 min)
+- 📗 Chat ID Telegram + Facebook Page ID + Instagram Business ID
+
+**Alternativa senza blocker**: **Sprint 2 · M5.S2 HAL Knowledge** (RAG su PRD/ROADMAP/DECISIONS) — usa Emergent LLM key già disponibile, zero credenziali esterne.
 
 Dopo Sprint 1: Sprint 2 (M5.S2 HAL Knowledge) → Sprint 3 (M3 backlog + M5.S4) → Sprint 4 (Perf + deploy).
 
 ### 🛑 ESPLICITAMENTE FUORI SCOPE fino a Sprint 4 chiuso
 
-**Il Founder ha detto CHIARAMENTE 23-Feb: "ordine tassativo da rispettare, basta deviazioni"**. NON toccare/proporre:
+**Il Founder ha detto CHIARAMENTE più volte (23-Feb e 24-Feb): "niente più deviazioni, si completa il programma"**. NON toccare/proporre:
 
 - ❌ Video promo brand OMNIA (Sora 2, Kling, Pippit, altri) — memorizzato in `ASPETTI_DA_APPROFONDIRE.md`
 - ❌ Nuove landing marketing
+- ❌ Form contatti pubblico (idea suggerita dall'agente il 24-Feb, esplicitamente rifiutata dal Founder come deviazione)
 - ❌ Manuale Operativo cap. 3-20 (in coda per volere Founder)
 - ❌ M6 Omnia Academy (in coda per volere Founder)
 - ❌ M4 MLS + Stripe (post-società — richiede P.IVA, IBAN, contratto Stripe di OMNIA)
@@ -97,6 +121,11 @@ Dopo Sprint 1: Sprint 2 (M5.S2 HAL Knowledge) → Sprint 3 (M3 backlog + M5.S4) 
 - ❌ Brand Lab expansion (già consegnata, non toccare)
 - ❌ Nuovi widget non pianificati
 - ❌ Refactoring "cosmetici" non richiesti
+- ❌ Domain Vault fase 2 (firma digitale policy — memorizzato in D-056 come "post-Sprint 4")
+- ❌ Portal Wizard fase 2 (modalità push/API — memorizzato in D-057 come "post-Sprint 4")
+- ❌ Deploy Emergent (Founder l'ha dismesso a giugno per costi — riattivare solo al go-live post Sprint 4)
+- ❌ Pulizia DNS Cloudflare (7 A record orfani `mx.` + CNAME `app`/`cloud`/`_domainconnect` — non urgente, si fa quando il Founder ha voglia)
+
 
 ---
 
@@ -200,23 +229,43 @@ Se crei/modifichi utenti di test, aggiorna SUBITO `/app/memory/test_credentials.
 
 ## 🎯 PROSSIMA AZIONE CONCRETA
 
-**Item corrente**: **Sprint 1 · Item #1 · M2.5.5 Domain Vault**
+**Sprint 1 · Item #1 · M2.5.5 Domain Vault ✅ FATTO (23-Feb-2026)** — vedi D-056.
+**Sprint 1 · Item #3 · M2.6d Universal Portal Wizard ✅ FATTO (23-Feb-2026)** — vedi D-057.
 
-**Cosa fa Domain Vault**:
-Modifica il signup dell'agenzia (`/it/register` o equivalente) per aggiungere:
+### 🔴 Item corrente: **Sprint 1 · Item #2 · M2.6c Social Publisher (BLOCCATO)**
 
-1. **Badge visibile** in onboarding: "🛡️ Il tuo dominio resta tuo — OMNIA garantisce di non registrare mai domini web a proprio nome"
-2. **Checkbox informativa** nei T&C: "Confermo di aver letto la Domain Sovereignty Policy di OMNIA"
-3. **Nuovo campo opzionale** nel signup: "Hai già un dominio? Inseriscilo qui — te lo aiutiamo a collegare, senza mai trasferirlo a nome nostro" (con link a `/it/verifica-dominio`)
-4. **Endpoint backend** che salva questa preferenza sull'agenzia (`agency.domain_sovereignty_confirmed: true`)
-5. **Nuova pagina** `/it/domain-sovereignty-policy` con il testo della policy contrattuale
-6. **Test suite pytest** con 8-10 test
-7. **i18n IT/EN/ES** per tutti i copy
+**Cosa fa Social Publisher**:
+Pubblicazione automatica di ogni immobile OMNIA su 3 canali social (D-041 Doppio Binario: disponibile via UI + API + widget):
+
+1. **Facebook Pages** — post automatico su pagina agenzia via Facebook Graph API v20
+2. **Instagram Business** — post con immagine principale + caption via Instagram Graph API (richiede IG Business account collegato a FB Page)
+3. **Telegram** — post su canale/gruppo via Bot API (il più semplice, no review, gratis)
+
+**Bloccante — al primo messaggio del prossimo agente chiedi al Founder**:
+- 📗 **Telegram Bot Token** (5 min via @BotFather + Chat ID canale)
+- 📘 **Meta Developer App ID + App Secret** (Founder deve creare app su developers.facebook.com in modalità "Business")
+- 📘 **Facebook Page ID + Instagram Business ID** (dal pannello Meta Business)
+
+**Suggerimento operativo**: proponi al Founder di partire da **Telegram-first** (5 min di credenziali, 30 min di codice) — permette di sbloccare 1/3 dello Sprint mentre lui completa la app Meta.
 
 **File probabilmente coinvolti** (verifica prima di modificare):
-- `/app/backend/apps/immoweb/agency.py` o `signup.py`
-- `/app/frontend/src/apps/auth/RegisterPage.jsx` (nome esatto da verificare)
-- `/app/frontend/src/i18n/` (traduzioni)
+- `/app/backend/apps/immoweb/publishing.py` (integra come nuovo dialect / integration_type)
+- `/app/backend/apps/immoweb/social_publisher.py` (NEW)
+- `/app/frontend/src/apps/immoweb/pages/PublishingPage.jsx` (nuova sezione "Social channels")
+- i18n IT/EN/ES
+
+**⚠️ OBBLIGO — Prima di scrivere una riga di codice social**: chiama `integration_playbook_expert_v2` con query "Facebook Graph API v20 pubblicazione posts + Instagram Business Publishing + Telegram Bot API sendPhoto" per ottenere la playbook aggiornata.
+
+### 🟢 Alternativa senza blocker: **Sprint 2 · M5.S2 HAL Knowledge**
+
+Se il Founder non ha ancora le credenziali Meta pronte, si può saltare temporaneamente M2.6c e partire su Sprint 2:
+- RAG (Retrieval Augmented Generation) su corpus iniziale `/app/memory/PRD.md` + `ROADMAP.md` + `DECISIONS.md`
+- HAL assistente AI che risponde a "cosa sa OMNIA di X" con citazioni tracciabili
+- Emergent LLM key già disponibile (Gemini/Claude)
+- Zero credenziali esterne richieste
+
+**In questo caso**: chiedi conferma esplicita al Founder che è OK saltare M2.6c temporaneamente. Non decidere da solo.
+
 
 ---
 

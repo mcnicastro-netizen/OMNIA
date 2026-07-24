@@ -22,11 +22,13 @@
 ### 🔴 SPRINT 1 — Chiusura M2.5 al 100%
 **Obiettivo**: portare M2.5 White Label / Doppio Binario al 100% del programma originale.
 
-| # | Item | Effort | Bloccanti |
+| # | Item | Effort | Stato |
 |:-:|---|:-:|---|
-| 1 | **M2.5.5 Domain Vault** | ~1g | Nessuno |
-| 2 | **M2.6c Social Publisher** (FB Graph + Instagram Business + Telegram Bot APIs) | ~2g | Founder deve creare Meta Developer app + fornire App ID/Secret |
-| 3 | **M2.6d Universal Portal Wizard** (self-service custom portali) | ~1g | Nessuno |
+| 1 | **M2.5.5 Domain Vault** | ~1g | ✅ **DONE (23-Feb-2026)** — signup con garanzia contrattuale + policy pubblica + audit trail + 11/11 pytest. Vedi D-056. |
+| 2 | **M2.6c Social Publisher** (FB Graph + Instagram Business + Telegram Bot APIs) | ~2g | ⏸️ **BLOCCATO** — Founder deve fornire Meta Developer App ID/Secret + Telegram Bot Token |
+| 3 | **M2.6d Universal Portal Wizard** (self-service custom portali) | ~1g | ✅ **DONE (23-Feb-2026)** — 4-step wizard + tenant isolation + 13/13 pytest. Vedi D-057. |
+
+**Sprint 1 status: 2/3 items completati.** M2.6c pending solo per credenziali esterne.
 
 **Definition of Done Sprint 1**: M2.5.5 + M2.6c + M2.6d in produzione, testati con pytest e smoke E2E screenshot. Regressione totale 100% pass.
 
