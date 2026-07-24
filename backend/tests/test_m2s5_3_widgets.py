@@ -101,7 +101,9 @@ class TestAssets:
         assert "Comparatore Mutui" in r.text or "mortgages" in r.text.lower()
 
     def test_unknown_widget_404(self):
-        r = requests.get(f"{BASE_URL}/api/widgets/v1/staging.html")
+        # Sprint 1.5 recovery: staging + legal ora sono widget validi.
+        # Testiamo con un nome davvero sconosciuto.
+        r = requests.get(f"{BASE_URL}/api/widgets/v1/tiktok.html")
         assert r.status_code == 404
 
 
@@ -211,13 +213,14 @@ class TestWidgetLead:
         assert r.json()["detail"] == "email_or_phone_required"
 
     def test_lead_invalid_widget(self, widget_key):
+        # Sprint 1.5 recovery: pattern ora accetta valuator|mortgages|legal|staging.
         r = requests.post(
             f"{BASE_URL}/api/v1/widgets/lead",
             headers={
                 "Authorization": f"Bearer {widget_key['key']}",
                 "Referer": f"{ALLOWED_ORIGIN}/x",
             },
-            json={"widget": "staging", "email": "x@y.com", "consent": True},
+            json={"widget": "tiktok", "email": "x@y.com", "consent": True},
         )
         assert r.status_code == 422  # pydantic pattern validation
 

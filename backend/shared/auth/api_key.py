@@ -30,6 +30,8 @@ CREDIT_COSTS: Dict[str, int] = {
     "legal_ask": 3,         # HAL Legal one-shot question
     "staging_render": 15,   # virtual staging (async, reserved)
     "feed_properties": 0,   # read-only export, free
+    "feed_properties_ingest": 0,  # inbound feed from external CRM (D-041, free — value = adoption)
+    "leads_export": 0,      # lead export back to Track B CRM (D-041, free)
     "widget_lead": 0,       # widget lead capture — free (funds monetized separately)
     "domain_check": 1,      # RDAP domain ownership check (M2.5.4b, D-054)
     "legal_render": 2,      # PDF template render (M2.5.4c, D-055) — compute cost

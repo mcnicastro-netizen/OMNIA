@@ -9,7 +9,7 @@ Endpoints:
     GET /api/widgets/v1/{widget}.html     → the widget UI (iframe target)
 
 Widgets available in this sprint (D-049 approvazione 1b):
-    valuator, mortgages
+    valuator, mortgages, staging (M2.5.3 gap #3, D-058b), legal (M2.5.3 gap #3, D-058b)
 """
 import os
 from pathlib import Path
@@ -63,7 +63,7 @@ async def widget_page(widget: str, request: Request,
                       primary: Optional[str] = None,
                       lang: str = "it") -> HTMLResponse:
     """Serve a single-file widget HTML. Query params: key, primary color, lang."""
-    if widget not in {"valuator", "mortgages", "domain-check"}:
+    if widget not in {"valuator", "mortgages", "domain-check", "staging", "legal"}:
         raise HTTPException(status_code=404, detail="widget_not_found")
 
     path = ASSETS_DIR / f"{widget}.html"

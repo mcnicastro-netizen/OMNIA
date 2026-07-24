@@ -18,7 +18,7 @@
     console.error("[OMNIA] Missing or invalid data-key on <script> tag.");
     return;
   }
-  if (["valuator", "mortgages"].indexOf(widget) === -1) {
+  if (["valuator", "mortgages", "staging", "legal"].indexOf(widget) === -1) {
     console.error("[OMNIA] Unknown data-widget:", widget);
     return;
   }
