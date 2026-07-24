@@ -241,3 +241,46 @@ Delivery 100% digitale: file scaricabili (PNG/MP4/PDF email), pubblicazione dire
 ---
 
 <!-- Aggiungere qui nuovi aspetti da approfondire con progressivo A-004, A-005, ... -->
+
+---
+
+## A-004 — Landing `/it/agenzie` con demo widget live embeddati (24-Feb-2026)
+
+### Contesto
+Con la chiusura di Sprint 1.5 recovery (D-059) i 4 widget di M2.5.3 sono tutti live e serviti pubblicamente dal loader `/api/widgets/v1/loader.js`:
+- Valuator (UNI 10750)
+- Mortgages Compare
+- Virtual Staging demo
+- HAL Legal Q&A
+
+Oggi il pubblico esterno non li vede: sono strumento tecnico per web agency partner Track B. La landing `/it/agenzie` (target: gestionali italiani legacy da aggredire con il pivot Doppio Binario) è oggi puramente **brochure/testuale**.
+
+### Idea
+Trasformare la landing da "brochure che racconta" a **demo interattiva che dimostra**: 4 widget embeddati dentro la pagina stessa via lo snippet 1-line ufficiale (dogfooding). Il visitatore Trackk B non deve immaginare cosa può integrare — lo tocca sulla pagina di vendita.
+
+### Perché ha valore
+- **Prova live** = conversione superiore rispetto a screenshot statici (pattern Stripe / Cal.com / Linear).
+- **Dogfooding**: se il nostro widget non regge il carico sulla landing di vendita, la scopriamo prima del cliente.
+- **SEO**: pagina interattiva riduce bounce rate, aumenta dwell time — segnali positivi per search.
+- **Zero maintenance**: usa esattamente lo stesso loader.js dei partner, nessuna forkatura di codice.
+
+### Elementi tecnici
+- 4 sezioni della landing, ognuna con un widget embeddato via `<div data-widget="staging"><script src=".../loader.js" data-key="omk_demo_..."></script>`.
+- API key dedicata `omk_demo_*` con **rate-limit stretto** (5 req/min per IP) e credit balance dedicato + eventualmente allowed_origins = solo `omniarealestateecosystem.it`.
+- Copy affiancato ad ogni widget che descrive il caso d'uso.
+
+### Vincoli / rischi
+- **Zero brand mentions** dei competitor (vincolo assoluto Founder).
+- **Abusi**: la landing è pubblica → serve rate-limit robusto per prevenire quota-exhaustion via demo.
+- **AGCM / pubblicità immobiliare**: dimostrare Virtual Staging pubblicamente OK, ma la valuazione UNI 10750 sul widget demo deve avere disclaimer chiaro "valore orientativo" (già presente nel widget stesso).
+
+### Timing consigliato
+**Congelato fino a M6 chiuso (D-035)**. Nessun pre-launch commerciale prima dell'Academy. Riprendere dopo Sprint 4 (perf hardening) e prima del go-live commerciale.
+
+### Stato
+🟠 **DA APPROFONDIRE post-M6** — Idea generata dall'agente durante Sprint 1.5 recovery, memorizzata su richiesta del Founder ("memorizzalo e metti in coda al fine programma").
+
+### Trigger di ripresa
+- Chiusura M6 Omnia Academy (unlock pre-launch commerciale, D-035)
+- Rilascio pubblico di `/it/agenzie` come landing di conversione Track B
+- Sopravvivenza dei 4 widget a stress test 5 agenti paralleli (GAP #2 audit M2, Sprint 4)
