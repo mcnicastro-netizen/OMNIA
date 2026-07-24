@@ -1045,3 +1045,23 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Regressione totale**: **180/180 pytest verdi** (164 pre + 16 nuovi, zero regressioni).
 - **Sprint 1 chiuso**: ✅ 3/3 items completati (M2.5.5 + M2.6c + M2.6d). Prossimo → Sprint 2 M5.S2 HAL Knowledge.
 - **Stato**: ✅ APPLICATA (24-Feb-2026).
+
+### D-059 — Sprint 1.5 recovery: chiusura GAP #3 + #4 dall'audit M2 (24-Feb-2026) 🔧
+
+- **Contesto**: audit granulare M2 del 24-Feb ha rilevato 4 gap nascosti dietro milestone dichiarate ✅ DONE. Il Founder ha chiesto "una volta per tutte" di chiudere i 2 gap P1 (widget mancanti + feed bidirezionale INBOUND) prima di Sprint 2. Vedi `AUDIT_M2.md`.
+- **Scope IN**:
+  1. **GAP #3 — Widget M2.5.3 completati**: aggiunti `staging.html` (Virtual Staging demo con lead capture) e `legal.html` (HAL Legal Q&A pubblico con disclaimer L.247/2012 e CTA notaio sotto confidence 0.85). Loader.js aggiornato per accettare 4 widget: valuator + mortgages + staging + legal. Whitelist backend `widgets.py` aggiornata a 5 (i 4 + domain-check bonus). `WidgetLeadBody.widget` pattern esteso a `valuator|mortgages|legal|staging`.
+  2. **GAP #4 — Feed bidirezionale INBOUND (D-041 modalità 3)**:
+     - `POST /api/v1/feed/properties` — ingest bulk properties da CRM esterni con mode upsert/append, idempotent per `external_id`, `photo_urls` mappati a `photos[]`, max 500 items per call, credit cost 0 (free — value = adoption Track B).
+     - `GET /api/v1/leads/export?since=&limit=` — pull lead nel CRM Track B, tenant-scoped via `key.agency_id`, filtro ISO datetime `since`, credit cost 0.
+     - `CREDIT_COSTS` esteso con `feed_properties_ingest=0` + `leads_export=0` in `shared/auth/api_key.py`.
+- **Scope OUT**:
+  - Webhook push-mode per lead (`POST` verso URL del cliente al lead nuovo) — pattern pull-first sufficiente, push aggiungibile senza refactor.
+  - Feed inbound con base64 photos — solo URL HTTPS accettati (wedge zero-friction, foto restano sul CDN del cliente).
+  - Endpoint UI OMNIA per gestire i feed inbound (visibile solo via `/api/v1/feed/properties` + `/api/v1/me` per debug).
+- **Coerenza D-041 Doppio Binario**: chiude la modalità 3 (feed bidirezionale) al 100%. Track B ora può: (1) API+crediti ✅, (2) widget embed ✅ (4/4), (3) feed in ↔ out ✅.
+- **Test coverage**: 13/13 pytest locale (`test_m25_recovery_sprint15.py`) + 16/16 testing_agent contro preview URL (iteration_27.json, 0 critical/0 minor/0 action items).
+- **Regressione totale**: **193/193 pytest verdi** (180 pre + 13 nuovi, zero regressioni). Aggiornati 2 test in `test_m2s5_3_widgets.py` che assumevano staging fosse widget sconosciuto (ora è widget valido).
+- **Effort reale**: ~40 min per implementazione + test + agent validation.
+- **Gap residui audit M2** (da AUDIT_M2.md): GAP #1 foto storage → object storage (Sprint 4), GAP #2 stress test 5 agenti rotto (Sprint 4), GAP #5 Universal Smart Importer 2.0 immobili / D-FUTURE-10 (Sprint 3), GAP #6 cron push_api generalizzato (M4+).
+- **Stato**: ✅ APPLICATA (24-Feb-2026 evening). Pilastro Track B ora al 100%.

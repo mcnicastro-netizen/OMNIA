@@ -74,6 +74,15 @@
 
 ## 🔴 GAP identificati (6 totali, priorità ordinata)
 
+### ✅ CHIUSI in Sprint 1.5 recovery (24-Feb-2026 evening, D-059)
+
+- ✅ **GAP #3 — Widget M2.5.3 completati**: aggiunti `staging.html` (Virtual Staging demo + lead capture) e `legal.html` (HAL Legal Q&A pubblico con disclaimer L.247/2012). Loader accetta 4 widget. `WidgetLeadBody` pattern esteso. 
+- ✅ **GAP #4 — Feed bidirezionale INBOUND (D-041 modalità 3)**: `POST /api/v1/feed/properties` (ingest upsert idempotent) + `GET /api/v1/leads/export?since=&limit=` (pull mode). Pilastro Track B chiuso 3/3 modalità.
+
+Test: 13/13 pytest locale + 16/16 testing_agent contro preview URL. Regressione totale 193/193 verdi.
+
+### 🔴 GAP residui
+
 ### GAP #2 · 🔴 P0 — Stress test 5 agenti concorrenti ROTTO
 - **Dov'è nel programma**: DoD M2 riga finale "[ ] 5 agenti in parallelo nella stessa agenzia (testabile ora)".
 - **Stato reale**: `test_m2_stress_5_agents.py` ora fallisce **7/11**. Al 23-Feb l'handoff diceva "validato — iter_25". Regressione post-refactor probabilmente causata da modifiche a login flow / property schema.
