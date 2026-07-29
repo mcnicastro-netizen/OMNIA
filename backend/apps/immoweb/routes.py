@@ -13,6 +13,7 @@ from apps.immoweb.api_keys import router as api_keys_router
 from apps.immoweb.xml_import import router as xml_import_router
 from apps.immoweb.publishing import router as publishing_router, feed_router as publishing_feed_router
 from apps.immoweb.social_publisher import router as social_publisher_router
+from apps.immoweb.hal_knowledge import router as hal_knowledge_router, ingest_corpus as hal_ingest_corpus
 from apps.immoweb.invites import router as invites_router
 from apps.immoweb.dashboard import router as dashboard_router
 from apps.immoweb.properties import router as properties_router
@@ -53,6 +54,7 @@ router.include_router(api_keys_router)
 router.include_router(xml_import_router)
 router.include_router(publishing_router)
 router.include_router(social_publisher_router)
+router.include_router(hal_knowledge_router)
 router.include_router(publishing_feed_router)  # public feed at /api/feed/portals/{slug}.xml
 router.include_router(invites_router)
 router.include_router(dashboard_router)

@@ -47,6 +47,7 @@ import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
 import PublishingPage from "@/apps/immoweb/pages/PublishingPage";
 import PortalWizardPage from "@/apps/immoweb/pages/PortalWizardPage";
 import SocialPublisherPage from "@/apps/immoweb/pages/SocialPublisherPage";
+import HalKnowledgePage from "@/apps/immoweb/pages/HalKnowledgePage";
 import BrandLabPage from "@/apps/immoweb/pages/BrandLabPage";
 import AcademyApp from "@/apps/academy/AcademyApp";
 import LegalApp from "@/apps/legal/LegalApp";
@@ -200,6 +201,15 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin", "branch_admin"]}>
                         <SocialPublisherPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  {/* M5.S2 — HAL Knowledge (RAG su documentazione OMNIA) */}
+                  <Route
+                    path="app/hal-knowledge"
+                    element={
+                      <ProtectedRoute>
+                        <HalKnowledgePage />
                       </ProtectedRoute>
                     }
                   />

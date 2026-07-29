@@ -1086,3 +1086,27 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Test coverage**: 7/7 pytest nuovi (`test_omnia_logo_assets.py`: full/mark/favicon served + 4 widget con mini-logo). Testing agent frontend 7/7 acceptance criteria pass (iteration_28.json), 0 UI bug, 2 design_issue minori (uno falso positivo su sidebar, uno cosmetico su testid wrapper corretto).
 - **Regressione totale**: **203/203 pytest verdi**.
 - **Stato**: ✅ APPLICATA (24-Feb-2026 sera).
+
+### D-061 — M5.S2 HAL Knowledge (Sprint 2) — RAG su documentazione OMNIA (25-Feb-2026) 📚
+
+- **Contesto**: 3° bottone fisico HAL (D-040) per rispondere alle domande operative dell'agente su "come funziona OMNIA". Sblocca onboarding self-service Track B (D-041) e riduce ticket di supporto ripetitivi. Sprint 2 avviato dopo chiusura Sprint 1 (3/3) + Sprint 1.5 recovery (D-059).
+- **Playbook Emergent LLM Key** ottenuta via `integration_playbook_expert_v2`. Chiave `EMERGENT_LLM_KEY` già in `.env`. Streaming `stream_message()` disponibile ma **non usato** in v1 (send_message() basta per una Q&A one-shot da 300 parole max).
+- **Scelta retrieval — TF-IDF invece di embeddings neurali**: la playbook Emergent LLM Key **non espone un endpoint embeddings** oggi. Piuttosto che aggiungere sentence-transformers (torch ~500MB, GPU o CPU lenta) o dipendere da una seconda API, il corpus è piccolo (~2500 righe → 405 chunk / 33.831 termini) e TF-IDF+cosine (`scikit-learn` 1.9, ngram 1-2, italian stopwords compact) è più veloce (retrieval <20ms) e più preciso su documenti tecnici italiani nomenclati (D-041, M2.6b, "Domain Vault"). Migrazione a embeddings differita a quando il corpus supera 10.000 chunk o l'italiano naturale (utenti finali) supera il tecnico.
+- **Scope IN**:
+  1. Modulo `apps/immoweb/hal_knowledge.py` con: chunker markdown by-heading + word-window 500/50 overlap, ingestion idempotente MD5-based, TF-IDF index persistito su `hal_knowledge_meta` (blob pickle <500KB), retrieval top-k=5 con cosine, confidence gate MIN=0.08 / HIGH=0.20 (scala TF-IDF, non embedding).
+  2. Endpoints `/api/app/hal/knowledge/*`: `GET /status`, `POST /reindex` (super_admin), `POST /ask`, `GET /history`.
+  3. Generation: `LlmChat` con `gemini-3-flash-preview` (send_message, ~9s risposta, ~$0.001 per query). System message: "Sei HAL Knowledge, rispondi solo con informazioni presenti nelle fonti". Prompt include `[FONTE N]` markers per attribuzione.
+  4. Ingestion automatica al boot (`server.py::lifespan`), idempotente — se un file `.md` non è cambiato (md5), skip. Se cambia, purge chunks + reingest + rebuild TF-IDF index.
+  5. Frontend `HalKnowledgePage.jsx` a `/it/app/hal-knowledge` con: textarea 1000 char, 5 sample questions, area risposta con markdown-lite (bold/code/FONTE-sup), fonti citate con file+section+similarity, storico recenti clickabili per restore, badge confidence colorati (high emerald, medium amber, insufficient red).
+  6. Sidebar navigation: aggiunta voce "HAL Knowledge · 📚" tra HAL Legal e Collaboratori.
+- **Scope OUT**:
+  - Streaming SSE (tokens in real-time): rinviato, la UX one-shot con loading spinner è sufficiente per query <15s.
+  - Multi-language: corpus italiano only; utenti EN/ES ricevono risposte italiane con FONTE citation (il vocab TF-IDF non ha stopwords EN/ES pesanti).
+  - Feedback thumbs-up/down + fine-tuning: rinviato al v2 quando avremo abbastanza volume di sessioni.
+  - Isolation tenant sul corpus: non applicabile — la documentazione è di sistema (OMNIA), non per-agenzia.
+- **Corpus iniziale**: 9 file `.md` in `/app/memory/` (PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA_OMNIA, ASPETTI_DA_APPROFONDIRE, BUSINESS_MODEL, CHANGELOG) + `manuale/01-introduzione-primo-accesso.md`. Totale **405 chunk indicizzati**, **33.831 termini vocab**. Man mano che vengono scritti i capitoli manuale (M5.S2-pre), HAL li ingesta al prossimo restart.
+- **Test coverage**: 11/11 pytest nuovi (`test_m5s2_hal_knowledge.py`: chunker unit + status + ask 5 casi + history + reindex). Test funzionale live con Gemini in ~21s totali. **Regressione totale 214/214 pytest verdi**.
+- **Costo operativo**: TF-IDF locale = zero cost. Gemini Flash Preview: ~$0.001-0.002/query (500 token in + 400 token out media). Budget Emergent LLM Key sufficiente per 5000+ query/mese.
+- **UX validation**: smoke test frontend passa — page renderizza header/badge/textarea/samples/storico correttamente su navy sidebar + Fraunces titoli. Prima domanda live "Domain Vault" genera risposta strutturata con 5 fonti citate (DECISIONS.md D-051/D-056, PRD.md, CHANGELOG.md, PROGRAMMA_OMNIA.md) in ~9 secondi.
+- **Stato**: ✅ APPLICATA (25-Feb-2026).
+- **Prossimo naturale**: M5.S2-pre — scrivere i 11 capitoli restanti del manuale operativo per arricchire il corpus e migliorare la confidence sulle query concrete "come si fa X".

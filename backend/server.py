@@ -64,6 +64,15 @@ async def lifespan(app: FastAPI):
             logger.info("Reaped %d stale virtual staging jobs", reaped)
     except Exception as e:
         logger.warning("Staging reaper failed: %s", e)
+    try:
+        from apps.immoweb.hal_knowledge import ingest_corpus as _hal_ingest
+        report = await _hal_ingest(force=False)
+        logger.info(
+            "HAL Knowledge corpus: %d files scanned, %d reingested, %d chunks total",
+            report["scanned"], len(report["reingested"]), report["total_chunks"],
+        )
+    except Exception as e:
+        logger.warning("HAL Knowledge ingest failed: %s", e)
     logger.info("OMNIA backend ready.")
     yield
     # Shutdown
