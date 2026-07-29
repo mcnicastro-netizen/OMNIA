@@ -52,7 +52,7 @@
 | Quotazione immobiliare base | €0,04 | 1 credito | €0,30 | **87%** |
 | Quotazione avanzata UNI 10750 *(v2.0)* | €0,08 | 2 crediti | €0,60 | **87%** |
 | Query HAL Legal *(v2.0)* | ~€0,03 | 2 crediti | €0,60 | **95%** |
-| Micro-tour video 5s *(v2.0, da M5.S4.3)* | €0,30 | 12 crediti | €3,60 | **92%** |
+| Micro-tour video 10s Kling Pro *(v2.1, D-066)* | €0,88 | 10 crediti | €3,00 | **71%** |
 | Visura catastale | €0,40 | 4 crediti | €1,20 | **67%** |
 | Planimetria catastale | €6,90 | 30 crediti | €9,00 | **23%** |
 | Ispezione ipotecaria | €23,70 | 100 crediti | €30,00 | **21%** |

@@ -344,21 +344,159 @@ async def video_download(video_id: str):
 
 
 # ---------------------------------------------------------------------------
-# Sora 2 premium — STUB (D-063 · playbook Sora 2 dedicata da chiamare a v2)
+# fal.ai Kling 1.6 Pro image-to-video (D-047, D-065)
 # ---------------------------------------------------------------------------
+
+FAL_KLING_MODEL = "fal-ai/kling-video/v1.6/pro/image-to-video"
+KLING_DURATION_S = 10    # 10s Pro (D-066, upgrade da 5s originale)
+KLING_CREDIT_COST = 10   # 10 crediti (D-066) — corretto in PRICING_OMNIA v2.1
+KLING_COST_EUR_ESTIMATE = 0.88  # $0.95 per 10s ≈ €0.88 (margine 71% a €3.00)
+
+
+def _build_kling_prompt(prop: dict) -> str:
+    """CRM-aware cinematic prompt from property fields."""
+    parts = ["Cinematic real estate walkthrough, slow dolly-in, natural sunlight"]
+    pt = prop.get("property_type")
+    if pt:
+        parts.append(pt)
+    city = prop.get("city")
+    if city:
+        parts.append(f"in {city}")
+    for f in ("balcony", "garden", "parquet", "modern kitchen", "large windows"):
+        if (prop.get("features") or {}).get(f.replace(" ", "_")):
+            parts.append(f)
+    parts.append("realistic, high quality, 24fps, elegant")
+    return ", ".join(parts)
+
+
+async def _generate_kling_video(video_id: str, property_id: str, image_url: str,
+                                prompt: str, db) -> None:
+    """Async task: call fal.ai Kling → download output → apply watermark."""
+    import fal_client
+    try:
+        await db.videos.update_one({"id": video_id}, {"$set": {"status": "processing"}})
+        handler = await fal_client.submit_async(
+            FAL_KLING_MODEL,
+            arguments={
+                "image_url": image_url,
+                "prompt": prompt,
+                "duration": "10",          # 10s Pro (D-066)
+                "aspect_ratio": "16:9",
+                "negative_prompt": "blur, low quality, distortion, watermark, text",
+                "cfg_scale": 0.5,
+            },
+        )
+        result = await handler.get()
+        video_url = (result.get("video") or {}).get("url")
+        if not video_url:
+            raise RuntimeError(f"fal_response_missing_video_url: {result}")
+        # Download output
+        raw_path = VIDEO_ROOT / f"{video_id}_raw.mp4"
+        async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+            r = await client.get(video_url)
+        raw_path.write_bytes(r.content)
+        # Apply watermark via ffmpeg
+        final_path = VIDEO_ROOT / f"{video_id}.mp4"
+        cmd = [
+            "ffmpeg", "-y", "-i", str(raw_path),
+            "-vf",
+            "drawtext=text='Powered by OMNIA':fontcolor=white:fontsize=18:"
+            "box=1:boxcolor=black@0.4:boxborderw=6:x=w-tw-14:y=h-th-14",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "26",
+            "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+            str(final_path),
+        ]
+        result_ff = subprocess.run(cmd, capture_output=True, timeout=120)
+        if result_ff.returncode != 0:
+            raise RuntimeError(f"watermark_failed: {result_ff.stderr.decode()[-300:]}")
+        raw_path.unlink(missing_ok=True)
+        await db.videos.update_one({"id": video_id}, {"$set": {
+            "status": "ready",
+            "file_path": str(final_path),
+            "download_url": f"/api/app/videos/{video_id}/download",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }})
+    except Exception as e:
+        logger.exception("kling video generation failed")
+        await db.videos.update_one({"id": video_id}, {"$set": {
+            "status": "failed",
+            "error": f"{type(e).__name__}: {str(e)[:200]}",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }})
+
+
+# ---------------------------------------------------------------------------
+# Sora 2 endpoint replaced by Kling 1.6 Pro (D-047 · fal.ai, non Sora)
+# ---------------------------------------------------------------------------
+
+@router.post("/kling/property/{pid}", status_code=202)
+async def kling_from_property(
+    pid: str,
+    user: dict = Depends(require_roles("agent", "agency_admin", "super_admin")),
+):
+    """Genera micro-tour video 5s via fal.ai Kling 1.6 Pro image-to-video.
+
+    Costo agente: 12 crediti (€3,60 a €0,30/credito).
+    Costo interno OMNIA: ~$0,475 (~€0,44), margine 88%.
+    """
+    db = Database.get()
+    aid = _agency_id(user)
+    if not aid:
+        raise HTTPException(status_code=404, detail="no_agency")
+    prop = await _load_property(db, pid, aid)
+
+    # Wallet check + charge (12 crediti)
+    agency = await db.agencies.find_one({"id": aid}, {"credits_balance": 1})
+    balance = int((agency or {}).get("credits_balance") or 0)
+    if balance < KLING_CREDIT_COST:
+        raise HTTPException(
+            status_code=402,
+            detail=f"insufficient_credits: {balance}/{KLING_CREDIT_COST}",
+        )
+
+    # Get cover photo URL (must be public HTTPS for fal.ai)
+    photos = prop.get("photos") or []
+    cover = next((p for p in photos if p.get("is_cover")), photos[0] if photos else None)
+    if not cover or not cover.get("url"):
+        raise HTTPException(status_code=422, detail="no_cover_photo")
+    image_url = cover["url"]
+    if not image_url.startswith("http"):
+        base = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
+        image_url = f"{base}{image_url}"
+
+    # Deduct credits atomically
+    r = await db.agencies.update_one(
+        {"id": aid, "credits_balance": {"$gte": KLING_CREDIT_COST}},
+        {"$inc": {"credits_balance": -KLING_CREDIT_COST}},
+    )
+    if r.modified_count == 0:
+        raise HTTPException(status_code=402, detail="credit_charge_failed")
+
+    doc = VideoDoc(
+        agency_id=aid, property_id=pid, mode="sora2",  # keep "sora2" mode name for BC
+        status="pending", duration_s=KLING_DURATION_S, photos_count=1,
+        credits_charged=KLING_CREDIT_COST,
+    ).model_dump()
+    await db.videos.insert_one(doc)
+    prompt = _build_kling_prompt(prop)
+    asyncio.create_task(_generate_kling_video(doc["id"], pid, image_url, prompt, db))
+    return {
+        "video_id": doc["id"],
+        "status": "pending",
+        "mode": "kling_1_6_pro",
+        "duration_s": KLING_DURATION_S,
+        "credits_charged": KLING_CREDIT_COST,
+        "poll_url": f"/api/app/videos/{doc['id']}",
+    }
+
 
 @router.post("/sora2/property/{pid}")
 async def sora2_from_property(
     pid: str,
     user: dict = Depends(require_roles("agent", "agency_admin", "super_admin")),
 ):
-    """v1 STUB — endpoint riservato per Sora 2 premium.
-
-    In v2 (D-063): integrare Emergent LLM Key Sora 2 video generation con job
-    async, addebito 12 crediti (a €0.30/credito = €3.60, margine 72% su costo
-    Sora ~€1.00), watermark "Powered by OMNIA", policy contenuti immobiliari.
-    """
+    """DEPRECATED — use /kling/property/{pid} instead (D-065 · fal.ai Kling replaces Sora 2)."""
     raise HTTPException(
-        status_code=501,
-        detail="sora2_not_implemented_v1_use_kenburns_meanwhile",
+        status_code=410,
+        detail="deprecated_use_kling_endpoint: POST /api/app/videos/kling/property/{pid}",
     )

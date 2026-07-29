@@ -1166,3 +1166,27 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **ffmpeg**: dipendenza runtime — va installato in build step del container (`apt-get install ffmpeg`) perché apt-install runtime non persiste tra restart K8s. Test tollerante: `pytest.skip` se ffmpeg mancante con messaggio chiaro. Ken Burns fallirà con status="failed" in produzione se ffmpeg non presente.
 - **Regressione**: 35/36 Sprint 3 pass (1 skip flag-gated) + regressione totale Sprint 3 verde.
 - **Stato**: ✅ APPLICATA (25-Feb-2026 sera).
+
+### D-065 — Sora 2 SCARTATO, integrazione fal.ai Kling 1.6 Pro (25-Feb-2026) 🎬
+
+- **Contesto**: nel piano di implementazione Sprint 3 avevo proposto Sora 2. Il Founder mi ha corretto: **D-047 aveva già scelto fal.ai** (image-to-video) come stack per il micro-tour video. Sora 2 fa text-to-video (scene AI immaginate), inadatto per animare le foto vere degli immobili.
+- **Confronto verificato**: Sora 2 costo ~€1.00 con margine 72%, Kling 1.6 Pro image-to-video $0.095/sec (verificato pagina ufficiale fal.ai 25-Feb-2026).
+- **Stack finale**: `fal-ai/kling-video/v1.6/pro/image-to-video` via `fal_client` (già installato per Virtual Staging). FAL_KEY in `.env` già presente. Watermark "Powered by OMNIA" applicato via ffmpeg drawtext post-processing.
+- **Endpoint`/sora2/property/{pid}`** → 410 Gone con detail deprecato che punta al nuovo `/kling/property/{pid}`.
+- **Stato**: ✅ APPLICATA (25-Feb-2026).
+
+
+### D-066 — Micro-tour video: durata 10s Pro, prezzo 10 crediti (25-Feb-2026) 💰
+
+- **Contesto**: dopo verifica del pricing reale fal.ai/Kling 1.6 Pro image-to-video ($0.095/sec) il Founder ha deciso di upgradare la durata da 5s (piano originale D-047) a **10 secondi** e ricalibrare il prezzo da 12 a **10 crediti**.
+- **Business math finale**:
+  - Costo interno: $0.95 per 10s ≈ **€0.88**
+  - Prezzo agente: 10 crediti × €0.30 = **€3.00**
+  - Margine: (€3.00 - €0.88) / €3.00 = **71%**
+- **Solo gestionale** (D-064): il video Kling Pro premium è disponibile ESCLUSIVAMENTE su `POST /api/app/videos/kling/property/{pid}` (auth agenzia). Il portale B2C usa Ken Burns gratuito. Nessuna cannibalizzazione.
+- **Wallet integrato**: endpoint verifica `agencies.credits_balance >= 10`, decurta atomicamente prima del submit fal, restituisce 402 con detail `insufficient_credits` se saldo insufficiente.
+- **Prompt CRM-aware**: `_build_kling_prompt()` genera prompt cinematografico da city + property_type + features (balcony, garden, parquet, ecc).
+- **Async pattern**: `fal_client.submit_async` → `handler.get()` → download video URL → watermark ffmpeg → salva in `/tmp/omnia_videos/{video_id}.mp4`. Status: pending → processing → ready|failed.
+- **Test coverage**: 3/3 nuovi test Kling endpoint (deprecated sora2 410, auth required, credit charging 202/402) + regressione totale **252/252 pytest verdi**.
+- **PRICING_OMNIA aggiornato a v2.1**: riga 55 modificata da "Micro-tour video 5s | €0,30 | 12 crediti | €3,60 | 92%" a "Micro-tour video 10s Kling Pro | €0,88 | 10 crediti | €3,00 | 71%".
+- **Stato**: ✅ APPLICATA (25-Feb-2026 sera).

@@ -91,3 +91,31 @@ class TestFfmpegAvailable:
         import shutil
         if shutil.which("ffmpeg") is None:
             pytest.skip("ffmpeg not installed in test container — install via apt-get in build step")
+
+
+class TestKlingEndpoint:
+    """D-065 · Kling 1.6 Pro image-to-video (fal.ai) replaces Sora 2."""
+
+    def test_sora2_endpoint_deprecated(self, session, test_property_with_photos):
+        pid, _ = test_property_with_photos
+        r = session.post(f"{BASE_URL}/api/app/videos/sora2/property/{pid}")
+        assert r.status_code == 410
+        assert "kling" in str(r.json().get("detail", "")).lower()
+
+    def test_kling_requires_auth(self, test_property_with_photos):
+        pid, _ = test_property_with_photos
+        r = requests.post(f"{BASE_URL}/api/app/videos/kling/property/{pid}")
+        assert r.status_code in (401, 403)
+
+    def test_kling_charges_credits_or_402(self, session, test_property_with_photos):
+        """Endpoint charges 10 crediti (D-066) — either 202 accepted or 402."""
+        pid, _ = test_property_with_photos
+        r = session.post(f"{BASE_URL}/api/app/videos/kling/property/{pid}")
+        assert r.status_code in (202, 402, 422)
+        if r.status_code == 402:
+            assert "insufficient_credits" in str(r.json().get("detail", ""))
+        elif r.status_code == 202:
+            data = r.json()
+            assert data["mode"] == "kling_1_6_pro"
+            assert data["duration_s"] == 10
+            assert data["credits_charged"] == 10
