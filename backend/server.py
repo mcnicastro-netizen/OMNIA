@@ -73,6 +73,13 @@ async def lifespan(app: FastAPI):
         )
     except Exception as e:
         logger.warning("HAL Knowledge ingest failed: %s", e)
+    # Sprint 4 · GAP #1 — Emergent Object Storage warm-up (best-effort)
+    try:
+        from shared.storage import init_storage
+        init_storage()
+        logger.info("Object Storage initialized")
+    except Exception as e:
+        logger.warning("Object Storage init failed (uploads will retry lazily): %s", e)
     logger.info("OMNIA backend ready.")
     yield
     # Shutdown
@@ -166,6 +173,10 @@ api_router.include_router(public_feed_router)
 # Public Site (Layer C) — HTML pages crawlable by portals + photo binary serving
 from apps.immoweb.site import router as public_site_router  # noqa: E402
 api_router.include_router(public_site_router)
+
+# Sprint 4 · GAP #1 — Media passthrough for Emergent Object Storage (public read)
+from apps.immoweb.media import router as media_router  # noqa: E402
+api_router.include_router(media_router)
 
 from apps.marketing.founders import router as founders_router  # noqa: E402
 api_router.include_router(founders_router)
