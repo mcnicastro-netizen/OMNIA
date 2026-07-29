@@ -1065,3 +1065,24 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Effort reale**: ~40 min per implementazione + test + agent validation.
 - **Gap residui audit M2** (da AUDIT_M2.md): GAP #1 foto storage → object storage (Sprint 4), GAP #2 stress test 5 agenti rotto (Sprint 4), GAP #5 Universal Smart Importer 2.0 immobili / D-FUTURE-10 (Sprint 3), GAP #6 cron push_api generalizzato (M4+).
 - **Stato**: ✅ APPLICATA (24-Feb-2026 evening). Pilastro Track B ora al 100%.
+
+### D-060 — Logo ufficiale OMNIA (asset canonico) inserito nell'ecosistema (24-Feb-2026 sera) 🎨
+
+- **Contesto**: il Founder ha fornito il logo definitivo OMNIA Real Estate Lab (simbolo circolare Q+skyline + wordmark "OMNIA · REAL ESTATE LAB", 1254x1254 originale ~758KB). Richiesta: "inserirlo dove previsto" nell'ecosistema.
+- **Asset creati**:
+  - `/app/frontend/public/omnia-logo.png` (800x800, ~361KB, PNG optimized, logo completo)
+  - `/app/frontend/public/omnia-mark.png` (256x220, ~35KB, solo simbolo circolare Q+skyline, sfondo trasparente RGBA)
+  - `/app/frontend/public/favicon.png` (64x55, ~5KB, favicon per browser tab)
+  - Componente `OmniaLogo.jsx` con props `variant` (full|mark), `size` (sm|md|lg|xl), `inverted` (bool per sfondi scuri).
+- **Punti di inserimento** (interfaccia OMNIA-branded, PRE-LOGIN o infrastruttura):
+  1. **Auth pages**: `LoginPage.jsx`, `RegisterPage.jsx`, `ForgotPasswordPage.jsx`, `AcceptInvitePage.jsx` — logo mark size=md nell'header accanto a "OMNIA · app".
+  2. **Onboarding wizard**: `OnboardingWizard.jsx` header.
+  3. **Landing pubblica `/it`** (`LandingApp.jsx`): logo full size=xl (120px) nell'hero, logo mark piccolo nel footer accanto a "© 2026 OMNIA Real Estate Lab".
+  4. **AgencyShell sidebar** (`AgencyShell.jsx`): logo mark size=sm invertito (bianco su navy #0B1E3F).
+  5. **Widget iframe footer**: `staging.html`, `legal.html`, `valuator.html`, `mortgages.html` — mini logo (14px) prima di "Powered by OMNIA".
+  6. **Email transazionali IT/EN/ES** (`welcome.*.html`): header con logo mark 36x36 accanto a "OMNIA". Placeholder `{{logo_url}}` iniettato automaticamente da `send_email()` in `shared/email/client.py` (env `OMNIA_LOGO_URL` con fallback `https://omniarealestateecosystem.it/omnia-mark.png`).
+  7. **index.html**: `<link rel="icon" type="image/png" href="/favicon.png">` + `apple-touch-icon` + `og:image` aggiornato a `omnia-logo.png`.
+- **Vincolo White Label rispettato (D-041)**: il logo NON appare dentro il content principale del dashboard agenzia (`/it/app/dashboard`, `/it/app/properties`, `/it/app/clients`) — quelle aree sono brand agenzia via ThemeRegistry. La sidebar `AgencyShell` è considerata "chrome infrastruttura" e mostra sempre "OMNIA · app" (deviazione White Label esistente già prima di questo intervento — decisione ereditata, non introdotta oggi).
+- **Test coverage**: 7/7 pytest nuovi (`test_omnia_logo_assets.py`: full/mark/favicon served + 4 widget con mini-logo). Testing agent frontend 7/7 acceptance criteria pass (iteration_28.json), 0 UI bug, 2 design_issue minori (uno falso positivo su sidebar, uno cosmetico su testid wrapper corretto).
+- **Regressione totale**: **203/203 pytest verdi**.
+- **Stato**: ✅ APPLICATA (24-Feb-2026 sera).

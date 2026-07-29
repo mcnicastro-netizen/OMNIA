@@ -48,8 +48,8 @@ export default function LandingApp() {
       {/* Hero */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto grid md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-7 min-w-0">
-          <div className="mb-8 md:mb-10">
-            <OmniaLogo variant="full" size="xl" data-testid="landing-hero-logo" />
+          <div className="mb-8 md:mb-10" data-testid="landing-hero-logo">
+            <OmniaLogo variant="full" size="xl" />
           </div>
           <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-4 md:mb-6">
             <Brand>Real estate · Ecosystem · 2026</Brand>
