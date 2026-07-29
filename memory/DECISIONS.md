@@ -1224,3 +1224,16 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Risultato**: 🟢 **READY FOR DEPLOYMENT**.
 - **Stato**: ✅ APPLICATA (26-Feb-2026).
 
+
+
+### D-070 — Privacy Gate Fix · L1/L2 pubblicamente accessibili (26-Feb-2026) 🛡️
+
+- **Contesto**: `tests/test_immobilcloud_public.py::TestPublicPropertyDetail::test_property_detail_returns_data` falliva 404 per anonimi anche su property con `privacy_level` di default. Root cause: (a) `p.get("privacy_level", "L2")` restituisce `None` se la chiave esiste con valore `None` (55 record legacy in DB con `privacy_level: null`); (b) `can_view_property()` faceva `_RANK[L1]=1 >= _RANK[L2]=2 → False`, rendendo tutti i record L2 (il default!) invisibili agli anonimi — in contraddizione con la docstring D-062 che dichiara L1 e L2 entrambi "publicly accessible" (field masking differenzia).
+- **Fix triplo**:
+  1. `shared/utils/privacy_gate.py::can_view_property()` — L1 e L2 ora ritornano sempre True; solo L3 richiede viewer L3+ (qualified lead) e L4 richiede L4 (agency internal). Coerente con la matrice della docstring del modulo.
+  2. Fallback pattern `p.get("privacy_level") or "L2"` in tutti i 4 punti (`public_portal.py`, `property_privacy.py` x3) per gestire il caso `None`-in-DB.
+  3. Backfill idempotente: 55 record legacy con `privacy_level: null` aggiornati a `L2` sul DB preview.
+- **Test coverage**: `test_property_detail_returns_data` ora PASS; `test_m3s9_privacy_audit.py` PASS (incluso `test_l3_property_hidden_from_l1` che verifica ancora correttamente che L3 blocchi anonimi).
+- **Business impact**: allineamento a policy documentata — il portale B2C mostra ora tutti i record L2 (default) al pubblico anonimo con i campi pubblici corretti (masking address esatto, coordinate approx, prezzo bucket 10%). I record L3/L4 restano bloccati come previsto.
+- **Stato**: ✅ APPLICATA (26-Feb-2026).
+

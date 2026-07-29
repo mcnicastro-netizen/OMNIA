@@ -68,9 +68,17 @@ def resolve_viewer_level(user: Optional[dict], agency_id_of_property: Optional[s
 def can_view_property(viewer_level: ViewerLevel, property_privacy: str) -> bool:
     """Return True if viewer has enough authorization to see the property at all.
 
-    A property with privacy_level=L3 is never shown to L1/L2 viewers.
+    Contract (D-062, docstring "Regole matrice"):
+    - privacy=L1 (fully public) and privacy=L2 (portal default) → visible to any
+      viewer including anonymous (L1). Field masking is applied downstream by
+      `apply_privacy_view`.
+    - privacy=L3 → requires viewer L3 (qualified lead) or L4 (agency internal).
+    - privacy=L4 → only agency internal (L4).
     """
-    return _RANK.get(viewer_level, 0) >= _RANK.get(property_privacy, 2)
+    prop = (property_privacy or "L2").upper()
+    if prop in ("L1", "L2"):
+        return True
+    return _RANK.get(viewer_level, 0) >= _RANK.get(prop, 2)
 
 
 def _round_price_bucket(price: float) -> float:

@@ -525,7 +525,7 @@ async def public_property_detail(pid: str, request: Request):
         })
         qualified = bool(qualified_lead)
     viewer_level = resolve_viewer_level(user, p.get("agency_id"), qualified=qualified)
-    property_privacy = p.get("privacy_level", "L2")
+    property_privacy = p.get("privacy_level") or "L2"
     if not can_view_property(viewer_level, property_privacy):
         raise HTTPException(status_code=404, detail="property_not_found")
 

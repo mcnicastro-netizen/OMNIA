@@ -51,7 +51,7 @@ async def set_privacy_level(
     db = Database.get()
     aid = _agency_id(user)
     p = await _get_owned(db, pid, aid)
-    old_level = p.get("privacy_level", "L2")
+    old_level = p.get("privacy_level") or "L2"
     if old_level == body.privacy_level:
         return {"id": pid, "privacy_level": old_level, "unchanged": True}
     await db.properties.update_one(
@@ -78,7 +78,7 @@ async def get_privacy_status(
     ).sort("created_at", -1).limit(20).to_list(20)
     return {
         "id": pid,
-        "privacy_level": p.get("privacy_level", "L2"),
+        "privacy_level": p.get("privacy_level") or "L2",
         "audit_events": audit,
     }
 
@@ -100,6 +100,6 @@ async def preview_privacy_view(
     view = apply_privacy_view(p, viewer)
     return {
         "viewer_level": viewer,
-        "property_privacy": p.get("privacy_level", "L2"),
+        "property_privacy": p.get("privacy_level") or "L2",
         "view": view,
     }
