@@ -5,7 +5,7 @@ import requests
 
 BASE_URL = os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://headless-crm.preview.emergentagent.com",
+    "https://omnia-real-estate-1.preview.emergentagent.com",
 ).rstrip("/")
 
 

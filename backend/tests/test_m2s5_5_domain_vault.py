@@ -24,7 +24,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 BASE_URL = os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://headless-crm.preview.emergentagent.com",
+    "https://omnia-real-estate-1.preview.emergentagent.com",
 ).rstrip("/")
 ADMIN_EMAIL = "mcnicastro@gmail.com"
 ADMIN_PASSWORD = "Forzainter2026."

@@ -4,7 +4,7 @@ import uuid
 import pytest
 import requests
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://headless-crm.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 ADMIN_EMAIL = "mcnicastro@gmail.com"
 ADMIN_PASSWORD = "Forzainter2026."
 
