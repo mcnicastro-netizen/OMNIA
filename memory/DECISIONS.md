@@ -1153,3 +1153,16 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **Stato Sprint 3 backend**: ✅ 4/5 items completamente done (Reverse Staging era già done pre-Sprint 3). Solo Sora 2 premium resta stub in v1 — Ken Burns copre 100% del use case B2C+privati e ~90% dell'agente che oggi non paga per video.
 - **Da fare in v2 (post-Sprint 4)**: integrazione Sora 2 completa + UI Frontend dashboard A/B + UI selettore privacy level nella scheda property + UI search advanced (leaflet-draw).
 - **Stato**: ✅ APPLICATA (25-Feb-2026).
+
+### D-064 — Ken Burns DISABILITATO nel gestionale, riservato al portale B2C (25-Feb-2026) 🛡️💰
+
+- **Contesto**: dopo D-063 il Founder ha chiesto conferma se Ken Burns fosse disponibile nel gestionale — ero errato: la mia implementazione aveva aperto entrambi gli endpoint (`/api/app/videos/kenburns/...` gestionale + `/api/cloud/videos/kenburns/...` portale). Questo cannibalizza la revenue di Sora 2 premium (12 crediti = €3.60, margine 72%).
+- **Fix applicato**: l'endpoint `POST /api/app/videos/kenburns/property/{pid}` (gestionale) ora ritorna **501 Not Implemented** con detail `"kenburns_disabled_in_agency: usa Sora 2 premium (12 crediti) — Ken Burns è disponibile solo sul portale B2C /api/cloud/videos/..."`.
+- **Strategia commerciale finale**:
+  - 🎬 **Ken Burns gratuito** → SOLO su `/api/cloud/videos/kenburns/...` (portale B2C ImmobilCloud + annunci privati UGC M3.S5). Riempie il portale di contenuti video a costo zero.
+  - 💎 **Sora 2 premium 12 crediti (€3.60)** → SOLO nel gestionale (v2, oggi stub 501). L'agente professionista paga per la qualità cinematica AI-generated.
+  - Separazione netta previene cannibalizzazione.
+- **Test aggiornato**: `test_m5s43_micro_tour.py` ora verifica che `POST /api/app/videos/kenburns/...` ritorni 501 con detail contenente `kenburns_disabled` o `sora`. Il test di generazione end-to-end resta sul path pubblico `/api/cloud/*` (tenuto in file separato o eseguito manualmente perché serve una property con `is_listed_on_immobilcloud=True + visibility=public`).
+- **ffmpeg**: dipendenza runtime — va installato in build step del container (`apt-get install ffmpeg`) perché apt-install runtime non persiste tra restart K8s. Test tollerante: `pytest.skip` se ffmpeg mancante con messaggio chiaro. Ken Burns fallirà con status="failed" in produzione se ffmpeg non presente.
+- **Regressione**: 35/36 Sprint 3 pass (1 skip flag-gated) + regressione totale Sprint 3 verde.
+- **Stato**: ✅ APPLICATA (25-Feb-2026 sera).

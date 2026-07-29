@@ -255,38 +255,28 @@ def _agency_id(user: dict) -> Optional[str]:
 # Ken Burns endpoints
 # ---------------------------------------------------------------------------
 
-@router.post("/kenburns/property/{pid}", status_code=202)
-async def kenburns_from_property(
+@router.post("/kenburns/property/{pid}", status_code=501)
+async def kenburns_from_property_gated(
     pid: str,
     body: KenBurnsRequest,
     user: dict = Depends(require_roles("agent", "agency_admin", "super_admin")),
 ):
-    db = Database.get()
-    aid = _agency_id(user)
-    prop = await _load_property(db, pid, aid)
-    base = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/") or "http://localhost:8001"
-    photo_urls = body.photo_urls or _property_photo_urls(prop, base)
-    if not photo_urls:
-        raise HTTPException(status_code=422, detail="no_photos_available")
+    """D-064 · Ken Burns NON è disponibile nel gestionale agenzia.
 
-    doc = VideoDoc(
-        agency_id=aid,
-        property_id=pid,
-        mode="ken_burns",
-        status="pending",
-        duration_s=body.duration_s,
-        photos_count=len(photo_urls),
-    ).model_dump()
-    await db.videos.insert_one(doc)
-    asyncio.create_task(_generate_ken_burns(doc["id"], pid, photo_urls, body.duration_s, db))
-    return {
-        "video_id": doc["id"],
-        "status": "pending",
-        "mode": "ken_burns",
-        "duration_s": body.duration_s,
-        "photos_count": len(photo_urls),
-        "poll_url": f"/api/app/videos/{doc['id']}",
-    }
+    Strategia commerciale: nel gestionale l'agente usa **Sora 2 premium**
+    (12 crediti = €3.60, margine 72%). Ken Burns gratuito è riservato al
+    portale B2C ImmobilCloud + annunci privati UGC, dove è funzionale a
+    riempire il portale di contenuti video senza costi per l'utente finale.
+
+    Ken Burns qui dentro cannibalizzerebbe la revenue Sora 2.
+    """
+    raise HTTPException(
+        status_code=501,
+        detail=(
+            "kenburns_disabled_in_agency: usa Sora 2 premium (12 crediti) — "
+            "Ken Burns è disponibile solo sul portale B2C /api/cloud/videos/..."
+        ),
+    )
 
 
 @public_router.post("/kenburns/property/{pid}", status_code=202)
