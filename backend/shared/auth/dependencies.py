@@ -37,6 +37,14 @@ async def get_current_user(request: Request) -> dict:
     return user
 
 
+async def get_current_user_optional(request: Request) -> Optional[dict]:
+    """Same as get_current_user but returns None when no valid session (public routes)."""
+    try:
+        return await get_current_user(request)
+    except HTTPException:
+        return None
+
+
 def require_roles(*allowed_roles: str):
     """Dependency factory: returns a dependency that checks the role of current user.
 

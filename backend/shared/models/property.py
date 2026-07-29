@@ -133,6 +133,14 @@ class PropertyInDB(TenantModel):
     is_exclusive: bool = False  # esclusiva agenzia
     commission_pct: Optional[float] = None  # provvigione
     visibility: Literal["public", "mls_only", "private"] = "public"
+    # M3.S9 · Privacy audit 4 livelli (D-062)
+    #   L1 = anonimo pubblico             (no indirizzo, no planimetria, no seller data, prezzo indicativo)
+    #   L2 = utente B2C autenticato       (foto tutte, quartiere, ancora niente indirizzo esatto)
+    #   L3 = utente qualificato (lead+GDPR con email confermata) → indirizzo esatto + planimetria
+    #   L4 = agenzia proprietaria/agente  → tutto: proprietario, min_price trattabile, note interne
+    privacy_level: Literal["L1", "L2", "L3", "L4"] = "L2"
+    min_price_negotiable: Optional[float] = None  # visibile solo L4
+    seller_notes: Optional[str] = Field(default=None, max_length=2000)  # visibile solo L4
     listing_agent_id: Optional[str] = None  # user_id of responsible agent
 
     # Cross-portal publishing (M3.S1 → finalized in M3.S2 Publishing Center)
@@ -188,6 +196,9 @@ class PropertyCreate(OmniaBaseModel):
     is_exclusive: bool = False
     commission_pct: Optional[float] = None
     visibility: Literal["public", "mls_only", "private"] = "public"
+    privacy_level: Literal["L1", "L2", "L3", "L4"] = "L2"
+    min_price_negotiable: Optional[float] = None
+    seller_notes: Optional[str] = None
     virtual_tour_url: Optional[str] = None
     photos: Optional[List[PropertyPhoto]] = None
     is_listed_on_immobilcloud: bool = True  # M3.S2 Publishing Center
@@ -227,6 +238,9 @@ class PropertyUpdate(OmniaBaseModel):
     is_exclusive: Optional[bool] = None
     commission_pct: Optional[float] = None
     visibility: Optional[Literal["public", "mls_only", "private"]] = None
+    privacy_level: Optional[Literal["L1", "L2", "L3", "L4"]] = None
+    min_price_negotiable: Optional[float] = None
+    seller_notes: Optional[str] = None
     reference_code: Optional[str] = None
     is_listed_on_immobilcloud: Optional[bool] = None  # M3.S2 Publishing Center
 

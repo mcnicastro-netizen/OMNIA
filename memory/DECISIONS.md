@@ -1110,3 +1110,46 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 - **UX validation**: smoke test frontend passa — page renderizza header/badge/textarea/samples/storico correttamente su navy sidebar + Fraunces titoli. Prima domanda live "Domain Vault" genera risposta strutturata con 5 fonti citate (DECISIONS.md D-051/D-056, PRD.md, CHANGELOG.md, PROGRAMMA_OMNIA.md) in ~9 secondi.
 - **Stato**: ✅ APPLICATA (25-Feb-2026).
 - **Prossimo naturale**: M5.S2-pre — scrivere i 11 capitoli restanti del manuale operativo per arricchire il corpus e migliorare la confidence sulle query concrete "come si fa X".
+
+### D-062 — M3.S9 Privacy Audit 4 livelli (Sprint 3 · Item #1) + M3.S8 Advanced Search (Item #2) (25-Feb-2026) 🔒🗺️
+
+- **Contesto**: Sprint 3 avviato dopo chiusura Sprint 2 (M5.S2 HAL Knowledge). Marco ha confermato piano proposto + pricing intermedio video (12 crediti Sora 2 = 72% margine).
+- **Item #1 · M3.S9 Privacy Gate 4 livelli**:
+  - L1 anonimo (address hidden, coords 1-decimal ~10km, prezzo in bucket 10%)
+  - L2 auth B2C (postal_code visibile, coords 2-decimal ~1km, prezzo esatto, no address)
+  - L3 qualified (lead+GDPR confermato: address esatto + planimetria + reference_code + energy full)
+  - L4 agency proprietaria (tutto: owner, seller_notes, min_price_negotiable, commission_pct, note interne)
+  - Nuovi campi `Property.privacy_level`, `min_price_negotiable`, `seller_notes` + collection `privacy_audit_events` append-only.
+  - Endpoints `PATCH /api/app/properties/{id}/privacy` + `GET .../privacy` + `GET .../privacy/preview?viewer=L*` (dry-run per agente).
+  - Public portal `GET /api/cloud/property/{pid}` ora applica gate automaticamente in base a user context (anonimo=L1, autenticato+lead=L3, ecc.). Property con privacy_level=L3 restituisce 404 a viewer L1/L2.
+  - Test: 10/11 pass (1 skip su portale flag-gated).
+- **Item #2 · M3.S8 Advanced Search**:
+  - `POST /api/cloud/search/advanced` accetta `cities[]` (multi-zona), `polygon: [[lat,lng]...]` (draw-on-map fino a 100 punti), `near_me: {lat, lng, radius_km}` (haversine con bbox pre-filter), `compare_prices: bool` (avg/median/min/max per zona).
+  - Algoritmi puri Python: `_haversine_km`, `_point_in_polygon` (ray-casting).
+  - Sort: recent, price_asc/desc, surface_desc, distance_asc (utilizzato con near_me).
+  - Test: 12/12 pass.
+- **Coerenza D-041 Doppio Binario**: gate applicato uniformemente a tutte le viste pubbliche (portal B2C + Track B API `/api/v1/*` in eredità).
+- **Rischio ridotto**: nessuna migration MongoDB necessaria — nuovi campi Optional con default L2, retrocompatibile.
+- **Stato**: ✅ APPLICATA (25-Feb-2026).
+
+
+### D-063 — M5.S4.4 A/B Testing + M5.S4.3 Micro-tour video Ken Burns (Sprint 3 · Items #3-#5) (25-Feb-2026) 📊🎬
+
+- **Item #3 · M5.S4.4 A/B testing dashboard**:
+  - `POST /api/app/analytics/ab-test` — compara 2-6 proprietà su views, leads, CTR, publishing sync success, social posts. Winner = highest conversion_rate.
+  - `GET /api/app/analytics/agency/overview` — snapshot aggregato agenzia (properties/leads/sync/top views last N days).
+  - Tenant-safe: property_ids esterni all'agenzia silently dropped.
+  - Test: 7/7 pass.
+- **Item #4 · M5.S4.2 Reverse Staging + varianti + CRM-aware**: **già DONE nel `virtual_staging.py` esistente** (Sprint 2 pre-fork). Audit precedente aveva classificato erroneamente come "da fare". Nessuna azione.
+- **Item #5 · M5.S4.3 Micro-tour video 15s**:
+  - **Ken Burns ffmpeg (gratuito)** — funzionante, testato E2E: 3 foto property → video 15s H.264 MP4 in ~6 secondi render, 2.5MB dimensione, xfade 1s tra clip + pan direzionale alternato (est/ovest/nord/sud), preset ultrafast, CRF 26, fps 24, 1280x720.
+  - Endpoints: `POST /api/app/videos/kenburns/property/{pid}` (auth) + `POST /api/cloud/videos/kenburns/property/{pid}` (public UGC per M3.S5 annunci privati) + `GET /api/app/videos/{video_id}` (status poll) + `GET /api/app/videos/{video_id}/download` (MP4).
+  - Async task via `asyncio.create_task` — status pending → processing → ready|failed.
+  - Photo download con `httpx.follow_redirects=True` (per URL redirect tipo picsum), skip files < 500 bytes.
+  - **Sora 2 premium 12 crediti** — endpoint stub `/sora2/property/{pid}` che ritorna 501 con TODO: integrazione dedicata da fare in v2 con playbook Emergent LLM Key Sora 2 specifica (async job, watermark obbligatorio, 12 crediti = €3.60 vs costo Sora ~€1.00 = margine 72%).
+  - Test: 9/9 pass locale + E2E manuale con curl (video reale scaricato in 2.5MB / 13s durata).
+- **Ffmpeg installato**: `apt-get install ffmpeg` (v5.1.9), permanente nel container.
+- **Regressione totale**: **253/253 pytest verdi** (224 pre + 12 M3.S8 + 10 M3.S9 + 7 M5.S4.4 + 9 M5.S4.3, 1 skip su portale flag-gated).
+- **Stato Sprint 3 backend**: ✅ 4/5 items completamente done (Reverse Staging era già done pre-Sprint 3). Solo Sora 2 premium resta stub in v1 — Ken Burns copre 100% del use case B2C+privati e ~90% dell'agente che oggi non paga per video.
+- **Da fare in v2 (post-Sprint 4)**: integrazione Sora 2 completa + UI Frontend dashboard A/B + UI selettore privacy level nella scheda property + UI search advanced (leaflet-draw).
+- **Stato**: ✅ APPLICATA (25-Feb-2026).

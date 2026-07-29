@@ -20,10 +20,16 @@ from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, EmailStr, Field
 
 from shared.db.connection import Database
+from shared.utils.privacy_gate import (
+    apply_privacy_view,
+    can_view_property,
+    resolve_viewer_level,
+)
+from shared.auth.dependencies import get_current_user_optional
 
 logger = logging.getLogger("omnia.immobilcloud")
 router = APIRouter(tags=["immobilcloud"])
@@ -208,6 +214,189 @@ async def public_search(
 
 
 # ============================================================
+# 1.5) M3.S8 Advanced search (multi-zone, polygon draw, near-me, price compare)
+# ============================================================
+
+
+class AdvancedSearchBody(BaseModel):
+    q: Optional[str] = None
+    cities: Optional[List[str]] = Field(default=None, max_length=20)
+    property_types: Optional[List[str]] = Field(default=None, max_length=20)
+    operation: Optional[str] = Field(default=None, pattern="^(sale|rent)$")
+    price_min: Optional[float] = Field(default=None, ge=0)
+    price_max: Optional[float] = Field(default=None, ge=0)
+    surface_min: Optional[float] = Field(default=None, ge=0)
+    surface_max: Optional[float] = Field(default=None, ge=0)
+    rooms_min: Optional[int] = Field(default=None, ge=0)
+    bedrooms_min: Optional[int] = Field(default=None, ge=0)
+    energy_class: Optional[str] = Field(default=None, pattern="^(A4|A3|A2|A1|A|B|C|D|E|F|G)$")
+    polygon: Optional[List[List[float]]] = Field(default=None, max_length=100)
+    near_me: Optional[Dict[str, float]] = None
+    compare_prices: bool = False
+    sort: str = Field(default="recent", pattern="^(recent|price_asc|price_desc|surface_desc|distance_asc)$")
+    page: int = Field(default=1, ge=1, le=500)
+    page_size: int = Field(default=20, ge=1, le=60)
+
+
+def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    from math import radians, sin, cos, asin, sqrt
+    R = 6371.0
+    dlat = radians(lat2 - lat1)
+    dlng = radians(lng2 - lng1)
+    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlng / 2) ** 2
+    return 2 * R * asin(sqrt(a))
+
+
+def _point_in_polygon(lat: float, lng: float, poly: List[List[float]]) -> bool:
+    if not poly or len(poly) < 3:
+        return False
+    inside = False
+    n = len(poly)
+    j = n - 1
+    for i in range(n):
+        yi, xi = poly[i][0], poly[i][1]
+        yj, xj = poly[j][0], poly[j][1]
+        if ((yi > lat) != (yj > lat)) and (lng < (xj - xi) * (lat - yi) / ((yj - yi) or 1e-12) + xi):
+            inside = not inside
+        j = i
+    return inside
+
+
+@router.post("/search/advanced")
+async def public_search_advanced(body: AdvancedSearchBody):
+    """M3.S8 — Advanced search: multi-city, draw-on-map polygon, near-me
+    haversine radius, cross-zone price comparison."""
+    db = Database.get()
+    flt: Dict[str, Any] = _base_filter()
+
+    if body.cities:
+        flt["city"] = {"$in": body.cities}
+    if body.property_types:
+        flt["property_type"] = {"$in": body.property_types}
+    if body.operation:
+        flt["operation"] = body.operation
+    if body.rooms_min:
+        flt["rooms"] = {"$gte": body.rooms_min}
+    if body.bedrooms_min:
+        flt["bedrooms"] = {"$gte": body.bedrooms_min}
+    if body.energy_class:
+        flt["energy.energy_class"] = body.energy_class
+    if body.surface_min or body.surface_max:
+        rng: Dict[str, Any] = {}
+        if body.surface_min: rng["$gte"] = body.surface_min
+        if body.surface_max: rng["$lte"] = body.surface_max
+        flt["surface_sqm"] = rng
+    if body.price_min or body.price_max:
+        rng = {}
+        if body.price_min: rng["$gte"] = body.price_min
+        if body.price_max: rng["$lte"] = body.price_max
+        if body.operation == "rent":
+            flt["rent_monthly"] = rng
+        else:
+            flt["price"] = rng
+    if body.q:
+        flt["$or"] = [
+            {"title": {"$regex": body.q, "$options": "i"}},
+            {"description": {"$regex": body.q, "$options": "i"}},
+            {"zone": {"$regex": body.q, "$options": "i"}},
+        ]
+
+    # Near-me bbox pre-filter
+    if body.near_me:
+        lat = body.near_me.get("lat")
+        lng = body.near_me.get("lng")
+        radius_km = body.near_me.get("radius_km", 5)
+        if lat is None or lng is None:
+            raise HTTPException(status_code=422, detail="near_me_requires_lat_lng")
+        from math import cos, radians
+        dlat = radius_km / 111.0
+        dlng = radius_km / (111.0 * max(0.01, cos(radians(lat))))
+        flt["lat"] = {"$gte": lat - dlat, "$lte": lat + dlat}
+        flt["lng"] = {"$gte": lng - dlng, "$lte": lng + dlng}
+
+    # Polygon bbox pre-filter
+    if body.polygon and len(body.polygon) >= 3:
+        lats = [p[0] for p in body.polygon]
+        lngs = [p[1] for p in body.polygon]
+        flt["lat"] = {"$gte": min(lats), "$lte": max(lats)}
+        flt["lng"] = {"$gte": min(lngs), "$lte": max(lngs)}
+
+    sort_map = {
+        "recent": [("updated_at", -1)],
+        "price_asc": [("price", 1), ("rent_monthly", 1)],
+        "price_desc": [("price", -1), ("rent_monthly", -1)],
+        "surface_desc": [("surface_sqm", -1)],
+        "distance_asc": [("updated_at", -1)],
+    }
+    sort_spec = sort_map[body.sort]
+
+    fetch_limit = body.page_size * body.page + 200 if (body.polygon or body.near_me) else body.page_size
+    cursor = db.properties.find(flt, LIST_FIELDS).sort(sort_spec).limit(fetch_limit)
+    docs = await cursor.to_list(length=fetch_limit)
+
+    if body.polygon and len(body.polygon) >= 3:
+        docs = [d for d in docs if d.get("lat") is not None and d.get("lng") is not None
+                and _point_in_polygon(d["lat"], d["lng"], body.polygon)]
+
+    if body.near_me:
+        lat = body.near_me["lat"]; lng = body.near_me["lng"]
+        radius_km = body.near_me.get("radius_km", 5)
+        annotated = []
+        for d in docs:
+            if d.get("lat") is None or d.get("lng") is None:
+                continue
+            dist = _haversine_km(lat, lng, d["lat"], d["lng"])
+            if dist <= radius_km:
+                d["_distance_km"] = round(dist, 2)
+                annotated.append(d)
+        docs = annotated
+        if body.sort == "distance_asc":
+            docs.sort(key=lambda x: x["_distance_km"])
+
+    total = len(docs)
+    skip = (body.page - 1) * body.page_size
+    page_docs = docs[skip: skip + body.page_size]
+
+    agency_ids = list({p.get("agency_id") for p in page_docs if p.get("agency_id")})
+    agencies: Dict[str, Dict[str, Any]] = {}
+    if agency_ids:
+        async for a in db.agencies.find(
+            {"id": {"$in": agency_ids}, "is_active": True},
+            {"_id": 0, "id": 1, "slug": 1, "display_name": 1},
+        ):
+            agencies[a["id"]] = a
+
+    price_stats = None
+    if body.compare_prices and docs:
+        prices = [d.get("price") for d in docs if d.get("price")]
+        rents = [d.get("rent_monthly") for d in docs if d.get("rent_monthly")]
+        if prices:
+            ps = sorted(prices)
+            price_stats = {"type": "sale", "count": len(ps), "avg": round(sum(ps)/len(ps)),
+                           "median": ps[len(ps)//2], "min": min(ps), "max": max(ps)}
+        elif rents:
+            rs = sorted(rents)
+            price_stats = {"type": "rent", "count": len(rs), "avg": round(sum(rs)/len(rs)),
+                           "median": rs[len(rs)//2], "min": min(rs), "max": max(rs)}
+
+    return {
+        "items": [_to_card(p, agencies.get(p.get("agency_id"))) for p in page_docs],
+        "total": total,
+        "page": body.page,
+        "page_size": body.page_size,
+        "has_next": (skip + body.page_size) < total,
+        "sort": body.sort,
+        "price_stats": price_stats,
+        "filters_applied": {
+            "cities": body.cities or [],
+            "polygon_points": len(body.polygon) if body.polygon else 0,
+            "near_me": body.near_me or None,
+            "compare_prices": body.compare_prices,
+        },
+    }
+
+
+# ============================================================
 # 2) Facets — counters for filter UI
 # ============================================================
 
@@ -314,13 +503,30 @@ async def public_facets(
 # ============================================================
 
 @router.get("/property/{pid}")
-async def public_property_detail(pid: str):
+@router.get("/property/{pid}")
+async def public_property_detail(pid: str, request: Request):
     db = Database.get()
     p = await db.properties.find_one(
         {"id": pid, **_base_filter()},
         PUBLIC_FIELDS,
     )
     if not p:
+        raise HTTPException(status_code=404, detail="property_not_found")
+
+    # M3.S9 Privacy Gate — determine viewer level
+    user = await get_current_user_optional(request)
+    # Qualified viewer: authenticated + has a confirmed lead on this property
+    qualified = False
+    if user and user.get("id"):
+        qualified_lead = await db.leads.find_one({
+            "property_id": pid,
+            "user_id": user["id"],
+            "gdpr_consent": True,
+        })
+        qualified = bool(qualified_lead)
+    viewer_level = resolve_viewer_level(user, p.get("agency_id"), qualified=qualified)
+    property_privacy = p.get("privacy_level", "L2")
+    if not can_view_property(viewer_level, property_privacy):
         raise HTTPException(status_code=404, detail="property_not_found")
 
     agency = None
@@ -338,8 +544,9 @@ async def public_property_detail(pid: str):
         pass
 
     photos = p.get("photos") or []
-    return {
-        **{k: v for k, v in p.items() if k != "photos"},
+    # Build the enriched dict then apply the privacy gate
+    enriched = {
+        **p,
         "photos": [
             {
                 "url": f"/api/public/property/{pid}/photo/{i}",
@@ -349,6 +556,10 @@ async def public_property_detail(pid: str):
             for i, ph in enumerate(photos)
         ],
         "agency": agency,
+    }
+    return {
+        **apply_privacy_view(enriched, viewer_level),
+        "_viewer_level": viewer_level,  # useful for frontend badge
     }
 
 
