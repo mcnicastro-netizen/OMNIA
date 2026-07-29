@@ -5,6 +5,7 @@ import { api } from "../../shared/lib/api";
 import { useAuth } from "../../shared/lib/auth";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 import Brand from "../../shared/components/Brand";
+import OmniaLogo from "../../shared/components/OmniaLogo";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 
 export default function AcceptInvitePage() {
@@ -63,9 +64,10 @@ export default function AcceptInvitePage() {
       <header className="border-b border-stone-200">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 py-5 flex items-center justify-between">
           <span
-            className="text-xl tracking-tight font-medium text-stone-900"
+            className="flex items-center gap-3 text-xl tracking-tight font-medium text-stone-900"
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
           >
+            <OmniaLogo variant="mark" size="md" />
             <Brand>OMNIA</Brand>
           </span>
           <LanguageSwitcher />

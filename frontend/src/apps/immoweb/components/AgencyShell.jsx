@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../shared/lib/auth";
 import { api } from "../../../shared/lib/api";
 import Brand from "../../../shared/components/Brand";
+import OmniaLogo from "../../../shared/components/OmniaLogo";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher";
 import AlChatWidget from "./AlChatWidget";
 
@@ -122,12 +123,15 @@ export default function AgencyShell({ children, current = "dashboard" }) {
         <div className="px-6 py-6 border-b border-stone-700/40">
           <Link
             to={`/${lang}`}
-            className="text-lg tracking-tight font-medium text-stone-50"
+            className="flex items-center gap-2 text-lg tracking-tight font-medium text-stone-50"
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
           >
-            <Brand>OMNIA</Brand>
-            <span className="text-stone-400">·</span>
-            <Brand className="font-light text-stone-300">app</Brand>
+            <OmniaLogo variant="mark" size="sm" inverted={true} />
+            <span>
+              <Brand>OMNIA</Brand>
+              <span className="text-stone-400">·</span>
+              <Brand className="font-light text-stone-300">app</Brand>
+            </span>
           </Link>
           {agency && (
             <p className="mt-2 text-xs text-stone-400 truncate" data-testid="agency-name">

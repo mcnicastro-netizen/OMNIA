@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth, formatApiErrorDetail } from "../../shared/lib/auth";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import Brand from "../../shared/components/Brand";
+import OmniaLogo from "../../shared/components/OmniaLogo";
 
 export default function RegisterPage() {
   const { t, i18n } = useTranslation();
@@ -64,9 +65,10 @@ export default function RegisterPage() {
       style={{ fontFamily: "'Fraunces', Georgia, serif" }}
     >
       <header className="flex items-center justify-between px-5 sm:px-8 md:px-12 py-5 border-b border-stone-300 bg-white">
-        <Link to={`/${lang}`} className="text-xl md:text-2xl tracking-tight font-medium">
-          <Brand>OMNIA</Brand><span className="text-stone-400">·</span>
-          <Brand className="font-light">app</Brand>
+        <Link to={`/${lang}`} className="flex items-center gap-3 text-xl md:text-2xl tracking-tight font-medium">
+          <OmniaLogo variant="mark" size="md" data-testid="register-logo" />
+          <span><Brand>OMNIA</Brand><span className="text-stone-400">·</span>
+          <Brand className="font-light">app</Brand></span>
         </Link>
         <LanguageSwitcher />
       </header>

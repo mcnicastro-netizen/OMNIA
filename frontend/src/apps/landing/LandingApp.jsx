@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import HealthBadge from "../../shared/components/HealthBadge";
 import TopNav from "../../shared/components/TopNav";
 import Brand from "../../shared/components/Brand";
+import OmniaLogo from "../../shared/components/OmniaLogo";
 
 /**
  * OMNIA Landing — fully responsive (mobile/tablet/desktop).
@@ -47,6 +48,9 @@ export default function LandingApp() {
       {/* Hero */}
       <section className="px-5 sm:px-8 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 max-w-screen-2xl mx-auto grid md:grid-cols-12 gap-10 md:gap-12">
         <div className="md:col-span-7 min-w-0">
+          <div className="mb-8 md:mb-10">
+            <OmniaLogo variant="full" size="xl" data-testid="landing-hero-logo" />
+          </div>
           <p className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-stone-500 mb-4 md:mb-6">
             <Brand>Real estate · Ecosystem · 2026</Brand>
           </p>
@@ -104,7 +108,10 @@ export default function LandingApp() {
 
       <footer className="border-t border-stone-200">
         <div className="max-w-screen-2xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8 text-[10px] sm:text-xs font-sans uppercase tracking-widest text-stone-500 flex flex-col sm:flex-row gap-3 sm:gap-6 sm:justify-between sm:items-center">
-          <span>© 2026 <Brand>OMNIA Real Estate Ecosystem</Brand></span>
+          <span className="flex items-center gap-2">
+            <OmniaLogo variant="mark" size="sm" />
+            © 2026 <Brand>OMNIA Real Estate Lab</Brand>
+          </span>
           <div className="flex flex-wrap gap-4 sm:gap-6">
             <Link
               to={`/${lang}/domain-sovereignty-policy`}

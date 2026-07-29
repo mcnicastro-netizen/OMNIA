@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 import Brand from "../../shared/components/Brand";
+import OmniaLogo from "../../shared/components/OmniaLogo";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 
 const STEPS = ["identity", "fiscal", "branding", "done"];
@@ -105,12 +106,15 @@ export default function OnboardingWizard() {
       <header className="border-b border-stone-200">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 py-5 flex items-center justify-between">
           <span
-            className="text-xl tracking-tight font-medium text-stone-900"
+            className="flex items-center gap-3 text-xl tracking-tight font-medium text-stone-900"
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
           >
-            <Brand>OMNIA</Brand>
-            <span className="text-stone-400">·</span>
-            <Brand className="font-light text-stone-500">app</Brand>
+            <OmniaLogo variant="mark" size="md" />
+            <span>
+              <Brand>OMNIA</Brand>
+              <span className="text-stone-400">·</span>
+              <Brand className="font-light text-stone-500">app</Brand>
+            </span>
           </span>
           <LanguageSwitcher />
         </div>

@@ -77,7 +77,16 @@ async def send_email(
     variables: Optional[dict] = None,
 ) -> dict:
     """Send a localized transactional email via Resend."""
-    variables = variables or {}
+    variables = dict(variables or {})
+    # Inject default assets for branded emails (D-060, logo asset in FE public/)
+    variables.setdefault(
+        "logo_url",
+        os.environ.get("OMNIA_LOGO_URL", "https://omniarealestateecosystem.it/omnia-mark.png"),
+    )
+    variables.setdefault(
+        "public_base",
+        os.environ.get("OMNIA_PUBLIC_URL", "https://omniarealestateecosystem.it"),
+    )
     subject_raw = SUBJECTS.get(template, {}).get(lang) or SUBJECTS.get(template, {}).get("it") or "OMNIA"
     subject = _render(subject_raw, variables)
     html = _render(_read_template(template, lang), variables)
