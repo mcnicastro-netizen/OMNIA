@@ -161,7 +161,11 @@ async def _tool_monthly_performance(db, agency_id: str, params: dict) -> dict:
     active = await db.properties.count_documents({"agency_id": agency_id, "status": "active"})
     new_clients = await db.clients.count_documents({"agency_id": agency_id, "created_at": {"$gte": since}})
     new_leads = await db.leads.count_documents({"agency_id": agency_id, "created_at": {"$gte": since}})
-    hot_leads = await db.leads.count_documents({"agency_id": agency_id, "status": "new", "score": {"$gte": 70}})
+    hot_leads = await db.leads.count_documents(
+        {"agency_id": agency_id,
+         "status": {"$in": ["new", "contacted"]},
+         "score": {"$gte": 70}}
+    )
     return {
         "period_days": 30,
         "new_properties": new_props, "active_properties": active,

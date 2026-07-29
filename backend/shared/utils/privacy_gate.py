@@ -118,9 +118,10 @@ def apply_privacy_view(prop: Dict[str, Any], viewer_level: ViewerLevel) -> Dict[
               "ingested_via", "ingested_api_key_id", "external_id"):
         out.pop(f, None)
     # Energy details beyond class → only from L3
+    # NOTE: model field is `energy_class` (see shared/models/property.py::PropertyEnergy)
     energy = out.get("energy") or {}
     if isinstance(energy, dict) and lvl < 3:
-        out["energy"] = {"class": energy.get("class")}
+        out["energy"] = {"energy_class": energy.get("energy_class")}
 
     # ---- L3 (qualified user with confirmed GDPR): full address + planimetry
     if lvl >= 3:

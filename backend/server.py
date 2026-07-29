@@ -197,6 +197,18 @@ api_router.include_router(v1_gateway_router)
 from apps.v1.widgets import router as v1_widgets_router  # noqa: E402
 api_router.include_router(v1_widgets_router)
 
+# M4 (scaffold) — Billing (Stripe subscriptions + credits) — endpoints 503 finché non attivato
+from apps.billing.routes import router as billing_router  # noqa: E402
+api_router.include_router(billing_router)
+
+# M4 (scaffold) — Docs search (APE via SIAPE + visure OpenAI) — endpoints 503 finché non attivato
+from apps.docs_search import router as docs_search_router  # noqa: E402
+api_router.include_router(docs_search_router)
+
+# MLS Box public widget — griglia immobili per embed su siti agenzia (stile home Nicastro)
+from apps.immoweb.mls_box import router as mls_box_router  # noqa: E402
+api_router.include_router(mls_box_router)
+
 app.include_router(api_router)
 
 

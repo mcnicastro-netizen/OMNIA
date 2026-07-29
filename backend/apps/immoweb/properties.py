@@ -26,7 +26,7 @@ from shared.models.property import (
     CSVImportPayload,
     XMLImportPayload,
 )
-from apps.immoweb.import_agestanet import detect_and_parse as detect_agestanet
+from shared.importers.vendor_map_legacy_a import detect_and_parse as detect_vendor_a
 from apps.immocloud.geocoding import schedule_geocode
 
 logger = logging.getLogger(__name__)
@@ -538,8 +538,9 @@ async def import_xml_feed(
 ):
     """Import properties from a public XML feed URL or pasted XML content.
 
-    Auto-detects Agestanet schema and uses dedicated parser if found.
-    Otherwise falls back to generic Italian portal XML parsing.
+    Auto-detects vendor "A" legacy schema (heuristic on `cod_tipologia`+`id_agenzia`
+    fields) and uses the dedicated parser if found. Otherwise falls back to
+    generic Italian portal XML parsing.
     """
     agency_id = await _require_agency(user)
     db = Database.get()
@@ -561,34 +562,34 @@ async def import_xml_feed(
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"feed_fetch_error: {e}")
 
-    # Try Agestanet dedicated parser first
-    is_agestanet, agestanet_props, agestanet_errors = detect_agestanet(xml_text, agency_id, user["id"])
+    # Try vendor "A" dedicated parser first (heuristic detection)
+    is_vendor_a, vendor_a_props, vendor_a_errors = detect_vendor_a(xml_text, agency_id, user["id"])
 
-    if is_agestanet:
-        # Use Agestanet-parsed properties
+    if is_vendor_a:
+        # Use vendor A-parsed properties
         job = ImportJob(
             agency_id=agency_id,
             source="xml_feed",
-            source_label=f"[Agestanet] {source_label}",
+            source_label=f"[legacy-vendor-a] {source_label}",
             status="processing",
-            total_rows=len(agestanet_props) + len(agestanet_errors),
+            total_rows=len(vendor_a_props) + len(vendor_a_errors),
             initiated_by=user["id"],
         )
         await db.import_jobs.insert_one(job.model_dump())
-        docs = [p.model_dump() for p in agestanet_props]
+        docs = [p.model_dump() for p in vendor_a_props]
         if docs:
             await db.properties.insert_many(docs)
         final_status = (
-            "completed_with_errors" if agestanet_errors and docs else
-            "failed" if agestanet_errors and not docs else
+            "completed_with_errors" if vendor_a_errors and docs else
+            "failed" if vendor_a_errors and not docs else
             "completed"
         )
         await db.import_jobs.update_one(
             {"id": job.id},
             {"$set": {
                 "imported_count": len(docs),
-                "error_count": len(agestanet_errors),
-                "errors": agestanet_errors[:200],
+                "error_count": len(vendor_a_errors),
+                "errors": vendor_a_errors[:200],
                 "status": final_status,
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             }},
@@ -596,10 +597,10 @@ async def import_xml_feed(
         return {
             "job_id": job.id,
             "imported": len(docs),
-            "total_rows": len(agestanet_props) + len(agestanet_errors),
-            "errors": agestanet_errors,
+            "total_rows": len(vendor_a_props) + len(vendor_a_errors),
+            "errors": vendor_a_errors,
             "status": final_status,
-            "format_detected": "agestanet",
+            "format_detected": "legacy_vendor_a",
         }
 
     # Generic XML fallback

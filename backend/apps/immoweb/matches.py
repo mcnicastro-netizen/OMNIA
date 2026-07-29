@@ -66,9 +66,9 @@ async def list_all_matches(
     """Top matches across the agency, sorted by score desc."""
     agency_id = await _agency(user)
     db = Database.get()
-    # Only active properties get matched
+    # Only active/published properties get matched (never drafts)
     props_cursor = db.properties.find(
-        {"agency_id": agency_id, "status": {"$in": ["active", "draft"]}}, {"_id": 0},
+        {"agency_id": agency_id, "status": "active"}, {"_id": 0},
     )
     properties = await props_cursor.to_list(length=2000)
     clients_cursor = db.clients.find(
@@ -145,7 +145,7 @@ async def matches_for_client(
         return {"client": _trim_client(c), "items": [], "total": 0,
                 "info": "client_type_does_not_search"}
     props = await db.properties.find(
-        {"agency_id": agency_id, "status": {"$in": ["active", "draft"]}}, {"_id": 0},
+        {"agency_id": agency_id, "status": "active"}, {"_id": 0},
     ).to_list(length=2000)
     results = []
     for p in props:

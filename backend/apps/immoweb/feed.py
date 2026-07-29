@@ -8,7 +8,7 @@ Endpoints (mounted at /api/feed/...):
   GET /api/feed/schema/osf-v1.json  → JSON Schema documentation
 
 The "secret sauce" (D-028):
-  - Clean schema (strings, not Agestanet's numeric codes)
+  - Clean schema (strings, not opaque legacy numeric codes)
   - Dual format (XML + JSON natively)
   - AI-extended namespace (omnia:ai_description, omnia:lead_score_avg)
   - Documented JSON Schema → invites portals to adopt OMNIA as standard

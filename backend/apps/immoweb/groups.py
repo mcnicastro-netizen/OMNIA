@@ -81,9 +81,9 @@ async def create_group(
 ):
     """Create a new AgencyGroup. Caller becomes owner and is promoted to group_admin.
 
-    NOTE: an `agency_admin` who creates a group becomes `group_admin` and their
-    existing agency stays as a standalone branch (they can attach it via
-    POST /groups/{gid}/branches).
+    The caller's existing agency (if any) is **auto-attached** as the first branch
+    of the group, so the creator lands on a working group with 1 branch — no extra
+    manual step required.
     """
     db = Database.get()
 
@@ -116,6 +116,22 @@ async def create_group(
         {"id": user["id"]},
         {"$set": role_update},
     )
+
+    # Auto-attach the creator's existing agency as the first branch (P1-H fix)
+    # Only if the creator has exactly one agency and it's not already in a group.
+    creator_agencies = user.get("agency_ids") or []
+    if len(creator_agencies) == 1:
+        aid = creator_agencies[0]
+        target_agency = await db.agencies.find_one(
+            {"id": aid, "$or": [{"group_id": None}, {"group_id": {"$exists": False}}]},
+            {"_id": 0, "id": 1, "name": 1},
+        )
+        if target_agency:
+            await db.agencies.update_one(
+                {"id": aid},
+                {"$set": {"group_id": group.id, "updated_at": now}},
+            )
+            logger.info("AgencyGroup: auto-attached agency=%s as first branch of group=%s", aid, group.id)
 
     logger.info("AgencyGroup created: id=%s slug=%s owner=%s", group.id, slug, user["email"])
     return _public(doc)

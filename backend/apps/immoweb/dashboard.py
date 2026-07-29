@@ -1,4 +1,5 @@
-"""OMNIA — ImmoWeb Dashboard KPIs (placeholders + real counts where available)."""
+"""OMNIA — ImmoWeb Dashboard KPIs (real counts from MongoDB)."""
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends
 from typing import List
 
@@ -13,30 +14,45 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 async def get_kpis(user: dict = Depends(get_current_user)):
     """Return KPI cards for the dashboard home.
 
-    M2.S1: most are placeholders (locked=True). Only "members" is real.
-    Real data fills in over M2.S2/S3/S4/S5.
+    All metrics are computed live from MongoDB, scoped to the current agency.
     """
     db = Database.get()
     agency_ids = user.get("agency_ids") or []
     agency_id = agency_ids[0] if agency_ids else None
 
-    # Real KPI: agency members
     members_count = 0
-    if agency_id:
-        members_count = await db.users.count_documents({"agency_ids": agency_id, "is_active": True})
-
-    # Real KPI: pending invites
     invites_count = 0
+    properties_active = 0
+    leads_open = 0
+    matches_week = 0
+    visits_week = 0
+
     if agency_id:
+        members_count = await db.users.count_documents(
+            {"agency_ids": agency_id, "is_active": True}
+        )
         invites_count = await db.agency_invites.count_documents(
             {"agency_id": agency_id, "status": "pending"}
         )
-
-    # Real KPI: active properties (M2.S2)
-    properties_active = 0
-    if agency_id:
         properties_active = await db.properties.count_documents(
             {"agency_id": agency_id, "status": "active"}
+        )
+        # M3.S4 leads (from B2C contact, valuator, mortgage, API v1)
+        leads_open = await db.leads.count_documents(
+            {"agency_id": agency_id, "status": {"$in": ["new", "contacted"]}}
+        )
+        # M2.S3 matches: computed on-read, so we look at the audit log of last 7 days.
+        # Fallback: count clients marked "active" that have at least one property match cached.
+        since = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+        matches_week = await db.match_audit.count_documents(
+            {"agency_id": agency_id, "created_at": {"$gte": since}}
+        )
+        # M3.S3 visits (calendar events of type=visit within 7 days ahead)
+        soon = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+        now_iso = datetime.now(timezone.utc).isoformat()
+        visits_week = await db.calendar_events.count_documents(
+            {"agency_id": agency_id, "event_type": "visit",
+             "start_at": {"$gte": now_iso, "$lte": soon}}
         )
 
     kpis: List[DashboardKPI] = [
@@ -50,23 +66,23 @@ async def get_kpis(user: dict = Depends(get_current_user)):
         DashboardKPI(
             key="leads_open",
             label="Lead aperti",
-            value=0,
+            value=leads_open,
             icon="user-plus",
-            locked=True,
+            locked=False,
         ),
         DashboardKPI(
             key="matches_week",
             label="Nuovi match (7gg)",
-            value=0,
+            value=matches_week,
             icon="sparkles",
-            locked=True,
+            locked=False,
         ),
         DashboardKPI(
             key="visits_week",
-            label="Visite settimana",
-            value=0,
+            label="Visite (7gg)",
+            value=visits_week,
             icon="calendar",
-            locked=True,
+            locked=False,
         ),
         DashboardKPI(
             key="members_active",

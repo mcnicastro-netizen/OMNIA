@@ -11,7 +11,7 @@ from apps.immocloud.saved_searches import run_all_active_saved_searches
 
 router = APIRouter(prefix="/cron", tags=["cron"])
 
-ALLOWED_ROLES = {"super_admin", "platform_admin", "admin"}
+ALLOWED_ROLES = {"super_admin"}
 
 
 @router.post("/saved-searches/run-all")

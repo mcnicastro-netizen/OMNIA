@@ -1,7 +1,10 @@
 """OMNIA — Private Listings Moderation (M3.S5 v2).
 
 Admin endpoints to review B2C private property listings before they go live
-on ImmobilCloud. Only super_admin and platform_admin can moderate.
+on ImmobilCloud.
+
+Only `super_admin` (platform-wide) and `group_admin` (holding) can moderate.
+No fantom roles.
 
 Endpoints (admin auth required):
   GET    /api/app/moderation/queue          — list pending listings
@@ -21,7 +24,7 @@ from shared.db.connection import Database
 logger = logging.getLogger("omnia.moderation")
 router = APIRouter(prefix="/moderation", tags=["moderation"])
 
-ALLOWED_ROLES = {"super_admin", "platform_admin", "admin"}
+ALLOWED_ROLES = {"super_admin", "group_admin"}
 
 
 async def _ensure_admin(user: dict) -> None:

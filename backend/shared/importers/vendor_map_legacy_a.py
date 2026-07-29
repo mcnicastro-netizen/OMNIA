@@ -1,8 +1,13 @@
-"""OMNIA — Dedicated Agestanet XML feed parser.
+"""OMNIA — Legacy XML vendor map (schema "A" — cod_tipologia + rif fields).
 
-Maps Agestanet's official XML schema (partners.agestanet.it/esportazione/xml-feed.htm)
-to OMNIA Property model. Handles their numeric type codes, energy class codes,
-floor codes, etc.
+Handles a specific dialect used by one of the mainstream Italian real-estate
+CRMs (kept anonymous per D-051 — no brand mentions in code, log or UI).
+Maps their numeric type codes, energy class codes, floor codes to the OMNIA
+Property model. Detection is heuristic (see `detect_and_parse`).
+
+⚠️ D-051 compliance: this file must NEVER refer to the vendor by name in
+comments, log lines, exceptions or exported symbols. Public labels always
+say "il tuo attuale fornitore".
 """
 from typing import Optional
 from uuid import uuid4
@@ -13,7 +18,7 @@ from shared.models.property import (
 )
 
 
-# Agestanet "cod_tipologia" (1-51) → OMNIA property_type (16 types)
+# Vendor A "cod_tipologia" (1-51) → OMNIA property_type (16 types)
 TIPOLOGIA_MAP = {
     "1": "altro",         # Qualsiasi
     "2": "altro",         # Albergo
@@ -66,7 +71,7 @@ TIPOLOGIA_MAP = {
     "51": "altro",        # Stabilimento balneare
 }
 
-# Agestanet contratto → OMNIA operation
+# Vendor A contratto → OMNIA operation
 CONTRATTO_MAP = {
     "V": "sale", "v": "sale",
     "A": "rent", "a": "rent",
@@ -74,7 +79,7 @@ CONTRATTO_MAP = {
     "s": "rent",
 }
 
-# Agestanet classe_energetica codes
+# Vendor A classe_energetica codes
 # DL 192/2005:  0=G, 1=A+, 2=A, 3=B..8=G
 # DL 90/2013:  10=A4, 11=A3, 12=A2, 13=A1, 14=B..19=G
 ENERGY_MAP = {
@@ -84,13 +89,13 @@ ENERGY_MAP = {
     "15": "C", "16": "D", "17": "E", "18": "F", "19": "G",
 }
 
-# Agestanet cod_condizioni → OMNIA condition
+# Vendor A cod_condizioni → OMNIA condition
 COND_MAP = {
     "NC": "nuovo", "OT": "ottime", "AB": "buone",
     "RI": "ristrutturato", "DR": "da_ristrutturare", "SM": "ottime",
 }
 
-# Agestanet cod_riscaldamento → OMNIA heating
+# Vendor A cod_riscaldamento → OMNIA heating
 HEAT_MAP = {"AU": "autonomo", "CN": "centralizzato", "IN": "assente"}
 
 
@@ -118,8 +123,8 @@ def _to_bool(v):
     return str(v).strip() in ("1", "true", "True", "si", "sì", "yes")
 
 
-def parse_agestanet_item(elem: ET.Element, agency_id: str, user_id: str) -> tuple[Optional[PropertyInDB], Optional[str]]:
-    """Convert a single Agestanet <immobile> (or root child) into a Property."""
+def parse_vendor_a_item(elem: ET.Element, agency_id: str, user_id: str) -> tuple[Optional[PropertyInDB], Optional[str]]:
+    """Convert a single Vendor A <immobile> (or root child) into a Property."""
     try:
         cod_tipologia = _t(elem, "cod_tipologia") or ""
         property_type = TIPOLOGIA_MAP.get(cod_tipologia, "appartamento")
@@ -178,7 +183,7 @@ def parse_agestanet_item(elem: ET.Element, agency_id: str, user_id: str) -> tupl
         civico = _t(elem, "civico") or ""
         full_address = (f"{indirizzo} {civico}").strip() or None
 
-        # Floor mapping (Agestanet uses numeric codes incl. negatives)
+        # Floor mapping (Vendor A uses numeric codes incl. negatives)
         piano_raw = _t(elem, "piano")
         floor = _to_int(piano_raw) if piano_raw and piano_raw not in ("-3",) else None
 
@@ -214,31 +219,31 @@ def parse_agestanet_item(elem: ET.Element, agency_id: str, user_id: str) -> tupl
                 heating=heat,
             ),
             photos=photos,
-            owner=PropertyOwner(),  # Agestanet feed doesn't expose owner — safer
+            owner=PropertyOwner(),  # Vendor A feed doesn't expose owner — safer
             is_exclusive=(_t(elem, "tipo_incarico") == "E"),
             visibility="public",
         )
         return prop, None
     except Exception as e:
-        return None, f"errore parsing Agestanet: {e}"
+        return None, f"errore parsing Vendor A: {e}"
 
 
 def detect_and_parse(xml_text: str, agency_id: str, user_id: str):
-    """Parse XML — detects if it's Agestanet format and uses the dedicated parser,
+    """Parse XML — detects if it's Vendor A format and uses the dedicated parser,
     else returns None to let the generic XML parser take over.
 
-    Returns: (is_agestanet, list_of_properties, list_of_errors)
+    Returns: (is_vendor_a, list_of_properties, list_of_errors)
     """
     try:
         root = ET.fromstring(xml_text)
     except ET.ParseError as e:
         return False, [], [{"row": 0, "message": f"XML non valido: {e}"}]
 
-    # Heuristic: Agestanet uses specific fields like "cod_tipologia", "rif", "id_agenzia"
+    # Heuristic: Vendor A uses specific fields like "cod_tipologia", "rif", "id_agenzia"
     sample = root.find(".//cod_tipologia")
-    is_agestanet = sample is not None or root.find(".//id_agenzia") is not None
+    is_vendor_a = sample is not None or root.find(".//id_agenzia") is not None
 
-    if not is_agestanet:
+    if not is_vendor_a:
         return False, [], []
 
     # Find all property items
@@ -252,7 +257,7 @@ def detect_and_parse(xml_text: str, agency_id: str, user_id: str):
     properties = []
     errors = []
     for i, elem in enumerate(candidates, start=1):
-        prop, err = parse_agestanet_item(elem, agency_id, user_id)
+        prop, err = parse_vendor_a_item(elem, agency_id, user_id)
         if err:
             errors.append({"row": i, "message": err})
         elif prop:

@@ -740,22 +740,35 @@ def _schedule_lead_email(*, to: str, lang: str, property_title: str,
     )
 
     async def _task():
-        try:
-            await send_email(
-                to=to,
-                template="lead_notification",
-                lang=lang,
-                variables={
-                    "property_title": property_title,
-                    "lead_name": lead_name,
-                    "lead_email": lead_email,
-                    "lead_phone_block": phone_block,
-                    "lead_message": lead_message,
-                    "crm_url": crm_url,
-                },
-            )
-        except Exception as e:
-            logger.warning("lead email failed: %s", e)
+        # Retry with exponential back-off (1s, 3s, 10s). Log final failure.
+        delays = [0, 1, 3, 10]
+        last_exc: Optional[Exception] = None
+        for attempt, delay in enumerate(delays, start=1):
+            if delay:
+                await asyncio.sleep(delay)
+            try:
+                await send_email(
+                    to=to,
+                    template="lead_notification",
+                    lang=lang,
+                    variables={
+                        "property_title": property_title,
+                        "lead_name": lead_name,
+                        "lead_email": lead_email,
+                        "lead_phone_block": phone_block,
+                        "lead_message": lead_message,
+                        "crm_url": crm_url,
+                    },
+                )
+                if attempt > 1:
+                    logger.info("lead email delivered on attempt %d to=%s", attempt, to)
+                return
+            except Exception as e:  # noqa: BLE001
+                last_exc = e
+                logger.warning("lead email attempt %d/%d failed: %s", attempt, len(delays), e)
+        # All retries exhausted → durable log for manual replay
+        logger.error("lead email PERMANENTLY FAILED to=%s agency=%s property=%s: %s",
+                     to, agency_id, property_id, last_exc)
 
     try:
         asyncio.create_task(_task())
