@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SUPPORTED_LANGS } from "../i18n/config";
+import { switchLangInPath } from "../lib/navigation";
 
 const LANG_LABELS = {
   it: "Italiano",
@@ -23,13 +24,7 @@ export default function LanguageSwitcher() {
     const next = e.target.value;
     i18n.changeLanguage(next);
     // M1 — go through the router so LangSync & components stay in sync
-    const segments = location.pathname.split("/").filter(Boolean);
-    if (SUPPORTED_LANGS.includes(segments[0])) {
-      segments[0] = next;
-    } else {
-      segments.unshift(next);
-    }
-    navigate("/" + segments.join("/") + location.search, { replace: true });
+    navigate(switchLangInPath(location.pathname, next) + location.search, { replace: true });
   };
 
   return (

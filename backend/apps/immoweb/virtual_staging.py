@@ -38,6 +38,7 @@ from pydantic import BaseModel, Field
 
 from shared.auth.dependencies import get_current_user
 from shared.db.connection import Database
+from shared.utils.net_guard import assert_public_url
 
 logger = logging.getLogger("omnia.staging")
 router = APIRouter(prefix="/staging", tags=["virtual-staging"])
@@ -590,6 +591,13 @@ async def generate_staging(
         raise HTTPException(400, f"Modalità non supportata: {body.mode}")
     if body.variant_mode not in ("same_style", "multi_style"):
         raise HTTPException(400, f"variant_mode non supportato: {body.variant_mode}")
+
+    # M12 — SSRF/abuse guard: accetta solo media interni (/api/media/...) o URL http(s) pubblici
+    src = (body.image_url or "").strip()
+    if not src:
+        raise HTTPException(400, "image_url mancante")
+    if not src.startswith("/api/media/") and "/api/media/" not in src.split("?")[0][:200]:
+        assert_public_url(src)
 
     styles_list: Optional[List[str]] = None
     if body.variant_mode == "multi_style":

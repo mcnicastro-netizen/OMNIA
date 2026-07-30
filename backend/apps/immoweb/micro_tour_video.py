@@ -33,11 +33,11 @@ from typing import Any, Dict, List, Literal, Optional
 from uuid import uuid4
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-from shared.auth.dependencies import require_roles
+from shared.auth.dependencies import require_roles, get_optional_user
 from shared.db.connection import Database
 
 logger = logging.getLogger(__name__)
@@ -246,9 +246,7 @@ def _property_photo_urls(prop: dict, base_url: str) -> List[str]:
     return urls
 
 
-def _agency_id(user: dict) -> Optional[str]:
-    ids = user.get("agency_ids") or []
-    return ids[0] if ids else None
+from shared.auth.tenant import optional_agency_id as _agency_id
 
 
 # ---------------------------------------------------------------------------
@@ -331,12 +329,22 @@ async def video_status_public(video_id: str):
 
 
 @router.get("/{video_id}/download")
-async def video_download(video_id: str):
-    """Serve the generated MP4. No auth: URL is opaque UUID and only exposed to owner."""
+async def video_download(video_id: str, request: Request):
+    """Serve the generated MP4.
+
+    M11 — agency-owned videos require auth (agency match or super_admin);
+    public UGC videos (agency_id=None, private listings) stay public.
+    """
     db = Database.get()
     doc = await db.videos.find_one({"id": video_id})
     if not doc or doc.get("status") != "ready" or not doc.get("file_path"):
         raise HTTPException(status_code=404, detail="video_not_ready")
+    if doc.get("agency_id"):
+        user = await get_optional_user(request)
+        if not user:
+            raise HTTPException(status_code=401, detail="not_authenticated")
+        if user.get("role") != "super_admin" and doc["agency_id"] not in (user.get("agency_ids") or []):
+            raise HTTPException(status_code=403, detail="forbidden")
     fp = Path(doc["file_path"])
     if not fp.exists():
         raise HTTPException(status_code=410, detail="video_expired")

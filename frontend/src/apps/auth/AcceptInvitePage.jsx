@@ -12,7 +12,10 @@ export default function AcceptInvitePage() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
   const [params] = useSearchParams();
-  const token = params.get("token");
+  // L5 — il token arriva nel fragment (#token=...) per non finire nei log server;
+  // fallback su query string per compatibilità con email già inviate.
+  const hashToken = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("token");
+  const token = hashToken || params.get("token");
   const nav = useNavigate();
   const { refresh } = useAuth();
 

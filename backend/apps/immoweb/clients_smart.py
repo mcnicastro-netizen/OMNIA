@@ -32,11 +32,7 @@ MATCH_COUNT_THRESHOLD = 50   # property is considered a "real" match for the cou
 # Helpers
 # ============================================================
 
-async def _agency_id(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=400, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import arequire_agency as _agency_id
 
 
 def _action_hint_fallback(temperature: str, matches_count: int, is_seller: bool) -> str:

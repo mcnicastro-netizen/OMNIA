@@ -119,10 +119,14 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
       {/* Dropzone */}
       <div
         data-testid="photo-dropzone"
+        role="button"
+        tabIndex={0}
+        aria-label="Carica foto: trascina qui i file JPEG o PNG, oppure premi Invio per selezionarli"
         onClick={() => fileInput.current?.click()}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.current?.click(); } }}
         onDragOver={(e) => e.preventDefault()}
         onDrop={onDrop}
-        className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center cursor-pointer hover:border-stone-500 hover:bg-stone-50 transition"
+        className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center cursor-pointer hover:border-stone-500 hover:bg-stone-50 transition focus:outline-none focus:border-stone-700"
       >
         <p className="text-sm text-stone-700 font-medium">
           📷 Trascina qui le foto JPEG / PNG
@@ -153,7 +157,7 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
               }`}
             >
               <div className="aspect-[4/3] bg-stone-100">
-                <img src={p.url} alt={p.caption || ""} className="w-full h-full object-cover" />
+                <img src={p.url} alt={p.caption || `Foto immobile ${p.order + 1}`} className="w-full h-full object-cover" />
               </div>
               {p.is_cover && (
                 <span className="absolute top-1 left-1 bg-amber-500 text-white text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded">

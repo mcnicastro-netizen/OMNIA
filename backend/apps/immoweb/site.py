@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict
 
 from fastapi import APIRouter, HTTPException, Response
+from fastapi.responses import RedirectResponse
 
 from shared.db.connection import Database
 from apps.immoweb.themes import render_index, render_property
@@ -30,8 +31,8 @@ router = APIRouter(tags=["public-site"])
 
 @router.get("/public/property/{pid}/photo/{idx}")
 async def serve_property_photo(pid: str, idx: int):
-    """Return one property photo as binary image. Resolves base64 stored in Mongo.
-    M3 will migrate to S3 → this endpoint becomes a 302 redirect.
+    """Return one property photo. Handles the 3 storage formats:
+    data: base64 (legacy) · /api/media/... (Object Storage, H10) · http(s) URL (302).
     """
     db = Database.get()
     p = await db.properties.find_one(
@@ -43,19 +44,34 @@ async def serve_property_photo(pid: str, idx: int):
     if idx < 0 or idx >= len(photos):
         raise HTTPException(status_code=404, detail="photo_not_found")
     raw = photos[idx].get("url") or ""
+
+    if raw.startswith("/api/media/"):
+        storage_path = raw[len("/api/media/"):]
+        try:
+            binary, mime = get_object(storage_path)
+        except ObjStoreError:
+            raise HTTPException(status_code=404, detail="photo_not_found")
+        return Response(
+            content=binary, media_type=mime or "image/jpeg",
+            headers={"Cache-Control": "public, max-age=86400"},
+        )
+
+    if raw.startswith("http://") or raw.startswith("https://"):
+        return RedirectResponse(raw, status_code=302)
+
     if raw.startswith("data:"):
         try:
             header, b64 = raw.split(",", 1)
             mime = header.split(";")[0].split(":")[1] or "image/jpeg"
         except (ValueError, IndexError):
-            raise HTTPException(status_code=500, detail="invalid_photo_data")
+            raise HTTPException(status_code=404, detail="invalid_photo_data")
     else:
         mime = "image/jpeg"
         b64 = raw
     try:
         binary = base64.b64decode(b64)
     except Exception:
-        raise HTTPException(status_code=500, detail="decode_failed")
+        raise HTTPException(status_code=404, detail="photo_not_found")
     return Response(
         content=binary, media_type=mime,
         headers={"Cache-Control": "public, max-age=86400"},

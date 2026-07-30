@@ -25,10 +25,12 @@ def create_access_token(user_id: str, email: str, role: str) -> str:
 
 
 def create_refresh_token(user_id: str) -> str:
+    import uuid
     payload = {
         "sub": user_id,
         "exp": datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_DAYS),
         "type": "refresh",
+        "jti": str(uuid.uuid4()),
     }
     return jwt.encode(payload, _get_secret(), algorithm=JWT_ALGORITHM)
 

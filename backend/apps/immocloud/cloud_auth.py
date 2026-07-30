@@ -72,11 +72,14 @@ async def cloud_register(payload: CloudRegisterRequest, response: Response):
 
     # Auto-login via cookie (same flow as standard /auth/login)
     try:
+        from apps.core.auth import _cookie_kwargs, ACCESS_COOKIE_MAX_AGE, REFRESH_COOKIE_MAX_AGE
+        from shared.auth.session_store import store_refresh
         access = create_access_token(user_id, doc["email"], "client")
         refresh = create_refresh_token(user_id)
-        kw = dict(httponly=True, secure=True, samesite="none", path="/")
-        response.set_cookie("access_token", access, max_age=ACCESS_TOKEN_MINUTES * 60, **kw)
-        response.set_cookie("refresh_token", refresh, max_age=REFRESH_TOKEN_DAYS * 24 * 3600, **kw)
+        kw = _cookie_kwargs()
+        response.set_cookie("access_token", access, max_age=ACCESS_COOKIE_MAX_AGE, **kw)
+        response.set_cookie("refresh_token", refresh, max_age=REFRESH_COOKIE_MAX_AGE, **kw)
+        await store_refresh(refresh)
     except Exception as e:
         logger.warning("cookie set failed (non-fatal): %s", e)
 

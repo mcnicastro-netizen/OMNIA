@@ -23,6 +23,7 @@ from shared.auth.brute_force import (
     clear_attempts,
 )
 from shared.auth.dependencies import get_current_user
+from shared.auth.session_store import store_refresh, is_refresh_valid, revoke_refresh
 from shared.models.user import (
     UserInDB,
     UserPublic,
@@ -39,13 +40,23 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 ACCESS_COOKIE_MAX_AGE = ACCESS_TOKEN_MINUTES * 60
 REFRESH_COOKIE_MAX_AGE = REFRESH_TOKEN_DAYS * 24 * 3600
 
+# L13 — secure cookies by default; COOKIE_SECURE=false only for local plain-HTTP dev
+COOKIE_SECURE = os.environ.get("COOKIE_SECURE", "true").lower() != "false"
+COOKIE_SAMESITE = "none" if COOKIE_SECURE else "lax"
 
-def _set_auth_cookies(response: Response, user_id: str, email: str, role: str) -> None:
+
+def _cookie_kwargs() -> dict:
+    return dict(httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/")
+
+
+def _set_auth_cookies(response: Response, user_id: str, email: str, role: str) -> str:
+    """Set access+refresh cookies; returns the refresh token (for jti persistence)."""
     access = create_access_token(user_id, email, role)
     refresh = create_refresh_token(user_id)
-    cookie_kwargs = dict(httponly=True, secure=True, samesite="none", path="/")
-    response.set_cookie("access_token", access, max_age=ACCESS_COOKIE_MAX_AGE, **cookie_kwargs)
-    response.set_cookie("refresh_token", refresh, max_age=REFRESH_COOKIE_MAX_AGE, **cookie_kwargs)
+    kw = _cookie_kwargs()
+    response.set_cookie("access_token", access, max_age=ACCESS_COOKIE_MAX_AGE, **kw)
+    response.set_cookie("refresh_token", refresh, max_age=REFRESH_COOKIE_MAX_AGE, **kw)
+    return refresh
 
 
 def _clear_auth_cookies(response: Response) -> None:
@@ -61,6 +72,7 @@ def _public(user: dict) -> dict:
         "role": user["role"],
         "lang": user.get("lang", "it"),
         "agency_ids": user.get("agency_ids", []),
+        "active_agency_id": user.get("active_agency_id"),
         "is_active": user.get("is_active", True),
         "account_type": user.get("account_type", "agent"),
         "intents": user.get("intents", []),
@@ -108,7 +120,8 @@ async def register(req: RegisterRequest, request: Request, response: Response,
     doc = user.model_dump()
     await db.users.insert_one(doc)
 
-    _set_auth_cookies(response, user.id, email, user.role)
+    _refresh_tok = _set_auth_cookies(response, user.id, email, user.role)
+    await store_refresh(_refresh_tok)
 
     # Send welcome email (non-blocking; ignore failures)
     frontend = os.environ.get("FRONTEND_URL", "")
@@ -147,7 +160,8 @@ async def login(req: LoginRequest, request: Request, response: Response,
         raise HTTPException(status_code=403, detail=t("auth.account_disabled", lang=lang))
 
     await clear_attempts(email, ip)
-    _set_auth_cookies(response, user["id"], email, user["role"])
+    _refresh_tok = _set_auth_cookies(response, user["id"], email, user["role"])
+    await store_refresh(_refresh_tok)
     return _public(user)
 
 
@@ -172,6 +186,10 @@ async def refresh(request: Request, response: Response,
     if not payload or payload.get("type") != "refresh":
         raise HTTPException(status_code=401, detail=t("auth.invalid_token", lang=lang))
 
+    # L12 — refresh valido solo se il jti non è stato revocato (logout)
+    if not await is_refresh_valid(payload):
+        raise HTTPException(status_code=401, detail=t("auth.invalid_token", lang=lang))
+
     db = Database.get()
     user = await db.users.find_one({"id": payload["sub"]})
     if not user:
@@ -183,7 +201,7 @@ async def refresh(request: Request, response: Response,
     response.set_cookie(
         "access_token", access,
         max_age=ACCESS_COOKIE_MAX_AGE,
-        httponly=True, secure=True, samesite="none", path="/",
+        **_cookie_kwargs(),
     )
     return _public(user)
 
@@ -191,9 +209,38 @@ async def refresh(request: Request, response: Response,
 # ---------------- LOGOUT ----------------
 
 @router.post("/logout")
-async def logout(response: Response):
+async def logout(request: Request, response: Response):
+    await revoke_refresh(request.cookies.get("refresh_token"))
     _clear_auth_cookies(response)
     return {"status": "ok"}
+
+
+# ---------------- ACTIVE AGENCY (M5 multi-agency switcher) ----------------
+
+@router.get("/my-agencies")
+async def my_agencies(user: dict = Depends(get_current_user)):
+    """List id+name of every agency the user belongs to (for the switcher)."""
+    ids = user.get("agency_ids") or []
+    if not ids:
+        return {"items": [], "active_agency_id": None}
+    db = Database.get()
+    cursor = db.agencies.find({"id": {"$in": ids}}, {"_id": 0, "id": 1, "display_name": 1, "slug": 1})
+    items = await cursor.to_list(length=100)
+    from shared.auth.tenant import optional_agency_id
+    return {"items": items, "active_agency_id": optional_agency_id(user)}
+
+
+@router.post("/active-agency")
+async def set_active_agency(payload: dict, user: dict = Depends(get_current_user)):
+    agency_id = (payload or {}).get("agency_id")
+    if not agency_id or agency_id not in (user.get("agency_ids") or []):
+        raise HTTPException(status_code=403, detail="agency_not_in_memberships")
+    db = Database.get()
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {"active_agency_id": agency_id, "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"status": "ok", "active_agency_id": agency_id}
 
 
 # ---------------- FORGOT PASSWORD ----------------

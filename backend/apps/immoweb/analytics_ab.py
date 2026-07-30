@@ -28,11 +28,7 @@ class ABTestBody(BaseModel):
     days_lookback: int = Field(default=30, ge=1, le=365)
 
 
-def _agency_id(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=404, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import require_agency_404 as _agency_id
 
 
 async def _property_metrics(db, prop: dict, since_iso: str) -> Dict[str, Any]:

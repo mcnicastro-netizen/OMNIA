@@ -17,11 +17,7 @@ from apps.immoweb.lead_scoring import score_lead
 router = APIRouter(prefix="/matches", tags=["matches"])
 
 
-async def _agency(user: dict) -> str:
-    ag = user.get("agency_ids") or []
-    if not ag:
-        raise HTTPException(status_code=400, detail="no_agency")
-    return ag[0]
+from shared.auth.tenant import arequire_agency as _agency
 
 
 def _trim_client(c: dict) -> dict:

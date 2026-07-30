@@ -28,11 +28,7 @@ class PrivacyUpdateBody(BaseModel):
     reason: Optional[str] = Field(default=None, max_length=500)
 
 
-def _agency_id(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=404, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import require_agency_404 as _agency_id
 
 
 async def _get_owned(db, pid: str, aid: str) -> dict:

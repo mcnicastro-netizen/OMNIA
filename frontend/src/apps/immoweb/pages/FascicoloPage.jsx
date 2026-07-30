@@ -34,17 +34,13 @@ function ChecklistItem({ item, propertyId, onChanged }) {
     }
     setBusy(true);
     try {
-      const b64 = await new Promise((res, rej) => {
-        const r = new FileReader();
-        r.onload = () => res(r.result.split(",")[1]);
-        r.onerror = rej;
-        r.readAsDataURL(file);
-      });
-      await api.post(`/app/fascicolo/${propertyId}/documents`, {
-        doc_type: item.key,
-        name: file.name,
-        mime: file.type || "application/octet-stream",
-        file_data: b64,
+      // M24 — multipart verso Object Storage (niente più base64 nel body JSON)
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      fd.append("doc_type", item.key);
+      await api.post(`/app/fascicolo/${propertyId}/documents/upload`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+        timeout: 60000,
       });
       onChanged();
     } catch (e) {

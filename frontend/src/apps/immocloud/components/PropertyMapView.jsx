@@ -7,9 +7,9 @@
  *
  * Center: Rome by default; auto-fits bounds to markers when present.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -45,11 +45,32 @@ function FitBounds({ markers }) {
   return null;
 }
 
-export default function PropertyMapView({ markers = [] }) {
-  const { t } = useTranslation();
-  const mapRef = useRef(null);
+/* M22 — grid clustering senza dipendenze extra: logica pura in lib/clustering.js */
+import { clusterMarkers, CLUSTER_MAX_ZOOM } from "../lib/clustering";
 
-  const valid = markers.filter((m) => m.lat && m.lng);
+function clusterIcon(count) {
+  const size = count >= 100 ? 46 : count >= 10 ? 40 : 34;
+  return L.divIcon({
+    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:#0B1E3F;color:#fff;display:flex;align-items:center;justify-content:center;font:600 12px/1 Inter,sans-serif;border:2px solid #C19A6B;box-shadow:0 2px 6px rgba(0,0,0,.3)">${count}</div>`,
+    className: "omnia-cluster-icon",
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+}
+
+function ZoomTracker({ onZoom }) {
+  const map = useMapEvents({ zoomend: () => onZoom(map.getZoom()) });
+  return null;
+}
+
+export default function PropertyMapView({ markers = [] }) {
+  const { t, i18n } = useTranslation();
+  const lang = (i18n.language || "it").slice(0, 2);
+  const mapRef = useRef(null);
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+
+  const valid = useMemo(() => markers.filter((m) => m.lat && m.lng), [markers]);
+  const { clusters, singles } = useMemo(() => clusterMarkers(valid, zoom), [valid, zoom]);
 
   return (
     <div data-testid="property-map-view" className="relative">
@@ -73,7 +94,21 @@ export default function PropertyMapView({ markers = [] }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <FitBounds markers={valid} />
-        {valid.map((m) => (
+        <ZoomTracker onZoom={setZoom} />
+        {clusters.map((c, i) => (
+          <Marker
+            key={`cluster-${i}-${c.count}`}
+            position={[c.lat, c.lng]}
+            icon={clusterIcon(c.count)}
+            eventHandlers={{
+              click: () => {
+                const map = mapRef.current;
+                if (map) map.setView([c.lat, c.lng], Math.min(map.getZoom() + 2, CLUSTER_MAX_ZOOM));
+              },
+            }}
+          />
+        ))}
+        {singles.map((m) => (
           <Marker key={m.id} position={[m.lat, m.lng]}>
             <Popup>
               <div data-testid={`map-popup-${m.id}`} className="min-w-[180px]">
@@ -87,7 +122,7 @@ export default function PropertyMapView({ markers = [] }) {
                   {formatPrice(m)}
                 </div>
                 <a
-                  href={`/it/cloud/property/${m.id}`}
+                  href={`/${lang}/cloud/property/${m.id}`}
                   data-testid={`map-popup-link-${m.id}`}
                   className="text-xs uppercase tracking-widest text-[#C19A6B] hover:underline mt-2 inline-block"
                 >

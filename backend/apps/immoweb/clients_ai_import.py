@@ -351,11 +351,7 @@ def _normalize_row(r: Dict[str, Any]) -> Dict[str, Any]:
 # Helpers
 # ============================================================
 
-async def _agency_id(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=400, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import arequire_agency as _agency_id
 
 
 def _draft_doc(agency_id: str, user_id: str, filename: str, fmt: str,

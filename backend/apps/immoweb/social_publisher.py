@@ -136,11 +136,7 @@ class SocialPublishRequest(OmniaBaseModel):
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _agency_id(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=404, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import require_agency_404 as _agency_id
 
 
 def _public_channel(doc: dict) -> dict:

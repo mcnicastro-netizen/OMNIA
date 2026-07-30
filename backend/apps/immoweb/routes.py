@@ -20,11 +20,11 @@ from apps.immoweb.micro_tour_video import router as micro_tour_router, public_ro
 from apps.immoweb.invites import router as invites_router
 from apps.immoweb.dashboard import router as dashboard_router
 from apps.immoweb.properties import router as properties_router
+import apps.immoweb.properties_import  # noqa: F401 — registra le route import CSV/XML sul router (L9)
 from apps.immoweb.clients import router as clients_router
 from apps.immoweb.clients_smart import router as clients_smart_router
 from apps.immoweb.clients_ai_import import router as clients_ai_import_router
 from apps.immoweb.matches import router as matches_router
-from apps.immoweb.portals import router as portals_router
 from apps.immoweb.brand_extractor import router as brand_router
 from apps.immoweb.custom_domain import router as custom_domain_router
 from apps.immoweb.themes import router as themes_router
@@ -69,7 +69,6 @@ router.include_router(clients_smart_router)
 router.include_router(clients_ai_import_router)
 router.include_router(clients_router)
 router.include_router(matches_router)
-router.include_router(portals_router)
 router.include_router(brand_router)
 router.include_router(custom_domain_router)
 router.include_router(themes_router)

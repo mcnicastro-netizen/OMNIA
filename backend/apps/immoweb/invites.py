@@ -97,7 +97,7 @@ async def create_invite(
 
     # Send magic-link email
     frontend = os.environ.get("FRONTEND_URL", "").rstrip("/")
-    accept_url = f"{frontend}/{lang}/accept-invite?token={token}"
+    accept_url = f"{frontend}/{lang}/accept-invite#token={token}"
     try:
         await send_email(
             to=email,

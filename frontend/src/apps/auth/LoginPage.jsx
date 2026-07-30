@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth, formatApiErrorDetail } from "../../shared/lib/auth";
+import { sanitizeNextParam } from "../../shared/lib/navigation";
 import LanguageSwitcher from "../../shared/components/LanguageSwitcher";
 import Brand from "../../shared/components/Brand";
 import OmniaLogo from "../../shared/components/OmniaLogo";
@@ -12,19 +13,11 @@ export default function LoginPage() {
   const { login } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
-  // C3 — anti open-redirect: only same-origin relative paths are allowed
-  const rawNext = new URLSearchParams(location.search).get("next");
-  let next = `/${lang}/app/dashboard`;
-  if (rawNext) {
-    try {
-      const decoded = decodeURIComponent(rawNext);
-      if (/^\/(?!\/)/.test(decoded) && !decoded.includes("://") && !decoded.includes("\\")) {
-        next = decoded;
-      }
-    } catch {
-      // keep default
-    }
-  }
+  // C3 — anti open-redirect (logica pura testata in shared/lib/navigation.ts)
+  const next = sanitizeNextParam(
+    new URLSearchParams(location.search).get("next"),
+    `/${lang}/app/dashboard`
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

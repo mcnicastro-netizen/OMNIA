@@ -20,6 +20,22 @@ export default function AgencyShell({ children, current = "dashboard" }) {
   const location = useLocation();
   const [agency, setAgency] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [myAgencies, setMyAgencies] = useState([]);
+
+  // M5 — multi-agency switcher: carica l'elenco solo se l'utente ha più agenzie
+  useEffect(() => {
+    if ((user?.agency_ids || []).length < 2) return;
+    api.get("/auth/my-agencies").then((r) => setMyAgencies(r.data.items || [])).catch(() => {});
+  }, [user?.agency_ids]);
+
+  const switchAgency = async (agencyId) => {
+    try {
+      await api.post("/auth/active-agency", { agency_id: agencyId });
+      window.location.reload();
+    } catch {
+      // noop
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -140,10 +156,23 @@ export default function AgencyShell({ children, current = "dashboard" }) {
               <Brand className="font-light text-stone-300">app</Brand>
             </span>
           </Link>
-          {agency && (
+          {agency && myAgencies.length < 2 && (
             <p className="mt-2 text-xs text-stone-400 truncate" data-testid="agency-name">
               {agency.display_name}
             </p>
+          )}
+          {myAgencies.length >= 2 && (
+            <select
+              data-testid="agency-switcher"
+              value={user?.active_agency_id || user?.agency_ids?.[0] || ""}
+              onChange={(e) => switchAgency(e.target.value)}
+              className="mt-2 w-full bg-[#0B1E3F] border border-stone-600 rounded px-2 py-1 text-xs text-stone-300 cursor-pointer"
+              aria-label="Cambia agenzia attiva"
+            >
+              {myAgencies.map((a) => (
+                <option key={a.id} value={a.id}>{a.display_name}</option>
+              ))}
+            </select>
           )}
         </div>
 

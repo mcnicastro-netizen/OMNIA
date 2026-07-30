@@ -6,15 +6,41 @@ import { api, API_BASE } from "../../shared/lib/api";
 import { formatApiErrorDetail } from "../../shared/lib/auth";
 
 function parseCSV(text) {
-  // Simple CSV parser supporting ; and , as separators
-  const lines = text.replace(/\r\n/g, "\n").split("\n").filter((l) => l.trim().length > 0);
-  if (lines.length === 0) return { headers: [], rows: [] };
-  const sep = (lines[0].match(/;/g) || []).length > (lines[0].match(/,/g) || []).length ? ";" : ",";
-  const headers = lines[0].split(sep).map((h) => h.trim().replace(/^\ufeff/, "").replace(/^"|"$/g, ""));
-  const rows = lines.slice(1).map((line) => {
-    const values = line.split(sep).map((v) => v.trim().replace(/^"|"$/g, ""));
+  // M14 — RFC-4180-aware parser: supporta campi quotati con separatori/righe interne
+  // e doppi apici escaped (""). Auto-rileva ; o , come separatore.
+  const clean = text.replace(/^\ufeff/, "").replace(/\r\n/g, "\n");
+  const firstLine = clean.split("\n", 1)[0] || "";
+  const sep = (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ";" : ",";
+
+  const records = [];
+  let field = "";
+  let record = [];
+  let inQuotes = false;
+  for (let i = 0; i < clean.length; i++) {
+    const c = clean[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (clean[i + 1] === '"') { field += '"'; i++; }
+        else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === sep) {
+      record.push(field); field = "";
+    } else if (c === "\n") {
+      record.push(field); field = "";
+      if (record.some((v) => v.trim() !== "")) records.push(record);
+      record = [];
+    } else field += c;
+  }
+  record.push(field);
+  if (record.some((v) => v.trim() !== "")) records.push(record);
+
+  if (records.length === 0) return { headers: [], rows: [] };
+  const headers = records[0].map((h) => h.trim());
+  const rows = records.slice(1).map((values) => {
     const obj = {};
-    headers.forEach((h, i) => (obj[h] = values[i] ?? ""));
+    headers.forEach((h, i) => (obj[h] = (values[i] ?? "").trim()));
     return obj;
   });
   return { headers, rows };
@@ -97,7 +123,26 @@ export default function PropertyImportPage() {
         ? { feed_url: xmlUrl.trim() }
         : { xml_content: xmlContent };
       const { data } = await api.post("/app/properties/import/xml", payload);
-      setXmlResult(data);
+      if (data.async && data.job_id) {
+        // M23 — import URL in background: polling dello stato job ogni 2s (max 5 min)
+        for (let i = 0; i < 150; i++) {
+          await new Promise((r) => setTimeout(r, 2000));
+          const { data: job } = await api.get(`/app/properties/import/jobs/${data.job_id}`);
+          if (["completed", "completed_with_errors", "failed"].includes(job.status)) {
+            setXmlResult({
+              job_id: job.id,
+              imported: job.imported_count,
+              total_rows: job.total_rows,
+              errors: job.errors || [],
+              status: job.status,
+            });
+            return;
+          }
+        }
+        setXmlError("Import ancora in corso — controlla lo storico import tra qualche minuto.");
+      } else {
+        setXmlResult(data);
+      }
     } catch (err) {
       setXmlError(formatApiErrorDetail(err?.response?.data?.detail) || t("common.error"));
     } finally {

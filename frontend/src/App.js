@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import "@/App.css";
 import {
   BrowserRouter,
@@ -15,51 +15,62 @@ import "@/shared/i18n/config";
 import { SUPPORTED_LANGS, DEFAULT_LANG } from "@/shared/i18n/config";
 import { AuthProvider } from "@/shared/lib/auth";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
-
-import LandingApp from "@/apps/landing/LandingApp";
-import AgenziesLandingPage from "@/apps/landing/AgenziesLandingPage";
-import DomainVerifyPage from "@/apps/landing/DomainVerifyPage";
-import DomainSovereigntyPolicyPage from "@/apps/landing/DomainSovereigntyPolicyPage";
-import WidgetsShowcasePage from "@/pages/WidgetsShowcasePage";
-import ImmocloudApp from "@/apps/immocloud/ImmocloudApp";
-import ImmowebApp from "@/apps/immoweb/ImmowebApp";
-import DashboardPage from "@/apps/immoweb/DashboardPage";
-import OnboardingWizard from "@/apps/immoweb/OnboardingWizard";
-import MembersPage from "@/apps/immoweb/MembersPage";
-import SettingsPage from "@/apps/immoweb/SettingsPage";
-import PropertiesPage from "@/apps/immoweb/PropertiesPage";
-import PropertyFormPage from "@/apps/immoweb/PropertyFormPage";
-import PropertyImportPage from "@/apps/immoweb/PropertyImportPage";
-import ClientsPage from "@/apps/immoweb/ClientsPage";
-import ClientFormPage from "@/apps/immoweb/ClientFormPage";
-import ClientImportPage from "@/apps/immoweb/ClientImportPage";
-import MatchesPage from "@/apps/immoweb/MatchesPage";
-import MatchLeadScorePage from "@/apps/immoweb/MatchLeadScorePage";
-import PortalsPage from "@/apps/immoweb/PortalsPage";
-import WebsitePage from "@/apps/immoweb/WebsitePage";
-import ModerationPage from "@/apps/immoweb/ModerationPage";
-import VirtualStagingPage from "@/apps/immoweb/pages/VirtualStagingPage";
-import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
-import MutuiToolPage from "@/apps/immoweb/pages/MutuiToolPage";
-import GroupPage from "@/apps/immoweb/pages/GroupPage";
-import ApiKeysPage from "@/apps/immoweb/pages/ApiKeysPage";
-import BillingPage from "@/apps/immoweb/pages/BillingPage";
-import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
-import PublishingPage from "@/apps/immoweb/pages/PublishingPage";
-import PortalWizardPage from "@/apps/immoweb/pages/PortalWizardPage";
-import SocialPublisherPage from "@/apps/immoweb/pages/SocialPublisherPage";
-import HalKnowledgePage from "@/apps/immoweb/pages/HalKnowledgePage";
-import BrandLabPage from "@/apps/immoweb/pages/BrandLabPage";
-import AcademyApp from "@/apps/academy/AcademyApp";
-import LegalApp from "@/apps/legal/LegalApp";
-
-import LoginPage from "@/apps/auth/LoginPage";
-import RegisterPage from "@/apps/auth/RegisterPage";
-import ForgotPasswordPage from "@/apps/auth/ForgotPasswordPage";
-import ResetPasswordPage from "@/apps/auth/ResetPasswordPage";
-import AcceptInvitePage from "@/apps/auth/AcceptInvitePage";
 import ProtectedRoute from "@/shared/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
+
+// M16 — code splitting: ogni app/pagina è un chunk separato caricato on-demand
+const LandingApp = lazy(() => import("@/apps/landing/LandingApp"));
+const AgenziesLandingPage = lazy(() => import("@/apps/landing/AgenziesLandingPage"));
+const DomainVerifyPage = lazy(() => import("@/apps/landing/DomainVerifyPage"));
+const DomainSovereigntyPolicyPage = lazy(() => import("@/apps/landing/DomainSovereigntyPolicyPage"));
+const WidgetsShowcasePage = lazy(() => import("@/pages/WidgetsShowcasePage"));
+const ImmocloudApp = lazy(() => import("@/apps/immocloud/ImmocloudApp"));
+const ImmowebApp = lazy(() => import("@/apps/immoweb/ImmowebApp"));
+const DashboardPage = lazy(() => import("@/apps/immoweb/DashboardPage"));
+const OnboardingWizard = lazy(() => import("@/apps/immoweb/OnboardingWizard"));
+const MembersPage = lazy(() => import("@/apps/immoweb/MembersPage"));
+const SettingsPage = lazy(() => import("@/apps/immoweb/SettingsPage"));
+const PropertiesPage = lazy(() => import("@/apps/immoweb/PropertiesPage"));
+const PropertyFormPage = lazy(() => import("@/apps/immoweb/PropertyFormPage"));
+const PropertyImportPage = lazy(() => import("@/apps/immoweb/PropertyImportPage"));
+const ClientsPage = lazy(() => import("@/apps/immoweb/ClientsPage"));
+const ClientFormPage = lazy(() => import("@/apps/immoweb/ClientFormPage"));
+const ClientImportPage = lazy(() => import("@/apps/immoweb/ClientImportPage"));
+const MatchesPage = lazy(() => import("@/apps/immoweb/MatchesPage"));
+const MatchLeadScorePage = lazy(() => import("@/apps/immoweb/MatchLeadScorePage"));
+const WebsitePage = lazy(() => import("@/apps/immoweb/WebsitePage"));
+const ModerationPage = lazy(() => import("@/apps/immoweb/ModerationPage"));
+const VirtualStagingPage = lazy(() => import("@/apps/immoweb/pages/VirtualStagingPage"));
+const FascicoloPage = lazy(() => import("@/apps/immoweb/pages/FascicoloPage"));
+const MutuiToolPage = lazy(() => import("@/apps/immoweb/pages/MutuiToolPage"));
+const GroupPage = lazy(() => import("@/apps/immoweb/pages/GroupPage"));
+const ApiKeysPage = lazy(() => import("@/apps/immoweb/pages/ApiKeysPage"));
+const BillingPage = lazy(() => import("@/apps/immoweb/pages/BillingPage"));
+const ImportXmlPage = lazy(() => import("@/apps/immoweb/pages/ImportXmlPage"));
+const PublishingPage = lazy(() => import("@/apps/immoweb/pages/PublishingPage"));
+const PortalWizardPage = lazy(() => import("@/apps/immoweb/pages/PortalWizardPage"));
+const SocialPublisherPage = lazy(() => import("@/apps/immoweb/pages/SocialPublisherPage"));
+const HalKnowledgePage = lazy(() => import("@/apps/immoweb/pages/HalKnowledgePage"));
+const BrandLabPage = lazy(() => import("@/apps/immoweb/pages/BrandLabPage"));
+const AcademyApp = lazy(() => import("@/apps/academy/AcademyApp"));
+const LegalApp = lazy(() => import("@/apps/legal/LegalApp"));
+const LoginPage = lazy(() => import("@/apps/auth/LoginPage"));
+const RegisterPage = lazy(() => import("@/apps/auth/RegisterPage"));
+const ForgotPasswordPage = lazy(() => import("@/apps/auth/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("@/apps/auth/ResetPasswordPage"));
+const AcceptInvitePage = lazy(() => import("@/apps/auth/AcceptInvitePage"));
+
+function RouteFallback() {
+  return (
+    <div
+      data-testid="route-loading"
+      className="min-h-screen flex items-center justify-center bg-stone-50 text-stone-500 font-sans text-sm uppercase tracking-widest"
+    >
+      …
+    </div>
+  );
+}
+
 
 function LangSync({ children }) {
   const { lang } = useParams();
@@ -118,6 +129,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <ErrorBoundary>
+        <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<RootRedirect />} />
           <Route
@@ -360,16 +372,6 @@ function App() {
                     }
                   />
 
-                  {/* Portals (M2.S5 Layer A) */}
-                  <Route
-                    path="app/portals"
-                    element={
-                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
-                        <PortalsPage />
-                      </ProtectedRoute>
-                    }
-                  />
-
                   {/* Website / Brand Studio (M2.S5 Layer D) */}
                   <Route
                     path="app/website"
@@ -420,6 +422,7 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
         </ErrorBoundary>
         <Toaster position="top-right" richColors />
       </BrowserRouter>

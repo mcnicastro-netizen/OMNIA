@@ -162,11 +162,7 @@ async def _gemini_brand_profile(summary: Dict[str, Any]) -> Dict[str, Any]:
         raise HTTPException(status_code=502, detail=f"extraction_failed: {type(e).__name__}")
 
 
-async def _agency(user: dict) -> str:
-    ag = user.get("agency_ids") or []
-    if not ag:
-        raise HTTPException(status_code=400, detail="no_agency")
-    return ag[0]
+from shared.auth.tenant import arequire_agency as _agency
 
 
 @router.post("/extract-from-url")

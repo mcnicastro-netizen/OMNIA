@@ -29,10 +29,11 @@ async def get_current_user(request: Request) -> dict:
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="user_not_found")
 
-    # Inject default agency for tenant filtering (first agency_id if user has any)
-    agencies = user.get("agency_ids") or []
-    if agencies:
-        set_current_agency_id(agencies[0])
+    # M5 — tenant filtering usa l'agenzia attiva (active_agency_id se legittima, altrimenti la prima)
+    from shared.auth.tenant import optional_agency_id
+    aid = optional_agency_id(user)
+    if aid:
+        set_current_agency_id(aid)
 
     return user
 

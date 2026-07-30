@@ -12,11 +12,12 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile
 from pydantic import BaseModel, Field
 
 from shared.auth.dependencies import get_current_user
 from shared.db.connection import Database
+from shared.storage import put_object, get_object, ObjStoreError
 
 logger = logging.getLogger("omnia.fascicolo")
 router = APIRouter(prefix="/fascicolo", tags=["fascicolo"])
@@ -48,8 +49,7 @@ class DocumentUploadBody(BaseModel):
     file_data: str  # base64 (no data: prefix)
 
 
-def _agency_of(user: dict) -> Optional[str]:
-    return user.get("agency_id") or (user.get("agency_ids") or [None])[0]
+from shared.auth.tenant import optional_agency_id as _agency_of
 
 
 async def _get_property(db, user: dict, property_id: str, projection: Optional[dict] = None) -> dict:
@@ -224,6 +224,51 @@ async def upload_document(
     return {"ok": True, "document": meta}
 
 
+@router.post("/{property_id}/documents/upload")
+async def upload_document_multipart(
+    property_id: str,
+    file: UploadFile = File(...),
+    doc_type: str = Form(...),
+    user=Depends(get_current_user),
+) -> Dict[str, Any]:
+    """M24 — multipart upload verso Object Storage (niente base64 nel body/DB)."""
+    db = Database.get()
+    if doc_type not in {d["key"] for d in DOC_TYPES}:
+        raise HTTPException(400, f"Tipo documento non valido: {doc_type}")
+    raw = await file.read()
+    if not raw:
+        raise HTTPException(400, "empty_file")
+    if len(raw) > MAX_DOC_MB * 1024 * 1024:
+        raise HTTPException(413, f"Documento troppo grande (max {MAX_DOC_MB} MB)")
+
+    await _get_property(db, user, property_id, {"_id": 1})
+
+    doc_id = str(uuid4())
+    mime = file.content_type or "application/octet-stream"
+    storage_path = f"omnia/fascicolo/{property_id}/{doc_id}"
+    try:
+        put_object(storage_path, raw, mime)
+    except ObjStoreError as e:
+        logger.exception("fascicolo upload failed prop=%s: %s", property_id, e)
+        raise HTTPException(502, "storage_upload_failed") from e
+
+    doc = {
+        "id": doc_id,
+        "doc_type": doc_type,
+        "name": file.filename or doc_id,
+        "mime": mime,
+        "size": len(raw),
+        "storage_path": storage_path,
+        "uploaded_by": user["id"],
+        "uploaded_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.properties.update_one(
+        {"id": property_id},
+        {"$push": {"documents": doc}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    return {"ok": True, "document": doc}
+
+
 @router.get("/{property_id}/documents/{doc_id}/download")
 async def download_document(property_id: str, doc_id: str, user=Depends(get_current_user)) -> Response:
     db = Database.get()
@@ -231,7 +276,13 @@ async def download_document(property_id: str, doc_id: str, user=Depends(get_curr
     doc = next((d for d in (prop.get("documents") or []) if d["id"] == doc_id), None)
     if not doc:
         raise HTTPException(404, "Documento non trovato")
-    raw = base64.b64decode(doc["file_data"])
+    if doc.get("storage_path"):
+        try:
+            raw, _ct = get_object(doc["storage_path"])
+        except ObjStoreError:
+            raise HTTPException(410, "Documento non più disponibile")
+    else:
+        raw = base64.b64decode(doc["file_data"])  # legacy base64 records
     return Response(
         content=raw,
         media_type=doc.get("mime") or "application/octet-stream",

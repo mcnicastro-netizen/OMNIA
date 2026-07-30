@@ -75,11 +75,7 @@ class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
 
 
-def _agency_id(user: dict) -> str:
-    aids = user.get("agency_ids") or []
-    if not aids:
-        raise HTTPException(status_code=403, detail="no_agency_membership")
-    return aids[0]
+from shared.auth.tenant import require_agency_membership as _agency_id
 
 
 async def _check_rate_limit(db, user_id: str, kind: Optional[str] = None) -> None:

@@ -23,11 +23,7 @@ def _strip(doc: dict) -> dict:
     return {k: v for k, v in doc.items() if k != "_id"}
 
 
-async def _agency(user: dict) -> str:
-    ids = user.get("agency_ids") or []
-    if not ids:
-        raise HTTPException(status_code=400, detail="no_agency")
-    return ids[0]
+from shared.auth.tenant import arequire_agency as _agency
 
 
 @router.get("", response_model=ClientListResponse)
