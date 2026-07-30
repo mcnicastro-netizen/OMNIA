@@ -92,7 +92,7 @@ async def _download_photo(url: str, dest: Path) -> bool:
     try:
         if url.startswith("/api/public/property/"):
             # Internal endpoint — resolve via backend base
-            base = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
+            base = os.environ.get("PUBLIC_BASE_URL", "").rstrip("/")
             if not base:
                 # fallback to localhost:8001 in-container
                 base = "http://localhost:8001"
@@ -291,7 +291,7 @@ async def kenburns_public(pid: str, body: KenBurnsRequest):
     })
     if not prop:
         raise HTTPException(status_code=404, detail="property_not_found")
-    base = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/") or "http://localhost:8001"
+    base = os.environ.get("PUBLIC_BASE_URL", "").rstrip("/") or "http://localhost:8001"
     photo_urls = body.photo_urls or _property_photo_urls(prop, base)
     if not photo_urls:
         raise HTTPException(status_code=422, detail="no_photos_available")
@@ -461,7 +461,7 @@ async def kling_from_property(
         raise HTTPException(status_code=422, detail="no_cover_photo")
     image_url = cover["url"]
     if not image_url.startswith("http"):
-        base = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
+        base = os.environ.get("PUBLIC_BASE_URL", "").rstrip("/")
         image_url = f"{base}{image_url}"
 
     # Deduct credits atomically

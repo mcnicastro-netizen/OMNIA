@@ -43,6 +43,7 @@ import FascicoloPage from "@/apps/immoweb/pages/FascicoloPage";
 import MutuiToolPage from "@/apps/immoweb/pages/MutuiToolPage";
 import GroupPage from "@/apps/immoweb/pages/GroupPage";
 import ApiKeysPage from "@/apps/immoweb/pages/ApiKeysPage";
+import BillingPage from "@/apps/immoweb/pages/BillingPage";
 import ImportXmlPage from "@/apps/immoweb/pages/ImportXmlPage";
 import PublishingPage from "@/apps/immoweb/pages/PublishingPage";
 import PortalWizardPage from "@/apps/immoweb/pages/PortalWizardPage";
@@ -235,6 +236,14 @@ function App() {
                     element={
                       <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
                         <SettingsPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="app/settings/billing"
+                    element={
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "group_admin"]}>
+                        <BillingPage />
                       </ProtectedRoute>
                     }
                   />

@@ -29,7 +29,7 @@ def _backend_base(request: Request) -> str:
     Priority: explicit `PUBLIC_BASE_URL` env → forwarded headers set by the
     ingress (host + proto) → request base URL (fallback for local dev).
     """
-    explicit = os.environ.get("PUBLIC_BASE_URL") or os.environ.get("REACT_APP_BACKEND_URL")
+    explicit = os.environ.get("PUBLIC_BASE_URL")
     if explicit:
         return explicit.rstrip("/")
     fwd_host = request.headers.get("x-forwarded-host") or request.headers.get("host")

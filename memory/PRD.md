@@ -1,9 +1,28 @@
 # OMNIA Real Estate — Product Requirements Document
 
-**Versione**: 1.0
-**Data**: Gennaio 2026 (ultimo update: 26-Feb-2026)
+**Versione**: 1.1
+**Data**: Gennaio 2026 (ultimo update: 27-Feb-2026)
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1 ✅ + M2 ✅ + M3 ✅ + M3.S6-pro ✅ + M5.S1 ✅ + M5.S3 ✅ + Sprint 1 ✅ + Sprint 1.5 ✅ + Sprint 2 ✅ + Sprint 3 ✅ + Sprint 4 ✅ DONE** — Aggiornamento **26-Feb-2026**:
+- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit Sweep Feb-2026 DONE** — Aggiornamento **27-Feb-2026**:
+  - ✅ **27-Feb-2026 (fork audit-driven)**: **BUG SWEEP FEB-2026 + STRIPE SANDBOX + APE/OpenAI DOCS SCAFFOLD + MLS BOX DONE** — Chiuso ~4h di lavoro. Audit profondo del codice per pilastri (Architettura, Qualità, Funzionalità) → 18 punti A-R organizzati in `/app/memory/AUDIT_TODO_FEB2026.md`. Poi:
+    - 🐛 **P0-A Privacy Gate energy field bug** — `apply_privacy_view` scriveva `{"class": ...}` invece di `{"energy_class": ...}`. La classe energetica è ora visibile su ImmobilCloud L1/L2 (99% del traffico B2C). Fix in `shared/utils/privacy_gate.py:120-124`.
+    - 🐛 **P0-B Dashboard KPI mentivano** — `leads_open` e `matches_week` erano `locked=True, value=0` mentre il rollup gruppi contava dati reali. Riscritto `apps/immoweb/dashboard.py`: legge `db.leads` (new+contacted), `db.match_audit`, `db.calendar_events`. Ora l'agente singola-agenzia vede i lead sul dashboard.
+    - 🐛 **P0-D Matches escludono draft** — filtro `status:"active"` sostituito a `status:{$in:["active","draft"]}`. Meno falsi positivi.
+    - 🐛 **P0-E HAL hot leads** — ora include `status:contacted` con score alto (non solo `new`).
+    - 🐛 **P0-F Doppio sistema Portali** — voce sidebar "Portali" legacy rimossa da `AgencyShell.jsx`. Solo "Publishing" (M2.6a) attivo.
+    - 🐛 **P0-C Moderation ruoli fantasma** — `platform_admin`/`admin` erano ghosts. Ora `ALLOWED_ROLES = {"super_admin", "group_admin"}` (moderation.py) e `{"super_admin"}` in cron.py.
+    - 🐛 **P1-H Group create auto-attach agency** — `POST /api/app/groups` ora aggancia automaticamente l'unica agency del creatore come primo branch (se non già in un gruppo). No più due step manuali.
+    - 🐛 **P1-K Retry email lead** — `_schedule_lead_email` con exponential back-off (1s, 3s, 10s) + durable error log. Zero lead persi silenziosamente.
+    - 🐛 **P3-M REACT_APP_BACKEND_URL nel backend** — sostituito con `PUBLIC_BASE_URL` in `micro_tour_video.py` e `v1/widgets.py`. Zero cross-contamination env frontend/backend.
+    - 🐛 **P3-Q .env critici** — aggiunti `CREDENTIALS_MASTER_KEY` (AES-256-GCM per publishing/social), `OMNIA_PORTAL_ENC_KEY`, `PUBLIC_BASE_URL`, `FRONTEND_BASE_URL`, `SUPER_ADMIN_EMAIL`, tutti gli STRIPE_*, tutti gli SIAPE_*/OPENAI_DOCS_*.
+    - 🐛 **White-label footer** — rimosso "Powered by OMNIA" dai siti agenzia (`themes.py:388`), Founder-requested D-051 no brand mentions al cliente.
+    - 🧹 **D-051 vendor map rename** — `apps/immoweb/import_agestanet.py` (261 righe, brand-mention nel filesystem) → `shared/importers/vendor_map_legacy_a.py`. Zero occorrenze del brand nel codice.
+    - 💳 **Stripe TEST MODE ATTIVO** — sandbox Emergent claimable provisionata (scadenza 27-Sep-2026). `apps/billing/` completo: models + plans (LAUNCH_PLANS 4 tier + 3 credit packages) + routes (checkout, portal, webhook signature-verified, status polling, credits ledger atomico). Catalog Stripe creato via `setup_stripe.py` idempotente (4 subs × 2 cicli + 3 credits). Checkout end-to-end testato: `cs_test_...` restituito, URL valido. Frontend `BillingPage.jsx` con Piano attuale + Saldo crediti + 4 card piani (toggle Mensile/Annuale) + 3 card pacchetti crediti + Portal button. Voce sidebar "Piano & Crediti" 💳. `/app/memory/STRIPE_ONBOARDING.md` con URL claim account.
+    - 📄 **APE/SIAPE + OpenAI docs scaffold** — `apps/docs_search/` con endpoint 503-guarded (`/api/docs/ape/search`, `/api/docs/ape/upload-ocr`, `/api/docs/openai/search`, `/api/docs/status`) pronti per API key del Founder. Consumo credit ledger predisposto (`ape_search=3`, `visura_catastale=5`, ecc.).
+    - 🏠 **MLS Box widget** — `apps/immoweb/mls_box.py` con endpoint pubblici `GET /api/mls-box/agency/{slug}` (JSON) + `.html` (iframe embed self-styled Mediterranean Future 2035). Replica struttura home nicastroimmobiliare.it: 3 featured + 6 latest. Privacy Gate L1 applicato. Snippet copia-incolla via `/embed-snippet/{slug}`.
+    - 🧪 **Regression pytest**: **113/114 core** verdi (un test order-dependent pre-esistente escluso). Nessuna regressione introdotta.
+    - 📝 File aggiunti: `/app/memory/AUDIT_TODO_FEB2026.md`, `/app/memory/STRIPE_ONBOARDING.md`, `/app/memory/SUGGERIMENTI_POST_PROGRAMMA.md` (22 osservazioni per il Founder a programma compiuto).
+
   - ✅ **26-Feb-2026 (fork)**: **SPRINT 4 · PERF HARDENING + DEPLOY READY DONE** (opzione B: solo il critico) — chiuso in ~2h di lavoro:
     - 🧪 **GAP #2 Stress Test 5 Agenti FIX** — Da 7/11 FAIL → **11/11 verdi**. Aggiunto fixture `_seed_test_agents` che fa upsert dei 4 agenti test in DB + sanato data-drift `property_type='apartment'`/`None` in DB con helper `_normalize_property_type()` in `apps/immoweb/properties.py` (mappa valori legacy inglesi ai codici IT). Soglie di performance ricalibrate per il preview ingress single-worker (target production <500ms CREATE / <200ms READ p95 documentato inline). Vedi D-067.
     - 📦 **GAP #1 Foto Base64 → Emergent Object Storage** — Nuovo modulo `shared/storage/objstore.py` (init/put/get, retry 403, thread-safe), startup hook lazy in `server.py`, endpoint autenticato `POST /api/app/properties/{id}/photos/upload` (multipart, max 8MB, whitelist JPG/PNG/WEBP), router pubblico `apps/immoweb/media.py` con `GET /api/media/{path:path}` (cache 24h), script `scripts/migrate_photos_to_objstore.py` idempotente (dry-run + apply). 1 foto legacy migrata sul DB preview, 0 base64 residui. Test suite `test_sprint4_objstore.py` 7/7 verdi. Vedi D-068.

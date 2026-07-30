@@ -74,6 +74,10 @@ async def mls_box_json(
         featured: [ {card1}, {card2}, {card3} ],
         latest:   [ {card1}, ... {card6} ] }
     """
+    # Route disambiguation: `.html` variant is a separate endpoint below.
+    if agency_slug.endswith(".html"):
+        return await mls_box_html(agency_slug[:-5], featured_limit=featured_limit,
+                                  latest_limit=latest_limit)
     db = Database.get()
     agency = await db.agencies.find_one(
         {"slug": agency_slug},

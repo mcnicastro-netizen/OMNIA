@@ -385,7 +385,7 @@ def _shell(cfg: Dict[str, Any], agency: Dict[str, Any],
 <body data-theme="{cfg['theme_id']}">
 {_render_header(cfg, agency)}
 <main class="container">{body_html}</main>
-<footer>Powered by <a href="https://omniarealestateecosystem.it">OMNIA</a></footer>
+<footer></footer>
 </body>
 </html>"""
 
