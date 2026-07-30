@@ -3,7 +3,20 @@
 **Versione**: 1.1
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026)
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit Sweep Feb-2026 DONE** — Aggiornamento **27-Feb-2026**:
+- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit Sweep Feb-2026 + Hardening Lug-2026 DONE** — Aggiornamento **30-Lug-2026**:
+  - ✅ **30-Lug-2026 (fork hardening pre-fase-finale)**: **AUDIT UNIFICATO FE+BE — TUTTI I P0 (7) + P1 (13) + P2 FUNZIONALI RISOLTI** — Il Founder ha fornito un report audit cross-stack (~60 issue) chiedendo di "sistemare tutto" prima della fase finale. Eseguito e testato (pytest 622+ verdi, testing agent 25/25 backend + 7/7 flussi frontend, iteration_30.json 100%):
+    - 🔴 **C1 Role escalation** — `POST /auth/register` ora whitelista `{client, agent, agency_admin, student}`; `super_admin`/`group_admin` via registrazione → forzati a `client` (`apps/core/auth.py`).
+    - 🔴 **C2 Token reset nei log** — rimosso il reset_url (con token) dai log; si logga solo l'evento.
+    - 🔴 **C3 Open redirect** — `LoginPage.jsx` valida `?next=`: solo path relativi, no `//`, no `://`.
+    - 🔴 **C4 Checkout rotto** — `BillingPage.jsx` `/api/billing/checkout` → `/billing/checkout` (era doppio /api).
+    - 🔴 **C5 Reset password UI** — creata `ResetPasswordPage.jsx` + route `/{lang}/reset-password` + chiavi i18n IT/EN/ES. Flusso E2E verificato (forgot → token → reset → login).
+    - 🔴 **C6 Branch hijacking** — `attach_branch` richiede `owner_id`/`agency_ids` del chiamante (403 `agency_not_owned` verificato) salvo super_admin.
+    - 🔴 **C7 SSRF import XML** — nuovo `shared/utils/net_guard.py` (`assert_public_url`): blocca IP privati/loopback/link-local/metadata. Verificato su 169.254.169.254, 127.0.0.1, 10.x.
+    - 🟠 **H1** CORS default esplicito con warning se `*`; **H3** moderazione solo `super_admin` (BE+FE allineati, via i ruoli fantasma dalla route); **H4** PropertyForm: GET fallito → submit disabilitato (mai PATCH su form vuoto); **H5** JSON-LD escape `<`→`\u003c` (anti-XSS); **H6** register B2C sincronizza AuthProvider via `refresh()`; **H7** `ProtectedRoute` espande gli alias ruoli franchising (branch_admin/group_admin) come il backend + sidebar filtrata (settings/billing/website solo admin); **H8** debito crediti API key atomico `$gte:cost` + clamp a zero (mai negativo); **H9** indice HAL Knowledge da pickle → JSON (vocab+idf+CSR), zero RCE da DB compromesso, rebuild automatico dal legacy; **H10** PhotoUploader → upload multipart su Object Storage (nuovo `POST /app/properties/photos/upload-tmp` per la modalità create, fallback base64 se storage giù); **H11** `api.js` fail-fast se manca REACT_APP_BACKEND_URL; **H12** `<Toaster/>` sonner montato in App.js; **H13** fix link `/edit` rotti (Publishing/SocialPublisher); **H14** `/auth/refresh` rifiuta utenti disabilitati; **H15** `/billing/status/{id}` auth-bound (401 senza cookie, 403 se non owner).
+    - 🟡 **M1** LanguageSwitcher via `useNavigate` (router sync); **M2** rimossi path `/it/` hardcoded (BillingPage, LegalApp, WidgetsShowcase, PublishingPage); **M3** clients_smart solo immobili `active`; **M4** `update_one` con filtro `agency_id` (properties, clients); **M6** `re.escape` + cap 100 char su tutte le regex di ricerca (no ReDoS/injection, verificato con `a(b` ecc.); **M7** HalKnowledgePage `submit(q)` diretto (no race setTimeout); **M9** interceptor 401 → evento `omnia:unauthorized` → AuthProvider logout → redirect login; **M10** lang non supportata (`/fr/...`) → redirect a `/it/...`; **M25** creati `.env.example` backend+frontend completi.
+    - 🟢 **L7** ErrorBoundary: stack trace solo in dev; **L11** health endpoint non espone più il messaggio d'errore DB.
+    - 🧪 **Test**: 2 test stale allineati al comportamento voluto (brand `Sei HAL,`; semantica NULLABLE_FIELDS explicit-clear di seller_client_id). Suite stress 11/11 verde se eseguita come file. Nuova suite regression `tests/test_audit_p0_p1_final.py` (25 test, dal testing agent).
+    - 📌 **Non affrontati (per scelta/scope)**: M5 multi-agency switcher, M11/M12 (video auth / staging allowlist — rischio basso, fal.ai esterno), M13 deprecazione portals.py legacy, M14 CSV Papa Parse, M16-M24 (lazy loading, split monoliti, React Query, clustering mappa — refactor architetturali Fase 2), L1/L2 (test FE, TypeScript), L3-L6, L8-L9, L12 (revoca refresh token richiede token-store). Elencati in ROADMAP sotto.
   - ✅ **27-Feb-2026 (fork audit-driven)**: **BUG SWEEP FEB-2026 + STRIPE SANDBOX + APE/OpenAI DOCS SCAFFOLD + MLS BOX DONE** — Chiuso ~4h di lavoro. Audit profondo del codice per pilastri (Architettura, Qualità, Funzionalità) → 18 punti A-R organizzati in `/app/memory/AUDIT_TODO_FEB2026.md`. Poi:
     - 🐛 **P0-A Privacy Gate energy field bug** — `apply_privacy_view` scriveva `{"class": ...}` invece di `{"energy_class": ...}`. La classe energetica è ora visibile su ImmobilCloud L1/L2 (99% del traffico B2C). Fix in `shared/utils/privacy_gate.py:120-124`.
     - 🐛 **P0-B Dashboard KPI mentivano** — `leads_open` e `matches_week` erano `locked=True, value=0` mentre il rollup gruppi contava dati reali. Riscritto `apps/immoweb/dashboard.py`: legge `db.leads` (new+contacted), `db.match_audit`, `db.calendar_events`. Ora l'agente singola-agenzia vede i lead sul dashboard.
@@ -343,23 +356,30 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 
 Riferimento completo: vedi `ROADMAP.md`
 
-### P0 (M1-M4) — MVP vendibile
-- Foundation + Auth multi-tenant
-- ImmoWeb completo (CRM agenzie)
-- ImmobilCloud (portale pubblico)
-- MLS + Stripe + crediti + visibilità
+### P0 — Nessuno (audit 30-Lug-2026: tutti i blocker deploy risolti)
 
-### P1 (M5-M6) — Vantaggio competitivo
-- AI Suite (Copywriter, Chatbot, Mutui, Modulistica)
-- Omnia Academy completa
+### P1 — In attesa del Founder
+- API key vere per APE/SIAPE + OpenAPI docs (scaffold pronto, 503-guarded)
+- Go Live Stripe (claim account sandbox → key live)
+- Manuale Operativo + Academy (messi in coda su richiesta)
+- Landing A-004 `/it/agenzie` refresh + A-006 video Ken Burns
 
-### P2 (Post-M6) — Espansione
+### P2 — Debito tecnico architetturale (Fase 2 audit, non bloccante)
+- M16 lazy loading route (React.lazy) · M17 split ImmocloudApp.jsx (~830 righe)
+- M18 client HTTP unico (axios ovunque) · M19 adottare/rimuovere React Query
+- M20-21 pulizia dipendenze inutilizzate + shadcn non usati
+- M22 clustering marker mappa · M23-24 upload multipart per import CSV/XML e Fascicolo
+- M5 multi-agency switcher · M13 deprecare portals.py legacy (migrare credenziali a publishing)
+- L8 consolidare helper `_agency` duplicati ×19 · L9 split properties.py (718 righe)
+- L12 revoca refresh token al logout (richiede token-store) · L1 test frontend · L2 TypeScript incrementale
+- L3-L6: PostHog dietro env flag, token invito fuori da query string
+
+### P3 (Post-M6) — Espansione
 - PWA mobile
 - Virtual Cleaning + Interior Redesign AI
 - Firma digitale reale
 - WhatsApp Business
 - Catasto reale
-- Social publishing
 
 ---
 
