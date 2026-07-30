@@ -3,7 +3,26 @@
 **Versione**: 1.1
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026)
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit Sweep Feb-2026 + Hardening Lug-2026 DONE** — Aggiornamento **30-Lug-2026**:
+- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit COMPLETO (Fasi 0-3) DONE** — Aggiornamento **30-Lug-2026 (sera)**:
+  - ✅ **30-Lug-2026 (Fase 2-3 audit — "sistema tutto")**: **REFACTORING ARCHITETTURALE + DEBITO TECNICO COMPLETATI** (pytest 653/653 + 10 nuovi test fase 2-3, jest frontend 19/19, testing agent iteration_31 100%):
+    - **M16** Lazy loading: tutte le ~40 route in `React.lazy` + `Suspense` (chunk separati per app).
+    - **M17** `ImmocloudApp.jsx` 831→33 righe: pagine estratte in `pages/` (CloudHomePage, CloudSearchPage, CloudRegisterPage) + `components/` (CloudTopNav, FooterB2C, PropertyCard) + `cloudTheme.js`.
+    - **M18** Client HTTP unificato su axios `api` per tutti i flussi core B2C; `fetch` resta SOLO dove tecnicamente necessario (AlChatWidget SSE streaming, download CSV template) — scelta documentata.
+    - **M19+M20+M21** Pulizia: rimossi React Query (mai usato), lodash, dayjs, swr, recharts, framer-motion, cra-template + 35 dipendenze radix/utility orfane + 44 componenti shadcn inutilizzati (restano button, sonner).
+    - **M22** Clustering mappa: grid clustering puro in `lib/clustering.js` (zero dipendenze extra, unit-testato con 500 marker), vista mappa deep-linkable `?view=map`.
+    - **M23** Import XML async: feed URL → job in background con polling `GET /import/jobs/{id}`; XML incollato resta sincrono; SSRF check sempre sincrono (400 immediato).
+    - **M24** Fascicolo: upload multipart → Object Storage (`POST /fascicolo/{pid}/documents/upload`), download retro-compatibile col base64 legacy.
+    - **M5** Multi-agency switcher: `active_agency_id` su user + `GET /auth/my-agencies` + `POST /auth/active-agency` + select in sidebar (visibile solo con 2+ agenzie).
+    - **M13+H2** Deprecato e RIMOSSO `portals.py` legacy (endpoint 404, route FE eliminata) → resta un solo sistema crypto (AES-GCM `shared/utils/crypto.py`).
+    - **M14** Parser CSV RFC-4180 (campi quotati, separatori interni, ""escaped, auto-rilevamento ;/,).
+    - **M11** Download video auth-gated per video di agenzia (i video UGC pubblici restano pubblici); **M12** guard SSRF su image_url del virtual staging.
+    - **L8** 13 helper `_agency` duplicati consolidati in `shared/auth/tenant.py`; **L9** `properties.py` splittato (357 righe + `properties_import.py`); **L10** `routing.js` dead code rimosso.
+    - **L12** Revoca refresh token al logout (jti in `refresh_tokens` collection, verificato 401 post-logout); **L13** `COOKIE_SECURE` configurabile via env (default true).
+    - **L3** PostHog key via `%REACT_APP_POSTHOG_KEY%` (env, non hardcoded); **L5** token invito nel fragment `#token=` (fallback query per email già inviate); **L14** conftest legge le URL da frontend/.env (mai stantie); **L15** dropzone foto accessibile (role/aria/tastiera) + alt text.
+    - **L2** TypeScript incrementale attivo: tsconfig.json + `shared/lib/navigation.ts` (sanitizeNextParam, resolveLangRedirect, switchLangInPath) usato da LoginPage/LanguageSwitcher; typecheck verde.
+    - **L1** Test frontend: 4 suite jest (19 test) — anti open-redirect, lang redirect, clustering, formatEUR, parità chiavi i18n IT/EN/ES (il test ha subito scovato e fatto fixare 25 chiavi `import.*` mancanti in EN/ES).
+    - 🐛 **Fix bonus**: endpoint foto pubbliche `/api/public/property/{id}/photo/{idx}` non va più in 500 — gestisce data:base64, `/api/media/` (object storage) e URL esterni (302).
+    - 📌 **Scelte documentate (non bug)**: L4 script Emergent in index.html è richiesto dalla piattaforma (non rimosso); L6 API key nella preview widget è inerente all'architettura embed pubblica dei widget.
   - ✅ **30-Lug-2026 (fork hardening pre-fase-finale)**: **AUDIT UNIFICATO FE+BE — TUTTI I P0 (7) + P1 (13) + P2 FUNZIONALI RISOLTI** — Il Founder ha fornito un report audit cross-stack (~60 issue) chiedendo di "sistemare tutto" prima della fase finale. Eseguito e testato (pytest 622+ verdi, testing agent 25/25 backend + 7/7 flussi frontend, iteration_30.json 100%):
     - 🔴 **C1 Role escalation** — `POST /auth/register` ora whitelista `{client, agent, agency_admin, student}`; `super_admin`/`group_admin` via registrazione → forzati a `client` (`apps/core/auth.py`).
     - 🔴 **C2 Token reset nei log** — rimosso il reset_url (con token) dai log; si logga solo l'evento.
@@ -356,23 +375,19 @@ Costruire OMNIA, ecosistema digitale verticale completo per il settore immobilia
 
 Riferimento completo: vedi `ROADMAP.md`
 
-### P0 — Nessuno (audit 30-Lug-2026: tutti i blocker deploy risolti)
+### P0 — Nessuno (audit 30-Lug-2026: tutte le fasi 0-3 completate)
 
 ### P1 — In attesa del Founder
 - API key vere per APE/SIAPE + OpenAPI docs (scaffold pronto, 503-guarded)
 - Go Live Stripe (claim account sandbox → key live)
-- Manuale Operativo + Academy (messi in coda su richiesta)
+- **Manuale Operativo + Academy** (prossimo blocco concordato)
 - Landing A-004 `/it/agenzie` refresh + A-006 video Ken Burns
 
-### P2 — Debito tecnico architetturale (Fase 2 audit, non bloccante)
-- M16 lazy loading route (React.lazy) · M17 split ImmocloudApp.jsx (~830 righe)
-- M18 client HTTP unico (axios ovunque) · M19 adottare/rimuovere React Query
-- M20-21 pulizia dipendenze inutilizzate + shadcn non usati
-- M22 clustering marker mappa · M23-24 upload multipart per import CSV/XML e Fascicolo
-- M5 multi-agency switcher · M13 deprecare portals.py legacy (migrare credenziali a publishing)
-- L8 consolidare helper `_agency` duplicati ×19 · L9 split properties.py (718 righe)
-- L12 revoca refresh token al logout (richiede token-store) · L1 test frontend · L2 TypeScript incrementale
-- L3-L6: PostHog dietro env flag, token invito fuori da query string
+### P2 — Residui minori (non bloccanti, opzionali)
+- Estendere TypeScript ad altri moduli shared (L2 è incrementale per design)
+- Convertire i fetch residui non-core (ValuatorPage, MortgageComparator, DomainVerifyPage) al client axios
+- Test frontend su componenti con DOM (oggi solo logica pura)
+- Migrazione batch delle foto base64 legacy verso Object Storage (le nuove già ci vanno)
 
 ### P3 (Post-M6) — Espansione
 - PWA mobile
