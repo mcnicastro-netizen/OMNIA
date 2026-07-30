@@ -10,8 +10,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from apps.immoweb.matching import compute_match, is_searcher, W  # noqa: E402
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASSWORD = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 # Known canonical seed data (from iteration_2 context)
 MARIO_SELLER_ID = "ded16e9d-3e10-4c2a-8373-2601c8573787"

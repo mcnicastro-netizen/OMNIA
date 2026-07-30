@@ -14,7 +14,7 @@ Covers:
 - MLS-1..5
 
 Test data slug: test-omnia-agency-abc700
-Super admin: mcnicastro@gmail.com / Forzainter2026.
+Credenziali: vedi /app/memory/test_credentials.env
 """
 import os
 import re
@@ -24,8 +24,8 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 AGENCY_SLUG = "test-omnia-agency-abc700"
-SUPER_EMAIL = "mcnicastro@gmail.com"
-SUPER_PASSWORD = "Forzainter2026."
+SUPER_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+SUPER_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 
 @pytest.fixture(scope="session")

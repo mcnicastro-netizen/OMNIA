@@ -15,7 +15,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from shared.auth.hashing import hash_password
 
 AGENCY_ID = "abc7004b-04a3-414b-8197-8e0e983d0892"
-PASSWORD = "AgentTest123!"
+PASSWORD = os.environ["OMNIA_STRESS_PASSWORD"]
 EMAILS = [f"agent{i}@omniatest.re" for i in range(1, 5)]
 
 

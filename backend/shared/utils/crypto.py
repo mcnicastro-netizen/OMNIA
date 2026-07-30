@@ -7,6 +7,7 @@ preview, but must be replaced with a strong key in prod.
 import base64
 import hashlib
 import json
+import logging
 import os
 from typing import Dict
 
@@ -21,6 +22,10 @@ def _master_key() -> bytes:
         except Exception:
             pass
     # dev fallback — deterministic 32-byte key from MONGO_URL
+    # R2: accettabile SOLO in preview/dev. In produzione impostare CREDENTIALS_MASTER_KEY.
+    logging.getLogger("omnia.crypto").warning(
+        "CREDENTIALS_MASTER_KEY non impostata — chiave derivata da MONGO_URL (solo dev/preview; configurarla in produzione)"
+    )
     seed = (os.environ.get("MONGO_URL") or "omnia-dev-fallback").encode("utf-8")
     return hashlib.sha256(seed).digest()
 

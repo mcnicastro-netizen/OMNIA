@@ -166,7 +166,7 @@ function App() {
                   <Route
                     path="app/onboarding"
                     element={
-                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin"]}>
+                      <ProtectedRoute allowedRoles={["super_admin", "agency_admin", "client"]}>
                         <OnboardingWizard />
                       </ProtectedRoute>
                     }

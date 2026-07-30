@@ -30,8 +30,8 @@ API = f"{BASE_URL}/api"
 
 AGENCY_ID = "abc7004b-04a3-414b-8197-8e0e983d0892"
 
-SUPER_ADMIN = ("mcnicastro@gmail.com", "Forzainter2026.")
-AGENTS = [(f"agent{i}@omniatest.re", "AgentTest123!") for i in range(1, 5)]
+SUPER_ADMIN = (os.environ["OMNIA_ADMIN_EMAIL"], os.environ["OMNIA_ADMIN_PASSWORD"])
+AGENTS = [(f"agent{i}@omniatest.re", os.environ["OMNIA_STRESS_PASSWORD"]) for i in range(1, 5)]
 ALL_USERS = [SUPER_ADMIN] + AGENTS  # 5 users total
 
 # Shared state populated during tests (used across tests + cleanup)

@@ -22,7 +22,7 @@ BASE_URL = os.environ.get("REACT_APP_BACKEND_URL")
 assert BASE_URL, "REACT_APP_BACKEND_URL not set"
 API = BASE_URL.rstrip("/")
 
-SUPER = ("mcnicastro@gmail.com", "Forzainter2026.")
+SUPER = (os.environ["OMNIA_ADMIN_EMAIL"], os.environ["OMNIA_ADMIN_PASSWORD"])
 
 # 1x1 transparent PNG
 _PNG_1x1 = base64.b64decode(

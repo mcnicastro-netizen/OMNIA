@@ -194,7 +194,7 @@ Prossima azione: **D-FUTURE-07 AI Smart Import Clienti** (P0 next session), poi 
 
 **Cosa è pronto da testare/caricare sul Founder PREVIEW**:
 - Preview URL: https://omnia-real-estate-1.preview.emergentagent.com/it/login
-- Login: `mcnicastro@gmail.com` / `Forzainter2026.`
+- Login: `mcnicastro@gmail.com` / `***ROTATED — vedi memory/test_credentials.env***`
 - Flusso da testare: Login → Onboarding → Crea Agenzia → Properties → Nuovo Immobile (con foto JPEG drag&drop)
 - DB locale è stato **pulito** alla fine sessione → pronto per primo onboarding pulito
 

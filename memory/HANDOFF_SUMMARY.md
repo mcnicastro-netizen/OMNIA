@@ -215,13 +215,13 @@ Il codice locale in `/app` è sincronizzato con questo repo (il Founder pusha vi
 | `BUSINESS_MODEL.md` | ⭐ | Stream revenue + margini |
 | `RESEND_DOMAIN_GUIDE.md` | ⭐ | Config Resend + Cloudflare |
 | `NEXT_SESSION_TIPS.md` | ⭐ | Tips operativi vari |
-| `test_credentials.md` | ⭐⭐ | Admin: `mcnicastro@gmail.com` / `Forzainter2026.` |
+| `test_credentials.md` | ⭐⭐ | Admin: `mcnicastro@gmail.com` / `***ROTATED — vedi memory/test_credentials.env***` |
 
 ---
 
 ## 🔑 CREDENZIALI E CONFIG
 
-- **Super Admin**: `mcnicastro@gmail.com` / `Forzainter2026.`
+- **Super Admin**: `mcnicastro@gmail.com` / `***ROTATED — vedi memory/test_credentials.env***`
 - **Dominio email**: `omniarealestateecosystem.it` (Resend + Cloudflare DNS)
 - **Sottodomini configurati**: `app.` (CRM), `nuvola.` (B2C), `imparare.` (Academy)
 - **API keys attive** (in `/app/backend/.env`):
@@ -253,7 +253,7 @@ tail -n 50 /var/log/supervisor/frontend.err.log
 API=$(grep REACT_APP_BACKEND_URL /app/frontend/.env | cut -d'=' -f2)
 COOKIE=/tmp/omnia.txt
 curl -s -X POST "$API/api/auth/login" -c $COOKIE -H "Content-Type: application/json" \
-  -d '{"email":"mcnicastro@gmail.com","password":"Forzainter2026."}' > /dev/null
+  -d '{"email":"mcnicastro@gmail.com","password":"***ROTATED — vedi memory/test_credentials.env***"}' > /dev/null
 curl -s "$API/api/app/staging/history" -b $COOKIE | python3 -m json.tool
 ```
 

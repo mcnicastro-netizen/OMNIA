@@ -200,7 +200,7 @@ Founder ha esplicitamente detto in più sessioni: lavoriamo per micro-task con c
 
 | Risorsa | Valore |
 |---|---|
-| Super admin | `mcnicastro@gmail.com` / `Forzainter2026.` |
+| Super admin | `mcnicastro@gmail.com` / `***ROTATED — vedi memory/test_credentials.env***` |
 | Resend Domain ID | `37e0ca6a-2b7e-4b9d-85c6-cd3406d1c5b4` (VERIFIED 26-Giu-2026) |
 | Cloudflare nameservers | `brit.ns.cloudflare.com`, `jose.ns.cloudflare.com` |
 | Sender mail finale | `OMNIA <info@omniarealestateecosystem.it>` |

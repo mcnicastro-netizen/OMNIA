@@ -86,6 +86,10 @@ credentials.json
 .env
 .env.*
 *.env
+!.env.example
+!*.env.example
+test_reports/
+memory/test_credentials.*
 frontend/node_modules/.cache/default-development/0.pack
 frontend/node_modules/.cache/default-development/16.pack
 frontend/node_modules/.cache/default-development/20.pack

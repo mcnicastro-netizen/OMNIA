@@ -12,8 +12,8 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASSWORD = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 FAKE_PDF = base64.b64encode(b"%PDF-1.4 fake test doc").decode()
 

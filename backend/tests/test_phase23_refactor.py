@@ -8,8 +8,8 @@ import pytest
 import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
-SUPER_EMAIL = "mcnicastro@gmail.com"
-SUPER_PASS = "Forzainter2026."
+SUPER_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+SUPER_PASS = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 
 def _login(session: requests.Session, email: str, password: str) -> requests.Response:

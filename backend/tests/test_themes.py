@@ -6,10 +6,10 @@ import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASS = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASS = os.environ["OMNIA_ADMIN_PASSWORD"]
 AGENT_EMAIL = "test_agent@omnia.it"
-AGENT_PASS = "TestAgent2026!"
+AGENT_PASS = os.environ["OMNIA_AGENT_PASSWORD"]
 
 
 def _login(email, password):

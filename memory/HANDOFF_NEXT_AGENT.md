@@ -44,7 +44,7 @@ Altre proposte rifiutate stasera:
 4. /app/memory/PRD.md                  ← cosa è stato fatto e quando
 5. /app/memory/ROADMAP.md              ← stato + backlog
 6. /app/memory/PRICING_OMNIA.md        ← prezzi vincolanti (NON alterare senza ok Founder)
-7. /app/memory/test_credentials.md     ← credenziali test (mcnicastro@gmail.com / Forzainter2026.)
+7. /app/memory/test_credentials.md     ← credenziali test (mcnicastro@gmail.com / ***ROTATED — vedi memory/test_credentials.env***)
 8. /app/memory/ASPETTI_DA_APPROFONDIRE.md ← idee memorizzate, NON implementare
 9. /app/memory/AUDIT_M2.md             ← audit M1-M5 + gap analysis
 10. /app/memory/creatives/brand_lab_reference.md ← estetica "Mediterranean Future 2035"
@@ -89,7 +89,7 @@ Mostra al Founder:
 - M2.5.1 Multi-branch, M2.5.2 API Gateway + wallet, M2.5.3 Widget embeddabili, M2.5.4a XML Importer, M2.5.4b Domain Checker, M2.5.4c Legal Pack, **M2.5.5 Domain Vault**, M2.6a Publishing, M2.6b Sync Engine, **M2.6c Social Publisher** (FB/IG/Telegram, D-058), **M2.6d Universal Portal Wizard**
 
 **Sprint 4 · Perf Hardening + Deploy Ready — DONE 26-Feb-2026 (D-067, D-068, D-069)**
-- 🧪 **GAP #2 Stress test 5 agenti FIX** → da 7/11 FAIL a **11/11 verdi**. Fixture `_seed_test_agents` module-scoped che auto-crea `agent1..4@omniatest.re` (password `AgentTest123!`) in agency `abc7004b-04a3-414b-8197-8e0e983d0892`. Helper `_normalize_property_type()` in `apps/immoweb/properties.py` gestisce data-drift (apartment→appartamento, None→altro). Soglie perf ricalibrate per preview ingress single-worker uvicorn (documentate inline nel test).
+- 🧪 **GAP #2 Stress test 5 agenti FIX** → da 7/11 FAIL a **11/11 verdi**. Fixture `_seed_test_agents` module-scoped che auto-crea `agent1..4@omniatest.re` (password `***ROTATED***`) in agency `abc7004b-04a3-414b-8197-8e0e983d0892`. Helper `_normalize_property_type()` in `apps/immoweb/properties.py` gestisce data-drift (apartment→appartamento, None→altro). Soglie perf ricalibrate per preview ingress single-worker uvicorn (documentate inline nel test).
 - 📦 **GAP #1 Foto Base64 → Emergent Object Storage** → nuovo modulo `shared/storage/objstore.py`, endpoint autenticato `POST /api/app/properties/{id}/photos/upload` (multipart, 8MB, JPG/PNG/WEBP), router pubblico `GET /api/media/{path:path}` in `apps/immoweb/media.py` (cache 24h), script `scripts/migrate_photos_to_objstore.py` idempotente. Startup init lazy in `server.py`. **7 test verdi**. 1 foto legacy migrata sul DB preview, 0 base64 residui.
 - ⚡ **Perf side-quest** → projection esplicita `list_properties` (esclude photos, `$slice: 1` per cover) + nuovo indice compound `agency_id + created_at`.
 - 🚀 **Deploy readiness PASS** (D-069). Unico fix pre-deploy: `CORS_ORIGINS="*"` in `.env` (backend leggeva già con fallback `"*"`).
@@ -216,7 +216,7 @@ Il Founder è **estremamente rigoroso** sui prezzi. Verificare `PRICING_OMNIA.md
 
 **Stress test agenti** (D-067)
 - Fixture module-scoped autouse in `tests/test_m2_stress_5_agents.py::_seed_test_agents`
-- Credenziali: `agent{1..4}@omniatest.re` / `AgentTest123!` — agency `abc7004b-04a3-414b-8197-8e0e983d0892`
+- Credenziali: `agent{1..4}@omniatest.re` / `***ROTATED***` — agency `abc7004b-04a3-414b-8197-8e0e983d0892`
 
 ---
 

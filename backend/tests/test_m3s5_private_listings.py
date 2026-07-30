@@ -15,8 +15,8 @@ import requests
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL").rstrip("/")
 
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASSWORD = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 TS = int(time.time())
 B2C_EMAIL_1 = f"b2cseller_{TS}_a@example.com"

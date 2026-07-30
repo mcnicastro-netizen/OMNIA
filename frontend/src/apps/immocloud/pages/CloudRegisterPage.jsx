@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../../../shared/lib/api";
-import { useAuth } from "../../../shared/lib/auth";
+import { useAuth, formatApiErrorDetail } from "../../../shared/lib/auth";
 
 export default function CloudRegisterPage() {
   const { t, i18n } = useTranslation();
@@ -31,9 +31,9 @@ export default function CloudRegisterPage() {
     try {
       const { data } = await api.post("/cloud/auth/register", { ...form, lang });
       setDone(data.user);
-      refresh(); // H6 — sync AuthProvider with the freshly set auth cookies
+      await refresh(); // H6/R7 — sync AuthProvider with the freshly set auth cookies
     } catch (e) {
-      setErr(e?.response?.data?.detail || String(e.message || e));
+      setErr(formatApiErrorDetail(e?.response?.data?.detail) || String(e.message || e)); // R5
     } finally { setBusy(false); }
   };
 

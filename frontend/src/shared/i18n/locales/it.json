@@ -81,7 +81,12 @@
     "reset_cta": "Imposta nuova password",
     "password_updated": "Password aggiornata con successo.",
     "passwords_mismatch": "Le password non coincidono.",
-    "invalid_reset_link": "Link di reset non valido o scaduto."
+    "invalid_reset_link": "Link di reset non valido o scaduto.",
+    "account_type": "Tipo di account",
+    "acct_agency": "Agenzia / Professionista immobiliare",
+    "acct_private": "Privato (cerco/vendo casa)",
+    "acct_student": "Studente Academy",
+    "acct_agency_hint": "Dopo la registrazione completerai l'onboarding della tua agenzia: solo allora otterrai i permessi da amministratore."
   },
   "domain_vault": {
     "badge": "Il tuo dominio resta tuo",

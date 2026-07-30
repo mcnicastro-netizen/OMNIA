@@ -49,10 +49,16 @@ async def _attach_user_to_agency(db, user_id: str, agency_id: str) -> None:
 @router.post("", status_code=201)
 async def create_agency(
     payload: AgencyCreate,
-    user: dict = Depends(require_roles("agency_admin", "super_admin")),
+    user: dict = Depends(get_current_user),
 ):
-    """Create a new agency. Caller becomes owner. Triggered by onboarding wizard."""
+    """Create a new agency. Caller becomes owner (and is promoted to agency_admin).
+
+    S2 — la registrazione pubblica non assegna più ruoli privilegiati: chi completa
+    l'onboarding creando la propria agenzia viene promosso qui, server-side.
+    """
     db = Database.get()
+    if user.get("role") in ("group_admin", "branch_admin", "branch_agent"):
+        raise HTTPException(status_code=403, detail="franchising_roles_use_group_flow")
 
     # Each agency_admin can own at most one agency in MVP scope
     existing = await db.agencies.find_one({"owner_id": user["id"]})
@@ -84,6 +90,13 @@ async def create_agency(
     doc = agency.model_dump()
     await db.agencies.insert_one(doc)
     await _attach_user_to_agency(db, user["id"], agency.id)
+
+    # S2 — promozione controllata: il creatore diventa agency_admin
+    if user.get("role") not in ("super_admin", "agency_admin"):
+        await db.users.update_one(
+            {"id": user["id"]},
+            {"$set": {"role": "agency_admin", "updated_at": datetime.now(timezone.utc).isoformat()}},
+        )
 
     logger.info("Agency created: id=%s slug=%s owner=%s", agency.id, slug, user["email"])
     return _public(doc)

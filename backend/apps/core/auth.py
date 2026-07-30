@@ -104,8 +104,10 @@ async def register(req: RegisterRequest, request: Request, response: Response,
     if existing:
         raise HTTPException(status_code=400, detail=t("auth.email_taken", lang=lang))
 
-    # C1 — public registration can never grant privileged roles
-    _PUBLIC_ROLES = {"client", "agent", "agency_admin", "student"}
+    # C1/S2 — public registration can never grant privileged roles.
+    # agency_admin viene assegnato SOLO al completamento dell'onboarding (creazione agenzia);
+    # agent SOLO via invito (accept-invite).
+    _PUBLIC_ROLES = {"client", "student"}
     safe_role = req.role if req.role in _PUBLIC_ROLES else "client"
 
     user = UserInDB(

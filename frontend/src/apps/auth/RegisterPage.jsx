@@ -16,7 +16,7 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    role: "agent",
+    account_type: "agency", // S2: agency | private | student — mai un ruolo privilegiato
     existing_domain: "",
   });
   const [policyAccepted, setPolicyAccepted] = useState(false);
@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const isAgencyRole = form.role === "agent" || form.role === "agency_admin";
+  const isAgencyRole = form.account_type === "agency";
 
   const submit = async (e) => {
     e.preventDefault();
@@ -36,11 +36,13 @@ export default function RegisterPage() {
     }
     setLoading(true);
     try {
+      // S2 — il backend accetta solo client/student: agency_admin arriva
+      // esclusivamente completando l'onboarding (creazione agenzia).
       const payload = {
         name: form.name,
         email: form.email,
         password: form.password,
-        role: form.role,
+        role: form.account_type === "student" ? "student" : "client",
         lang,
       };
       if (isAgencyRole) {
@@ -50,7 +52,13 @@ export default function RegisterPage() {
         }
       }
       await register(payload);
-      nav(`/${lang}/app/dashboard`, { replace: true });
+      if (isAgencyRole) {
+        nav(`/${lang}/app/onboarding`, { replace: true });
+      } else if (form.account_type === "student") {
+        nav(`/${lang}/academy`, { replace: true });
+      } else {
+        nav(`/${lang}/cloud`, { replace: true });
+      }
     } catch (err) {
       setError(formatApiErrorDetail(err.response?.data?.detail) || err.message);
     } finally {
@@ -102,19 +110,23 @@ export default function RegisterPage() {
 
           <label className="block mb-6">
             <span className="block text-xs font-sans uppercase tracking-widest text-stone-500 mb-2">
-              {t("auth.role")}
+              {t("auth.account_type")}
             </span>
             <select
-              data-testid="register-role"
-              value={form.role}
-              onChange={set("role")}
+              data-testid="register-account-type"
+              value={form.account_type}
+              onChange={set("account_type")}
               className="w-full px-4 py-3 border border-stone-300 bg-stone-50 font-sans text-base focus:outline-none focus:border-stone-900"
             >
-              <option value="agent">{t("auth.role_agent")}</option>
-              <option value="agency_admin">{t("auth.role_agency_admin")}</option>
-              <option value="client">{t("auth.role_client")}</option>
-              <option value="student">{t("auth.role_student")}</option>
+              <option value="agency">{t("auth.acct_agency")}</option>
+              <option value="private">{t("auth.acct_private")}</option>
+              <option value="student">{t("auth.acct_student")}</option>
             </select>
+            {isAgencyRole && (
+              <span className="mt-2 block text-xs font-sans text-stone-500">
+                {t("auth.acct_agency_hint")}
+              </span>
+            )}
           </label>
 
           {isAgencyRole && (

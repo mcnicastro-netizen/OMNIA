@@ -72,7 +72,9 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
         try {
           url = await uploadBlob(blob, file.name);
         } catch {
-          url = await blobToDataUrl(blob); // fallback: storage unavailable
+          // R4 — fallback base64 solo per blob piccoli: mai payload JSON enormi
+          if (blob.size > 600 * 1024) continue;
+          url = await blobToDataUrl(blob);
         }
         newPhotos.push({
           id: crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2),

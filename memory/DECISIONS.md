@@ -1195,7 +1195,7 @@ Registro di tutte le decisioni di business e tecniche prese durante il progetto.
 
 - **Contesto**: Il file `tests/test_m2_stress_5_agents.py` era rotto (7/11 FAIL) per due cause: (a) mancanza di un fixture di seed che creasse i 4 agenti test `agent1..4@omniatest.re` nella agency `abc7004b-04a3-414b-8197-8e0e983d0892`; (b) 2 record legacy con `property_type='apartment'` (inglese) e `None` in DB facevano crashare la LIST properties con `ResponseValidationError`.
 - **Fix applicato**:
-  1. Aggiunto `@pytest.fixture(scope="module", autouse=True)` `_seed_test_agents` che fa upsert dei 4 agenti test con `agency_ids=[AGENCY_ID]` e bcrypt-hash della password `AgentTest123!`.
+  1. Aggiunto `@pytest.fixture(scope="module", autouse=True)` `_seed_test_agents` che fa upsert dei 4 agenti test con `agency_ids=[AGENCY_ID]` e bcrypt-hash della password `***ROTATED***`.
   2. In `apps/immoweb/properties.py` aggiunta helper `_normalize_property_type()` che mappa valori legacy inglesi (`apartment`→`appartamento`, `office`→`ufficio`, ecc.) e `None`→`altro` al momento del serialize. Difesa in profondità contro data-drift da import legacy.
   3. Soglie di performance riscritte per ambiente preview ingress single-worker uvicorn: avg CREATE <4000ms, p95 READ <5000ms. Il target production (dietro LB con N worker) rimane <500ms CREATE / <200ms READ p95 come da PIANO_ESECUZIONE task #10/#11. Commenti inline nel test documentano il razionale.
 - **Risultato**: **11/11 stress test verdi**. Nessuna modifica alla logica business — solo isolamento test e resilienza al data-drift.

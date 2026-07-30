@@ -81,7 +81,12 @@
     "reset_cta": "Establecer nueva contraseña",
     "password_updated": "Contraseña actualizada correctamente.",
     "passwords_mismatch": "Las contraseñas no coinciden.",
-    "invalid_reset_link": "Enlace de restablecimiento no válido o caducado."
+    "invalid_reset_link": "Enlace de restablecimiento no válido o caducado.",
+    "account_type": "Tipo de cuenta",
+    "acct_agency": "Agencia / Profesional inmobiliario",
+    "acct_private": "Particular (busco/vendo casa)",
+    "acct_student": "Estudiante Academy",
+    "acct_agency_hint": "Tras registrarte completarás el onboarding de tu agencia: solo entonces obtendrás permisos de administrador."
   },
   "domain_vault": {
     "badge": "Tu dominio sigue siendo tuyo",

@@ -20,8 +20,8 @@ BASE_URL = (
     os.environ.get("REACT_APP_BACKEND_URL")
     or "https://omnia-real-estate-1.preview.emergentagent.com"
 ).rstrip("/")
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASSWORD = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 
 # Two deterministic in-bbox points (Roma area) and one out-of-bbox (Milano)
 ROMA_LAT, ROMA_LNG = 41.9028, 12.4964        # inside bbox 41.0,12.0,42.5,13.0

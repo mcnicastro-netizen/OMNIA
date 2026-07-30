@@ -23,10 +23,10 @@ import requests
 
 BASE_URL = (os.environ.get("REACT_APP_BACKEND_URL") or "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
-SUPER_EMAIL = "mcnicastro@gmail.com"
-SUPER_PASSWORD = "Forzainter2026."
+SUPER_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+SUPER_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 AGENT_EMAIL = "test_agent@omnia.it"
-AGENT_PASSWORD = "TestAgent2026!"
+AGENT_PASSWORD = os.environ["OMNIA_AGENT_PASSWORD"]
 
 
 @pytest.fixture(scope="session")
@@ -71,6 +71,8 @@ class TestC1RoleWhitelist:
         assert user.get("role") == "client"
 
     def test_agent_role_preserved(self):
+        """S2 (30-Lug): 'agent' NON è più un ruolo pubblico — si ottiene solo via invito.
+        La register pubblica lo declassa a 'client'."""
         email = f"test_c1_agent_{int(time.time())}@omniatest.re"
         r = requests.post(f"{API}/auth/register", json={
             "email": email, "password": "TestPass123!",
@@ -78,7 +80,7 @@ class TestC1RoleWhitelist:
         })
         assert r.status_code in (200, 201), r.text
         user = r.json().get("user") or r.json()
-        assert user.get("role") == "agent"
+        assert user.get("role") == "client"
 
 
 # ---------- C4/H12: Billing checkout endpoint path ----------

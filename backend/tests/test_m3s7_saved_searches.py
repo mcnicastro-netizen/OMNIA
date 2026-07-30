@@ -8,8 +8,8 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-ADMIN_EMAIL = "mcnicastro@gmail.com"
-ADMIN_PASSWORD = "Forzainter2026."
+ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]
 B2C_PASSWORD = "TestB2C2026!"
 TS = int(time.time())
 B2C_EMAIL = f"b2csavedtest_{TS}@example.com"

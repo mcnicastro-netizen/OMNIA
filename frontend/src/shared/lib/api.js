@@ -18,7 +18,7 @@ export const API_BASE = `${BACKEND_URL}/api`;
 
 export const api = axios.create({
   baseURL: API_BASE,
-  timeout: 15000,
+  timeout: 30000, // R6 — le chiamate AI/PDF possono superare 15s; override per-call dove serve
 });
 
 api.interceptors.request.use((config) => {
