@@ -3,7 +3,14 @@
 **Versione**: 1.1
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026)
 **Founder**: mcnicastro-netizen
-- **Stato progetto**: 🎉 **M1–M3 + M5 + Sprints 1–4 + Audit COMPLETO (Fasi 0-3) DONE** — Aggiornamento **30-Lug-2026 (sera)**:
+- **Stato progetto**: 🎉 **Audit COMPLETO (Fasi 0-3) + Follow-up S1-S5 DONE** — Aggiornamento **30-Lug-2026 (notte)**:
+  - ✅ **30-Lug-2026 (follow-up report post-push, S1-S5 + R)**: testato da testing agent iteration_32 (16/16 nuovi test + 35/35 suite audit + UI Playwright tutta verde):
+    - 🔴 **S1 Credenziali**: password admin/agent/stress RUOTATE (le vecchie nel repo/history Git sono invalide → 401 verificato). Test (~41 file) ora leggono da `memory/test_credentials.env` (gitignored) via conftest; `memory/*.md` e `test_reports/` bonificati; gitignore esteso (`test_reports/`, `memory/test_credentials.*`). NUOVE credenziali SOLO in `memory/test_credentials.env|.md` (mai committati).
+    - 🔴 **S2 Register**: `_PUBLIC_ROLES={client, student}` — `agency_admin` E `agent` non ottenibili da registrazione pubblica. Il flusso agenzia: register (client) → OnboardingWizard → `POST /app/agencies` promuove server-side a `agency_admin`. RegisterPage: select "Tipo di account" (Agenzia/Privato/Studente) al posto della scelta ruolo; redirect post-register: agenzia→onboarding, privato→/cloud, studente→/academy.
+    - 🟠 **S3 RBAC**: verificato con utente `group_admin` reale (test_groupadmin@omnia.it): dashboard/properties/settings accessibili grazie a ROLE_ALIASES in ProtectedRoute (era un falso positivo del report: guardava solo App.js).
+    - 🟠 **S4**: suite phase23 35/35 verde (il test tollera `id`; failure del XML era di una run precedente).
+    - 🟠 **S5**: gitignore `!.env.example` → i template env ora committabili (verificato con git check-ignore).
+    - 🟡 **R**: crypto warning se manca CREDENTIALS_MASTER_KEY (R2), fallback base64 foto limitato a 600KB (R4), errori leggibili su CloudRegister (R5), timeout axios 30s (R6), `await refresh()` (R7), README root riscritto. R9/R13 erano già risolti (falsi positivi). R3/R10/R11 scelte documentate.
   - ✅ **30-Lug-2026 (Fase 2-3 audit — "sistema tutto")**: **REFACTORING ARCHITETTURALE + DEBITO TECNICO COMPLETATI** (pytest 653/653 + 10 nuovi test fase 2-3, jest frontend 19/19, testing agent iteration_31 100%):
     - **M16** Lazy loading: tutte le ~40 route in `React.lazy` + `Suspense` (chunk separati per app).
     - **M17** `ImmocloudApp.jsx` 831→33 righe: pagine estratte in `pages/` (CloudHomePage, CloudSearchPage, CloudRegisterPage) + `components/` (CloudTopNav, FooterB2C, PropertyCard) + `cloudTheme.js`.
