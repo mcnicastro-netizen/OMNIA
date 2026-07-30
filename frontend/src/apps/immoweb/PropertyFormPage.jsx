@@ -57,6 +57,8 @@ export default function PropertyFormPage() {
   const [error, setError] = useState("");
   const [agency, setAgency] = useState(null);
   const [stagingPhoto, setStagingPhoto] = useState(null);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [loaded, setLoaded] = useState(!id);
 
   useEffect(() => {
     api.get(`/app/agencies/me`).then((r) => setAgency(r.data)).catch(() => {});
@@ -64,6 +66,7 @@ export default function PropertyFormPage() {
 
   useEffect(() => {
     if (!isEdit) return;
+    // H4 — if the GET fails, block submit: never PATCH over real data with an empty form
     api.get(`/app/properties/${id}`).then((r) => {
       const d = r.data;
       const nn = (obj) => Object.fromEntries(Object.entries(obj || {}).map(([k, v]) => [k, v === null ? "" : v]));
@@ -74,6 +77,10 @@ export default function PropertyFormPage() {
         features: { ...empty.features, ...nn(d.features) },
         owner: { ...empty.owner, ...nn(d.owner) },
       });
+      setLoaded(true);
+    }).catch(() => {
+      setLoadFailed(true);
+      setError(t("common.error"));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -408,7 +415,7 @@ export default function PropertyFormPage() {
             )}
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || loadFailed || !loaded}
               data-testid="prop-save-btn"
               className="ml-auto px-6 py-3 bg-stone-900 text-stone-50 text-xs uppercase tracking-widest font-medium rounded-md hover:bg-stone-700 disabled:opacity-50"
             >

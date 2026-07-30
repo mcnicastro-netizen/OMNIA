@@ -66,11 +66,11 @@ export default function BillingPage() {
   const checkoutSubscription = async (tier) => {
     setBusy(true);
     try {
-      const { data } = await api.post("/api/billing/checkout", {
+      const { data } = await api.post("/billing/checkout", {
         plan_tier: tier,
         billing_cycle: billingCycle,
         success_url: window.location.origin,
-        cancel_url: window.location.origin + "/it/app/settings/billing?cancel=1",
+        cancel_url: window.location.origin + window.location.pathname + "?cancel=1",
       });
       window.location.href = data.checkout_url;
     } catch (e) {
@@ -86,7 +86,7 @@ export default function BillingPage() {
       const { data } = await api.post("/billing/credits/purchase", {
         package_key: packageKey,
         success_url: window.location.origin,
-        cancel_url: window.location.origin + "/it/app/settings/billing?cancel=1",
+        cancel_url: window.location.origin + window.location.pathname + "?cancel=1",
       });
       window.location.href = data.checkout_url;
     } catch (e) {

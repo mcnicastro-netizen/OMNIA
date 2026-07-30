@@ -215,16 +215,22 @@ async def buy_credits(
 
 
 @router.get("/status/{session_id}")
-async def get_session_status(session_id: str):
-    """Public — used by frontend polling on success page. Never returns sensitive data."""
+async def get_session_status(session_id: str, user: dict = Depends(get_current_user)):
+    """Frontend polling on success page. Auth-bound (H15): only the initiating
+    user/agency (or super_admin) can read the transaction status."""
     db = Database.get()
     record = await db.payment_transactions.find_one(
         {"session_id": session_id},
         {"_id": 0, "session_id": 1, "status": 1, "payment_status": 1, "kind": 1,
-         "tier": 1, "credits": 1},
+         "tier": 1, "credits": 1, "user_id": 1, "agency_id": 1},
     )
     if not record:
         raise HTTPException(status_code=404, detail="transaction_not_found")
+    if user.get("role") != "super_admin":
+        if record.get("user_id") != user["id"] and record.get("agency_id") not in (user.get("agency_ids") or []):
+            raise HTTPException(status_code=403, detail="forbidden")
+    record.pop("user_id", None)
+    record.pop("agency_id", None)
 
     # Webhook fallback: if still pending, ask Stripe directly.
     if record.get("payment_status") != "paid":

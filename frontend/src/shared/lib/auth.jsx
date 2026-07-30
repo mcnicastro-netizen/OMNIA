@@ -45,8 +45,12 @@ export function AuthProvider({ children }) {
       .catch(() => {
         if (mounted) setUser(false);
       });
+    // M9 — 401 on any protected call → drop the local session (ProtectedRoute redirects to login)
+    const onUnauthorized = () => setUser((u) => (u ? false : u));
+    window.addEventListener("omnia:unauthorized", onUnauthorized);
     return () => {
       mounted = false;
+      window.removeEventListener("omnia:unauthorized", onUnauthorized);
     };
   }, []);
 

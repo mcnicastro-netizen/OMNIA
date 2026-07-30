@@ -100,7 +100,12 @@ app = FastAPI(
 )
 
 # CORS (allow Emergent preview + production subdomains)
-allowed = os.environ.get("CORS_ORIGINS", "*").split(",")
+_cors_env = os.environ.get("CORS_ORIGINS", "").strip()
+if _cors_env:
+    allowed = _cors_env.split(",")
+else:
+    allowed = ["*"]
+    logger.warning("CORS_ORIGINS not set — using '*' (acceptable in preview only; set explicit origins in production)")
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -151,7 +156,8 @@ async def global_health(accept_language: str = Header(None)):
         db = Database.get()
         await db.command("ping")
     except Exception as e:
-        db_status = f"error: {e}"
+        logger.error("health db ping failed: %s", e)
+        db_status = "error"
     return HealthResponse(
         app="omnia",
         lang=lang,

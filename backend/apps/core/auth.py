@@ -92,11 +92,15 @@ async def register(req: RegisterRequest, request: Request, response: Response,
     if existing:
         raise HTTPException(status_code=400, detail=t("auth.email_taken", lang=lang))
 
+    # C1 — public registration can never grant privileged roles
+    _PUBLIC_ROLES = {"client", "agent", "agency_admin", "student"}
+    safe_role = req.role if req.role in _PUBLIC_ROLES else "client"
+
     user = UserInDB(
         email=email,
         password_hash=hash_password(req.password),
         name=req.name.strip(),
-        role=req.role or "client",
+        role=safe_role,
         lang=lang,
         signup_domain_sovereignty_confirmed=bool(req.domain_sovereignty_confirmed),
         signup_existing_domain=(req.existing_domain or "").strip().lower() or None,
@@ -172,6 +176,8 @@ async def refresh(request: Request, response: Response,
     user = await db.users.find_one({"id": payload["sub"]})
     if not user:
         raise HTTPException(status_code=401, detail=t("auth.user_not_found", lang=lang))
+    if not user.get("is_active", True):
+        raise HTTPException(status_code=403, detail=t("auth.account_disabled", lang=lang))
 
     access = create_access_token(user["id"], user["email"], user["role"])
     response.set_cookie(
@@ -213,7 +219,7 @@ async def forgot_password(req: ForgotPasswordRequest,
         })
         frontend = os.environ.get("FRONTEND_URL", "")
         reset_url = f"{frontend}/{lang}/reset-password?token={token}"
-        logger.info("Password reset link for %s: %s", email, reset_url)
+        logger.info("Password reset link generated for %s", email)
         try:
             await send_email(
                 to=email,

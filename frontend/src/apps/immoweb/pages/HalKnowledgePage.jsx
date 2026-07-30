@@ -60,9 +60,9 @@ export default function HalKnowledgePage() {
     inputRef.current?.focus();
   }, []);
 
-  const submit = async (e) => {
+  const submit = async (e, override) => {
     if (e) e.preventDefault();
-    const q = question.trim();
+    const q = (override ?? question).trim();
     if (!q || busy) return;
     setBusy(true);
     setError(null);
@@ -81,7 +81,7 @@ export default function HalKnowledgePage() {
 
   const askSample = (q) => {
     setQuestion(q);
-    setTimeout(() => submit(), 30);
+    submit(null, q);
   };
 
   const restoreFromHistory = (h) => {

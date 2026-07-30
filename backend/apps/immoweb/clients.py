@@ -2,6 +2,7 @@
 import csv
 import io
 import logging
+import re
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -46,11 +47,12 @@ async def list_clients(
     if client_type:
         query["client_type"] = client_type
     if q:
+        q_safe = re.escape(q[:100])
         query["$or"] = [
-            {"name": {"$regex": q, "$options": "i"}},
-            {"surname": {"$regex": q, "$options": "i"}},
-            {"email": {"$regex": q, "$options": "i"}},
-            {"phone": {"$regex": q, "$options": "i"}},
+            {"name": {"$regex": q_safe, "$options": "i"}},
+            {"surname": {"$regex": q_safe, "$options": "i"}},
+            {"email": {"$regex": q_safe, "$options": "i"}},
+            {"phone": {"$regex": q_safe, "$options": "i"}},
         ]
     total = await db.clients.count_documents(query)
     docs = await db.clients.find(query, {"_id": 0}).sort("created_at", -1).skip((page - 1) * page_size).limit(page_size).to_list(page_size)
@@ -92,11 +94,12 @@ async def list_sellers_for_autocomplete(
         "client_type": {"$in": ["seller", "landlord"]},
     }
     if q:
+        q_safe = re.escape(q[:100])
         query["$or"] = [
-            {"name": {"$regex": q, "$options": "i"}},
-            {"surname": {"$regex": q, "$options": "i"}},
-            {"email": {"$regex": q, "$options": "i"}},
-            {"phone": {"$regex": q, "$options": "i"}},
+            {"name": {"$regex": q_safe, "$options": "i"}},
+            {"surname": {"$regex": q_safe, "$options": "i"}},
+            {"email": {"$regex": q_safe, "$options": "i"}},
+            {"phone": {"$regex": q_safe, "$options": "i"}},
         ]
     docs = await db.clients.find(
         query, {"_id": 0, "id": 1, "name": 1, "surname": 1, "email": 1, "phone": 1, "client_type": 1},
@@ -130,7 +133,7 @@ async def update_client(
         if v is None:
             continue
         update_doc[k] = v.model_dump() if hasattr(v, "model_dump") else v
-    await db.clients.update_one({"id": cid}, {"$set": update_doc})
+    await db.clients.update_one({"id": cid, "agency_id": agency_id}, {"$set": update_doc})
     return _strip(await db.clients.find_one({"id": cid}))
 
 

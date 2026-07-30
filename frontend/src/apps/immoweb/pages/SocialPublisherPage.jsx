@@ -367,7 +367,7 @@ export default function SocialPublisherPage() {
                       <td className="px-4 py-3 text-xs">
                         {p.property_id ? (
                           <Link
-                            to={`/${lang}/app/properties/${p.property_id}/edit`}
+                            to={`/${lang}/app/properties/${p.property_id}`}
                             className="text-emerald-700 hover:underline"
                           >
                             {p.property_id.slice(0, 8)}…

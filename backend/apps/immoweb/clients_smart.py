@@ -188,7 +188,7 @@ async def smart_clients(
 
     # 2. Pull all active+draft properties of the agency
     properties = await db.properties.find(
-        {"agency_id": agency_id, "status": {"$in": ["active", "draft"]}}, {"_id": 0},
+        {"agency_id": agency_id, "status": "active"}, {"_id": 0},
     ).to_list(length=2000)
 
     # 3. Pull lead_score_cache for this agency once → index by (property_id, client_id)
@@ -275,7 +275,7 @@ async def refresh_smart_scores(
         {"agency_id": agency_id, "client_type": {"$in": list(SEARCHER_TYPES)}}, {"_id": 0},
     ).to_list(length=2000)
     properties = await db.properties.find(
-        {"agency_id": agency_id, "status": {"$in": ["active", "draft"]}}, {"_id": 0},
+        {"agency_id": agency_id, "status": "active"}, {"_id": 0},
     ).to_list(length=2000)
     if not clients or not properties:
         return {"refreshed": 0, "skipped": 0, "items": []}

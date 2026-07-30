@@ -1,11 +1,13 @@
 import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { api } from "../../../shared/lib/api";
 
 /**
  * PhotoUploader — drag&drop JPEG/PNG upload with client-side resize.
  *
- * Photos are stored as base64 data URLs inside the property document.
- * Max 1600px width, JPEG quality ~80% → typical ~150KB per photo.
+ * H10 — Photos are uploaded to Object Storage (multipart) and only the media
+ * URL is stored in the property document. Base64 data-URL is kept as a
+ * fallback if the storage upload fails (preview resilience).
  *
  * Props:
  *   photos: [{ id, url, caption?, order, is_cover }]
@@ -16,7 +18,7 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
   const { t } = useTranslation();
   const fileInput = useRef(null);
 
-  const resizeImage = (file) => new Promise((resolve, reject) => {
+  const resizeToBlob = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
@@ -32,7 +34,7 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.82));
+        canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("toBlob failed"))), "image/jpeg", 0.82);
       };
       img.onerror = reject;
       img.src = e.target.result;
@@ -41,6 +43,23 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
     reader.readAsDataURL(file);
   });
 
+  const blobToDataUrl = (blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+  const uploadBlob = async (blob, name) => {
+    const fd = new FormData();
+    fd.append("file", blob, name.replace(/\.[^.]+$/, "") + ".jpg");
+    const { data } = await api.post("/app/properties/photos/upload-tmp", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+      timeout: 45000,
+    });
+    return data.url;
+  };
+
   const handleFiles = async (files) => {
     const remaining = max - photos.length;
     const filesArr = Array.from(files).slice(0, remaining);
@@ -48,10 +67,16 @@ export default function PhotoUploader({ photos = [], onChange, max = 15, onStage
     for (const file of filesArr) {
       if (!file.type.startsWith("image/")) continue;
       try {
-        const dataUrl = await resizeImage(file);
+        const blob = await resizeToBlob(file);
+        let url;
+        try {
+          url = await uploadBlob(blob, file.name);
+        } catch {
+          url = await blobToDataUrl(blob); // fallback: storage unavailable
+        }
         newPhotos.push({
           id: crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2),
-          url: dataUrl,
+          url,
           caption: file.name.replace(/\.[^.]+$/, ""),
           order: newPhotos.length,
           is_cover: newPhotos.length === 0, // first photo = cover by default

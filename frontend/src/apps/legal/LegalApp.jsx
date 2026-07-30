@@ -445,7 +445,7 @@ export default function LegalApp() {
           </div>
           <Link
             data-testid="legal-nav-back"
-            to="/it/app/dashboard"
+            to={`/${document.documentElement.lang || "it"}/app/dashboard`}
             className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-[#0B1E3F]"
           >
             ← {t("legal.nav_back")}

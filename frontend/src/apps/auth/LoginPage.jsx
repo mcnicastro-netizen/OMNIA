@@ -12,7 +12,19 @@ export default function LoginPage() {
   const { login } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
-  const next = new URLSearchParams(location.search).get("next") || `/${lang}/app/dashboard`;
+  // C3 — anti open-redirect: only same-origin relative paths are allowed
+  const rawNext = new URLSearchParams(location.search).get("next");
+  let next = `/${lang}/app/dashboard`;
+  if (rawNext) {
+    try {
+      const decoded = decodeURIComponent(rawNext);
+      if (/^\/(?!\/)/.test(decoded) && !decoded.includes("://") && !decoded.includes("\\")) {
+        next = decoded;
+      }
+    } catch {
+      // keep default
+    }
+  }
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +37,7 @@ export default function LoginPage() {
     setError("");
     try {
       await login(email, password);
-      nav(decodeURIComponent(next), { replace: true });
+      nav(next, { replace: true });
     } catch (err) {
       setError(formatApiErrorDetail(err.response?.data?.detail) || err.message);
     } finally {

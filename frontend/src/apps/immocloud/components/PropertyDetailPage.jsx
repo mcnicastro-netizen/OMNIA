@@ -504,7 +504,7 @@ function SchemaOrgJsonLd({ prop, publicUrl }) {
     <script
       type="application/ld+json"
       data-testid="schema-jsonld"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
     />
   );
 }

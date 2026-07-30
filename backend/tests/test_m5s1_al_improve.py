@@ -303,14 +303,13 @@ class TestAlImproveAudit:
         assert isinstance(found["output_len"], int)
 
 
-# ---------- Static asserts (brand rename to 'AL') ----------
+# ---------- Static asserts (brand rename to 'HAL') ----------
 
 def test_system_prompt_uppercase_al():
-    """SYSTEM_PROMPT identifies the assistant as 'AL' (uppercase)."""
+    """SYSTEM_PROMPT identifies the assistant as 'HAL' (uppercase, current brand)."""
     path = "/app/backend/apps/immoweb/al_agent.py"
     with open(path, "r", encoding="utf-8") as f:
         src = f.read()
-    assert "Sei AL," in src, "SYSTEM_PROMPT does not start with 'Sei AL,'"
-    # Make sure the lowercase 'Al,' brand greeting is no longer present in the SYSTEM_PROMPT body
-    # (we accept 'Al' inside arbitrary code/comments; we only assert the canonical greeting is uppercased)
+    assert "Sei HAL," in src, "SYSTEM_PROMPT does not start with 'Sei HAL,'"
+    # Make sure the stale lowercase brand greetings are no longer present
     assert "Sei Al," not in src, "stale 'Sei Al,' still present"

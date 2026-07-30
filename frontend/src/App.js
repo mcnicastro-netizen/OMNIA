@@ -56,11 +56,14 @@ import LegalApp from "@/apps/legal/LegalApp";
 import LoginPage from "@/apps/auth/LoginPage";
 import RegisterPage from "@/apps/auth/RegisterPage";
 import ForgotPasswordPage from "@/apps/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/apps/auth/ResetPasswordPage";
 import AcceptInvitePage from "@/apps/auth/AcceptInvitePage";
 import ProtectedRoute from "@/shared/components/ProtectedRoute";
+import { Toaster } from "@/components/ui/sonner";
 
 function LangSync({ children }) {
   const { lang } = useParams();
+  const location = useLocation();
   const { i18n } = useTranslation();
   useEffect(() => {
     if (lang && SUPPORTED_LANGS.includes(lang)) {
@@ -68,6 +71,14 @@ function LangSync({ children }) {
       document.documentElement.lang = lang;
     }
   }, [lang, i18n]);
+  // M10 — unknown lang prefix (e.g. /fr/...) → redirect to default lang
+  if (lang && !SUPPORTED_LANGS.includes(lang)) {
+    const rest = location.pathname.replace(/^\/[^/]+/, "");
+    const target = /^[a-z]{2}(-[A-Za-z]{2})?$/.test(lang)
+      ? `/${DEFAULT_LANG}${rest}`
+      : `/${DEFAULT_LANG}${location.pathname}`;
+    return <Navigate to={target + location.search} replace />;
+  }
   return children;
 }
 
@@ -132,6 +143,7 @@ function App() {
                   <Route path="login" element={<LoginPage />} />
                   <Route path="register" element={<RegisterPage />} />
                   <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="reset-password" element={<ResetPasswordPage />} />
                   <Route path="accept-invite" element={<AcceptInvitePage />} />
 
                   {/* B2C portal */}
@@ -382,7 +394,7 @@ function App() {
                   <Route
                     path="app/moderation"
                     element={
-                      <ProtectedRoute allowedRoles={["super_admin", "platform_admin", "admin"]}>
+                      <ProtectedRoute allowedRoles={["super_admin"]}>
                         <ModerationPage />
                       </ProtectedRoute>
                     }
@@ -409,6 +421,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         </ErrorBoundary>
+        <Toaster position="top-right" richColors />
       </BrowserRouter>
     </AuthProvider>
   );

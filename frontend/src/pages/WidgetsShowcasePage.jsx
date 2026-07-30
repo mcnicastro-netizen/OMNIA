@@ -9,6 +9,10 @@ import Brand from "../shared/components/Brand";
  */
 const BACKEND = process.env.REACT_APP_BACKEND_URL || window.location.origin;
 const DEMO_KEY_HINT = "omk_live_yourKeyHere...";
+const curLang = () => {
+  const seg = window.location.pathname.split("/")[1];
+  return ["it", "en", "es"].includes(seg) ? seg : "it";
+};
 
 const WIDGETS = [
   {
@@ -83,7 +87,7 @@ export default function WidgetsShowcasePage() {
             </h1>
           </div>
           <a
-            href={user ? "/it/app/api-keys" : "/it/login"}
+            href={user ? `/${curLang()}/app/api-keys` : `/${curLang()}/login`}
             data-testid="widgets-get-key-cta"
             className="text-xs uppercase tracking-widest bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-700"
           >
@@ -201,7 +205,7 @@ export default function WidgetsShowcasePage() {
                   Inserisci una chiave API a sinistra per vedere il widget dal vivo.
                   <br />
                   <a
-                    href={user ? "/it/app/api-keys" : "/it/login"}
+                    href={user ? `/${curLang()}/app/api-keys` : `/${curLang()}/login`}
                     className="underline hover:no-underline mt-2 inline-block"
                   >
                     Non hai ancora una chiave? Emettila qui →
@@ -226,7 +230,7 @@ export default function WidgetsShowcasePage() {
                 1 · Emetti la chiave
               </p>
               <p>
-                Su <a href="/it/app/api-keys" className="underline">/app/api-keys</a> crei una
+                Su <a href={`/${curLang()}/app/api-keys`} className="underline">/app/api-keys</a> crei una
                 chiave <code>omk_live_...</code> con crediti iniziali e (opzionale)
                 <em> partner_id</em> del programma Web Agency (D-046).
               </p>
@@ -255,7 +259,7 @@ export default function WidgetsShowcasePage() {
 
         <footer className="text-center text-xs text-stone-500 py-8">
           Powered by OMNIA · <a href="/api/v1/health" className="underline">API v1 health</a> ·{" "}
-          <a href="/it/pricing" className="underline">Pricing</a>
+          <a href={`/${curLang()}/pricing`} className="underline">Pricing</a>
         </footer>
       </main>
     </div>

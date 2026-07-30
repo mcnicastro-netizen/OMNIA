@@ -194,15 +194,27 @@ async def charge_and_log(request: Request, status_code: int = 200,
     ok = 200 <= status_code < 400 and error_code is None
     now = datetime.now(timezone.utc).isoformat()
 
-    # Debit only on success + non-zero cost
+    # Debit only on success + non-zero cost (H8 — atomic, never overdraws)
     if ok and cost > 0:
-        await db.api_keys.update_one(
-            {"id": key["id"]},
+        res = await db.api_keys.update_one(
+            {"id": key["id"], "credits_balance": {"$gte": cost}},
             {
                 "$inc": {"credits_balance": -cost, "credits_spent": cost},
                 "$set": {"last_used_at": now, "updated_at": now},
             },
         )
+        if res.modified_count == 0:
+            # Concurrent race consumed the balance: drain to zero, never negative.
+            logger.warning("credit_debit_clamped key=%s cost=%s", key["id"], cost)
+            await db.api_keys.update_one(
+                {"id": key["id"]},
+                [{"$set": {
+                    "credits_spent": {"$add": ["$credits_spent", "$credits_balance"]},
+                    "credits_balance": 0,
+                    "last_used_at": now,
+                    "updated_at": now,
+                }}],
+            )
     else:
         # touch last_used_at anyway (attempts count)
         await db.api_keys.update_one(

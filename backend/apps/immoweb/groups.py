@@ -287,6 +287,15 @@ async def attach_branch(
     if agency.get("group_id") and agency["group_id"] != group_id:
         raise HTTPException(status_code=409, detail="agency_already_in_another_group")
 
+    # C6 — anti branch-hijacking: only super_admin can attach agencies not owned by the caller
+    if user.get("role") != "super_admin":
+        owned = (
+            agency.get("owner_id") == user["id"]
+            or agency["id"] in (user.get("agency_ids") or [])
+        )
+        if not owned:
+            raise HTTPException(status_code=403, detail="agency_not_owned")
+
     now = datetime.now(timezone.utc).isoformat()
     update = {"group_id": group_id, "updated_at": now}
     if payload.branch_code:

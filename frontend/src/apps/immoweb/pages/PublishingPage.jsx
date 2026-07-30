@@ -322,7 +322,7 @@ export default function PortalsPage() {
                       <div key={b.id} className="text-xs border border-stone-200 rounded px-3 py-2">
                         <div className="flex justify-between">
                           <span className="font-medium truncate">{b.title || b.reference || b.id}</span>
-                          <a href={`/it/app/properties/${b.id}/edit`} className="text-emerald-700 hover:underline ml-2 shrink-0">Correggi →</a>
+                          <a href={`/${document.documentElement.lang || "it"}/app/properties/${b.id}`} className="text-emerald-700 hover:underline ml-2 shrink-0">Correggi →</a>
                         </div>
                         <div className="text-stone-500 mt-1">
                           {b.reasons.map((r) => REASON_LABELS[r] || r).join(" · ")}

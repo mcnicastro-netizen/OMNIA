@@ -26,9 +26,9 @@ Router: /api/app/hal/knowledge/*
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import os
-import pickle
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -36,10 +36,11 @@ from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import numpy as np
+from scipy.sparse import csr_matrix
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import Field
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from shared.auth.dependencies import require_roles
@@ -253,7 +254,16 @@ async def _rebuild_tfidf_index() -> None:
         stop_words=list(_ITALIAN_STOPS),
     )
     matrix = vectorizer.fit_transform(corpus_texts)
-    blob = pickle.dumps({"vectorizer": vectorizer, "matrix": matrix, "ids": corpus_ids})
+    # H9 — JSON-serialized index (no pickle: a compromised DB must never lead to RCE)
+    index_json = json.dumps({
+        "vocab": {term: int(i) for term, i in vectorizer.vocabulary_.items()},
+        "idf": vectorizer.idf_.tolist(),
+        "data": matrix.data.tolist(),
+        "indices": matrix.indices.tolist(),
+        "indptr": matrix.indptr.tolist(),
+        "shape": list(matrix.shape),
+        "ids": corpus_ids,
+    })
     await db.hal_knowledge_meta.update_one(
         {"id": "singleton"},
         {"$set": {
@@ -261,15 +271,16 @@ async def _rebuild_tfidf_index() -> None:
             "empty": False,
             "index_size": len(corpus_ids),
             "vocab_size": len(vectorizer.vocabulary_),
-            "blob": blob,
+            "index_json": index_json,
             "updated_at": utcnow_iso(),
-        }},
+        },
+         "$unset": {"blob": ""}},
         upsert=True,
     )
     logger.info("hal_knowledge tfidf rebuilt: %d chunks, %d terms", len(corpus_ids), len(vectorizer.vocabulary_))
 
 
-_CACHE: Dict[str, Any] = {"blob_ts": None, "vectorizer": None, "matrix": None, "ids": None}
+_CACHE: Dict[str, Any] = {"blob_ts": None, "cv": None, "idf": None, "matrix": None, "ids": None}
 
 
 async def _load_index() -> Optional[Dict[str, Any]]:
@@ -277,11 +288,34 @@ async def _load_index() -> Optional[Dict[str, Any]]:
     meta = await db.hal_knowledge_meta.find_one({"id": "singleton"})
     if not meta or meta.get("empty"):
         return None
+    if not meta.get("index_json"):
+        # Legacy pickle-based index: rebuild once in the new JSON format.
+        await _rebuild_tfidf_index()
+        meta = await db.hal_knowledge_meta.find_one({"id": "singleton"})
+        if not meta or not meta.get("index_json"):
+            return None
     ts = meta.get("updated_at")
-    if _CACHE["blob_ts"] == ts and _CACHE["vectorizer"] is not None:
+    if _CACHE["blob_ts"] == ts and _CACHE["cv"] is not None:
         return _CACHE
-    data = pickle.loads(meta["blob"])
-    _CACHE.update({"blob_ts": ts, **data})
+    payload = json.loads(meta["index_json"])
+    matrix = csr_matrix(
+        (payload["data"], payload["indices"], payload["indptr"]),
+        shape=tuple(payload["shape"]),
+    )
+    cv = CountVectorizer(
+        lowercase=True,
+        strip_accents="unicode",
+        ngram_range=(1, 2),
+        stop_words=list(_ITALIAN_STOPS),
+        vocabulary=payload["vocab"],
+    )
+    _CACHE.update({
+        "blob_ts": ts,
+        "cv": cv,
+        "idf": np.asarray(payload["idf"]),
+        "matrix": matrix,
+        "ids": payload["ids"],
+    })
     return _CACHE
 
 
@@ -293,7 +327,8 @@ async def retrieve_chunks(query: str, k: int = TOP_K) -> List[Dict[str, Any]]:
     idx = await _load_index()
     if idx is None:
         return []
-    q_vec = idx["vectorizer"].transform([query])
+    counts = idx["cv"].transform([query])
+    q_vec = counts.multiply(idx["idf"]).tocsr()
     sims = cosine_similarity(q_vec, idx["matrix"])[0]
     top_indices = np.argsort(sims)[::-1][:k]
     top = []

@@ -576,6 +576,7 @@ function RegisterPage() {
   const { t, i18n } = useTranslation();
   const lang = (i18n.language || "it").slice(0, 2);
   const nav = useNavigate();
+  const { refresh } = useAuth();
   const [params] = useSearchParams();
   const presetIntent = params.get("intent");
   const [form, setForm] = useState({
@@ -604,6 +605,7 @@ function RegisterPage() {
       const data = await r.json();
       if (!r.ok) throw new Error(data.detail || "register_failed");
       setDone(data.user);
+      refresh(); // H6 — sync AuthProvider with the freshly set auth cookies
     } catch (e) {
       setErr(String(e.message || e));
     } finally { setBusy(false); }

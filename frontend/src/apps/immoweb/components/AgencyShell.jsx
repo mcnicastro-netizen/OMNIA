@@ -74,14 +74,20 @@ export default function AgencyShell({ children, current = "dashboard" }) {
     { key: "properties", to: `/${lang}/app/properties`, label: t("immoweb_app.nav_properties"), icon: "🏠" },
     { key: "clients", to: `/${lang}/app/clients`, label: t("immoweb_app.nav_clients"), icon: "👥" },
     { key: "matches", to: `/${lang}/app/matches`, label: t("immoweb_app.nav_matches"), icon: "✦" },
-    { key: "website", to: `/${lang}/app/website`, label: t("immoweb_app.nav_website") || "Sito web", icon: "🎨" },
+    ...(isAgencyAdmin
+      ? [{ key: "website", to: `/${lang}/app/website`, label: t("immoweb_app.nav_website") || "Sito web", icon: "🎨" }]
+      : []),
     { key: "staging", to: `/${lang}/app/staging`, label: "Virtual Staging", icon: "✨" },
     { key: "mutui", to: `/${lang}/app/mutui`, label: t("mutui.nav") || "Mutui", icon: "💰" },
     { key: "legal", to: `/${lang}/legal`, label: "HAL Legal", icon: "⚖" },
     { key: "hal-knowledge", to: `/${lang}/app/hal-knowledge`, label: "HAL Knowledge", icon: "📚" },
     { key: "members", to: `/${lang}/app/members`, label: t("immoweb_app.nav_members"), icon: "✉" },
-    { key: "billing", to: `/${lang}/app/settings/billing`, label: "Piano & Crediti", icon: "💳" },
-    { key: "settings", to: `/${lang}/app/settings`, label: t("immoweb_app.nav_settings"), icon: "⚙" },
+    ...(isAgencyAdmin
+      ? [{ key: "billing", to: `/${lang}/app/settings/billing`, label: "Piano & Crediti", icon: "💳" }]
+      : []),
+    ...(isAgencyAdmin
+      ? [{ key: "settings", to: `/${lang}/app/settings`, label: t("immoweb_app.nav_settings"), icon: "⚙" }]
+      : []),
     // Brand Lab — internal creative repository (super_admin only)
     ...(user?.role === "super_admin"
       ? [{ key: "brand-lab", to: `/${lang}/app/brand-lab`, label: "Brand Lab", icon: "◈" }]

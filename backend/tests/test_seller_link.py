@@ -143,14 +143,16 @@ class TestPropertySellerLink:
         assert r.status_code == 200, r.text
         assert r.json()["seller_client_id"] == landlord_client["id"]
 
-        # PATCH semantics: sending null with exclude_unset must NOT clear
+        # PATCH semantics: seller_client_id is a NULLABLE_FIELD — explicit null CLEARS it
+        # (the frontend "Rimuovi" action relies on this explicit-clear behaviour)
         r = session.patch(f"{BASE_URL}/api/app/properties/{pid}", json={"seller_client_id": None})
         assert r.status_code == 200, r.text
-        # backend skips None on PATCH, so previous value should persist
-        assert r.json()["seller_client_id"] == landlord_client["id"], \
-            "PATCH with null should NOT clear seller_client_id (exclude_unset PATCH semantics)"
+        assert r.json()["seller_client_id"] is None, \
+            "PATCH with explicit null must clear seller_client_id (NULLABLE_FIELDS semantics)"
 
-        # omit -> still landlord
+        # re-set, then omit -> value persists (exclude_unset semantics for omitted fields)
+        r = session.patch(f"{BASE_URL}/api/app/properties/{pid}", json={"seller_client_id": landlord_client["id"]})
+        assert r.status_code == 200, r.text
         r = session.patch(f"{BASE_URL}/api/app/properties/{pid}", json={"title": "TEST_PROP_LINK_patch_v2"})
         assert r.status_code == 200, r.text
         assert r.json()["seller_client_id"] == landlord_client["id"]

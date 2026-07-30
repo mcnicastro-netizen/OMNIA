@@ -2,6 +2,7 @@
 import csv
 import io
 import logging
+import re
 from datetime import datetime, timezone
 from typing import List, Optional
 from uuid import uuid4
@@ -27,6 +28,7 @@ from shared.models.property import (
     XMLImportPayload,
 )
 from shared.importers.vendor_map_legacy_a import detect_and_parse as detect_vendor_a
+from shared.utils.net_guard import assert_public_url
 from apps.immocloud.geocoding import schedule_geocode
 
 logger = logging.getLogger(__name__)
@@ -116,12 +118,13 @@ async def list_properties(
     if property_type:
         query["property_type"] = property_type
     if city:
-        query["city"] = {"$regex": city, "$options": "i"}
+        query["city"] = {"$regex": re.escape(city[:100]), "$options": "i"}
     if q:
+        q_safe = re.escape(q[:100])
         query["$or"] = [
-            {"title": {"$regex": q, "$options": "i"}},
-            {"description": {"$regex": q, "$options": "i"}},
-            {"reference_code": {"$regex": q, "$options": "i"}},
+            {"title": {"$regex": q_safe, "$options": "i"}},
+            {"description": {"$regex": q_safe, "$options": "i"}},
+            {"reference_code": {"$regex": q_safe, "$options": "i"}},
         ]
 
     total = await db.properties.count_documents(query)
@@ -239,7 +242,7 @@ async def update_property(
         else:
             update_doc[k] = v
 
-    await db.properties.update_one({"id": prop_id}, {"$set": update_doc})
+    await db.properties.update_one({"id": prop_id, "agency_id": agency_id}, {"$set": update_doc})
     updated = await db.properties.find_one({"id": prop_id})
     # M3.S3 — re-geocode if any address field changed (best-effort)
     address_changed = any(k in update_doc for k in ("address", "city", "province", "postal_code"))
@@ -325,6 +328,37 @@ async def upload_property_photo(
         {"$set": {"photos": photos, "updated_at": datetime.now(timezone.utc).isoformat()}},
     )
     return {"photo": new_photo, "photos": photos}
+
+
+@router.post("/photos/upload-tmp")
+async def upload_photo_tmp(
+    file: UploadFile = File(...),
+    user: dict = Depends(require_roles("agency_admin", "agent", "super_admin")),
+):
+    """Upload a photo binary before the property exists (create mode) — H10.
+
+    Stores in Object Storage under the agency namespace and returns the media URL
+    to embed in the `photos` array on save.
+    """
+    agency_id = await _require_agency(user)
+    ct = (file.content_type or "").lower()
+    if ct not in _ALLOWED_PHOTO_MIME:
+        raise HTTPException(status_code=415, detail="unsupported_media_type")
+    data = await file.read()
+    if len(data) > _MAX_PHOTO_BYTES:
+        raise HTTPException(status_code=413, detail="file_too_large")
+    if not data:
+        raise HTTPException(status_code=400, detail="empty_file")
+
+    ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}[ct]
+    photo_id = str(uuid4())
+    storage_path = f"omnia/agencies/{agency_id}/photos/{photo_id}.{ext}"
+    try:
+        put_object(storage_path, data, ct)
+    except ObjStoreError as e:
+        logger.exception("tmp photo upload failed agency=%s: %s", agency_id, e)
+        raise HTTPException(status_code=502, detail="storage_upload_failed") from e
+    return {"id": photo_id, "url": f"/api/media/{storage_path}"}
 
 
 # -------------------- CSV TEMPLATE --------------------
@@ -555,10 +589,13 @@ async def import_xml_feed(
         xml_text = payload.xml_content
     else:
         try:
+            assert_public_url(payload.feed_url)  # C7 — SSRF guard
             async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
                 r = await client.get(payload.feed_url)
                 r.raise_for_status()
                 xml_text = r.text
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"feed_fetch_error: {e}")
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SUPPORTED_LANGS } from "../i18n/config";
 
 const LANG_LABELS = {
@@ -14,19 +15,21 @@ const LANG_LABELS = {
  */
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const current = (i18n.language || "it").slice(0, 2);
 
   const change = (e) => {
     const next = e.target.value;
     i18n.changeLanguage(next);
-    const segments = window.location.pathname.split("/").filter(Boolean);
+    // M1 — go through the router so LangSync & components stay in sync
+    const segments = location.pathname.split("/").filter(Boolean);
     if (SUPPORTED_LANGS.includes(segments[0])) {
       segments[0] = next;
     } else {
       segments.unshift(next);
     }
-    const newPath = "/" + segments.join("/");
-    window.history.replaceState({}, "", newPath + window.location.search);
+    navigate("/" + segments.join("/") + location.search, { replace: true });
   };
 
   return (

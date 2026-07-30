@@ -24,7 +24,8 @@ from shared.db.connection import Database
 logger = logging.getLogger("omnia.moderation")
 router = APIRouter(prefix="/moderation", tags=["moderation"])
 
-ALLOWED_ROLES = {"super_admin", "group_admin"}
+# H3 — B2C private listings are platform-wide (no tenant): only super_admin moderates.
+ALLOWED_ROLES = {"super_admin"}
 
 
 async def _ensure_admin(user: dict) -> None:

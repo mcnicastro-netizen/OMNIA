@@ -48,10 +48,12 @@ export default class ErrorBoundary extends React.Component {
           <p className="text-sm text-stone-600 mb-5">
             Abbiamo registrato l'errore. Prova a ricaricare la pagina — se il problema persiste, contattaci.
           </p>
-          <details className="bg-stone-50 border border-stone-200 rounded-md text-xs text-stone-700 mb-5">
-            <summary className="cursor-pointer px-3 py-2 font-medium">Dettaglio tecnico</summary>
-            <pre className="px-3 py-3 overflow-x-auto whitespace-pre-wrap break-words">{stack}</pre>
-          </details>
+          {process.env.NODE_ENV !== "production" && (
+            <details className="bg-stone-50 border border-stone-200 rounded-md text-xs text-stone-700 mb-5">
+              <summary className="cursor-pointer px-3 py-2 font-medium">Dettaglio tecnico</summary>
+              <pre className="px-3 py-3 overflow-x-auto whitespace-pre-wrap break-words">{stack}</pre>
+            </details>
+          )}
           <div className="flex gap-3">
             <button
               data-testid="error-reload-btn"
