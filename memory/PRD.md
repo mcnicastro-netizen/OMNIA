@@ -1,8 +1,17 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: 27-Feb-2026)
+**Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (27-Feb-2026 — sessione breve, micro-cleanup)**:
+  - ✅ **Stripe plans** — rimosso campo dead-code `stripe_price_id_env` da `apps/billing/plans.py` (esposto via API pubblica con valori errati per Pro/Agency, mai usato dal checkout che si basa su `lookup_key`). Test `billing/stripe` 10/10 verdi.
+  - ✅ **R9 Health leak** — `/api/core/health` non espone più dettagli raw dell'eccezione DB (rischio info disclosure). Errore generico in response, dettagli loggati server-side.
+  - ✅ **R10 PostHog** — verificato: già dietro guard `if (PH_KEY && indexOf("phc_") === 0)` in `frontend/public/index.html`. Nessun fix necessario (falso positivo audit).
+  - ✅ **R13 LLM budget** — verificato: già 503 `llm_budget_exceeded` in tutti gli endpoint (al_legal, al_agent). Falso positivo audit.
+  - 📌 **Pending Founder decisions**: R8 (moderation super_admin vs group_admin), R12 (v1 staging 501 → intenzionale per M2.5.3).
+  - 📌 **Pricing v2.0 (PRICING_OMNIA.md)** — resta 🟡 BOZZA in revisione Founder. Deliverable M2.5.0/P0. Sandbox Stripe attuale (€19/29/79/299) NON allineata al listino ufficiale Founders 50 (€39/99/249) — da riallineare quando Founder conferma v2.0.
+
 - **Stato progetto**: 🎉 **Audit COMPLETO (Fasi 0-3) + Follow-up S1-S5 DONE** — Aggiornamento **30-Lug-2026 (notte)**:
   - ✅ **30-Lug-2026 (follow-up report post-push, S1-S5 + R)**: testato da testing agent iteration_32 (16/16 nuovi test + 35/35 suite audit + UI Playwright tutta verde):
     - 🔴 **S1 Credenziali**: password admin/agent/stress RUOTATE (le vecchie nel repo/history Git sono invalide → 401 verificato). Test (~41 file) ora leggono da `memory/test_credentials.env` (gitignored) via conftest; `memory/*.md` e `test_reports/` bonificati; gitignore esteso (`test_reports/`, `memory/test_credentials.*`). NUOVE credenziali SOLO in `memory/test_credentials.env|.md` (mai committati).
