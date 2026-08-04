@@ -4,6 +4,9 @@ Pricing "fase lancio" (primi 12 mesi) as defined in PROGRAMMA_OMNIA.md.
 Post-traction pricing lives here too as a switchable dict; only one is
 active depending on `PRICING_PHASE` env var (default: launch).
 
+Checkout uses stable Stripe `lookup_key` = f"{tier}_{cycle}" (es.
+`pro_monthly`, `agency_yearly`). Vedi apps/billing/setup_stripe.py.
+
 ⚠️ Nessun brand mention (D-051). Pubblichiamo sempre solo il ns. listino
 in €/mese, mai comparazioni nominative con altri gestionali/portali.
 """
@@ -29,7 +32,6 @@ class Plan(BaseModel):
     max_agents: int  # -1 = illimitato
     max_properties: int  # -1 = illimitato
     features: List[PlanFeature] = Field(default_factory=list)
-    stripe_price_id_env: str  # env var name (letto lazy)
     trial_days: int = 14
     launch_discount_months: int = 0  # es. Starter: 3 mesi gratis in lancio
 
@@ -43,7 +45,6 @@ LAUNCH_PLANS: Dict[PlanTier, Plan] = {
         price_yearly=190.0,
         max_agents=1,
         max_properties=20,
-        stripe_price_id_env="STRIPE_PRICE_STARTER",
         launch_discount_months=3,
     ),
     "pro": Plan(
@@ -53,7 +54,6 @@ LAUNCH_PLANS: Dict[PlanTier, Plan] = {
         price_yearly=290.0,
         max_agents=3,
         max_properties=100,
-        stripe_price_id_env="STRIPE_PRICE_STARTER",  # placeholder — mappare quando arriva
     ),
     "agency": Plan(
         tier="agency",
@@ -62,7 +62,6 @@ LAUNCH_PLANS: Dict[PlanTier, Plan] = {
         price_yearly=790.0,
         max_agents=-1,
         max_properties=-1,
-        stripe_price_id_env="STRIPE_PRICE_GROWTH",
     ),
     "enterprise": Plan(
         tier="enterprise",
@@ -71,24 +70,19 @@ LAUNCH_PLANS: Dict[PlanTier, Plan] = {
         price_yearly=2990.0,
         max_agents=-1,
         max_properties=-1,
-        stripe_price_id_env="STRIPE_PRICE_ENTERPRISE",
     ),
 }
 
 # --- FASE POST-TRACTION (dopo 100 agenzie paganti) ---------------------
 POST_TRACTION_PLANS: Dict[PlanTier, Plan] = {
     "starter": Plan(tier="starter", name="Starter", price_monthly=19.0,
-                    price_yearly=190.0, max_agents=1, max_properties=20,
-                    stripe_price_id_env="STRIPE_PRICE_STARTER"),
+                    price_yearly=190.0, max_agents=1, max_properties=20),
     "pro": Plan(tier="pro", name="Pro", price_monthly=49.0,
-                price_yearly=490.0, max_agents=3, max_properties=100,
-                stripe_price_id_env="STRIPE_PRICE_STARTER"),
+                price_yearly=490.0, max_agents=3, max_properties=100),
     "agency": Plan(tier="agency", name="Agency", price_monthly=149.0,
-                   price_yearly=1490.0, max_agents=-1, max_properties=-1,
-                   stripe_price_id_env="STRIPE_PRICE_GROWTH"),
+                   price_yearly=1490.0, max_agents=-1, max_properties=-1),
     "enterprise": Plan(tier="enterprise", name="Enterprise", price_monthly=499.0,
-                       price_yearly=4990.0, max_agents=-1, max_properties=-1,
-                       stripe_price_id_env="STRIPE_PRICE_ENTERPRISE"),
+                       price_yearly=4990.0, max_agents=-1, max_properties=-1),
 }
 
 
@@ -111,16 +105,12 @@ class CreditPackage(BaseModel):
     key: str
     credits: int
     price_eur: float
-    stripe_price_id_env: str
 
 
 CREDIT_PACKAGES: List[CreditPackage] = [
-    CreditPackage(key="pkg_50", credits=50, price_eur=9.0,
-                  stripe_price_id_env="STRIPE_PRICE_CREDITS_50"),
-    CreditPackage(key="pkg_200", credits=200, price_eur=29.0,
-                  stripe_price_id_env="STRIPE_PRICE_CREDITS_200"),
-    CreditPackage(key="pkg_1000", credits=1000, price_eur=119.0,
-                  stripe_price_id_env="STRIPE_PRICE_CREDITS_1000"),
+    CreditPackage(key="pkg_50", credits=50, price_eur=9.0),
+    CreditPackage(key="pkg_200", credits=200, price_eur=29.0),
+    CreditPackage(key="pkg_1000", credits=1000, price_eur=119.0),
 ]
 
 # --- Credit consumption catalog (D-024 pricing) ------------------------
