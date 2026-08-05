@@ -1,5 +1,53 @@
 # OMNIA — Changelog
 
+## 2026-02-27 (sera) — 🟢 Manuale Cap. 4 · Clienti + fix v1.0.1/v1.0.2 + GAP.md formale
+
+**Tipo**: Documentazione manuale utente (Fase 2 iterazione) + fix redazionali.
+
+### Cosa è stato costruito
+
+#### 3 Fix applicati sui capitoli già consegnati
+- **Cap. 3 · Immobili v1.0.1** — L4 privacy: rimosso "e le agenzie in rete" da tabella matrice + descrizione + voce HAL `privacy-4-livelli-cosa-sono`. Ora L4 = "solo tu e il tuo team di agenzia" (allineato al fatto che MLS network M4 non è ancora implementato).
+- **Cap. 1 · Primo Accesso v1.0.2** — rimossa dicitura "attività recenti" dalla tabella Tour barra sinistra e dalla voce HAL `tour-barra-sinistra`. Sostituita con l'elenco dei 6 numeri chiave reali della Dashboard.
+- **`/app/memory/GAP.md`** creato (119 righe, 6 sezioni): A funzioni backend senza UI · B moduli deprecati/transizione · C duplicati da consolidare · D roba da NON documentare · E gap intercettati per capitolo · F azioni prossime + regole di contributo per il prossimo agente.
+
+#### Cap. 4 · Clienti (12 voci HAL)
+- **7 sottocapitoli** (`/app/memory/manuale/04-clienti.md`, ~360 righe):
+  - 4.1 Anagrafica: 5 tipi cliente (Acquirente/Venditore/Affittuario/Proprietario/Investitore), 7 stati CRM (Nuovo → Contattato → Qualificato → Trattativa → Chiuso vinto/perso → Archiviato), consenso GDPR.
+  - 4.2 Preferenze di ricerca: 14 campi con regola "meglio 3 chiari che 10 vaghi".
+  - 4.3 Import CSV con template (separatore `;`, UTF-8, preview 5 righe).
+  - 4.4 Smart Import AI: formati `.csv .xlsx .vcf .txt`, max 5 MB, 500 righe, powered by Gemini (verificato in `clients_ai_import.py`).
+  - 4.5 Collegamento property-seller: 2 flussi (dal form immobile + dalla scheda cliente).
+  - 4.6 Smart Sorting + Lead Scoring intro: bucket Roventi 🔥 / Caldi 🌶️ / Tiepidi ☀️ / Freddi ❄️, badge "⚡ Aggiorna AI", azioni rapide Chiama + WhatsApp. Dettaglio rinviato a Cap. 5.
+  - 4.7 Modificare / archiviare / eliminare (segreteria+agente NON possono eliminare, solo titolare).
+- **12 voci HAL YAML** validate in `/app/memory/manuale/hal/04-clienti.yaml` (~470 righe): `creare-nuovo`, `tipi-cliente`, `stato-crm`, `preferenze-ricerca`, `gdpr-consenso`, `import-csv-template`, `smart-import-ai`, `collegare-immobile-venditore`, `smart-sorting-buckets`, `temperatura-lead-scoring`, `azioni-rapide`, `archiviare-eliminare`.
+
+#### Screenshots Index aggiornato
+- 6 nuovi screenshot Cap. 4 catalogati (`cap4-client-form-nuovo`, `preferences-form`, `import-csv-flow`, `smart-import-ai-preview`, `property-seller-link`, `smart-sorting-buckets`).
+- **Totale index: 23 placeholder screenshot** (Cap. 1: 8, Cap. 2: 2, Cap. 3: 7, Cap. 4: 6).
+
+### File creati/modificati
+- ✨ NEW `/app/memory/GAP.md` (119 righe)
+- ✨ NEW `/app/memory/manuale/04-clienti.md` (~360 righe)
+- ✨ NEW `/app/memory/manuale/hal/04-clienti.yaml` (12 voci, ~470 righe)
+- ♻️ MOD `/app/memory/manuale/03-immobili.md` (L4 privacy fix)
+- ♻️ MOD `/app/memory/manuale/hal/03-immobili.yaml` (L4 privacy fix voce HAL)
+- ♻️ MOD `/app/memory/manuale/01-primo-accesso.md` (tabella Dashboard fix)
+- ♻️ MOD `/app/memory/manuale/hal/01-primo-accesso.yaml` (voce tour-barra-sinistra fix)
+- ♻️ MOD `/app/memory/manuale/hal/screenshots-index.md` (Cap. 4 sezione, +6 screenshot)
+
+### Numeri aggiornati
+- **45 voci HAL** validate su 4 capitoli (di 26 previsti — 15% del manuale)
+- **23 screenshot** placeholder catalogati
+- **4/26 capitoli** completi
+
+### Prossime azioni
+- Cap. 5 · Match (Lead Scoring dettagliato, azioni sui match)
+- Poi Cap. 6 · Fascicolo (già toccato in Cap. 3.6 — capitolo dedicato con analisi AI documenti)
+- Ingestion HAL Knowledge RAG partirà dopo Cap. 5 (corpus di 5 capitoli sufficiente per cold start)
+
+---
+
 ## 2026-02-27 — 🟢 Manuale Operativo · Sprint 2 avvio (Cap. 1-3) + micro-cleanup
 
 **Tipo**: Documentazione manuale utente (Fase 1-3 di 26 capitoli) + 2 micro-fix codice.

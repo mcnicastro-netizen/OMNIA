@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 27 Febbraio 2026 — 🟢 **Sprint 2 avvio: Manuale Operativo Cap. 1-3 consegnati (33 voci HAL) + micro-cleanup Stripe/R9**
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md` e `OPEN_SOURCE_FINDINGS.md` (audit GitHub 29-Giu)
+**Ultimo aggiornamento**: 27 Febbraio 2026 (sera) — 🟢 **Sprint 2: Manuale Cap. 1-4 consegnati (45 voci HAL, 4/26 capitoli, 15%) · GAP.md formale · fix L4 privacy + Dashboard**
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md` (nuovo — traccia discrepanze codice↔UI↔manuale)
 
 ---
 
@@ -13,17 +13,18 @@
 SPRINT 1 🔴  Chiusura M2.5 al 100% → M2.5.5 Domain Vault ✅ + M2.6c Social Publisher ⏸️ (bloccato Meta App ID/Secret) + M2.6d Universal Portal Wizard ✅
 SPRINT 2 🟡  M5.S2-pre Manuale Operativo + M5.S2 HAL Knowledge (RAG)
               ├─ Fase 0 · Piano approvato ✅ (27-Feb-2026)
-              ├─ Cap. 1 · Primo Accesso ✅ (10 voci HAL)
+              ├─ Cap. 1 · Primo Accesso ✅ (10 voci HAL, v1.0.2)
               ├─ Cap. 2 · Dashboard ✅ (8 voci HAL)
-              ├─ Cap. 3 · Immobili ✅ (15 voci HAL)
-              ├─ Cap. 4 · Clienti 🟡 NEXT (~10-13 voci HAL)
-              ├─ Cap. 5-26 + placeholder Academy/MLS 🔴
-              └─ Ingestion HAL Knowledge RAG (post Cap. 5-6, corpus cold start)
+              ├─ Cap. 3 · Immobili ✅ (15 voci HAL, v1.0.1)
+              ├─ Cap. 4 · Clienti ✅ (12 voci HAL)
+              ├─ Cap. 5 · Match 🟡 NEXT (Lead Scoring dettagliato)
+              ├─ Cap. 6-26 + placeholder Academy/MLS 🔴
+              └─ Ingestion HAL Knowledge RAG (post Cap. 5, corpus cold start pronto)
 SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
 SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness
 ```
 
-**Ultimo item chiuso**: ✅ **Manuale Cap. 3 · Immobili** (27-Feb-2026) — 15 voci HAL validate (81 passi, 21 errori comuni), privacy L1-L4 documentata, screenshots-index aggiornato a 17 voci. **Micro-cleanup** codice: dead field `stripe_price_id_env` rimosso, R9 health leak sanato.
+**Ultimo item chiuso**: ✅ **Manuale Cap. 4 · Clienti** (27-Feb-2026 sera) — 12 voci HAL validate, Smart Import AI documentato, property-seller link. Fix v1.0.1 su Cap. 3 (L4 privacy), Cap. 1 v1.0.2 (attività recenti). GAP.md formale creato.
 
 🛑 **Fuori scope fino a Sprint 4 chiuso**: video promo brand, nuove landing marketing, aspetti da approfondire A-001/A-002/A-003, APE integration, M4, M6, pre-launch commerciale.
 

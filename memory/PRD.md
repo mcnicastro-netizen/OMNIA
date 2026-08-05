@@ -4,7 +4,15 @@
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (27-Feb-2026 — sessione manuale Cap. 1-3 + micro-cleanup)**:
+- **Ultimo update (27-Feb-2026 sera — Cap. 4 · Clienti + fix v1.0.1/v1.0.2 + GAP.md formale)**:
+  - ✅ **Cap. 4 · Clienti**: 7 sottocapitoli + **12 voci HAL YAML**. Copre anagrafica (5 tipi cliente, 7 stati CRM, GDPR), preferenze di ricerca, Import CSV con template, Smart Import AI (formati .csv/.xlsx/.vcf/.txt, powered by Gemini), collegamento property-seller, Smart Sorting con bucket 🔥🌶️☀️❄️ e Lead Scoring intro.
+  - ✅ **Fix Cap. 3 v1.0.1** — L4 privacy: rimosso "e le agenzie in rete" (MLS network M4 non ancora implementato). L4 = solo team di agenzia.
+  - ✅ **Fix Cap. 1 v1.0.2** — rimossa dicitura "attività recenti" dalla tabella Tour barra sinistra (non esiste in UI).
+  - ✅ **GAP.md formale creato** (`/app/memory/GAP.md`, 119 righe): 6 sezioni (funzioni backend senza UI, moduli deprecati, duplicati, roba da NON documentare, gap per capitolo, azioni prossime). Serve come "verità operativa" per il prossimo agente.
+  - ✅ **Screenshots Index**: 23 placeholder totali (Cap. 1-4). Dati demo standardizzati.
+  - 📈 **Progresso manuale**: 4/26 capitoli (15%). Totale voci HAL prodotte: **45**. Prossimo: Cap. 5 · Match.
+
+- **Ultimo update (27-Feb-2026 mattina — Cap. 1-3 + micro-cleanup)**:
   - ✅ **Manuale Operativo — Fase 0 (piano) approvato dal Founder**: mappa moduli/widget completa, indice 26 capitoli + 2 placeholder, 10 convenzioni redazionali chiuse (nomi menu = "ImmoWeb", assistente = "HAL", mls_box → "Vetrina Immobili", segreteria = concetto operativo, Gruppi = solo tier Agency, HAL Legal legale silente, screenshot placeholder-only, HAL Knowledge indicizzazione incrementale, Academy/MLS placeholder "ricco ma corto", NO Immobili Segreti).
   - ✅ **Cap. 1 · Primo Accesso**: 5 sottocapitoli in `manuale/01-primo-accesso.md` + **10 voci HAL YAML** validate in `manuale/hal/01-primo-accesso.yaml`. Rimosso vecchio file discorsivo `01-introduzione-primo-accesso.md`. Micro-fix v1.0.1: HAL Knowledge "in arrivo", nota agenti invitati, selettore agenzia chiarito, tier Agency per Gruppi.
   - ✅ **Cap. 2 · Dashboard**: 5 sottocapitoli + **8 voci HAL** allineate all'UI reale (rimosse feature inesistenti come "attività recenti").
