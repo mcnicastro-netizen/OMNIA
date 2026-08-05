@@ -69,6 +69,9 @@ voci:
       passi:
         - Apri il link che hai ricevuto per email (indirizzo del tipo
           "https://tua-agenzia.omniarealestateecosystem.it").
+        - Se sei stato invitato da un titolare, usa direttamente il link
+          nell'email di invito e salta il wizard di onboarding
+          (riguarda solo chi apre l'agenzia).
         - Clicca "Accedi" in alto a destra.
         - Scrivi la tua email.
         - Scrivi la password provvisoria.
@@ -244,8 +247,9 @@ voci:
         - "API Keys, Importa, Portali, Sito web: strumenti di gestione
           avanzata, visibili solo al titolare."
         - "Immobili, Clienti, Match: uso quotidiano operativo (tutti)."
-        - "Virtual Staging, Mutui, HAL Legal, HAL Knowledge: strumenti
-          AI e servizi (tutti)."
+        - "Virtual Staging, Mutui, HAL Legal: strumenti AI e servizi
+          (tutti). HAL Knowledge è in arrivo — la vedi in elenco ma il
+          corpus è in indicizzazione."
         - "Collaboratori: gestione dei membri (visibile a tutti, solo
           il titolare può invitare o revocare)."
         - "Piano & Crediti, Impostazioni: amministrazione (solo
@@ -349,25 +353,27 @@ voci:
       dall'una all'altra?"
     contenuto:
       a_cosa_serve: >
-        Passare rapidamente da un'agenzia all'altra quando sei stato
-        invitato in più agenzie (es. rete franchising, doppio incarico).
+        Passare rapidamente da un'agenzia all'altra quando sei membro
+        di più agenzie (es. rete franchising, doppio incarico su più
+        sedi).
       quando_si_usa: >
-        Quando devi lavorare sui dati di un'altra agenzia in cui sei
-        stato invitato. Il selettore appare solo se sei in due o più
-        agenzie.
+        Solo se sei attivo in due o più agenzie. Se sei in una sola
+        agenzia, il selettore non compare: è normale.
       passi:
-        - In alto a sinistra, sotto il logo OMNIA, trovi il selettore
-          agenzia con il nome dell'agenzia attiva.
+        - Il selettore agenzia compare in alto a sinistra sotto il logo
+          OMNIA, ma solo quando sei membro di due o più agenzie.
         - Clicca il selettore.
         - Scegli l'agenzia su cui vuoi lavorare.
-        - Tutti i dati mostrati (immobili, clienti, match) si aggiornano
-          per l'agenzia scelta.
+        - Da quel momento tutti i dati mostrati (immobili, clienti,
+          match) si riferiscono solo all'agenzia attiva. Cambiare
+          agenzia non ti fa uscire dall'account.
       errori_comuni:
         - problema: "Non vedo il selettore"
           soluzione: >
-            Il selettore appare solo se sei attivo in almeno due agenzie.
-            Se pensi di doverlo vedere, verifica con il titolare che
-            l'invito nell'altra agenzia sia stato accettato.
+            Il selettore appare solo se sei membro di almeno due
+            agenzie. Se pensi di doverlo vedere, verifica con il
+            titolare dell'altra agenzia che l'invito sia stato
+            accettato.
       permessi:
         - Utente presente in due o più agenzie
     screenshot: []

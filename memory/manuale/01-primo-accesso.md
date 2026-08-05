@@ -37,6 +37,8 @@ Il tuo titolare (o il servizio OMNIA se ti sei registrato tu stesso) ti ha invia
 - Un indirizzo del tipo `https://tua-agenzia.omniarealestateecosystem.it` (o simile).
 - La tua email e una **password provvisoria**.
 
+> **Sei stato invitato da un titolare?** Usa direttamente il link nell'email di invito: entri in un'agenzia già configurata, salti il wizard di onboarding e cominci a lavorare. L'onboarding descritto al paragrafo 1.3 riguarda **solo il titolare** che apre l'agenzia per la prima volta.
+
 **Passi**
 1. Apri il link ricevuto per email.
 2. Clicca **Accedi** (in alto a destra).
@@ -141,7 +143,7 @@ Sapere dove trovi ogni cosa. La barra a sinistra è il tuo indice: da qui apri i
 | Voce | Cosa apre | Chi la vede |
 |------|-----------|-------------|
 | **Dashboard** | Pannello iniziale con numeri chiave e attività recenti | Tutti |
-| **Gruppo** | Gestione filiali (solo reti multi-sede) | Titolare + capogruppo |
+| **Gruppo** | Gestione filiali (solo tier **Agency** — reti multi-sede) | Titolare + capogruppo |
 | **API Keys** | Chiavi per widget e integrazioni esterne | Solo titolare |
 | **Importa** | Import massivo di immobili da file XML | Solo titolare |
 | **Portali** | Publishing Center: dove pubblichi su Immobiliare.it, Casa.it, ecc. | Solo titolare (in questa versione) |
@@ -152,7 +154,7 @@ Sapere dove trovi ogni cosa. La barra a sinistra è il tuo indice: da qui apri i
 | **Virtual Staging** | Studio per arredare stanze vuote con l'AI | Tutti |
 | **Mutui** | Comparatore mutui | Tutti |
 | **HAL Legal** | Chatbot giuridico con citazioni normative | Tutti gli utenti loggati |
-| **HAL Knowledge** | Chatbot che spiega come funziona la piattaforma | Tutti |
+| **HAL Knowledge** | Chatbot che spiega come funziona la piattaforma (**in arrivo** — corpus in indicizzazione) | Tutti |
 | **Collaboratori** | Inviti e gestione membri agenzia | Tutti (solo titolare può invitare) |
 | **Piano & Crediti** | Il tuo piano attuale, crediti residui, ricariche | Solo titolare |
 | **Impostazioni** | Dati agenzia, branding, dominio, notifiche | Solo titolare |
@@ -201,7 +203,9 @@ Aggiornare il tuo nome, la tua foto e la password. Vedere l'agenzia in cui sei a
 4. Clicca **Salva**.
 
 **Se sei attivo in più agenzie**
-Se il tuo titolare ti ha invitato in due o più agenzie (es. rete franchising) trovi in alto a sinistra un **selettore agenzia**: clicca e scegli su quale stai lavorando. Ogni immobile, cliente, match ecc. che vedi si riferisce solo all'agenzia attiva in quel momento.
+Il selettore compare **solo se sei membro di due o più agenzie** (es. rete franchising, doppio incarico su più sedi). Se sei in una sola agenzia non lo vedi affatto: è normale.
+
+Quando c'è, lo trovi in alto a sinistra sotto il logo OMNIA. Clicca e scegli l'agenzia su cui vuoi lavorare: da quel momento immobili, clienti, match e ogni dato mostrato si riferiscono **solo** all'agenzia attiva. Cambiare agenzia non ti fa uscire dall'account.
 
 ### 1.5.3 Uscire
 
