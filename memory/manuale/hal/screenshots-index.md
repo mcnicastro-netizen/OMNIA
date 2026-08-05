@@ -60,6 +60,21 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 4 · Clienti
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap4-client-form-nuovo` | Form completo *"+ Nuovo cliente"*: sezione **Anagrafica** compilata con dati demo, sezione **Preferenze di ricerca** con campi visibili, spunta GDPR attiva. | 🔴 | Dati demo: cliente *Anna Verdi · anna.verdi@example.it · +39 333 000 0001 · Acquirente · Nuovo · Origine: Idealista*. | — |
+| 2 | `cap4-preferences-form` | Solo sezione **Preferenze di ricerca** con multi-select tipologie + città + range prezzo/superficie compilati. | 🔴 | Preferenze demo: Appartamento + Attico, Belpasso, €150k-€250k, 80-120 m², 3 locali min. | — |
+| 3 | `cap4-import-csv-flow` | Pagina **Importa clienti** scheda **📋 Template CSV** dopo caricamento file demo: dropzone + preview tabella prime 5 righe. | 🔴 | 5 righe demo con nomi variegati (Rossi, Bianchi, ecc.). | — |
+| 4 | `cap4-smart-import-ai-preview` | Scheda **⚡ Import AI** dopo caricamento file "brutto" (Excel vecchio): tabella preview con badge confidenza per riga. | 🔴 | Includere 1-2 righe evidenziate in giallo *"sotto soglia confidenza"*. | — |
+| 5 | `cap4-property-seller-link` | Form immobile con campo *"Cliente venditore / proprietario"* aperto: risultati ricerca (dropdown con 3-4 clienti trovati) o messaggio *"Nessun cliente venditore trovato"*. | 🟡 | Mostra sia lo stato "collegato" sia lo stato "vuoto con suggerimento crea". | — |
+| 6 | `cap4-smart-sorting-buckets` | Vista lista Clienti con **linguette bucket** attive in alto: *Tutti · Da chiamare oggi · Roventi 🔥 · Caldi 🌶️ · Tiepidi ☀️ · Freddi ❄️ · Acquirenti · Venditori*. Selezionato "Roventi". Tabella sotto con 5-6 clienti + badge temperatura + numero match + azioni rapide (Chiama, WhatsApp). | 🔴 | Il più importante di questo capitolo. | — |
+
+**Totale Cap. 4**: 6 screenshot (5 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**

@@ -240,8 +240,9 @@ voci:
       quando_si_usa: >
         Ogni volta che devi cambiare modulo di lavoro.
       passi:
-        - "Dashboard: pannello iniziale con numeri chiave e attività
-          recenti (tutti)."
+        - "Dashboard: pannello iniziale con sei numeri chiave
+          (immobili attivi, lead aperti, match, visite, collaboratori,
+          inviti pendenti) — tutti."
         - "Gruppo: gestione filiali per reti multi-sede (solo tier
           Agency, solo titolare/capogruppo)."
         - "API Keys, Importa, Portali, Sito web: strumenti di gestione

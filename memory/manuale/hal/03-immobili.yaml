@@ -289,7 +289,7 @@ voci:
         - "L3 · Lead qualificato: chi ha lasciato un lead + confermato
           email (GDPR ok). Vede indirizzo esatto, coordinate mappa
           reali, planimetria, dettagli energetici."
-        - "L4 · Agenzia interna: tu, il tuo team, e le agenzie in rete.
+        - "L4 · Agenzia interna: solo tu e il tuo team di agenzia.
           Vede tutto, compresi nome/telefono del proprietario, note
           interne, commissioni."
       errori_comuni:

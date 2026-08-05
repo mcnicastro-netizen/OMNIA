@@ -169,7 +169,7 @@ Non decide solo se è pubblico: decide **quali campi** sono visibili a chi.
 
 |  | **L1 · Anonimo** | **L2 · Registrato** | **L3 · Lead qualificato** | **L4 · Agenzia** |
 |---|:-:|:-:|:-:|:-:|
-| Chi è | Chiunque visiti il portale senza login | Chi ha creato un account su ImmobilCloud | Chi ha lasciato un lead + confermato email (GDPR ok) | Tu, il tuo team, e le agenzie in rete |
+| Chi è | Chiunque visiti il portale senza login | Chi ha creato un account su ImmobilCloud | Chi ha lasciato un lead + confermato email (GDPR ok) | Solo tu e il tuo team di agenzia |
 | Titolo + descrizione | ✅ | ✅ | ✅ | ✅ |
 | Foto | ✅ (ridotte) | ✅ | ✅ | ✅ |
 | Città + quartiere | ✅ | ✅ | ✅ | ✅ |
@@ -190,7 +190,7 @@ Il livello che imposti sull'immobile è una **soglia minima**: dice *"per essere
 - **Immobile L1** → visibile a tutti (anche anonimi). L'ideale per l'85% degli annunci pubblici.
 - **Immobile L2** → visibile solo a utenti registrati sul portale. Piccolo filtro anti-curiosi.
 - **Immobile L3** → visibile solo a chi ha lasciato un lead qualificato con email verificata. Perfetto per esclusive semi-riservate.
-- **Immobile L4** → visibile **solo dentro l'agenzia**. Non compare sui portali, né sul sito, né su ImmobilCloud.
+- **Immobile L4** → visibile **solo dentro l'agenzia** (tu e il tuo team). Non compare sui portali, né sul sito, né su ImmobilCloud.
 
 ### Scegliere il livello giusto
 

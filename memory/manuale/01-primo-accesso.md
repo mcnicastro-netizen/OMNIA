@@ -142,7 +142,7 @@ Sapere dove trovi ogni cosa. La barra a sinistra è il tuo indice: da qui apri i
 
 | Voce | Cosa apre | Chi la vede |
 |------|-----------|-------------|
-| **Dashboard** | Pannello iniziale con numeri chiave e attività recenti | Tutti |
+| **Dashboard** | Pannello iniziale con 6 numeri chiave (immobili attivi, lead, match, visite, collaboratori, inviti pendenti) | Tutti |
 | **Gruppo** | Gestione filiali (solo tier **Agency** — reti multi-sede) | Titolare + capogruppo |
 | **API Keys** | Chiavi per widget e integrazioni esterne | Solo titolare |
 | **Importa** | Import massivo di immobili da file XML | Solo titolare |
