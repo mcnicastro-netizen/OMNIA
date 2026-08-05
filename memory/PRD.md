@@ -4,15 +4,23 @@
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (27-Feb-2026 — sessione breve, micro-cleanup)**:
+- **Ultimo update (27-Feb-2026 — sessione manuale Cap. 1-3 + micro-cleanup)**:
+  - ✅ **Manuale Operativo — Fase 0 (piano) approvato dal Founder**: mappa moduli/widget completa, indice 26 capitoli + 2 placeholder, 10 convenzioni redazionali chiuse (nomi menu = "ImmoWeb", assistente = "HAL", mls_box → "Vetrina Immobili", segreteria = concetto operativo, Gruppi = solo tier Agency, HAL Legal legale silente, screenshot placeholder-only, HAL Knowledge indicizzazione incrementale, Academy/MLS placeholder "ricco ma corto", NO Immobili Segreti).
+  - ✅ **Cap. 1 · Primo Accesso**: 5 sottocapitoli in `manuale/01-primo-accesso.md` + **10 voci HAL YAML** validate in `manuale/hal/01-primo-accesso.yaml`. Rimosso vecchio file discorsivo `01-introduzione-primo-accesso.md`. Micro-fix v1.0.1: HAL Knowledge "in arrivo", nota agenti invitati, selettore agenzia chiarito, tier Agency per Gruppi.
+  - ✅ **Cap. 2 · Dashboard**: 5 sottocapitoli + **8 voci HAL** allineate all'UI reale (rimosse feature inesistenti come "attività recenti").
+  - ✅ **Cap. 3 · Immobili**: 7 sottocapitoli + **15 voci HAL** (81 passi, 21 errori comuni). Include privacy L1-L4 spiegata in linguaggio agenzia, import CSV/XML veloce, import XML universale (solo titolare), fascicolo con checklist 10 documenti, APE via partner esterno.
+  - ✅ **Screenshots Index** (`manuale/hal/screenshots-index.md`): 17 screenshot catalogati (Cap. 1-3) con convenzioni viewport, dati demo standardizzati (Immobiliare Rossi, Belpasso CT), priorità 🔴🟡🟢.
+  - ✅ **Progresso manuale**: 3/26 capitoli (12%). Totale voci HAL prodotte: **33**. Prossimo: Cap. 4 · Clienti.
   - ✅ **Stripe plans** — rimosso campo dead-code `stripe_price_id_env` da `apps/billing/plans.py` (esposto via API pubblica con valori errati per Pro/Agency, mai usato dal checkout che si basa su `lookup_key`). Test `billing/stripe` 10/10 verdi.
   - ✅ **R9 Health leak** — `/api/core/health` non espone più dettagli raw dell'eccezione DB (rischio info disclosure). Errore generico in response, dettagli loggati server-side.
   - ✅ **R10 PostHog** — verificato: già dietro guard `if (PH_KEY && indexOf("phc_") === 0)` in `frontend/public/index.html`. Nessun fix necessario (falso positivo audit).
   - ✅ **R13 LLM budget** — verificato: già 503 `llm_budget_exceeded` in tutti gli endpoint (al_legal, al_agent). Falso positivo audit.
   - 📌 **Pending Founder decisions**: R8 (moderation super_admin vs group_admin), R12 (v1 staging 501 → intenzionale per M2.5.3).
-  - 📌 **Pricing v2.0 (PRICING_OMNIA.md)** — resta 🟡 BOZZA in revisione Founder. Deliverable M2.5.0/P0. Sandbox Stripe attuale (€19/29/79/299) NON allineata al listino ufficiale Founders 50 (€39/99/249) — da riallineare quando Founder conferma v2.0.
+  - 📌 **Pricing v2.0 (PRICING_OMNIA.md)** — resta 🟡 BOZZA in revisione Founder. Deliverable M2.5.0/P0. Sandbox Stripe attuale (€19/29/79/299) NON allineata al listino ufficiale Founders 50 (€49/99/249 nella v più recente) — da riallineare quando Founder conferma v2.0.
 
-- **Stato progetto**: 🎉 **Audit COMPLETO (Fasi 0-3) + Follow-up S1-S5 DONE** — Aggiornamento **30-Lug-2026 (notte)**:
+- **Sessione precedente (23-Feb-2026)**:
+
+- **Stato progetto**: 🎉 **Audit COMPLETO (Fasi 0-3) + Follow-up S1-S5 DONE · Manuale Cap. 1-3 in corso** — Aggiornamento **30-Lug-2026 (notte)**:
   - ✅ **30-Lug-2026 (follow-up report post-push, S1-S5 + R)**: testato da testing agent iteration_32 (16/16 nuovi test + 35/35 suite audit + UI Playwright tutta verde):
     - 🔴 **S1 Credenziali**: password admin/agent/stress RUOTATE (le vecchie nel repo/history Git sono invalide → 401 verificato). Test (~41 file) ora leggono da `memory/test_credentials.env` (gitignored) via conftest; `memory/*.md` e `test_reports/` bonificati; gitignore esteso (`test_reports/`, `memory/test_credentials.*`). NUOVE credenziali SOLO in `memory/test_credentials.env|.md` (mai committati).
     - 🔴 **S2 Register**: `_PUBLIC_ROLES={client, student}` — `agency_admin` E `agent` non ottenibili da registrazione pubblica. Il flusso agenzia: register (client) → OnboardingWizard → `POST /app/agencies` promuove server-side a `agency_admin`. RegisterPage: select "Tipo di account" (Agenzia/Privato/Studente) al posto della scelta ruolo; redirect post-register: agenzia→onboarding, privato→/cloud, studente→/academy.

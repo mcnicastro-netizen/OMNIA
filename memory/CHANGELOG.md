@@ -1,5 +1,81 @@
 # OMNIA — Changelog
 
+## 2026-02-27 — 🟢 Manuale Operativo · Sprint 2 avvio (Cap. 1-3) + micro-cleanup
+
+**Tipo**: Documentazione manuale utente (Fase 1-3 di 26 capitoli) + 2 micro-fix codice.
+
+### Cosa è stato costruito
+
+#### Manuale Operativo OMNIA — nuovo formato con schema HAL
+- **Fase 0 (Piano approvato dal Founder)**: mappa completa moduli/widget/B2C, indice 26 capitoli operativi + 2 placeholder (Academy M6 + MLS Network M4), sequenza fasi (F0→F10, ~10-11 sessioni per completamento manuale), 10 domande di convenzione redazionale chiuse.
+- **Convenzioni redazionali locked (approvate dal Founder)**:
+  - Nome CRM in-app = "**ImmoWeb**"
+  - Assistente AI = "**HAL**" nel manuale (codice invariato "AL")
+  - `mls_box` = rinominato "**Vetrina Immobili**" (evita confusione con MLS network M4)
+  - **Segreteria** = concetto operativo (agente con permessi ridotti), non ruolo backend
+  - **Gruppi/Filiali** = riservato tier Agency (nota esplicita nel manuale)
+  - **Moderazione** = solo super_admin nel manuale v1
+  - **Legale HAL Legal** = silente (nessuna menzione lancio commerciale)
+  - **Screenshot** = solo placeholder `[SCREEN: id-voce]`, mai generati automaticamente
+  - **HAL Knowledge** = indicizzazione RAG incrementale (un capitolo alla volta)
+  - **Placeholder Academy/MLS** = "ricco ma corto" (3 bullet, nessuna waitlist)
+  - **NO Immobili Segreti** (rimosso definitivamente)
+
+- **Cap. 1 · Primo Accesso** (`/app/memory/manuale/01-primo-accesso.md` + `hal/01-primo-accesso.yaml`):
+  - 5 sottocapitoli: Cos'è OMNIA · Login e cambio password · Onboarding agenzia (wizard 4 passi) · Tour della barra a sinistra · Cambio lingua e profilo
+  - **10 voci HAL YAML** validate (schema completo)
+  - Rimosso vecchio `01-introduzione-primo-accesso.md`
+  - Micro-fix v1.0.1 applicati: HAL Knowledge marcata "in arrivo", nota agenti invitati, selettore agenzia chiarito, tier Agency esplicitato per Gruppi
+
+- **Cap. 2 · Dashboard** (`02-dashboard.md` + `hal/02-dashboard.yaml`):
+  - 5 sottocapitoli: Cosa mi dice il pannello · I 6 contatori · Come leggerli in pratica · Dove vado dopo · Errori comuni
+  - **8 voci HAL YAML** validate
+  - Allineato all'UI reale (rimosse "Attività recenti"/"Notifiche" che non esistono)
+
+- **Cap. 3 · Immobili** (`03-immobili.md` + `hal/03-immobili.yaml`):
+  - 7 sottocapitoli: Creare a mano · Import CSV/XML/XML-universale · Foto e ordinamento · Privacy 4 livelli · Stato/ciclo di vita · Fascicolo · Errori comuni
+  - **15 voci HAL YAML** validate (81 passi totali, 21 errori comuni documentati)
+  - Privacy matrix L1-L4 spiegata in linguaggio agenzia (chi vede cosa)
+  - Distinzione titolare/agente/segreteria in ogni voce "Chi può farlo"
+
+- **Screenshots Index** (`hal/screenshots-index.md`):
+  - 17 screenshot totali catalogati (8 Cap.1 + 2 Cap.2 + 7 Cap.3)
+  - Convenzioni: viewport 1440×900, dati demo standardizzati (*Immobiliare Rossi*, Belpasso CT), formato PNG max 300 KB
+  - Priorità per screenshot (🔴 essenziale · 🟡 utile · 🟢 nice-to-have)
+
+#### Micro-cleanup codice (dead code + info-leak)
+- **`apps/billing/plans.py`**: rimosso campo `stripe_price_id_env` (dead metadata esposto pubblicamente via `/api/billing/plans` con valori errati per Pro/Agency). Il checkout usa `lookup_key` dinamico (`{tier}_{cycle}`), quindi il campo non serviva. 10/10 pytest billing verdi post-fix.
+- **`apps/core/routes.py`** (R9 audit): `/api/core/health` non espone più raw exception detail (info-disclosure). Errore DB → generic `"error"` in response, dettagli via `logger.exception()`.
+- **R10 PostHog** — verificato già dietro guard (`if PH_KEY && startsWith("phc_")`), falso positivo audit.
+- **R13 LLM budget** — verificato già 503 `llm_budget_exceeded` in `al_legal` + `al_agent`, falso positivo audit.
+
+### File creati/modificati
+- ✨ NEW `/app/memory/manuale/01-primo-accesso.md` (200 righe)
+- ✨ NEW `/app/memory/manuale/02-dashboard.md` (~180 righe)
+- ✨ NEW `/app/memory/manuale/03-immobili.md` (~330 righe)
+- ✨ NEW `/app/memory/manuale/hal/01-primo-accesso.yaml` (10 voci, 405 righe)
+- ✨ NEW `/app/memory/manuale/hal/02-dashboard.yaml` (8 voci, ~260 righe)
+- ✨ NEW `/app/memory/manuale/hal/03-immobili.yaml` (15 voci, ~450 righe)
+- ✨ NEW `/app/memory/manuale/hal/screenshots-index.md` (17 screenshot catalogati)
+- ❌ RIMOSSO `/app/memory/manuale/01-introduzione-primo-accesso.md` (vecchio formato discorsivo)
+- ♻️ MOD `/app/backend/apps/billing/plans.py` (Plan + CreditPackage senza `stripe_price_id_env`)
+- ♻️ MOD `/app/backend/apps/core/routes.py` (health R9)
+- ♻️ MOD `/app/memory/PRD.md` (append status update Feb 2026)
+
+### Numeri
+- **33 voci HAL** validate su 3 capitoli (di 26 previsti — 12% del manuale)
+- **17 screenshot** catalogati (di ~80 stimati totali per l'intero manuale)
+- **10 pytest billing** verdi post-cleanup
+- **Health endpoint** non espone più dettagli DB (info-disclosure sanato)
+
+### Prossime azioni
+- Cap. 4 · Clienti (~6 sottocap, 10-13 voci HAL)
+- Poi Cap. 5 (Match) e Cap. 6 (Fascicolo dedicato)
+- Ingestion HAL Knowledge partirà dopo Cap. 5-6 (corpus sufficiente per cold start RAG)
+
+---
+
+
 ## 2026-07-03 — ✅ M5.S4.1 Virtual Staging (Sprint 1) DONE
 
 **Tipo**: Feature completa, testata e navigabile.
