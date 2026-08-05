@@ -44,6 +44,22 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 3 · Immobili
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap3-property-form-nuovo` | Form completo *"+ Nuovo immobile"* con i campi principali visibili (Titolo, Tipologia, Operazione, Indirizzo, Prezzo, Superficie), tab Foto in fondo. | 🔴 | Campi vuoti o con dati demo *Immobiliare Rossi*. Sezione "Privacy" visibile in basso. | — |
+| 2 | `cap3-import-csv-flow` | Pagina Importa scheda **📋 Template CSV**: dropzone tratteggiata + link "Scarica template" + preview tabella prime 5 righe. | 🔴 | Consigliato: mostrare fase 3 con tabella già popolata (dati demo). | — |
+| 3 | `cap3-xml-import-preview` | Pagina **Importa** (`/app/import`) dopo click "Analizza contenuto": report analisi con ripartizioni per tipologia/città e warning. | 🟡 | Usare un feed XML demo con ~50 immobili. | — |
+| 4 | `cap3-photos-dropzone-cover` | Sezione Fotografie in form immobile: dropzone + 4-6 miniature con badge ⭐ Copertina sulla prima. | 🔴 | Foto demo interni case (senza persone). | — |
+| 5 | `cap3-privacy-selector` | Menu/riquadro privacy con L1/L2/L3/L4 e descrizione a lato di ciascuno. | 🔴 | Selezionato L2 con etichetta *"Consigliato per la maggior parte degli annunci"*. | — |
+| 6 | `cap3-state-select` | Menu Stato aperto: Bozza · Pubblicato · Prenotato · Venduto · Affittato · Ritirato. | 🟡 | Ricorda evidenziare "Pubblicato" con checkmark. | — |
+| 7 | `cap3-fascicolo-checklist` | Vista Fascicolo con checklist 10 documenti: alcuni ✅ (APE, Visura), alcuni ⚠️ (Planimetria, Atto), alcuni ⬜ (facoltativi). | 🔴 | Immobile demo tipologia *Appartamento* (mostra anche righe condominio). | — |
+
+**Totale Cap. 3**: 7 screenshot (5 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
