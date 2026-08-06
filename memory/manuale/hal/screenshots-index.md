@@ -75,6 +75,20 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 5 · Match
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap5-matches-lista` | Vista principale **Match** con filtro Score minimo `50+ buoni` (default). Elenco 6-8 righe con badge temperatura colorati (rovente/caldo/tiepido/freddo). | 🔴 | Mix di temperature per illustrare la scala visivamente. | — |
+| 2 | `cap5-temperature-legenda` | Focus/zoom sui 4 badge temperatura affiancati con range punti sotto ciascuno (`85-100`, `65-84`, `40-64`, `<40`). Può essere anche un banner tabellare. | 🔴 | Utile come "focus" nel manuale. | — |
+| 3 | `cap5-scoring-breakdown` | Dettaglio match aperto: sezione **Breakdown** con barre orizzontali per ciascuno dei 14 criteri + punti (es. `Prezzo 15/17`, `Città 12/12`, `Zona 2/5`). Sezione **Cosa manca** con 2-3 righe testuali (es. *"Zona non tra le preferite"*). | 🔴 | Il più importante di Cap. 5. Serve al titolare per capire come è composto lo score. | — |
+| 4 | `cap5-lista-filtri` | Vista Match con menu filtro Score minimo aperto (dropdown con le 4 opzioni: 40+/50+/65+/85+). | 🟡 | Frame catturato con dropdown espanso. | — |
+| 5 | `cap5-lead-scoring-ai` | Lista Clienti con bottone **⚡ Aggiorna AI (N)** in alto e alcuni clienti con badge temperatura misti. | 🟡 | Riusabile anche in Cap. 4 (già catalogato lì). Duplicare solo se si vuole enfasi. | — |
+
+**Totale Cap. 5**: 5 screenshot (3 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**

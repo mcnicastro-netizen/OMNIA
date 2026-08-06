@@ -233,7 +233,7 @@ Dopo aver popolato Clienti e Immobili, ImmoWeb inizia a proporti chi chiamare **
 | **Tiepidi ☀️** | Media — quando puoi |
 | **Freddi ❄️** | Bassa — nel dubbio salta |
 | **Acquirenti** | Solo clienti di tipo *Acquirente/Investitore/Affittuario* con preferenze |
-| **Venditori** | Solo clienti di tipo *Venditore/Proprietario* con almeno un immobile collegato |
+| **Venditori** | Solo clienti di tipo *Venditore/Proprietario/Investitore* — utile per gestire proprietari e chi affida mandati (indipendentemente da eventuali immobili collegati) |
 
 - Ogni riga cliente mostra un **badge temperatura** (Rovente / Caldo / Tiepido / Freddo) e — se calcolato — il **numero di match** con immobili in portafoglio.
 
@@ -258,9 +258,9 @@ Se il cliente non ha numero, il bottone è disabilitato.
 - Configurazione ranking (per agenzie che vogliono più controllo)
 
 **Chi vede cosa**
-- **Titolare**: vede tutti i clienti dell'agenzia.
-- **Agente**: vede i clienti che ha creato lui + eventuali condivisi.
-- **Segreteria** (come agente): stessa visibilità dell'agente. Il titolare può ridurre i permessi da **Impostazioni → Collaboratori**.
+- **Titolare · Agente · Segreteria** (come agente): tutti vedono l'**intera anagrafica clienti dell'agenzia** — non c'è separazione per proprietario del contatto. Ogni collaboratore può cercare, aprire e modificare qualsiasi cliente.
+- Il campo *"agente assegnato"* di ciascun cliente serve per statistiche interne, non per limitare la visibilità.
+- Se in futuro serve una separazione "ogni agente vede solo i suoi clienti", va introdotta una nuova funzione — al momento non esiste.
 
 ---
 
@@ -281,6 +281,12 @@ Il cliente scompare dai bucket ma resta nello storico e nelle statistiche.
 
 ### Eliminare definitivamente
 ⚠️ Perdi anche le note e la storia dei contatti.
+
+**Prima di eliminare**: se il cliente ha immobili collegati (proprietario/venditore) il sistema **blocca l'eliminazione** con un messaggio del tipo *"Impossibile eliminare: questo cliente ha N immobile/i in carico. Riassegna o elimina prima quegli immobili."*
+
+Per procedere devi prima:
+- **Riassegnare** ogni immobile a un altro cliente venditore/proprietario (Cap. 3.5), oppure
+- **Rimuovere il collegamento** dall'immobile (in questo caso l'immobile resta senza proprietario collegato).
 
 1. Apri il cliente.
 2. In fondo alla scheda clicca **Elimina**.

@@ -410,8 +410,9 @@ voci:
           temperatura Lead Scoring AI."
         - "Acquirenti: solo tipi Acquirente/Investitore/Affittuario
           con preferenze."
-        - "Venditori: solo tipi Venditore/Proprietario con almeno un
-          immobile collegato."
+        - "Venditori: solo clienti di tipo Venditore, Proprietario o
+          Investitore (indipendentemente da eventuali immobili
+          collegati)."
         - Clicca il bucket che ti interessa per filtrare la lista.
       errori_comuni:
         - problema: "Il bucket 'Da chiamare oggi' è vuoto"
@@ -536,11 +537,23 @@ voci:
         - "Per eliminare definitivamente apri il cliente, scorri in
           fondo, clicca 'Elimina', conferma. Perdi anche le note e
           la storia dei contatti."
+        - "Se il cliente ha immobili collegati (proprietario/venditore)
+          il sistema blocca l'eliminazione con il messaggio
+          'Impossibile eliminare: questo cliente ha N immobile/i in
+          carico'. Prima riassegna o rimuovi il collegamento
+          dagli immobili, poi ritenta."
       errori_comuni:
         - problema: "Ho eliminato per sbaglio"
           soluzione: >
             L'operazione non è reversibile. In futuro preferisci
             'Archiviato': stesso effetto visivo, storico salvo.
+        - problema: "Non riesco a eliminare, mi dice 'immobili in carico'"
+          soluzione: >
+            Il sistema protegge gli immobili con proprietario. Vai su
+            Immobili, apri gli immobili collegati a questo cliente,
+            e per ciascuno riassegna il cliente venditore a un'altra
+            anagrafica oppure rimuovi il collegamento. Poi ritenta
+            l'eliminazione.
       permessi:
         - "Archiviare (cambio stato): titolare, agente, segreteria."
         - "Eliminare: solo titolare (agency_admin). L'agente e la
