@@ -132,6 +132,20 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 9 · Virtual Staging
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap9-staging-panoramica` | Pagina Virtual Staging vista d'insieme: dropzone drag&drop in alto, pillole stile (5) + tipo stanza (6) + modalità (2) + slider num_variants, bottone **Genera render** in verde. | 🔴 | Agenzia demo *Immobiliare Rossi*. Nessun render lanciato ancora. | — |
+| 2 | `cap9-staging-pipeline` | Vista job in progress: 3 stage con status live (SAM 2 ✅ done 6.2s $0.001, Flux ⏳ running, Upscale ⚪ queued) + banner "Costo totale finora: $0.06". | 🔴 | Il più importante del capitolo per far capire cosa succede. | — |
+| 3 | `cap9-staging-before-after` | Vista Before/After side-by-side: foto sorgente stanza vuota a sinistra, render arredato in modern con watermark "Render virtuale OMNIA" a destra + bottone **Scarica con watermark**. | 🔴 | Il watermark deve essere ben visibile in basso a destra. | — |
+| 4 | `cap9-staging-multi-variants` | Vista 4 varianti multi_style: griglia 2×2 con 4 render dello stesso soggiorno (modern, classic, scandi, luxury) + costo totale rendering "72 crediti · $0.22 fal.ai". | 🟡 | Utile ma può essere posticipato. | — |
+| 5 | `cap9-staging-history` | Cronologia render utente: tabella con miniature + stile + tipo stanza + timestamp + status + azioni (Download / Salva come foto / Elimina). 6-8 righe di render passati. | 🟡 | Serve per far capire dove ritrovare i vecchi render. | — |
+
+**Totale Cap. 9**: 5 screenshot (3 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -169,3 +183,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 6) | Aggiunte 6 righe Cap. 6 · Portali / Publishing (5 essenziali, 1 utile) |
 | Feb 2026 (Cap. 7) | Aggiunte 5 righe Cap. 7 · Fascicolo Immobile (4 essenziali, 1 utile). Totale index = **39 screenshot** catalogati. |
 | Feb 2026 (Cap. 8) | Aggiunte 5 righe Cap. 8 · Sito web agenzia (4 essenziali, 1 utile). Totale index = **44 screenshot** catalogati. |
+| Feb 2026 (Cap. 9) | Aggiunte 5 righe Cap. 9 · Virtual Staging (3 essenziali, 2 utili). Totale index = **49 screenshot** catalogati. |

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T11:46:02.347804+00:00",
-  "version": "v0.4-cap8",
+  "generated_at": "2026-08-06T12:06:40.840852+00:00",
+  "version": "v0.5-cap9",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -40,6 +40,11 @@
     {
       "file": "08-sito-web.yaml",
       "md5": "8a75af77933c6cf241c5325d166dd189",
+      "voci_count": 12
+    },
+    {
+      "file": "09-virtual-staging.yaml",
+      "md5": "f0c634e3a629d741450d1aaaa3789683",
       "voci_count": 12
     }
   ],
@@ -3005,10 +3010,408 @@
         "errori_comuni": 2
       },
       "content_md5": "df25075569843a3275b05557e2344336"
+    },
+    {
+      "id": "staging.cos-e",
+      "titolo": "Cos'è il Virtual Staging in OMNIA",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "virtual-staging",
+        "ai",
+        "panoramica",
+        "primi-passi"
+      ],
+      "correlati": [
+        "staging.pipeline",
+        "staging.stili",
+        "staging.crediti-costo"
+      ],
+      "domanda_naturale": "Cos'è il Virtual Staging in OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap9-staging-panoramica]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "8b7457424a661ed423bf19a30217ab1b"
+    },
+    {
+      "id": "staging.pipeline",
+      "titolo": "Come funziona la pipeline AI in 3 stage",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "staging",
+        "pipeline",
+        "sam2",
+        "flux",
+        "upscale",
+        "ai",
+        "fal-ai"
+      ],
+      "correlati": [
+        "staging.cos-e",
+        "staging.modalita",
+        "staging.errori-comuni"
+      ],
+      "domanda_naturale": "Come funziona la pipeline di Virtual Staging sotto il cofano?",
+      "screenshot": [
+        "[SCREEN: cap9-staging-pipeline]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 3
+      },
+      "content_md5": "bbef63f5c2fcff57159c1f5cf66d421d"
+    },
+    {
+      "id": "staging.stili",
+      "titolo": "I 5 stili disponibili (Modern, Classic, Scandi, Industrial, Luxury)",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "stili",
+        "design",
+        "modern",
+        "classic",
+        "scandi",
+        "industrial",
+        "luxury"
+      ],
+      "correlati": [
+        "staging.tipi-stanza",
+        "staging.varianti-parallele"
+      ],
+      "domanda_naturale": "Quali stili di arredamento posso scegliere per un render?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "c1644489dee0a76d0973869e8f26544a"
+    },
+    {
+      "id": "staging.tipi-stanza",
+      "titolo": "I 6 tipi stanza disponibili",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "room-type",
+        "living",
+        "bedroom",
+        "kitchen",
+        "dining",
+        "bathroom",
+        "office"
+      ],
+      "correlati": [
+        "staging.stili",
+        "staging.lanciare-render"
+      ],
+      "domanda_naturale": "Quali tipi di stanza posso arredare in Virtual Staging?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "343465e68bd34f041556ab2f4375c99a"
+    },
+    {
+      "id": "staging.modalita",
+      "titolo": "Modalita' Standard vs Reverse (stanza vuota vs ri-arredare)",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "staging",
+        "modalita",
+        "standard",
+        "reverse",
+        "svuotamento"
+      ],
+      "correlati": [
+        "staging.pipeline",
+        "staging.crediti-costo"
+      ],
+      "domanda_naturale": "Qual e' la differenza tra Standard e Reverse Staging?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "4d4fdcd8b0bb8926deb85c81027a413b"
+    },
+    {
+      "id": "staging.varianti-parallele",
+      "titolo": "Generare 1-4 varianti in parallelo (same_style vs multi_style)",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "staging",
+        "varianti",
+        "multi-style",
+        "same-style",
+        "parallelo"
+      ],
+      "correlati": [
+        "staging.stili",
+        "staging.crediti-costo"
+      ],
+      "domanda_naturale": "Posso generare piu' varianti di render in un colpo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "e8ff4c73af7b2ed83cca7aedaa2ae5cb"
+    },
+    {
+      "id": "staging.lanciare-render",
+      "titolo": "Come lancio un render Virtual Staging (passi)",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "come-fare",
+        "upload",
+        "generate",
+        "passi"
+      ],
+      "correlati": [
+        "staging.stili",
+        "staging.tipi-stanza",
+        "staging.modalita"
+      ],
+      "domanda_naturale": "Come lancio un render Virtual Staging?",
+      "screenshot": [],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 3
+      },
+      "content_md5": "a9bed38b7cecae1065e70ed8dde2a964"
+    },
+    {
+      "id": "staging.crediti-costo",
+      "titolo": "Crediti e costo per render (18 crediti = 0.90 euro)",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "staging",
+        "crediti",
+        "costo",
+        "prezzo",
+        "fal-ai",
+        "pricing"
+      ],
+      "correlati": [
+        "staging.modalita",
+        "staging.varianti-parallele"
+      ],
+      "domanda_naturale": "Quanto costa un render Virtual Staging?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "99fc674ea417d648def218487431b5c9"
+    },
+    {
+      "id": "staging.watermark",
+      "titolo": "Il watermark 'Render virtuale OMNIA' e' obbligatorio",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "watermark",
+        "compliance",
+        "agcm",
+        "codice-consumo",
+        "onesta-documentale"
+      ],
+      "correlati": [
+        "staging.cos-e",
+        "staging.salva-foto-immobile"
+      ],
+      "domanda_naturale": "Posso rimuovere il watermark 'Render virtuale OMNIA'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "ab6a51764e19471e07152896026b0a62"
+    },
+    {
+      "id": "staging.rate-limit",
+      "titolo": "Limiti orari - 20 render utente, 80 render agenzia",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "staging",
+        "rate-limit",
+        "quota",
+        "anti-abuso",
+        "limiti"
+      ],
+      "correlati": [
+        "staging.crediti-costo",
+        "staging.varianti-parallele"
+      ],
+      "domanda_naturale": "Quanti render posso lanciare per ora?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "561e13301267a9a8ed22c5abbc8166e9"
+    },
+    {
+      "id": "staging.salva-foto-immobile",
+      "titolo": "Salvare un render come foto dell'immobile",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "salva",
+        "immobile",
+        "foto",
+        "save-to-property",
+        "cover"
+      ],
+      "correlati": [
+        "staging.watermark",
+        "staging.lanciare-render",
+        "immobili.foto-ordinamento"
+      ],
+      "domanda_naturale": "Come uso un render come foto dell'immobile?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 3
+      },
+      "content_md5": "86a6a339f4c6c38d6b8a11d52ce8347a"
+    },
+    {
+      "id": "staging.storia-cancella",
+      "titolo": "Storia render e cancellazione job",
+      "modulo": "Virtual Staging",
+      "widget": null,
+      "capitolo": "09",
+      "source_file": "09-virtual-staging.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "staging",
+        "history",
+        "cronologia",
+        "elimina",
+        "ttl"
+      ],
+      "correlati": [
+        "staging.cos-e",
+        "staging.rate-limit"
+      ],
+      "domanda_naturale": "Come vedo lo storico dei render e come li elimino?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "1475da0f55f98e4aafc13c05a8d439c3"
     }
   ],
   "stats": {
-    "totale_voci": 92,
+    "totale_voci": 104,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -3017,7 +3420,8 @@
       "05": 11,
       "06": 12,
       "07": 12,
-      "08": 12
+      "08": 12,
+      "09": 12
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -3027,18 +3431,19 @@
       "Match": 11,
       "Portali": 12,
       "Fascicolo": 12,
-      "Sito web": 12
+      "Sito web": 12,
+      "Virtual Staging": 12
     },
     "per_livello": {
-      "base": 68,
-      "intermedio": 24
+      "base": 75,
+      "intermedio": 29
     },
     "per_pubblico": {
-      "titolare": 92,
-      "agente": 78,
-      "segreteria": 54
+      "titolare": 104,
+      "agente": 90,
+      "segreteria": 61
     },
-    "totale_correlati": 217,
-    "totale_tags_unici": 215
+    "totale_correlati": 245,
+    "totale_tags_unici": 256
   }
 }

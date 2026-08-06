@@ -1,5 +1,110 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK F · Cap. 9 · Virtual Staging (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — nono capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-TASK E approvato · Cap. 9 = Virtual Staging (virtual_staging.py + fal.ai pipeline).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 9 · Virtual Staging** (nuovo modulo verticale AI generativa):
+- **Nuovo capitolo** `memory/manuale/09-virtual-staging.md` (~12 sottocapitoli, ~500 righe): panoramica funzionale + pipeline 3-stage AI (SAM 2 + Flux + ESRGAN) con costi/durate reali, 5 stili disponibili con target buyer, 6 tipi stanza, modalità Standard vs Reverse (svuota+ri-arreda), varianti parallele 1-4 (same_style/multi_style), passi operativi, crediti B2B (18 cr = €0.90) + costo fal.ai reale ($0.056 standard, $0.106 reverse) con margine 94%, watermark obbligatorio server-side con motivazione legale (AGCM 2024 + Art. 21 Codice Consumo + FIAIP), rate limit 20/80 orari, save-to-property con base64 + rescale 1600px, storia + cancellazione, errori comuni.
+- **Nuovo YAML HAL** `memory/manuale/hal/09-virtual-staging.yaml` (~570 righe, **12 voci**): `cos-e`, `pipeline`, `stili`, `tipi-stanza`, `modalita`, `varianti-parallele`, `lanciare-render`, `crediti-costo`, `watermark`, `rate-limit`, `salva-foto-immobile`, `storia-cancella`. Validato con `yaml.safe_load` + `_chunk_yaml_hal_file()` HAL RAG parser (12 chunk generati).
+- **`hal-index.json` rigenerato**: v0.5-cap9, ora **104 voci totali** (Cap. 1-9), 9 source files. Stats: base 75 · intermedio 29 · titolare 104 · agente 90 · segreteria 61 · 256 tag unici · 245 correlati.
+- **`IMPORT_HAL.md`** aggiornato a v0.5: header a 104 voci · nuova sezione "Smoke Cap. 9" con 3 query attese.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 9 con **5 righe placeholder** (3 essenziali + 2 utili). Totale index: **49 screenshot** catalogati.
+- **`GAP.md`**: aggiunta Sezione E per Cap. 9 con 15 punti verifica onestà 1:1 al codice (`virtual_staging.py` 759 righe); aggiornata Sezione A voce HAL Knowledge (92 → 104 voci).
+
+### Onestà documentale (D-051)
+- **5 stili + 6 tipi stanza** = whitelist `STYLES` + `ROOM_TYPES` esatte (`virtual_staging.py:63-104`). Zero invenzioni.
+- **Pipeline nomi modelli fal.ai esatti**: `fal-ai/sam2/auto-segment`, `fal-ai/flux-lora/inpainting`, `fal-ai/esrgan`. Documentati 1:1.
+- **Costo fal.ai reale documentato**: SAM2 $0.001 + Flux $0.05 + Upscale $0.005 = $0.056 standard, $0.106 reverse (aggiunge Flux svuotamento). Costanti `COST_*` in codice.
+- **Crediti B2B**: **18 crediti = €0.90 lordi/render**. Documentato con margine agenzia ~94%. Zero soft-selling.
+- **Hard-gate crediti NON attivo in v1**: dichiarato onestamente. L'addebito è posticipato, verrà attivato in versione futura.
+- **Watermark server-side obbligatorio**: motivazione legale esplicita (AGCM 2024 + Art. 21 Codice Consumo + FIAIP). Non rimovibile. `_apply_watermark` in `virtual_staging.py:482-509`.
+- **Rate limits soft**: 20 render/ora/utente, 80/ora/agenzia. Costanti in codice, aggregato per num_variants. Documentato.
+- **Upload limits**: 12 MB max, MIME whitelist (JPEG/PNG/WebP, no HEIC). Documentato.
+- **SSRF guard**: image_url solo `/api/media/*` interni o URL pubbliche (blocca localhost, IP privati). Documentato.
+- **TTL job 30 giorni + stale reaper 10 min**: documentati.
+- **num_variants ge=1 le=4** validato Pydantic. Limite hard.
+- **B2C Virtual Staging pubblico NON attivo v1**: previsto €0.90/foto ma checkout Stripe B2C one-shot da implementare. Documentato come "in arrivo".
+- **Cosa NON è nel modulo v1**: video/micro-tour, controllo pixel-level, custom style, editing manuale, ritaglio in-app. Documentato per evitare aspettative.
+- **Prompt CRM-aware best-effort**: Gemini 3 Flash aggiunge frase inglese (≤25 parole), timeout 15s, fallback silente se fallisce. Documentato senza sopravvalutare l'impatto.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder:
+1. **Reindex forzato HAL**: `POST /api/app/hal/knowledge/reindex` con body `{"force": true}` (super_admin).
+2. **3 query smoke test attese**:
+   - *"Come faccio un render Virtual Staging?"* → `staging.lanciare-render` (o `staging.cos-e`)
+   - *"Quanto costa un render Virtual Staging?"* → `staging.crediti-costo`
+   - *"Posso rimuovere il watermark 'Render virtuale OMNIA'?"* → `staging.watermark` (risposta: **no**)
+3. Confidence attesa ≥ 0.15 su tutte e 3.
+4. `manual_hal_indexed >= 104`.
+
+### File modificati
+- `memory/manuale/09-virtual-staging.md` (nuovo, ~500 righe)
+- `memory/manuale/hal/09-virtual-staging.yaml` (nuovo, ~570 righe, 12 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.5-cap9, 104 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.5, 104 voci, Smoke Cap. 9)
+- `memory/manuale/hal/screenshots-index.md` (+ sezione Cap. 9 con 5 righe → 49 totali)
+- `memory/GAP.md` (Sezione E Cap. 9 con 15 punti onestà + aggiornamento Sezione A HAL Knowledge)
+- `memory/CHANGELOG.md` (questo entry)
+
+### Commit message consigliato
+```
+feat(docs): TASK F · Cap. 9 Virtual Staging (Manual + HAL YAML)
+
+Manual Cap. 9:
+- 09-virtual-staging.md (~500 lines, 12 subchapters)
+- 09-virtual-staging.yaml (12 HAL voci)
+- hal-index.json v0.5-cap9 (104 voci total, 9 source files)
+- IMPORT_HAL.md v0.5 (updated to 104 voci + Smoke Cap. 9)
+- screenshots-index.md (+5 rows Cap. 9 → 49 total)
+- GAP.md: Sezione E Cap. 9 (15 honesty points)
+
+Coverage: virtual_staging.py (759 lines) full mapping:
+SAM 2 + Flux + ESRGAN pipeline, 5 styles, 6 room types,
+standard/reverse modes, 1-4 parallel variants (same/multi),
+CRM-aware prompt best-effort (Gemini 3 Flash), watermark
+server-side, rate limits, save-to-property.
+
+Honesty (D-051):
+- 5 styles + 6 room types match code whitelist exactly
+- Pipeline model names 1:1 (fal-ai/sam2, flux-lora, esrgan)
+- Real fal.ai cost disclosed: $0.056 standard / $0.106 reverse
+- Credit cost: 18 credits = €0.90 lordi, ~94% agency margin
+- Hard-gate credits NOT active v1: transparently declared
+- Watermark obbligatorio: legal rationale (AGCM 2024 + Art. 21
+  Codice Consumo + FIAIP). Not removable.
+- Rate limits soft 20/80 hourly + aggregation via num_variants
+- Upload: 12MB max, MIME whitelist (no HEIC)
+- SSRF guard on image_url
+- TTL 30d + stale reaper 10min
+- num_variants ge=1 le=4 Pydantic hard limit
+- B2C staging pubblico NOT active v1
+- No video, no pixel-level control, no custom style,
+  no in-app cropping
+
+Validation:
+- yaml.safe_load OK on 09-virtual-staging.yaml (12 voci)
+- HAL RAG parser _chunk_yaml_hal_file() → 12 chunks OK
+- Total corpus YAML chunks = 104 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex {force: true}
+Expected: manual_hal_indexed >= 104
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 9
+- Cap. 10 manuale (candidati: HAL Agent CRM · Mutui · Import XML universale · HAL Legal)
+- (Rimandato) TASK G · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging
+
+**Progresso manuale**: 9/26 capitoli (35%). Totale voci HAL: **104**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK E · Cap. 8 · Sito web agenzia (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — ottavo capitolo del Manuale Operativo.

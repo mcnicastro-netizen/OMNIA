@@ -1,5 +1,5 @@
 # OMNIA — Sprint Status (handoff agenti)
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 8 Sito web agenzia)  
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 9 Virtual Staging)  
 **Branch di riferimento**: `main`  
 **Repo**: https://github.com/mcnicastro-netizen/OMNIA  
 **Preview Emergent**: https://omnia-crm-docs.preview.emergentagent.com  
@@ -26,6 +26,7 @@
 | **C** Manuale Cap. 6 Portali | ✅ | `06-portali-publishing.md` + 12 voci YAML · index **68 voci** |
 | **D** Manuale Cap. 7 Fascicolo + micro-fix | ✅ | `07-fascicolo-immobile.md` + 12 voci YAML · index **80 voci** · 4 micro-fix chiusi (Cap. 1 §1.4, CHANGELOG typo, IMPORT_HAL a 80, Cap. 3 cross-ref §3.6/§3.7 + APE partner "in valutazione") |
 | **E** Manuale Cap. 8 Sito web | ✅ | `08-sito-web.md` + 12 voci YAML · index **92 voci** · copertura site.py + themes.py + brand_extractor.py + custom_domain.py |
+| **F** Manuale Cap. 9 Virtual Staging | ✅ | `09-virtual-staging.md` + 12 voci YAML · index **104 voci** · copertura virtual_staging.py (SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -38,10 +39,11 @@
 | 6 | Portali / Publishing | 12 | ✅ |
 | 7 | Fascicolo Immobile | 12 | ✅ v1.0 (esteso oltre §3.6) |
 | 8 | Sito web agenzia | 12 | ✅ v1.0 (site + themes + brand extractor + custom domain) |
-| 9–26 | — | — | ⏳ |
+| 9 | Virtual Staging | 12 | ✅ v1.0 (pipeline SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
+| 10–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **8/26 capitoli (31%)** · **92 voci HAL** · **44 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **9/26 capitoli (35%)** · **104 voci HAL** · **49 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -51,16 +53,17 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.4-cap8 |
+| Index | `hal-index.json` v0.5-cap9 |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
 | Post Cap. 6 | 68 voci ✅ reindex fatto |
 | Post Cap. 7 | 80 voci ✅ reindex fatto (Feb 2026) |
-| Post Cap. 8 | **Atteso 92** — reindex Founder da eseguire |
+| Post Cap. 8 | 92 voci ✅ reindex fatto (Feb 2026) |
+| Post Cap. 9 | **Atteso 104** — reindex Founder da eseguire |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke Cap. 8**:
-1. *Come collego il mio dominio al sito OMNIA?* → `sito.custom-domain`
-2. *Come estraggo il brand dal mio sito esistente?* → `sito.brand-extractor`
-3. *Quali temi posso scegliere per il sito?* → `sito.temi-disponibili`
+**Smoke Cap. 9**:
+1. *Come faccio un render Virtual Staging?* → `staging.lanciare-render`
+2. *Quanto costa un render Virtual Staging?* → `staging.crediti-costo`
+3. *Posso rimuovere il watermark 'Render virtuale OMNIA'?* → `staging.watermark` (risposta: **no**)
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05
@@ -75,13 +78,14 @@
 ## Prossimi task (ordine Founder)
 | # | Task | Priorità |
 |---|------|:--------:|
-| 1 | Reindex HAL post-Cap. 8 + smoke 3 query Sito web | 🔴 Founder |
-| 2 | Cap. 9 manuale (candidati: Virtual Staging · HAL Agent · Mutui · Import XML) | 🟢 |
+| 1 | Reindex HAL post-Cap. 9 + smoke 3 query Virtual Staging | 🔴 Founder |
+| 2 | Cap. 10 manuale (candidati: HAL Agent CRM · Mutui · Import XML · HAL Legal) | 🟢 |
 | 3 | Billing UI listino Founder | 🟡 |
 | 4 | B2C Stripe checkout | 🟡 |
-| 5 | Screenshot kit (TASK F) | 🟡 |
+| 5 | Screenshot kit (TASK G) | 🟡 |
+| 6 | Hard-gate crediti Virtual Staging (pre-check saldo) | 🟢 |
 ---
 ## Micro-fix aperti
-_Tutti chiusi in TASK D (Feb 2026). Nessun micro-fix aperto post-Cap. 8._
+_Tutti chiusi in TASK D (Feb 2026). Nessun micro-fix aperto post-Cap. 9._
 ---
 ## Handoff nuova sessione

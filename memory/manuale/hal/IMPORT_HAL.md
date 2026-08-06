@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.4)
+# 📚 HAL Knowledge — Import & Cold Start (v0.5)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 8 Sito web agenzia)
-**Corpus attuale**: **92 voci HAL YAML** su **8 capitoli** (Cap. 1-8) · 215 tag unici · 217 correlati
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 9 Virtual Staging)
+**Corpus attuale**: **104 voci HAL YAML** su **9 capitoli** (Cap. 1-9) · 256 tag unici · 245 correlati
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 8 e verifica 3 query smoke (vedi §"Smoke Cap. 8").
+**Prossimo passo**: reindex live post-Cap. 9 e verifica 3 query smoke (vedi §"Smoke Cap. 9").
 
 ---
 
@@ -92,15 +92,15 @@ Motivi:
 
 ```json
 {
-  "version": "v0.4-cap8",
+  "version": "v0.5-cap9",
   "stats": {
-    "totale_voci": 92,
-    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11, "06": 12, "07": 12, "08": 12},
-    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11, "Portali": 12, "Fascicolo": 12, "Sito web": 12},
-    "per_livello":  {"base": 68, "intermedio": 24},
-    "per_pubblico": {"titolare": 92, "agente": 78, "segreteria": 54},
-    "totale_correlati": 217,
-    "totale_tags_unici": 215
+    "totale_voci": 104,
+    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11, "06": 12, "07": 12, "08": 12, "09": 12},
+    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11, "Portali": 12, "Fascicolo": 12, "Sito web": 12, "Virtual Staging": 12},
+    "per_livello":  {"base": 75, "intermedio": 29},
+    "per_pubblico": {"titolare": 104, "agente": 90, "segreteria": 61},
+    "totale_correlati": 245,
+    "totale_tags_unici": 256
   }
 }
 ```
@@ -272,7 +272,18 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | 06-Ago-2026 (notte) | **v0.2-cleanup** | CHANGELOG.md rimosso dal corpus (`hal_knowledge.py:CORPUS_FILES`) per rompere feedback loop TF-IDF. |
 | 06-Ago-2026 (Cap. 6) | **v0.2-cap6** | Cap. 6 Portali/Publishing aggiunto (+12 voci → 68). |
 | Feb-2026 (Cap. 7) | **v0.3-cap7** | Cap. 7 Fascicolo Immobile aggiunto (+12 voci → 80). Reindex live post-push. |
-| Feb-2026 (Cap. 8) | **v0.4-cap8** | Cap. 8 Sito web agenzia aggiunto (+12 voci → **92**). Reindex live post-push. |
+| Feb-2026 (Cap. 8) | **v0.4-cap8** | Cap. 8 Sito web agenzia aggiunto (+12 voci → 92). Reindex live post-push. |
+| Feb-2026 (Cap. 9) | **v0.5-cap9** | Cap. 9 Virtual Staging aggiunto (+12 voci → **104**). Reindex live post-push. |
+
+---
+
+## 🚦 Smoke Cap. 9 — 3 query attese dopo reindex
+
+1. **"Come faccio un render Virtual Staging?"** → top-1 atteso `09-virtual-staging.yaml::staging.lanciare-render` (o `staging.cos-e`)
+2. **"Quanto costa un render Virtual Staging?"** → top-1 atteso `09-virtual-staging.yaml::staging.crediti-costo`
+3. **"Posso rimuovere il watermark 'Render virtuale OMNIA'?"** → top-1 atteso `09-virtual-staging.yaml::staging.watermark` (risposta: **no**, obbligatorio AGCM + Art. 21)
+
+Confidence attesa ≥ 0.15 su tutte e 3.
 
 ---
 

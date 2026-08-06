@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 8 Sito web agenzia · aggiunta Sezione E Cap. 8)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 9 Virtual Staging · aggiunta Sezione E Cap. 9)
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -30,7 +30,7 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-8) indicizzato con **92 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-9) indicizzato con **104 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
 | **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | ✅ Coperto in Cap. 7 · Fascicolo Immobile §7.5. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
@@ -134,6 +134,26 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **`RESERVED_SUFFIXES`** documentati (`omniarealestateecosystem.it`, `emergent.host`, `emergentagent.com` — `custom_domain.py:52-58`) → il manuale spiega perché non puoi richiedere quei domini.
 - **Domain workflow endpoints**: `POST /website/domain/request`, `POST /website/domain/verify`, `DELETE /website/domain`, `GET /website/domain`, `GET /website/domain/admin/pending` (super_admin only). Documentati 1:1.
 - **Cosa NON è documentato (out of scope per manuale user-facing)**: middleware hostname routing `host_routing.py`, il DB agency schema completo `agencies.website.*`, tag `metadata` avanzati. Sezione D applicabile — non aggiunta perché nessuno chiede.
+
+### Cap. 9 · Virtual Staging — Feb 2026
+- **5 stili documentati (`modern`, `classic`, `scandi`, `industrial`, `luxury`)** coincidono 1:1 con `STYLES` dict in `virtual_staging.py:63-84`. Zero invenzioni.
+- **6 tipi stanza (`living`, `bedroom`, `kitchen`, `dining`, `bathroom`, `office`)** 1:1 con `ROOM_TYPES` e `ROOM_LABELS` (`virtual_staging.py:88-104`). Terrazzi/cantine/box/giardini esplicitamente esclusi (non nel modello Flux).
+- **Pipeline 3-stage AI** documentata onestamente: SAM 2 (`fal-ai/sam2/auto-segment`), Flux Inpainting (`fal-ai/flux-lora/inpainting`), Real-ESRGAN 4x (`fal-ai/esrgan`) — nomi modelli fal.ai esatti.
+- **Modalità Reverse (svuota + ri-arreda)** documentata come stage aggiuntivo (`furniture_removal`) con prompt `EMPTY_ROOM_PROMPT` (`virtual_staging.py:111-115`).
+- **Costo fal.ai reale documentato onestamente**: SAM2 $0.001, Flux $0.05, Upscale $0.005 → $0.056 standard, $0.106 reverse (verificati in `virtual_staging.py:58-60 COST_*` costanti + CHANGELOG 2026-07-03).
+- **Crediti B2B ImmoWeb**: 18 crediti/render = €0,90 lordi (verificato `plans.py:CREDIT_COSTS` + CHANGELOG 5-Ago). Margine agenzia ~94%. Documentato senza mascherare i numeri.
+- **Hard-gate crediti NON attivo in v1**: dichiarato esplicitamente. L'addebito è posticipato. Verrà attivato in versione futura.
+- **Watermark obbligatorio "Render virtuale OMNIA"** applicato server-side in `/download` e `/dataurl` (`virtual_staging.py:482-509 _apply_watermark`). Documentata la motivazione legale (AGCM 2024 + Art. 21 Codice Consumo + FIAIP). Non rimovibile in v1.
+- **Rate limit soft**: 20 render/ora/utente + 80 render/ora/agenzia (`SOFT_RATE_LIMIT_USER_HOUR=20`, `SOFT_RATE_LIMIT_AGENCY_HOUR=80` in `virtual_staging.py:52-53`). Multi_style con N varianti conta N nel contatore (aggregato via `$ifNull: ["$num_variants", 1]` in `_rate_limit`). Documentato 1:1.
+- **Upload limits**: 12 MB (`MAX_UPLOAD_MB=12`), MIME whitelist `{image/jpeg, image/jpg, image/png, image/webp}` (`ALLOWED_MIME`). HEIC iPhone non supportato → user deve convertire. Documentato.
+- **SSRF/abuse guard**: `image_url` accetta solo `/api/media/...` interni o URL http(s) pubblici che superano `assert_public_url` (blocca localhost, 127.0.0.1, IP privati). Documentato.
+- **TTL job 30 giorni** (`JOB_TTL_DAYS=30`) + **stale reaper 10 minuti** (`STALE_JOB_MINUTES=10`, `reap_stale_jobs` al startup). Documentato.
+- **`num_variants` validato 1-4** in Pydantic (`ge=1, le=4`). Documentato esplicitamente come limite hard.
+- **Prompt CRM-aware best-effort**: Gemini 3 Flash aggiunge una frase inglese (max 25 parole) se il job è collegato a un immobile, con timeout 15s e fallback silente (`virtual_staging.py:226-277 _crm_prompt_fragment`). Documentato senza sopravvalutare l'impatto.
+- **Save-to-property**: applica watermark + rescale a 1600px (`MAX_PHOTO_WIDTH=1600`), converte in base64, aggiunge a `photos[]` con caption "Render virtuale OMNIA · {Stanza} {Stile}" e `is_cover=true` solo se photos vuoto. Documentato 1:1.
+- **History**: solo owner (`user_id`) vede i propri job. Non c'è vista aggregata per agenzia in v1. Documentato onestamente.
+- **B2C Virtual Staging pubblico**: NON attivo in v1 (previsto €0.90/foto in `PRICING_B2C.md` ma checkout Stripe B2C one-shot da implementare). Documentato come "in arrivo".
+- **Cosa NON è nel modulo v1**: video/micro-tour (rimandati a modulo dedicato), controllo pixel-level, editing manuale, custom style, ritaglio in-app della foto sorgente. Documentato per evitare aspettative.
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
