@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T10:22:58.074567+00:00",
-  "version": "v0.2-cap6",
+  "generated_at": "2026-08-06T11:10:22.656958+00:00",
+  "version": "v0.3-cap7",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -14,7 +14,7 @@
     },
     {
       "file": "03-immobili.yaml",
-      "md5": "844e6fee2c955a0e4d083cfc1122252e",
+      "md5": "990d64006f62a2a376d4f9aa00916990",
       "voci_count": 15
     },
     {
@@ -30,6 +30,11 @@
     {
       "file": "06-portali-publishing.yaml",
       "md5": "c052042a52ff70d97d34cf99d14337e6",
+      "voci_count": 12
+    },
+    {
+      "file": "07-fascicolo-immobile.yaml",
+      "md5": "ab350f525bfd22b74a72250d8b95bb66",
       "voci_count": 12
     }
   ],
@@ -65,7 +70,7 @@
         "passi": 4,
         "errori_comuni": 0
       },
-      "content_md5": "4a56783023b099ea522f1f0828dc0ded"
+      "content_md5": "c9133a508457c7f2e1486b4c2510f4e3"
     },
     {
       "id": "primo-accesso.login-primo-ingresso",
@@ -98,7 +103,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "e4a263f4ec4ceedb51fde02f56be5f7d"
+      "content_md5": "eb7747ad5920643e181490e3c31a657b"
     },
     {
       "id": "primo-accesso.password-dimenticata",
@@ -130,7 +135,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "97769317ed755be5b5f1816d1d6e7ee6"
+      "content_md5": "87aca2d53adc475d4b45a52117a6e19a"
     },
     {
       "id": "primo-accesso.cambiare-password",
@@ -160,7 +165,7 @@
         "passi": 7,
         "errori_comuni": 1
       },
-      "content_md5": "249c7230d01065cb7aff21f45e84caab"
+      "content_md5": "89f598e7667e30eb290324242ea04e53"
     },
     {
       "id": "primo-accesso.onboarding-agenzia",
@@ -192,7 +197,7 @@
         "passi": 4,
         "errori_comuni": 3
       },
-      "content_md5": "aa816d23cea711027eea3ac911551f37"
+      "content_md5": "f02fcfd5fe71b58d84a3a2d0776272c8"
     },
     {
       "id": "primo-accesso.tour-barra-sinistra",
@@ -225,7 +230,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "320ffbcba7b64ff23d175f5e8efa3347"
+      "content_md5": "47ba2f7794f678a7475be51b95840024"
     },
     {
       "id": "primo-accesso.cambio-lingua",
@@ -256,7 +261,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "53d4a7d2c5a4f234dfbf897eeeb1135a"
+      "content_md5": "e9b4a835330e7f22e5552052609f2a39"
     },
     {
       "id": "primo-accesso.profilo-utente",
@@ -286,7 +291,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "e25d65940a358995409326d2d265b111"
+      "content_md5": "811c3ba45c6b8b52200e5fd7fbbe8bcd"
     },
     {
       "id": "primo-accesso.selettore-agenzia",
@@ -315,7 +320,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "e437f16642f6ab9fa5389888fb4a6fc5"
+      "content_md5": "47034a7a110ff45fa6f78da1ddae279f"
     },
     {
       "id": "primo-accesso.uscire",
@@ -343,7 +348,7 @@
         "passi": 3,
         "errori_comuni": 0
       },
-      "content_md5": "77c11fc6b4552833078a4c7bdbf9bfdc"
+      "content_md5": "09df2b324d22b730f5a8167e1714648a"
     },
     {
       "id": "dashboard.panoramica-iniziale",
@@ -376,7 +381,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "0ef5efbf0d49493b50d51b54308e6fe6"
+      "content_md5": "d92a6756c0111838b03603aa42da489a"
     },
     {
       "id": "dashboard.6-contatori",
@@ -412,7 +417,7 @@
         "passi": 6,
         "errori_comuni": 1
       },
-      "content_md5": "8129b44a7636f84b4296715575e6d3e3"
+      "content_md5": "35fb9686c5493c862ab56961814a3dd7"
     },
     {
       "id": "dashboard.immobili-attivi",
@@ -443,7 +448,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "e3734466f2d4e1a72f44a190846a2328"
+      "content_md5": "70c8a22c0df1b8636b3d5107d689ac05"
     },
     {
       "id": "dashboard.lead-aperti",
@@ -475,7 +480,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "6feed0e591081bf383b0bc60e55512b6"
+      "content_md5": "daa02deabd74367af13b0592b9d18464"
     },
     {
       "id": "dashboard.nuovi-match",
@@ -508,7 +513,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "9da4b764c2f7e136925f65d7978a2c81"
+      "content_md5": "7b993b1f58a251f3b1b9afcbd0957d8f"
     },
     {
       "id": "dashboard.visite-settimana",
@@ -539,7 +544,7 @@
         "passi": 2,
         "errori_comuni": 1
       },
-      "content_md5": "b648ae9b7611baf4dc12d35f6f000d77"
+      "content_md5": "61fb121f3b6a9a376d4a94e5f1d259ad"
     },
     {
       "id": "dashboard.collaboratori-inviti",
@@ -569,7 +574,7 @@
         "passi": 2,
         "errori_comuni": 1
       },
-      "content_md5": "85bbc055ad5251b3185b05510814b4dd"
+      "content_md5": "932a0dde947edf79181899266d411e49"
     },
     {
       "id": "dashboard.dove-vado-dopo",
@@ -601,7 +606,7 @@
         "passi": 6,
         "errori_comuni": 0
       },
-      "content_md5": "ed212497d251e5faa4284b54af54a8e7"
+      "content_md5": "c4b2f95bf5baf002e650675b29316ffa"
     },
     {
       "id": "immobili.creazione-manuale",
@@ -635,7 +640,7 @@
         "passi": 8,
         "errori_comuni": 2
       },
-      "content_md5": "d36028be5db972da8ae8a51950fa73c1"
+      "content_md5": "f6e7f9e373a956ee2282b21c860c0916"
     },
     {
       "id": "immobili.importare-csv",
@@ -669,7 +674,7 @@
         "passi": 8,
         "errori_comuni": 2
       },
-      "content_md5": "810b046f5cb09d71d994be9ddf9c357f"
+      "content_md5": "0192ea0c098d476e03ffbe5ba51014d4"
     },
     {
       "id": "immobili.importare-xml",
@@ -701,7 +706,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "00a426c05b9b5f071eedbc42dd095fe6"
+      "content_md5": "59b05cf3f4cfb7d842ce427cf6fda616"
     },
     {
       "id": "immobili.importare-xml-universale",
@@ -733,7 +738,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "d3f2c4dc2ecd6ec513ffff17d24ae49b"
+      "content_md5": "02395e549ed8e3fef023abf9f2639570"
     },
     {
       "id": "immobili.caricare-foto",
@@ -766,7 +771,7 @@
         "passi": 6,
         "errori_comuni": 3
       },
-      "content_md5": "156f9f69699725bf0bc77c1cce48b6cc"
+      "content_md5": "30ca6f0b817165ee90f4f1637d52f7fc"
     },
     {
       "id": "immobili.impostare-copertina",
@@ -795,7 +800,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "1d9d0ede3804a9b165df6080e05893f5"
+      "content_md5": "a8b491baf9f0c9db77cfdccac8314515"
     },
     {
       "id": "immobili.privacy-4-livelli-cosa-sono",
@@ -826,7 +831,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "aa941cccdf6b91cec3c15d21cf5dd84b"
+      "content_md5": "7c3a3880bb0345c3d7534022a78f65f0"
     },
     {
       "id": "immobili.privacy-scegliere-livello",
@@ -859,7 +864,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "d3430d4d9f63e74d116a0c6d31224808"
+      "content_md5": "3a81e86eec5ef94db02065a632ecd9e6"
     },
     {
       "id": "immobili.nascondere-indirizzo",
@@ -888,7 +893,7 @@
         "passi": 3,
         "errori_comuni": 0
       },
-      "content_md5": "b560d5b22c92212cf8221c091b2a9211"
+      "content_md5": "eacd6919c49a86e244c0eb7c9b7493e9"
     },
     {
       "id": "immobili.pubblicare-bozza",
@@ -920,7 +925,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "6c592a06e8e71baaea217b40d74da976"
+      "content_md5": "051e2f8c68397a52446f49b57f255ba4"
     },
     {
       "id": "immobili.cambiare-stato",
@@ -951,7 +956,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "a8215e978858098186bc0c3f3498c3fc"
+      "content_md5": "a7953fc481f32f3668a049f0403e605e"
     },
     {
       "id": "immobili.eliminare-definitivo",
@@ -979,7 +984,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "9b3e718ce5ab146abb6825e4628d7977"
+      "content_md5": "b951a9786dd6dcd4648343a118435c67"
     },
     {
       "id": "immobili.fascicolo-panoramica",
@@ -1012,7 +1017,7 @@
         "passi": 7,
         "errori_comuni": 0
       },
-      "content_md5": "0ac2cb5121c26ad75b2e923f6328d31d"
+      "content_md5": "8bb42fb46f5486f02fe6d77266e14fc9"
     },
     {
       "id": "immobili.fascicolo-caricare-documento",
@@ -1043,7 +1048,7 @@
         "passi": 5,
         "errori_comuni": 2
       },
-      "content_md5": "a17f28adfebc772ed64816b03f002184"
+      "content_md5": "b9c7e6cf1323de1485a20d75d05edc03"
     },
     {
       "id": "immobili.fascicolo-ape",
@@ -1075,7 +1080,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "889ddce525adc44f7dd890fca04338f8"
+      "content_md5": "1995ab54a19104b77a978f925559132c"
     },
     {
       "id": "clienti.creare-nuovo",
@@ -1110,7 +1115,7 @@
         "passi": 10,
         "errori_comuni": 2
       },
-      "content_md5": "747a10c69560364673f44a7291d024e6"
+      "content_md5": "439f09296abbf38da1d142ad8259af20"
     },
     {
       "id": "clienti.tipi-cliente",
@@ -1141,7 +1146,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "e8f2944440728d3905f1cf5b292dd748"
+      "content_md5": "bed46668dd31ed87c34d8b24db0ec69d"
     },
     {
       "id": "clienti.stato-crm",
@@ -1173,7 +1178,7 @@
         "passi": 7,
         "errori_comuni": 1
       },
-      "content_md5": "6f2e1e85904c2f9b52eb8bed3e7aa214"
+      "content_md5": "b397507b9cdfc7ea4977caff4c905f80"
     },
     {
       "id": "clienti.preferenze-ricerca",
@@ -1208,7 +1213,7 @@
         "passi": 11,
         "errori_comuni": 2
       },
-      "content_md5": "6b4661b6e8c1264ea9233b04ebff1cc4"
+      "content_md5": "7d94b83385930c3c98fc2c0a843c916a"
     },
     {
       "id": "clienti.gdpr-consenso",
@@ -1238,7 +1243,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "a85179339d05d66d3ac394444e95cd65"
+      "content_md5": "3658e81fdaf5590bb54b8c9794e194fb"
     },
     {
       "id": "clienti.import-csv-template",
@@ -1271,7 +1276,7 @@
         "passi": 9,
         "errori_comuni": 3
       },
-      "content_md5": "5ef23e3014938eb0765082d293d26bbc"
+      "content_md5": "73ca2b5cc5ce11c5f6ccaa6214c6e06c"
     },
     {
       "id": "clienti.smart-import-ai",
@@ -1307,7 +1312,7 @@
         "passi": 9,
         "errori_comuni": 2
       },
-      "content_md5": "b3bd8efa2edd36a86507be3d4ac4dc24"
+      "content_md5": "acd6cc9242e9bb234632976c0dbe2e6c"
     },
     {
       "id": "clienti.collegare-immobile-venditore",
@@ -1342,7 +1347,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "a68acd18e007d347cbee85f07c3ada66"
+      "content_md5": "4dc0874f37142d00295d778a1f8fcd41"
     },
     {
       "id": "clienti.smart-sorting-buckets",
@@ -1377,7 +1382,7 @@
         "passi": 8,
         "errori_comuni": 1
       },
-      "content_md5": "d45a334c51e8983a44cd5ec1fee3dea1"
+      "content_md5": "fb5aec04b062dad11544bfd3fb0c9183"
     },
     {
       "id": "clienti.temperatura-lead-scoring",
@@ -1410,7 +1415,7 @@
         "passi": 4,
         "errori_comuni": 2
       },
-      "content_md5": "e36a431c46bcfeb08a0d58c7c7f79614"
+      "content_md5": "e61b5d047e1dda4f6a3b678ce55734ab"
     },
     {
       "id": "clienti.azioni-rapide",
@@ -1441,7 +1446,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "04b0dfdc2728be5c4d99910ae04a19f0"
+      "content_md5": "a0215dc1d89bbba8c8287f761d44c75e"
     },
     {
       "id": "clienti.archiviare-eliminare",
@@ -1469,7 +1474,7 @@
         "passi": 3,
         "errori_comuni": 2
       },
-      "content_md5": "aa05d86f47a57ef2aa27eba16a5539c6"
+      "content_md5": "bad17d7813f239626e6ce6ab2cc6ddec"
     },
     {
       "id": "match.come-funziona",
@@ -1503,7 +1508,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "3c6c45feb9b796cfec8e92de038f348a"
+      "content_md5": "90038570f8905673271b8a17b5bcfd19"
     },
     {
       "id": "match.scala-temperature",
@@ -1540,7 +1545,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "b687d70b44c7c00f25a5a701eb07b0c4"
+      "content_md5": "9b02bfdc29dc0f9695829ff938dde1bd"
     },
     {
       "id": "match.14-criteri",
@@ -1575,7 +1580,7 @@
         "passi": 12,
         "errori_comuni": 2
       },
-      "content_md5": "cbb04e7789a6ed4c849fe77a20796ff6"
+      "content_md5": "bd75ffe6ae559c88ea7b370d4c5b09c7"
     },
     {
       "id": "match.lista-e-filtro",
@@ -1610,7 +1615,7 @@
         "passi": 8,
         "errori_comuni": 1
       },
-      "content_md5": "137095046392cf0adc9ea2c533aa58e0"
+      "content_md5": "362734427a501d4b03310d163b96e51b"
     },
     {
       "id": "match.breakdown-dettaglio",
@@ -1640,7 +1645,7 @@
         "passi": 4,
         "errori_comuni": 0
       },
-      "content_md5": "5054c22edef3b32d49b549655c5b75db"
+      "content_md5": "670e243c565ec645fe7d5d6b1a6060bd"
     },
     {
       "id": "match.match-per-immobile",
@@ -1671,7 +1676,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "e6bf48d48a88124de13a98721b088db1"
+      "content_md5": "4ab2324b9ed0df1d4264856b34cf49b6"
     },
     {
       "id": "match.match-per-cliente",
@@ -1702,7 +1707,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "7f59b0a2963ff3e7c06d46662907caed"
+      "content_md5": "51d183629193fcbb17d40ac7823bcb01"
     },
     {
       "id": "match.lead-scoring-ai",
@@ -1736,7 +1741,7 @@
         "passi": 5,
         "errori_comuni": 2
       },
-      "content_md5": "f20d2941dd85e79214599ca915d65476"
+      "content_md5": "667160d947e2ffbcdef50071102a52a2"
     },
     {
       "id": "match.workflow-giornata",
@@ -1768,7 +1773,7 @@
         "passi": 6,
         "errori_comuni": 1
       },
-      "content_md5": "41c15bc2655b79fbe1ff9b3b6b4d1c4a"
+      "content_md5": "0cc5280868c05b76c6d28fd132e8b893"
     },
     {
       "id": "match.zero-match",
@@ -1800,7 +1805,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "68745843661715459d1660a676829ee5"
+      "content_md5": "a5b58bbf1085bd502f8819eb426969ef"
     },
     {
       "id": "match.ricalcolo-manuale",
@@ -1831,7 +1836,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "f5ace8d676977a94259869926ccc1b36"
+      "content_md5": "812dc6775a22df1b06e55f6fea062e62"
     },
     {
       "id": "portali.a-cosa-serve",
@@ -1865,7 +1870,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "11f0684d89e08a9991c6733b92802b32"
+      "content_md5": "fcf6ba3683e9bcb4778f0c0bcc373de5"
     },
     {
       "id": "portali.catalogo-portali",
@@ -1903,7 +1908,7 @@
         "passi": 6,
         "errori_comuni": 2
       },
-      "content_md5": "2bb9929686632f2d27a0a6b4b32f936b"
+      "content_md5": "9da7f321ff2dd6a30c34c53dc42ca17a"
     },
     {
       "id": "portali.attivare-portale",
@@ -1937,7 +1942,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "0c88a1a1b15c36b95dab17ffc7566f31"
+      "content_md5": "eb4fe071856bd9098f03dbae402687fc"
     },
     {
       "id": "portali.disattivare-portale",
@@ -1967,7 +1972,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "de926db147e7d83997738dac1f8490d4"
+      "content_md5": "180bd47ae5d0b67a8329877104be76c5"
     },
     {
       "id": "portali.sync-manuale",
@@ -2000,7 +2005,7 @@
         "passi": 8,
         "errori_comuni": 2
       },
-      "content_md5": "6f71eafae46f1ab54d2de7430e3fabd9"
+      "content_md5": "cee74ca84ef6e16c84ad4149cd952441"
     },
     {
       "id": "portali.sync-automatico",
@@ -2032,7 +2037,7 @@
         "passi": 7,
         "errori_comuni": 1
       },
-      "content_md5": "25ac03ea8427cbd0ff619557f220a6a9"
+      "content_md5": "451856cac99fb46fd8c3f62def14fcc9"
     },
     {
       "id": "portali.compliance-hard",
@@ -2068,7 +2073,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "6c16e287b6a4b80e3a25e4dcb5cd05ff"
+      "content_md5": "2d483fd3cf96489a5710e743585ae419"
     },
     {
       "id": "portali.compliance-soft",
@@ -2100,7 +2105,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "e163bf16d369cb948963b7be2b2c7528"
+      "content_md5": "6b2105f45e2738d80f6ae5e91c114ddf"
     },
     {
       "id": "portali.aprire-compliance",
@@ -2133,7 +2138,7 @@
         "passi": 6,
         "errori_comuni": 1
       },
-      "content_md5": "9245fa2bf70f9cb08b1cb99205c1cebc"
+      "content_md5": "b05d3c2c13c622f8416352d0d71786fa"
     },
     {
       "id": "portali.wizard-custom-portal",
@@ -2168,7 +2173,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "45c2ff1c655cbf3f41669f0cf5fc70dd"
+      "content_md5": "c21544ca81dafc26336cd4f6878bbdd6"
     },
     {
       "id": "portali.feed-pubblico",
@@ -2201,7 +2206,7 @@
         "passi": 6,
         "errori_comuni": 2
       },
-      "content_md5": "01d4d0d9545772a10b2908d9a253095e"
+      "content_md5": "a1ea62bdc852fc7e4764ea0da5afdc1e"
     },
     {
       "id": "portali.log-sync",
@@ -2233,18 +2238,398 @@
         "passi": 9,
         "errori_comuni": 1
       },
-      "content_md5": "07249912299cf138501c45a37f1e5370"
+      "content_md5": "88662c52d966754bc3ed5ef1c720ab32"
+    },
+    {
+      "id": "fascicolo.cos-e",
+      "titolo": "Cos'è il Fascicolo Immobile e a cosa serve",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "panoramica",
+        "primi-passi",
+        "rogito"
+      ],
+      "correlati": [
+        "fascicolo.aprire",
+        "fascicolo.checklist-rogito",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Cos'è il Fascicolo Immobile in OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap7-fascicolo-panoramica]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "e38123386b9de91b1c3fe2fae2b61b70"
+    },
+    {
+      "id": "fascicolo.aprire",
+      "titolo": "Come apro il Fascicolo di un immobile",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "navigazione",
+        "come-fare"
+      ],
+      "correlati": [
+        "fascicolo.cos-e",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Come apro il Fascicolo di un immobile?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "5da971f72a74f98095913d84d74a4b2f"
+    },
+    {
+      "id": "fascicolo.stima-ai",
+      "titolo": "La stima AI dell'immobile nel Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "valutazione",
+        "stima",
+        "uni-10750",
+        "prezzo"
+      ],
+      "correlati": [
+        "fascicolo.cos-e",
+        "fascicolo.badge-prezzo"
+      ],
+      "domanda_naturale": "Come funziona la stima AI mostrata nel Fascicolo?",
+      "screenshot": [
+        "[SCREEN: cap7-fascicolo-stima-badge]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "ef78ae392c0e3d4bc1f0443172885b6b"
+    },
+    {
+      "id": "fascicolo.badge-prezzo",
+      "titolo": "Cosa significano i badge Sotto/In linea/Sopra la stima AI",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "badge",
+        "prezzo",
+        "stima",
+        "coerenza"
+      ],
+      "correlati": [
+        "fascicolo.stima-ai"
+      ],
+      "domanda_naturale": "Cosa vuol dire il badge Sopra/Sotto/In linea alla stima?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "4af2cd4948845a174383ff8f50f5f857"
+    },
+    {
+      "id": "fascicolo.checklist-rogito",
+      "titolo": "La checklist documentale rogito (5+5 righe)",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "checklist",
+        "rogito",
+        "documenti"
+      ],
+      "correlati": [
+        "fascicolo.caricare-documento",
+        "fascicolo.condominio-documenti",
+        "fascicolo.ape-partner"
+      ],
+      "domanda_naturale": "Quali documenti servono per portare un immobile a rogito?",
+      "screenshot": [
+        "[SCREEN: cap7-checklist-vista]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "9ba39b390b38a83437f7a6c6a748bff7"
+    },
+    {
+      "id": "fascicolo.caricare-documento",
+      "titolo": "Caricare un documento nel Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "upload",
+        "documenti",
+        "storage"
+      ],
+      "correlati": [
+        "fascicolo.checklist-rogito",
+        "fascicolo.scaricare-documento",
+        "fascicolo.eliminare-documento"
+      ],
+      "domanda_naturale": "Come carico un documento nel Fascicolo dell'immobile?",
+      "screenshot": [
+        "[SCREEN: cap7-upload-flow]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 3
+      },
+      "content_md5": "30a9f3e2aaa0c68420005a56554b6b91"
+    },
+    {
+      "id": "fascicolo.scaricare-documento",
+      "titolo": "Scaricare un documento dal Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "download",
+        "documenti"
+      ],
+      "correlati": [
+        "fascicolo.caricare-documento",
+        "fascicolo.eliminare-documento"
+      ],
+      "domanda_naturale": "Come scarico un documento dal Fascicolo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "f9755456be1fc0335f406203fd942a7d"
+    },
+    {
+      "id": "fascicolo.eliminare-documento",
+      "titolo": "Eliminare un documento dal Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "elimina",
+        "documenti"
+      ],
+      "correlati": [
+        "fascicolo.caricare-documento"
+      ],
+      "domanda_naturale": "Come elimino un documento sbagliato dal Fascicolo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "dc0a3c5a8ee1f5826c712d2a05c614ef"
+    },
+    {
+      "id": "fascicolo.analisi-hal",
+      "titolo": "L'analisi HAL - prontezza al rogito",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "hal",
+        "ai",
+        "analisi",
+        "rogito",
+        "gemini"
+      ],
+      "correlati": [
+        "fascicolo.checklist-rogito",
+        "fascicolo.cos-e"
+      ],
+      "domanda_naturale": "Cosa fa il bottone 'Analizza con HAL' nel Fascicolo?",
+      "screenshot": [
+        "[SCREEN: cap7-analisi-hal]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 3
+      },
+      "content_md5": "8c6440d659f43b6be8cfff806543eede"
+    },
+    {
+      "id": "fascicolo.ape-partner",
+      "titolo": "APE - cosa fa e non fa il Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "fascicolo",
+        "ape",
+        "energetica",
+        "rogito",
+        "onesta-documentale"
+      ],
+      "correlati": [
+        "fascicolo.checklist-rogito",
+        "immobili.classe-energetica"
+      ],
+      "domanda_naturale": "Il Fascicolo mi ordina l'APE se non ce l'ho?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "7fa60690bcf459c7ffa0c4f253f9780d"
+    },
+    {
+      "id": "fascicolo.condominio-documenti",
+      "titolo": "Documenti condominio (regolamento e spese) - quando servono",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "fascicolo",
+        "condominio",
+        "regolamento",
+        "spese",
+        "amministratore",
+        "rogito"
+      ],
+      "correlati": [
+        "fascicolo.checklist-rogito",
+        "fascicolo.caricare-documento"
+      ],
+      "domanda_naturale": "Quando servono i documenti di condominio nel Fascicolo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "b6417dcbd3ad9cfa0c693193183c36b3"
+    },
+    {
+      "id": "fascicolo.staging-nel-fascicolo",
+      "titolo": "I render Virtual Staging visibili nel Fascicolo",
+      "modulo": "Fascicolo",
+      "widget": null,
+      "capitolo": "07",
+      "source_file": "07-fascicolo-immobile.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "fascicolo",
+        "staging",
+        "virtual-staging",
+        "render"
+      ],
+      "correlati": [
+        "fascicolo.cos-e"
+      ],
+      "domanda_naturale": "Perche' nel Fascicolo vedo i render Virtual Staging?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "76aa5ee34ebbda3f6ab04d3a61f583e1"
     }
   ],
   "stats": {
-    "totale_voci": 68,
+    "totale_voci": 80,
     "per_capitolo": {
       "01": 10,
       "02": 8,
       "03": 15,
       "04": 12,
       "05": 11,
-      "06": 12
+      "06": 12,
+      "07": 12
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -2252,18 +2637,19 @@
       "Immobili": 15,
       "Clienti": 12,
       "Match": 11,
-      "Portali": 12
+      "Portali": 12,
+      "Fascicolo": 12
     },
     "per_livello": {
-      "base": 49,
-      "intermedio": 19
+      "base": 59,
+      "intermedio": 21
     },
     "per_pubblico": {
-      "titolare": 68,
-      "agente": 63,
-      "segreteria": 49
+      "titolare": 80,
+      "agente": 75,
+      "segreteria": 54
     },
-    "totale_correlati": 166,
-    "totale_tags_unici": 161
+    "totale_correlati": 190,
+    "totale_tags_unici": 181
   }
 }

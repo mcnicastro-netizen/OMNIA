@@ -321,7 +321,7 @@ Il Fascicolo mostra una checklist di 10 documenti tipici, di cui alcuni **obblig
 L'APE non è calcolabile da OMNIA: deve essere **prodotto da un tecnico abilitato** (geometra, architetto, ingegnere con certificazione).
 
 - Se ce l'hai già → caricalo come *APE*.
-- Se non ce l'hai ancora → nel Fascicolo trovi (**se attivo**) un bottone *"Ordina APE ufficiale"* che apre un partner esterno (ancora in valutazione).
+- Se non ce l'hai ancora → **l'ordine APE via partner integrato è in valutazione** (nessun bottone in UI oggi). Nell'attesa, chiedi il documento al tuo tecnico abilitato di fiducia (geometra/architetto/ingegnere certificatore) e caricalo appena disponibile.
 - Nell'attesa, puoi comunque **dichiarare la classe energetica** (A4 → G) nei dati dell'immobile: il portale la mostrerà, ma per il rogito serve il documento firmato dal tecnico.
 
 **Chi vede il Fascicolo**
@@ -342,7 +342,7 @@ Riassumo i problemi più frequenti su questo modulo. Le soluzioni dettagliate so
 | L'indirizzo non è riconosciuto sulla mappa | Nuovo immobile | Metti *"via + civico"* completo, o aggiungi *"(sigla provincia)"* dopo il comune. |
 | Le foto compaiono in ordine sbagliato | Foto | Trascina le miniature. La prima foto della lista è la copertina. |
 | Il proprietario si lamenta della visibilità del prezzo | Privacy | Alza a **L2** (esatto solo per registrati) o **L3** (esclusive). |
-| Ho pubblicato ma l'immobile non è su Immobiliare.it | Portali | La sincronizzazione richiede 5-15 minuti dopo la pubblicazione. Se dopo 30 min non c'è, vedi Cap. 8. |
+| Ho pubblicato ma l'immobile non compare sui portali | Portali | Il sync automatico gira ogni notte alle 06:00 UTC; puoi anche forzare *Sync subito* dalla scheda del portale. Se dopo la finestra di sync non appare, apri la modale **Compliance** per vedere se è stato bloccato. Vedi Cap. 6. |
 | Voglio nascondere solo l'indirizzo, non tutto | Privacy | Attiva *"Nascondi indirizzo esatto pubblicamente"*. |
 | Import CSV: molte righe scartate | Importa CSV | Apri l'accordion errori: mancano campi obbligatori (prezzo, tipologia, città). |
 | Import XML: file troppo grande | Import universale | Chiedi al vecchio gestionale di esportare per zona/agente. Massimo 50 MB per file. |
@@ -354,7 +354,8 @@ Riassumo i problemi più frequenti su questo modulo. Le soluzioni dettagliate so
 - **Cap. 2 · Dashboard** — contatore *Immobili attivi*
 - **Cap. 4 · Clienti** — collegare *Cliente venditore* al proprietario
 - **Cap. 5 · Match** — abbinamenti automatici cliente↔immobile
-- **Cap. 8 · Portali** — pubblicare su Immobiliare.it, Casa.it, Idealista
+- **Cap. 6 · Portali** — Publishing Center (catalogo v1 di 8 portali generalisti; Immobiliare.it/Casa.it/Idealista non in v1)
+- **Cap. 7 · Fascicolo Immobile** — checklist rogito, analisi HAL e valutazione AI (approfondimento del §3.6)
 - **Cap. 10 · HAL Agents** — pulsante *"Migliora con HAL"* su titolo/descrizione
 
 ---

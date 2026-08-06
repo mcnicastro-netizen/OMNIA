@@ -104,6 +104,20 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 7 · Fascicolo Immobile
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap7-fascicolo-panoramica` | Vista d'insieme pagina Fascicolo: hero immobile (titolo/città/tipologia/superficie) + card Prezzo annuncio + card Stima AI + badge coerenza. Poi checklist + sezione Analisi HAL sotto. | 🔴 | Agenzia demo *Immobiliare Rossi*, immobile appartamento Belpasso 95 m². | — |
+| 2 | `cap7-fascicolo-stima-badge` | Focus/zoom sulle 3 card in alto: Prezzo annuncio (es. € 195.000) + Stima AI (media + banda min-max, es. € 178.000 · 165k-195k) + badge celeste *In linea con la stima AI*. | 🔴 | Serve come esempio didattico dei 3 stati badge (verde/celeste/ambra). Preparare 3 varianti se possibile. | — |
+| 3 | `cap7-checklist-vista` | Vista completa checklist documentale: 5 righe obbligatorie (3 verdi ✅ + 2 rosse 🔴 mancanti), 3 righe consigliate grigie ⚪, 2 righe condominio grigie. Barra progresso in alto `3/5 obbligatori` in ambra. | 🔴 | Il più importante del capitolo. Includere nota inline "APE non caricato ma classe A dichiarata" sulla riga rossa APE. | — |
+| 4 | `cap7-upload-flow` | Modale/riga di upload documento: bottone **⬆ Carica** in stato *"..."* (loading) su una riga rossa (es. Planimetria catastale). Sotto la riga, tag documento caricato in verde con nome file (`planimetria-2025.pdf`) + ✕ elimina. | 🟡 | Se lo scatto in loading è complicato, spezza in due immagini (before/after). | — |
+| 5 | `cap7-analisi-hal` | Sezione Analisi HAL espansa con report generato: 4-5 bullet con emoji (⚠️ documenti mancanti, ✅ prontezza, 🚨 rischi), timestamp e nota "Analisi HAL (Gemini)" in fondo. | 🔴 | Il testo può essere fittizio ma realistico (es. "Mancano APE e visura, notaio blocca la firma"). | — |
+
+**Totale Cap. 7**: 5 screenshot (4 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -139,3 +153,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 | Prima stesura index (Cap. 1) |
 | Ago 2026 | Aggiunte 5 righe Cap. 5 · Match |
 | Feb 2026 (Cap. 6) | Aggiunte 6 righe Cap. 6 · Portali / Publishing (5 essenziali, 1 utile) |
+| Feb 2026 (Cap. 7) | Aggiunte 5 righe Cap. 7 · Fascicolo Immobile (4 essenziali, 1 utile). Totale index = **39 screenshot** catalogati. |

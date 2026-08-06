@@ -1,5 +1,105 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK D · Cap. 7 · Fascicolo Immobile (Manuale + HAL YAML) + micro-fix
+
+**Tipo**: Feature docs — settimo capitolo del Manuale Operativo + 4 micro-fix aperti.
+**Fonte**: Founder Feb 2026 · Post-TASK C approvato · Cap. 7 = Fascicolo (NON Match, che è Cap. 5).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 7 · Fascicolo Immobile** (esteso rispetto a §3.6):
+- **Nuovo capitolo** `memory/manuale/07-fascicolo-immobile.md` (~10 sottocapitoli, ~330 righe): cos'è il Fascicolo, stima AI + badge coerenza prezzo, checklist 10 documenti (5+5 + 2 condominio), caricare/scaricare/eliminare documenti con limiti (8 MB, storage cifrato), analisi HAL Gemini con fallback rule-based, valutazione AI integrata (UNI 10750 base mode), APE onestà D-051 (partner "in valutazione", zero bottone in UI), documenti condominio dettagliati (regolamento + spese, amministratore, condominio minimo), render Virtual Staging embedded (max 12 done), errori comuni.
+- **Nuovo YAML HAL** `memory/manuale/hal/07-fascicolo-immobile.yaml` (~530 righe, **12 voci**): `cos-e`, `aprire`, `stima-ai`, `badge-prezzo`, `checklist-rogito`, `caricare-documento`, `scaricare-documento`, `eliminare-documento`, `analisi-hal`, `ape-partner`, `condominio-documenti`, `staging-nel-fascicolo`. Validato con `yaml.safe_load` + `_chunk_yaml_hal_file()` HAL RAG parser (12 chunk generati senza errori).
+- **`memory/manuale/hal/hal-index.json` rigenerato**: v0.3-cap7, ora **80 voci totali** (Cap. 1-7), 7 source files con md5 aggiornati, stats: base 59 · intermedio 21 · titolare 80 · agente 75 · segreteria 54 · 181 tag unici · 190 correlati.
+- **`memory/manuale/hal/IMPORT_HAL.md`** aggiornato a v0.3: header a 80 voci · nuova sezione "Smoke Cap. 7" con 3 query attese post-reindex · storico versioni esteso (v0.1 → v0.2-attivato → v0.2-cleanup → v0.2-cap6 → v0.3-cap7).
+- **`memory/manuale/hal/screenshots-index.md`**: aggiunta sezione Cap. 7 con **5 nuove righe placeholder** (4 essenziali + 1 utile). Totale index: **39 screenshot** catalogati (34 pre + 5 nuovi).
+- **`memory/GAP.md`**: aggiunta Sezione E per Cap. 7 con 11 punti di verifica onestà 1:1 al codice (`fascicolo.py`, `_compute_valuation`, `DOC_TYPES`, `CONDO_TYPES`, `MAX_DOC_MB`, endpoint attivi, storage cifrato, mapping condition, APE onestà); aggiornato Sezione A voce HAL Knowledge (68 → 80 voci) e Analisi AI Fascicolo (coperta esplicitamente in Cap. 7).
+
+**Micro-fix contestuali (P0 chiusi in questa iterazione)**:
+1. **Cap. 1 §1.4 riga 149** — allineato al Cap. 6: tabella barra sinistra riga *Portali* ora cita catalogo v1 di 8 portali generalisti (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business, Attico, Case24) + chiarimento esplicito che Immobiliare.it/Casa.it/Idealista **non sono in v1** — cross-ref a Cap. 6.
+2. **CHANGELOG.md TASK C** — sistemato typo *"Cap. 7 · Match"* → Match è **Cap. 5**, Cap. 7 = Fascicolo Immobile.
+3. **IMPORT_HAL.md** — portato da 56 voci a **80 voci** (v0.3-cap7).
+4. **Cap. 3 cross-ref**: (a) rimossa citazione errata *"Cap. 8 · Portali"* nel blocco "Voci correlate fuori capitolo" → sostituita con *"Cap. 6 · Portali"* + aggiunta cross-ref a Cap. 7; (b) rimosso claim *"Ho pubblicato ma l'immobile non è su Immobiliare.it"* dalla tabella errori §3.7 (Immobiliare.it non in v1) → sostituito con formulazione generica portali + rimando a Cap. 6 Compliance; (c) rimosso in §3.6 il claim *"nel Fascicolo trovi (se attivo) un bottone Ordina APE ufficiale"* — non esiste in UI → sostituito con formulazione onestà D-051 (*"partner integrato in valutazione, nessun bottone oggi"*); (d) stesso fix nella voce YAML `immobili.classe-energetica` in `03-immobili.yaml`.
+
+### Onestà documentale (D-051)
+- **Zero invenzioni sul Fascicolo**: ogni sottocapitolo Cap. 7 mappa 1:1 su codice reale (`fascicolo.py` 360 righe + `FascicoloPage.jsx` 289 righe). Endpoint documentati sono esattamente quelli attivi. Nessun claim su feature "in arrivo" per il partner APE (chiarito che non esiste UI oggi).
+- **Analisi HAL**: dichiarato esplicitamente che usa **Gemini 3 Flash** via EMERGENT_LLM_KEY con **fallback rule-based**, che è **sola lettura** e che **non da consulenza legale vincolante** (rimando a notaio/avvocato per casi complessi).
+- **Eliminazione documento**: onestà tecnica sul fatto che il backend DELETE non discrimina il ruolo — il vincolo per segreteria è procedurale/policy, non tecnico.
+- **Stima AI**: dichiarata come **indicativa** (banda ±10-15%), esplicitato che **non sostituisce perizia estimativa firmata** o valutazione bancaria.
+- **Cap. 6 cross-ref**: mantenuta coerenza catalogo v1 (8 portali) anche nel Cap. 1 e nel Cap. 3 (allineamento redazionale).
+
+### Verifiche post-scrittura (istruzioni operative — NON eseguite in prod)
+Il main agent NON esegue reindex né test live in questo commit. Istruzioni per l'operatore Founder dopo il push:
+1. **Reindex forzato HAL**: `POST /api/app/hal/knowledge/reindex` con body `{"force": true}` (super_admin).
+2. **3 query smoke test attese** (post-Cap. 7):
+   - *"Quali documenti servono per portare un immobile a rogito?"* → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.checklist-rogito`
+   - *"Come funziona la stima AI mostrata nel Fascicolo?"* → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.stima-ai`
+   - *"Il Fascicolo mi ordina l'APE se non ce l'ho?"* → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.ape-partner` (risposta chiara: **no**, partner "in valutazione").
+3. Confidence attesa ≥ 0.15 su tutte e 3 (similarity range simile a Cap. 5/6).
+4. Verificare che `/api/app/hal/knowledge/status` risponda `manual_hal_indexed >= 80`.
+
+### File modificati
+- `memory/manuale/07-fascicolo-immobile.md` (nuovo, ~330 righe)
+- `memory/manuale/hal/07-fascicolo-immobile.yaml` (nuovo, ~530 righe, 12 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.3-cap7, 80 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.3, 80 voci, Smoke Cap. 7)
+- `memory/manuale/hal/screenshots-index.md` (+ sezione Cap. 7 con 5 righe)
+- `memory/manuale/01-primo-accesso.md` (micro-fix §1.4 tabella Portali)
+- `memory/manuale/03-immobili.md` (micro-fix §3.6 APE partner · §3.7 tabella errori · Voci correlate Cap. 6/7)
+- `memory/manuale/hal/03-immobili.yaml` (micro-fix voce `immobili.classe-energetica`)
+- `memory/GAP.md` (Sezione E Cap. 7 + aggiornamento Sezione A HAL Knowledge/Analisi Fascicolo)
+- `memory/CHANGELOG.md` (questo entry · fix typo Cap. 7 Match → Fascicolo nel TASK C entry)
+
+### Commit message consigliato
+```
+feat(docs): TASK D · Cap. 7 Fascicolo Immobile + 4 micro-fix
+
+Manual Cap. 7 (extended from Cap. 3.6):
+- 07-fascicolo-immobile.md (~330 lines, 10 subchapters)
+- 07-fascicolo-immobile.yaml (12 HAL voci, ~530 lines)
+- hal-index.json v0.3-cap7 (80 voci total, 7 source files)
+- IMPORT_HAL.md v0.3 (updated to 80 voci + Smoke Cap. 7)
+- screenshots-index.md (+5 rows Cap. 7 → 39 total)
+
+Micro-fix P0:
+- Cap. 1 §1.4: Portali row aligned to Cap. 6 (8 portals v1,
+  no Immobiliare.it/Casa.it/Idealista claim)
+- Cap. 3 cross-ref: Cap. 8 → Cap. 6 for portali; removed
+  Immobiliare.it example in §3.7; APE partner "in valutazione"
+  (no UI button today, D-051) both in §3.6 md and yaml voce
+  immobili.classe-energetica
+- CHANGELOG TASK C: typo "Cap. 7 Match" → Match is Cap. 5
+
+Honesty (D-051):
+- Fascicolo mapped 1:1 to backend (fascicolo.py 360 lines +
+  FascicoloPage.jsx 289 lines). No invented endpoints.
+- APE partner explicitly "in valutazione", no UI button today.
+- HAL analysis: Gemini 3 Flash + rule-based fallback, no legal
+  binding advice, notary escalation for complex cases.
+- Stima AI: indicative band ±10-15%, no replacement for
+  perizia estimativa firmata.
+
+Validation:
+- yaml.safe_load OK on 07-fascicolo-immobile.yaml (12 voci)
+- HAL RAG parser _chunk_yaml_hal_file() → 12 chunks
+  generated successfully
+- md5_source per file, content_md5 per voce (idempotent)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex {force: true}
+Expected: manual_hal_indexed >= 80
+```
+
+### Prossimi passi
+- Founder: eseguire reindex prod + 3 smoke query Cap. 7
+- Cap. 8 manuale (secondo indice, da decidere insieme al Founder — candidati onesti: Sito web agenzia · Virtual Staging · HAL Agent CRM)
+- (Rimandato) TASK D · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe one-shot · Billing UI listino Founder
+
+**Progresso manuale**: 7/26 capitoli (27%). Totale voci HAL: **80**.
+
+---
+
 ## 2026-02-XX (Feb 2026, sera) — 📖 TASK C · Cap. 6 · Portali / Publishing (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — sesto capitolo del Manuale Operativo + reindex HAL.
@@ -40,7 +140,7 @@ Il main agent NON esegue reindex né test live in questo commit. Istruzioni per 
 - `memory/CHANGELOG.md` (questo entry)
 
 ### Prossimi passi
-- Cap. 7 · Match / o modulo successivo secondo indice (`memory/manuale/PIANO.md` da consultare)
+- Cap. 7 · Fascicolo Immobile (dedicato · Match è già Cap. 5)
 - (Rimandato) TASK D · Screenshot kit reali
 - (Backlog) B2C Checkout Stripe one-shot
 

@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.1)
+# 📚 HAL Knowledge — Import & Cold Start (v0.3)
 
-**Data**: 6 Agosto 2026
-**Sprint**: TASK B — HAL Knowledge v0 (cold start RAG su manuale Cap. 1-5)
-**Corpus attuale**: 56 voci HAL YAML · 5 capitoli · 120 tag unici · 135 correlati
-**Prossimo passo**: eseguire lo script di ingestion (senza LLM cost — TF-IDF) e verificare le 5 query test qui sotto.
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 7 Fascicolo Immobile)
+**Corpus attuale**: **80 voci HAL YAML** su **7 capitoli** (Cap. 1-7) · 181 tag unici · 190 correlati
+**Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
+**Prossimo passo**: reindex live post-Cap. 7 e verifica 3 query smoke (vedi §"Smoke Cap. 7").
 
 ---
 
@@ -92,15 +92,15 @@ Motivi:
 
 ```json
 {
-  "version": "v0.1-cold-start",
+  "version": "v0.3-cap7",
   "stats": {
-    "totale_voci": 56,
-    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11},
-    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11},
-    "per_livello":  {"base": 41, "intermedio": 15},
-    "per_pubblico": {"titolare": 56, "agente": 51, "segreteria": 45},
-    "totale_correlati": 135,
-    "totale_tags_unici": 120
+    "totale_voci": 80,
+    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11, "06": 12, "07": 12},
+    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11, "Portali": 12, "Fascicolo": 12},
+    "per_livello":  {"base": 59, "intermedio": 21},
+    "per_pubblico": {"titolare": 80, "agente": 75, "segreteria": 54},
+    "totale_correlati": 190,
+    "totale_tags_unici": 181
   }
 }
 ```
@@ -268,3 +268,19 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Data | Versione | Note |
 |------|:-:|------|
 | 06-Ago-2026 | **v0.1-cold-start** | Prima stesura. hal-index.json generato su 56 voci Cap. 1-5. Strategia chunk = 1 voce YAML atomica. 5 query test documentate. |
+| 06-Ago-2026 (sera) | **v0.2-attivato** | Opzione A applicata in `hal_knowledge.py` (loader YAML in `ingest_corpus`). 56 voci indicizzate come chunk atomici, 5/5 query PASS. |
+| 06-Ago-2026 (notte) | **v0.2-cleanup** | CHANGELOG.md rimosso dal corpus (`hal_knowledge.py:CORPUS_FILES`) per rompere feedback loop TF-IDF. |
+| 06-Ago-2026 (Cap. 6) | **v0.2-cap6** | Cap. 6 Portali/Publishing aggiunto (+12 voci → 68). |
+| Feb-2026 (Cap. 7) | **v0.3-cap7** | Cap. 7 Fascicolo Immobile aggiunto (+12 voci → **80**). Reindex live post-push. |
+
+---
+
+## 🚦 Smoke Cap. 7 — 3 query attese dopo reindex
+
+Da eseguire dalla UI HAL Knowledge (o via `POST /api/app/hal/knowledge/ask`) subito dopo il reindex forzato successivo al deploy del Cap. 7:
+
+1. **"Quali documenti servono per portare un immobile a rogito?"** → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.checklist-rogito`
+2. **"Come funziona la stima AI mostrata nel Fascicolo?"** → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.stima-ai`
+3. **"Il Fascicolo mi ordina l'APE se non ce l'ho?"** → top-1 atteso `07-fascicolo-immobile.yaml::fascicolo.ape-partner` (risposta chiara: **no**, partner "in valutazione").
+
+Confidence attesa ≥ 0.15 su tutte e 3 (similarity range simile a Cap. 5/6).

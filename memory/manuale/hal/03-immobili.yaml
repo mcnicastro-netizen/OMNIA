@@ -595,9 +595,10 @@ voci:
         - Se manca ancora → nell'attesa dichiara la classe energetica
           nei dati dell'immobile per l'annuncio; procurati il
           documento firmato prima del rogito o del contratto.
-        - "Se attivo, il Fascicolo può mostrare un pulsante 'Ordina
-          APE ufficiale' che apre un partner esterno certificatore.
-          Verificare la disponibilità del partner nella tua zona."
+        - "L'ordine APE via partner integrato è **in valutazione**:
+          nessun bottone in UI oggi. Rivolgiti al tecnico abilitato
+          di fiducia e carica il PDF firmato nel Fascicolo appena
+          pronto."
       errori_comuni:
         - problema: "Posso pubblicare senza APE?"
           soluzione: >

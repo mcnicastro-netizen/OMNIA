@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 6 Portali/Publishing + micro-fix Cap. 1 HAL Knowledge no più "in arrivo")
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 7 Fascicolo Immobile · aggiunta Sezione E Cap. 7 · micro-fix cross-ref Cap. 3 §3.6/§3.7 · fix Cap. 1 §1.4 portali v1)
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -30,9 +30,9 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-6) indicizzato. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-7) indicizzato con **80 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
-| **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | Coperto in Cap. 3.6 (Fascicolo) implicitamente. |
+| **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | ✅ Coperto in Cap. 7 · Fascicolo Immobile §7.5. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
 
 ---
@@ -104,6 +104,19 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Log sync in UI**: attualmente in dashboard si vedono solo timestamp ultimo sync + counter items_published/items_failed + last_error badge (`PublishingPage.jsx:198-218`). Endpoint `GET /connections/{id}/logs` esiste ma **nessuna UI dedicata**. Documentato onestamente come "in arrivo".
 - **Sospensione via PATCH `status=disabled`**: endpoint esiste (`publishing.py:182-183`) ma **nessun bottone "Sospendi temporaneamente"** in UI (solo "Disattiva" = DELETE). Documentato come cosa esistente lato API senza inventare UI.
 - **Nome route sidebar**: la sidebar mostra "Portali" (label in italiano) — `AgencyShell.jsx` menu key `publishing`. Corretto nel manuale.
+
+### Cap. 7 · Fascicolo Immobile — Feb 2026
+- **10 tipi documento (5 obbligatori + 5 consigliati + 2 solo-condominio + "altro")** documentati 1:1 da `fascicolo.py:DOC_TYPES` (lines 28-40). Zero invenzioni.
+- **`CONDO_TYPES` = {appartamento, attico, loft, monolocale}**: il manuale spiega esplicitamente che le righe *Regolamento condominio* + *Attestazione spese* compaiono solo per queste 4 tipologie (verificato in `fascicolo.py:26`).
+- **Peso max upload 8 MB** documentato onestamente (backend `MAX_DOC_MB=8`).
+- **Storage**: il capitolo dichiara che i documenti vanno su Object Storage cifrato (path `omnia/fascicolo/{property_id}/{doc_id}`) via `put_object`, non in base64 nel DB (backend `fascicolo.py:248-253`). Legacy base64 records ancora leggibili in download (`fascicolo.py:285`).
+- **Endpoint attivi documentati**: `GET /fascicolo/{id}` (dettaglio), `POST /fascicolo/{id}/documents/upload` (multipart M24), `GET /fascicolo/{id}/documents/{doc_id}/download`, `DELETE /fascicolo/{id}/documents/{doc_id}`, `POST /fascicolo/{id}/analyze`. Non menzionato l'endpoint legacy `POST /fascicolo/{id}/documents` (JSON base64) — mantenuto solo per retrocompatibilità.
+- **Analisi HAL (POST /analyze)**: usa Gemini 3 Flash via `EMERGENT_LLM_KEY` con fallback rule-based se il LLM fallisce (`fascicolo.py:314-355`). System prompt esplicito: no consulenza legale vincolante, no invenzione documenti. Salvato in `fascicolo_analysis` sul documento immobile.
+- **Stima AI (`_compute_valuation`)**: al load pagina, chiama `apps.immocloud.valuator.estimate_value` con mapping *ottime→ottimo* / *buone→buono* per il campo `condition` (`fascicolo.py:42, 111`). Fallisce silenziosamente se manca città o superficie.
+- **APE partner "in valutazione" (D-051 onestà)**: il capitolo dichiara esplicitamente che **non c'è alcun bottone "Ordina APE ufficiale" in UI oggi** (verificato: nessun endpoint `order_ape` nel backend, nessun componente frontend). Il claim precedente in Cap. 3.6 v1.0.0 ("nel Fascicolo trovi (se attivo) un bottone Ordina APE ufficiale") era **misleading**: sistemato in questo TASK D con correzione contestuale sia in `03-immobili.md` §3.6 sia nella voce YAML `immobili.classe-energetica`.
+- **Cross-ref sistemata anche in Cap. 3**: rimosso link errato "Cap. 8 · Portali" (portali è Cap. 6), rimossa citazione "Immobiliare.it" in tabella errori comuni §3.7 (allineamento a v1 8-portali).
+- **Voce eliminazione documento** (`fascicolo.eliminare-documento`): il backend `DELETE` non discrimina il ruolo (segreteria può eliminare tecnicamente). Il manuale lo documenta come vincolo procedurale/policy: segreteria "usa con cura", non "non può". Onestà.
+- **Render Virtual Staging embedded** (`fascicolo.staging-nel-fascicolo`): il Fascicolo mostra fino a 12 render con status=done presi da `virtual_staging_jobs` (`fascicolo.py:153-156`). Il capitolo chiarisce che il Fascicolo non lancia nuovi render (rimando al modulo dedicato).
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
