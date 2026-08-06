@@ -56,11 +56,11 @@ I crediti inclusi nel piano si sommano ai pacchetti ricarica acquistati.
 |----------|:-:|:-:|:-:|
 | SMS notifica al cliente | 4 | €0,20 | 60% |
 | Query **HAL Agents** (assistente CRM) | 4 | €0,20 | 75% |
+| **Valuator base** | 6 | €0,30 | 85% |
+| **Valuator UNI 10750 + PDF** | 12 | €0,60 | 82% |
 | Query **HAL Legal** (con citazioni) | 12 | €0,60 | 90% |
 | **Virtual Staging** (pipeline 3-stage) | 18 | €0,90 | 88% |
-| **Valuator base** | 20 | €1,00 | 85% |
 | **Visura catastale** | 24 | €1,20 | 40-60% (dipende dal partner) |
-| **Valuator UNI 10750 + PDF** | 40 | €2,00 | 82% |
 | **APE search** regionale | 60 | €3,00 | 30% (fee partner) |
 | **Micro-tour video 10s** (Kling Pro) | 60 | €3,00 | 68% |
 | **Promozione TOP** (7 giorni) | 400 | €20 | rev share |

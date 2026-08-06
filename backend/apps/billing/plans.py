@@ -148,8 +148,8 @@ CREDIT_PACKAGES: List[CreditPackage] = [
 # Listino Founder — 5 Agosto 2026 · Rimossi: planimetria catastale,
 # ispezione ipotecaria (margini troppo bassi in v1).
 CREDIT_COSTS: Dict[str, int] = {
-    "valuator_base": 20,           # Quotazione base
-    "valuator_uni_pdf": 40,        # Quotazione UNI 10750 con PDF
+    "valuator_base": 6,            # Quotazione base (€0,30)
+    "valuator_uni_pdf": 12,        # Quotazione UNI 10750 con PDF (€0,60)
     "visura_catastale": 24,        # Visura catastale
     "ape_search": 60,              # Ricerca APE regionale (partner)
     "sms_notification": 4,         # SMS al cliente

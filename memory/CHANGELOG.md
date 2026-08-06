@@ -1,5 +1,38 @@
 # OMNIA — Changelog
 
+## 2026-08-05 (micro-fix) — 🩹 Pricing valuator crediti
+
+**Tipo**: Micro-fix listino post-TASK A (richiesta Founder subito dopo push).
+
+### Cosa è cambiato
+- `valuator_base`: **20 → 6 crediti** (€1,00 → **€0,30**)
+- `valuator_uni_pdf`: **40 → 12 crediti** (€2,00 → **€0,60**)
+
+Motivo: allineare il valutatore alla logica "strumento di acquisizione mandato" — deve costare pochissimo per essere usato con generosità dagli agenti in fase di acquisizione.
+
+### File modificati
+```
+♻️ backend/apps/billing/plans.py           (CREDIT_COSTS: valuator 6 / valuator_uni 12)
+♻️ memory/PRICING_OMNIA.md                 (tabella consumo riordinata per crediti crescenti)
+♻️ memory/CHANGELOG.md                     (questo entry)
+```
+
+### Verifiche
+- Pytest billing 10/10 ✅
+- API `/api/billing/plans`: valuator_base=6 (€0,30), valuator_uni_pdf=12 (€0,60) ✅
+- Nessun cambio Stripe catalog (i consumi crediti sono lato server, non prezzi Stripe)
+
+### Commit message consigliato
+```
+fix(pricing): valuator credits — base 6cr (€0,30), UNI+PDF 12cr (€0,60)
+
+Valuator è strumento di acquisizione mandato: deve essere economico
+per essere usato senza remore in fase di acquisizione.
+Founder decision post-TASK A push.
+```
+
+---
+
 ## 2026-08-05 — 🟢 TASK A · Pricing Sync (Listino Founder ufficiale)
 
 **Tipo**: Aggiornamento listino ufficiale + rigenerazione catalog Stripe sandbox.
