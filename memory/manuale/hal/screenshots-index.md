@@ -89,6 +89,21 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 6 · Portali / Publishing
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap6-portali-panoramica` | Pagina **Portali** con hero + 3 metric card in alto (Portali attivi, Disponibili, Catalogo totale) + banner ambra "Compliance HARD attiva + Sync automatico" + tab switcher Attivi/Disponibili sotto. | 🔴 | Agenzia demo *Immobiliare Rossi* con 2 portali attivi (Subito + Bakeca) e 6 disponibili. | — |
+| 2 | `cap6-catalog-disponibili` | Scheda **Disponibili** aperta: tabella con 6-8 portali, colonna "Traffico" con stelle, colonna "Modalità" (feed_pull / api_push), bottone verde **Attiva** a destra su ogni riga. | 🔴 | Ordinamento traffic_score decrescente (Subito in cima con ★★★★★). | — |
+| 3 | `cap6-modale-attivazione` | Modale **Attiva [portale]**: nome portale in header, note descrittive, form credenziali (es. campo Username per Subito), bottoni "Annulla" (grigio) + "Attiva portale" (verde). | 🔴 | Portale scelto: Wikicasa con campo "API Key" visibile. | — |
+| 4 | `cap6-sync-manuale-esito` | Scheda **Attivi** con banner **emerald** sopra la tabella: "Sync subito — 8 immobili pubblicabili, 2 bloccati dal validatore compliance". Riga portale Subito con "Ultimo sync: oggi 14:23 · 8 pubblicati · 2 bloccati". | 🔴 | Banner ha ✕ chiudibile a destra. Nella riga si vedono 3 azioni: Sync, Compliance, Disattiva. | — |
+| 5 | `cap6-modale-compliance` | Modale **Compliance Subito.it**: 4 metric card in griglia (Totale 10, Pubblicabili 8, Bloccati 2, Con warning 3) + sezione "Motivi blocco più frequenti" con 3 righe rosse (es. "Meno di 3 foto: 9 immobili") + lista "Immobili bloccati (primi 20)" con titolo + motivi + link "Correggi →". | 🔴 | Il più importante del capitolo. Serve al titolare per capire l'operatività. | — |
+| 6 | `cap6-wizard-step4-conferma` | Step 4 del **Wizard Custom Portal**: box con URL feed OMNIA della tua agenzia (es. `.../api/publishing/feed/immobiliare-rossi.xml?dialect=osf_federata`) + bottone **Copia** a destra (dopo il click mostra "Copiato ✓"). | 🟡 | Portale demo custom: "Portale AgenziaLiguria" con dialect osf_federata. | — |
+
+**Totale Cap. 6**: 6 screenshot (5 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -122,3 +137,5 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Data | Note |
 |------|------|
 | Feb 2026 | Prima stesura index (Cap. 1) |
+| Ago 2026 | Aggiunte 5 righe Cap. 5 · Match |
+| Feb 2026 (Cap. 6) | Aggiunte 6 righe Cap. 6 · Portali / Publishing (5 essenziali, 1 utile) |

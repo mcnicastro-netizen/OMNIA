@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: 27 Febbraio 2026
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 6 Portali/Publishing + micro-fix Cap. 1 HAL Knowledge no più "in arrivo")
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -30,7 +30,7 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | Pagina esiste, ma il corpus RAG non è ancora indicizzato. Segnato "in arrivo" nel manuale. | 🔴 P0 | Cap. 12 già scritto? No — verrà scritto dopo Sprint 2 completo. Deve dire "in arrivo" ovunque. |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-6) indicizzato. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
 | **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | Coperto in Cap. 3.6 (Fascicolo) implicitamente. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
@@ -90,6 +90,20 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Preview privacy** (`/preview`) — non nel manuale v1 (backend-only).
 - **Analytics A/B** — non menzionato (nessuna UI).
 - **Micro-tour Kling/Sora** — placeholder "in arrivo" in Cap. 3.6/3.7? No, in Cap. 13 (Virtual Staging). Cap. 3 non lo menziona.
+
+### Cap. 6 · Portali / Publishing — Feb 2026
+- **Catalogo 8 portali documentati** (Subito, Bakeca, Kijiji, Wikicasa, Facebook Marketplace, Google Business Profile, Attico, Case24): coincide 1:1 con `CATALOG_SEED` in `apps/immoweb/publishing.py`.
+- **Portali NON nel catalogo v1** documentati esplicitamente: Idealista, Immobiliare.it, Casa.it richiedono accordi commerciali diretti agenzia ↔ portale. Il manuale invita a continuare a usarli col loro pannello. Nessun claim di integrazione futura.
+- **api_push = SIMULATO in v1** (Facebook Marketplace + Google Business Profile): documentato onestamente. Il codice in `sync_engine.py:162-165` restituisce `action_status="simulated_push"` — nessuna chiamata reale a Meta Graph API o Google Business Profile API. Da promuovere a "live" solo quando M2.6c completa l'integrazione.
+- **feed_pull = pulling, no external call**: il manuale spiega che OMNIA non chiama nulla per feed_pull, sono i portali a scaricare (`sync_engine.py:157-161` conferma).
+- **APScheduler daily job 06:00 UTC** documentato esattamente come da `sync_engine.py:35-36` (`DAILY_SYNC_HOUR_UTC=6`).
+- **Retry backoff 60/300/1800 sec** documentato come 1min/5min/30min (`sync_engine.py:39`).
+- **Regole HARD compliance**: 5 regole documentate 1:1 dal codice (`shared/validators/compliance.py:99-111`).
+- **Classi APE ammesse**: lista completa dal codice (`compliance.py:20-24`) — inclusi EXEMPT_IN_PROGRESS/EXEMPT_NOT_APPLICABLE.
+- **Universal Portal Wizard (M2.6d)**: 4 step documentati come da `PortalWizardPage.jsx:21` (STEPS array) + solo feed_pull come da `publishing.py:320` (_SUPPORTED_INTEGRATIONS).
+- **Log sync in UI**: attualmente in dashboard si vedono solo timestamp ultimo sync + counter items_published/items_failed + last_error badge (`PublishingPage.jsx:198-218`). Endpoint `GET /connections/{id}/logs` esiste ma **nessuna UI dedicata**. Documentato onestamente come "in arrivo".
+- **Sospensione via PATCH `status=disabled`**: endpoint esiste (`publishing.py:182-183`) ma **nessun bottone "Sospendi temporaneamente"** in UI (solo "Disattiva" = DELETE). Documentato come cosa esistente lato API senza inventare UI.
+- **Nome route sidebar**: la sidebar mostra "Portali" (label in italiano) — `AgencyShell.jsx` menu key `publishing`. Corretto nel manuale.
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.

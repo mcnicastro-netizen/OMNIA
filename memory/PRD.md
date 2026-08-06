@@ -1,8 +1,16 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 6 · Portali/Publishing)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK C · Cap. 6 · Portali/Publishing)**:
+  - ✅ **Cap. 6 · Portali/Publishing**: 9 sottocapitoli + **12 voci HAL YAML**. Copre a-cosa-serve del Publishing Center, catalogo 8 portali del `CATALOG_SEED` (Subito · Bakeca · Kijiji · Wikicasa · FB Marketplace · Google Business · Attico · Case24), attivazione con form credenziali AES-256-GCM, sync daily 06:00 UTC + sync manuale con retry 60/300/1800s, Compliance HARD (5 regole: prezzo · superficie · APE valida · ≥3 foto · indirizzo) + SOFT (4 warning), modale Compliance con top-5 reasons + lista bloccati, Universal Portal Wizard M2.6d (4 step feed_pull only), feed XML pubblico osf_federata/generic_rss, log audit trail.
+  - ✅ **Onestà documentale (D-051)**: solo gli 8 portali del catalogo v1 documentati come attivi. Idealista/Immobiliare.it/Casa.it esplicitati come "continua a usarli col loro pannello". api_push (FB/Google) chiaramente marcato "simulato in v1, live in arrivo".
+  - ✅ **Micro-fix Cap. 1 v1.0.3**: HAL Knowledge non è più "in arrivo" (corpus attivo dopo TASK B-bis/B-ter). Aggiornati `01-primo-accesso.md` e `.yaml`.
+  - ✅ **`hal-index.json` rigenerato**: v0.2-cap6, **68 voci totali** (Cap. 1-6), md5 aggiornati per tutti i file.
+  - 📸 Screenshots-index: +6 righe Cap. 6. Totale 34 screenshot catalogati.
+  - 📈 **Progresso manuale**: 6/26 capitoli (23%). Totale voci HAL: **68**. Prossimo: Cap. 7 (secondo indice).
 
 - **Ultimo update (05-Ago-2026 — TASK A · Pricing Sync ufficiale)**:
   - ✅ **Listino Founder 5-Ago-2026 sincronizzato** in codice + Stripe + docs:

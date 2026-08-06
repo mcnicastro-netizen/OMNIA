@@ -1,5 +1,53 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026, sera) — 📖 TASK C · Cap. 6 · Portali / Publishing (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — sesto capitolo del Manuale Operativo + reindex HAL.
+**Fonte**: Founder Feb 2026 · Post-TASK B-ter approvato.
+
+### Cosa è cambiato
+- **Nuovo capitolo** `memory/manuale/06-portali-publishing.md` (~9 sottocapitoli, profondità coerente con Cap. 5): panoramica Publishing Center, catalogo 8 portali del `CATALOG_SEED`, attivazione (form credenziali AES-256-GCM), sync automatico daily 06:00 UTC + sync manuale, Compliance HARD (5 regole D.Lgs 192/2005 + AGCM) + SOFT (4 warning), aprire modale Compliance, Universal Portal Wizard (M2.6d, 4 step), feed XML pubblico, log audit trail, errori comuni.
+- **Nuovo YAML HAL** `memory/manuale/hal/06-portali-publishing.yaml` con **12 voci** strutturate (portali.a-cosa-serve, catalogo-portali, attivare-portale, disattivare-portale, sync-manuale, sync-automatico, compliance-hard, compliance-soft, aprire-compliance, wizard-custom-portal, feed-pubblico, log-sync).
+- **`memory/manuale/hal/hal-index.json` rigenerato**: v0.2-cap6, ora **68 voci totali** (Cap. 1-6), 6 source files con md5 aggiornati, stats per capitolo/modulo/livello.
+- **Micro-fix Cap. 1 v1.0.3**: HAL Knowledge non è più "in arrivo" nel manuale — il corpus RAG è indicizzato e funzionante. Aggiornati sia `01-primo-accesso.md` (tour barra sinistra) sia `01-primo-accesso.yaml` (voce `primo-accesso.tour-barra-sinistra`).
+- **`screenshots-index.md`**: aggiunta sezione Cap. 6 con 6 nuove righe placeholder (5 essenziali + 1 utile). Totale screenshot catalogati: **34** (28 pre + 6 nuovi).
+- **`GAP.md`**: aggiunta Sezione E per Cap. 6 con verifica onestà 1:1 al codice (`CATALOG_SEED`, `sync_engine.py`, `compliance.py`, `PortalWizardPage.jsx`); aggiornata Sezione A (HAL Knowledge da 🔴 P0 → 🟢 attivo).
+
+### Onestà documentale (regola D-051 · no brand mentions competitor)
+- Catalogo v1 documentato = **8 portali reali** in `CATALOG_SEED` (Subito, Bakeca, Kijiji, Wikicasa, FB Marketplace, Google Business, Attico, Case24). Nulla di inventato.
+- **Idealista / Immobiliare.it / Casa.it**: menzionati esplicitamente come "NON nel catalogo v1, continua a usarli col loro pannello" — no claim di integrazione futura non confermata.
+- **api_push simulato**: FB Marketplace + Google Business Profile sono chiaramente documentati come "integrazione live in arrivo, per ora `simulated_push` nel log". Il manuale non lascia intendere pubblicazione reale.
+- **feed_pull**: chiarito che OMNIA non chiama nulla, sono i portali a scaricare (allineato a `sync_engine.py:157-161`).
+- **UI log sync**: documentato che oggi in dashboard c'è solo timestamp/counter ma non pannello dedicato — pannello logs "in arrivo" (endpoint `GET /connections/{id}/logs` esiste ma no UI).
+
+### Verifiche post-scrittura (istruzioni operative — NON eseguite in prod)
+Il main agent NON esegue reindex né test live in questo commit. Istruzioni per l'operatore Founder dopo il push:
+1. **Reindex forzato HAL**: `POST /api/app/hal/knowledge/reindex` con body `{"force": true}` (super_admin).
+2. **3 query smoke test attese**:
+   - *"Come attivo Subito.it?"* → top-1 atteso `06-portali-publishing.yaml::portali.attivare-portale`
+   - *"Perché un annuncio è bloccato dalla compliance?"* → top-1 atteso `06-portali-publishing.yaml::portali.compliance-hard`
+   - *"Come forzo un sync manuale su un portale?"* → top-1 atteso `06-portali-publishing.yaml::portali.sync-manuale`
+3. Confidence attesa ≥ 0.15 su tutte e 3 (similarity range simile a Cap. 5).
+
+### File modificati
+- `memory/manuale/06-portali-publishing.md` (nuovo, +240 righe)
+- `memory/manuale/hal/06-portali-publishing.yaml` (nuovo, +450 righe, 12 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.2-cap6, 68 voci)
+- `memory/manuale/hal/screenshots-index.md` (+ sezione Cap. 6 con 6 righe)
+- `memory/manuale/01-primo-accesso.md` (v1.0.3 — HAL Knowledge fix)
+- `memory/manuale/hal/01-primo-accesso.yaml` (v1.0.3 — voce tour-barra-sinistra)
+- `memory/GAP.md` (aggiunta Sezione E Cap. 6 + aggiornamento Sezione A)
+- `memory/CHANGELOG.md` (questo entry)
+
+### Prossimi passi
+- Cap. 7 · Match / o modulo successivo secondo indice (`memory/manuale/PIANO.md` da consultare)
+- (Rimandato) TASK D · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe one-shot
+
+**Progresso manuale**: 6/26 capitoli (23%). Totale voci HAL: **68**.
+
+---
+
 ## 2026-08-06 (notte) — 🧹 TASK B-ter · HAL corpus cleanup (Opzione 1)
 
 **Tipo**: Fix retrieval — rimozione file rumoroso dal corpus TF-IDF.

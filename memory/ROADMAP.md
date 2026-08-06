@@ -1,6 +1,6 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 5 Agosto 2026 — 🟢 **TASK A · Pricing Sync completato — listino Founder ufficiale sincronizzato in codice + Stripe + docs**
+**Ultimo aggiornamento**: Feb 2026 — 📖 **TASK C · Cap. 6 · Portali/Publishing DONE** (12 voci HAL YAML, 68 voci totali, HAL-index rigenerato)
 **Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md`, `PRICING_OMNIA.md` v3.0
 
 ---
@@ -19,9 +19,9 @@ SPRINT 2 🟡  M5.S2-pre Manuale Operativo + M5.S2 HAL Knowledge (RAG)
               ├─ Cap. 4 · Clienti ✅ (12 voci HAL, v1.0.1 — 3 fix)
               ├─ Cap. 5 · Match ✅ (11 voci HAL)
               ├─ TASK A · Pricing Sync ufficiale ✅ (5-Ago-2026)
-              ├─ TASK B · HAL Knowledge v0 (cold start RAG su 56 voci) 🟡 NEXT
-              ├─ TASK C · Cap. 6 · Portali/Publishing 🔴
-              ├─ Cap. 7-26 + placeholder Academy/MLS 🔴
+              ├─ TASK B · HAL Knowledge v0 (cold start RAG su 68 voci) ✅
+              ├─ TASK C · Cap. 6 · Portali/Publishing ✅ (Feb 2026, 12 voci HAL)
+              ├─ Cap. 7-26 + placeholder Academy/MLS 🔴 NEXT
               └─ TASK D · Screenshot kit — RIMANDATO (placeholder ok, post-pricing)
 SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
 SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness

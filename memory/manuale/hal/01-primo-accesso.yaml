@@ -248,9 +248,10 @@ voci:
         - "API Keys, Importa, Portali, Sito web: strumenti di gestione
           avanzata, visibili solo al titolare."
         - "Immobili, Clienti, Match: uso quotidiano operativo (tutti)."
-        - "Virtual Staging, Mutui, HAL Legal: strumenti AI e servizi
-          (tutti). HAL Knowledge è in arrivo — la vedi in elenco ma il
-          corpus è in indicizzazione."
+        - "Virtual Staging, Mutui, HAL Legal, HAL Knowledge:
+          strumenti AI e servizi (tutti). HAL Knowledge risponde
+          alle domande su come usare la piattaforma (corpus manuale
+          già indicizzato)."
         - "Collaboratori: gestione dei membri (visibile a tutti, solo
           il titolare può invitare o revocare)."
         - "Piano & Crediti, Impostazioni: amministrazione (solo

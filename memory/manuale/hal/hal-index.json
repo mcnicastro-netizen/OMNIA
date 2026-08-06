@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-06T09:06:31.531267+00:00",
-  "version": "v0.1-cold-start",
+  "generated_at": "2026-08-06T10:22:58.074567+00:00",
+  "version": "v0.2-cap6",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
-      "md5": "ad257aa007f03b72a9c9e95ab0906e9e",
+      "md5": "98337d35d9efff301f3f59ef37ee50d1",
       "voci_count": 10
     },
     {
@@ -26,6 +26,11 @@
       "file": "05-match.yaml",
       "md5": "c26d5030132b083025f681ad728a01bc",
       "voci_count": 11
+    },
+    {
+      "file": "06-portali-publishing.yaml",
+      "md5": "c052042a52ff70d97d34cf99d14337e6",
+      "voci_count": 12
     }
   ],
   "voci": [
@@ -60,7 +65,7 @@
         "passi": 4,
         "errori_comuni": 0
       },
-      "content_md5": "ac45b565c6bd62aae7ca439b006b61cd"
+      "content_md5": "4a56783023b099ea522f1f0828dc0ded"
     },
     {
       "id": "primo-accesso.login-primo-ingresso",
@@ -93,7 +98,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "ee462d3328edf8679ec665325f70656f"
+      "content_md5": "e4a263f4ec4ceedb51fde02f56be5f7d"
     },
     {
       "id": "primo-accesso.password-dimenticata",
@@ -125,7 +130,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "16ef5c92251e68a84e809c5412981fbe"
+      "content_md5": "97769317ed755be5b5f1816d1d6e7ee6"
     },
     {
       "id": "primo-accesso.cambiare-password",
@@ -155,7 +160,7 @@
         "passi": 7,
         "errori_comuni": 1
       },
-      "content_md5": "94508652018bdf233e1a975c1a8ffd4d"
+      "content_md5": "249c7230d01065cb7aff21f45e84caab"
     },
     {
       "id": "primo-accesso.onboarding-agenzia",
@@ -187,7 +192,7 @@
         "passi": 4,
         "errori_comuni": 3
       },
-      "content_md5": "ed75b3b166837faafe2438fe4fa3bfa4"
+      "content_md5": "aa816d23cea711027eea3ac911551f37"
     },
     {
       "id": "primo-accesso.tour-barra-sinistra",
@@ -220,7 +225,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "7d27923f48bbf5099ccd41d2602138d3"
+      "content_md5": "320ffbcba7b64ff23d175f5e8efa3347"
     },
     {
       "id": "primo-accesso.cambio-lingua",
@@ -251,7 +256,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "71971e0f8109fda86d75dcf6b2a040ee"
+      "content_md5": "53d4a7d2c5a4f234dfbf897eeeb1135a"
     },
     {
       "id": "primo-accesso.profilo-utente",
@@ -281,7 +286,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "09598c245216e1fa3ed819ff5b3cfd47"
+      "content_md5": "e25d65940a358995409326d2d265b111"
     },
     {
       "id": "primo-accesso.selettore-agenzia",
@@ -310,7 +315,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "e03fbb6a4a36d633f5b3390e01f6a7e6"
+      "content_md5": "e437f16642f6ab9fa5389888fb4a6fc5"
     },
     {
       "id": "primo-accesso.uscire",
@@ -338,7 +343,7 @@
         "passi": 3,
         "errori_comuni": 0
       },
-      "content_md5": "648cf37167586b0a54e71908249196bc"
+      "content_md5": "77c11fc6b4552833078a4c7bdbf9bfdc"
     },
     {
       "id": "dashboard.panoramica-iniziale",
@@ -371,7 +376,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "b298c6c692c83a475a9f971b1bf538a0"
+      "content_md5": "0ef5efbf0d49493b50d51b54308e6fe6"
     },
     {
       "id": "dashboard.6-contatori",
@@ -407,7 +412,7 @@
         "passi": 6,
         "errori_comuni": 1
       },
-      "content_md5": "b44079fc82ba74de80ef450ff64e0d5b"
+      "content_md5": "8129b44a7636f84b4296715575e6d3e3"
     },
     {
       "id": "dashboard.immobili-attivi",
@@ -438,7 +443,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "1968471d8058a93100a446040f4f0c72"
+      "content_md5": "e3734466f2d4e1a72f44a190846a2328"
     },
     {
       "id": "dashboard.lead-aperti",
@@ -470,7 +475,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "36293da6646d551d4e00a2e262b02800"
+      "content_md5": "6feed0e591081bf383b0bc60e55512b6"
     },
     {
       "id": "dashboard.nuovi-match",
@@ -503,7 +508,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "30ca738f6ce5068012ba8fe7b7e0cdbc"
+      "content_md5": "9da4b764c2f7e136925f65d7978a2c81"
     },
     {
       "id": "dashboard.visite-settimana",
@@ -534,7 +539,7 @@
         "passi": 2,
         "errori_comuni": 1
       },
-      "content_md5": "d204bf6cfe71c3837f0fdb05a2aa3394"
+      "content_md5": "b648ae9b7611baf4dc12d35f6f000d77"
     },
     {
       "id": "dashboard.collaboratori-inviti",
@@ -564,7 +569,7 @@
         "passi": 2,
         "errori_comuni": 1
       },
-      "content_md5": "9c358a46840ea8e1624447fad25ec8f5"
+      "content_md5": "85bbc055ad5251b3185b05510814b4dd"
     },
     {
       "id": "dashboard.dove-vado-dopo",
@@ -596,7 +601,7 @@
         "passi": 6,
         "errori_comuni": 0
       },
-      "content_md5": "502b3cbf8640f115479d6a569fe5c10b"
+      "content_md5": "ed212497d251e5faa4284b54af54a8e7"
     },
     {
       "id": "immobili.creazione-manuale",
@@ -630,7 +635,7 @@
         "passi": 8,
         "errori_comuni": 2
       },
-      "content_md5": "2ced7cd3fdba143c2acc7ebbae32a9e7"
+      "content_md5": "d36028be5db972da8ae8a51950fa73c1"
     },
     {
       "id": "immobili.importare-csv",
@@ -664,7 +669,7 @@
         "passi": 8,
         "errori_comuni": 2
       },
-      "content_md5": "d3b94148617b65960ba23044445a6afc"
+      "content_md5": "810b046f5cb09d71d994be9ddf9c357f"
     },
     {
       "id": "immobili.importare-xml",
@@ -696,7 +701,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "d9b66bebfecaf06e433b0de30ce2a840"
+      "content_md5": "00a426c05b9b5f071eedbc42dd095fe6"
     },
     {
       "id": "immobili.importare-xml-universale",
@@ -728,7 +733,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "d25fad746bfd3b38d53d43389f534a14"
+      "content_md5": "d3f2c4dc2ecd6ec513ffff17d24ae49b"
     },
     {
       "id": "immobili.caricare-foto",
@@ -761,7 +766,7 @@
         "passi": 6,
         "errori_comuni": 3
       },
-      "content_md5": "efd69c61685609000129789dfb7e2f77"
+      "content_md5": "156f9f69699725bf0bc77c1cce48b6cc"
     },
     {
       "id": "immobili.impostare-copertina",
@@ -790,7 +795,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "e26c0bdf42da00ac3c6e691b361bb8b8"
+      "content_md5": "1d9d0ede3804a9b165df6080e05893f5"
     },
     {
       "id": "immobili.privacy-4-livelli-cosa-sono",
@@ -821,7 +826,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "58a7a2b646787f95c1213693818caa19"
+      "content_md5": "aa941cccdf6b91cec3c15d21cf5dd84b"
     },
     {
       "id": "immobili.privacy-scegliere-livello",
@@ -854,7 +859,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "f35eb42b31dc50d13d8adf44f6ef9acd"
+      "content_md5": "d3430d4d9f63e74d116a0c6d31224808"
     },
     {
       "id": "immobili.nascondere-indirizzo",
@@ -883,7 +888,7 @@
         "passi": 3,
         "errori_comuni": 0
       },
-      "content_md5": "e6ea40e7caff7ffdc77e08f31387370b"
+      "content_md5": "b560d5b22c92212cf8221c091b2a9211"
     },
     {
       "id": "immobili.pubblicare-bozza",
@@ -915,7 +920,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "774c54792d843b0581d7839b0e873fd8"
+      "content_md5": "6c592a06e8e71baaea217b40d74da976"
     },
     {
       "id": "immobili.cambiare-stato",
@@ -946,7 +951,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "3b6fdb740930d88a588db90afc91808f"
+      "content_md5": "a8215e978858098186bc0c3f3498c3fc"
     },
     {
       "id": "immobili.eliminare-definitivo",
@@ -974,7 +979,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "ce69ca0ed20637426f215d34d3602a9a"
+      "content_md5": "9b3e718ce5ab146abb6825e4628d7977"
     },
     {
       "id": "immobili.fascicolo-panoramica",
@@ -1007,7 +1012,7 @@
         "passi": 7,
         "errori_comuni": 0
       },
-      "content_md5": "a31883c588167c577584cdc15537c591"
+      "content_md5": "0ac2cb5121c26ad75b2e923f6328d31d"
     },
     {
       "id": "immobili.fascicolo-caricare-documento",
@@ -1038,7 +1043,7 @@
         "passi": 5,
         "errori_comuni": 2
       },
-      "content_md5": "9d3ea2a26d4044dacdb9dddfa3950840"
+      "content_md5": "a17f28adfebc772ed64816b03f002184"
     },
     {
       "id": "immobili.fascicolo-ape",
@@ -1070,7 +1075,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "44cf2249a89740dc7f2191a5ba40b229"
+      "content_md5": "889ddce525adc44f7dd890fca04338f8"
     },
     {
       "id": "clienti.creare-nuovo",
@@ -1105,7 +1110,7 @@
         "passi": 10,
         "errori_comuni": 2
       },
-      "content_md5": "0823a859977d7385746cc7d98c67b598"
+      "content_md5": "747a10c69560364673f44a7291d024e6"
     },
     {
       "id": "clienti.tipi-cliente",
@@ -1136,7 +1141,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "eb1b0811ad8adcc8cee667012292d55e"
+      "content_md5": "e8f2944440728d3905f1cf5b292dd748"
     },
     {
       "id": "clienti.stato-crm",
@@ -1168,7 +1173,7 @@
         "passi": 7,
         "errori_comuni": 1
       },
-      "content_md5": "3e0576da2e0205eedaa65860cde8c722"
+      "content_md5": "6f2e1e85904c2f9b52eb8bed3e7aa214"
     },
     {
       "id": "clienti.preferenze-ricerca",
@@ -1203,7 +1208,7 @@
         "passi": 11,
         "errori_comuni": 2
       },
-      "content_md5": "097cb5ae64e768832d6b2698d20c0a65"
+      "content_md5": "6b4661b6e8c1264ea9233b04ebff1cc4"
     },
     {
       "id": "clienti.gdpr-consenso",
@@ -1233,7 +1238,7 @@
         "passi": 3,
         "errori_comuni": 1
       },
-      "content_md5": "265e5bc2107c33d6792b2b998c40af95"
+      "content_md5": "a85179339d05d66d3ac394444e95cd65"
     },
     {
       "id": "clienti.import-csv-template",
@@ -1266,7 +1271,7 @@
         "passi": 9,
         "errori_comuni": 3
       },
-      "content_md5": "71a1fcf4da274450484aa4b057fee860"
+      "content_md5": "5ef23e3014938eb0765082d293d26bbc"
     },
     {
       "id": "clienti.smart-import-ai",
@@ -1302,7 +1307,7 @@
         "passi": 9,
         "errori_comuni": 2
       },
-      "content_md5": "088b2a288b7cc373567c18b6746cb8b7"
+      "content_md5": "b3bd8efa2edd36a86507be3d4ac4dc24"
     },
     {
       "id": "clienti.collegare-immobile-venditore",
@@ -1337,7 +1342,7 @@
         "passi": 7,
         "errori_comuni": 2
       },
-      "content_md5": "0d05f3b2ad335a02f3138fe5f839ae76"
+      "content_md5": "a68acd18e007d347cbee85f07c3ada66"
     },
     {
       "id": "clienti.smart-sorting-buckets",
@@ -1372,7 +1377,7 @@
         "passi": 8,
         "errori_comuni": 1
       },
-      "content_md5": "7e0348493dea2be99469a021ac6f8908"
+      "content_md5": "d45a334c51e8983a44cd5ec1fee3dea1"
     },
     {
       "id": "clienti.temperatura-lead-scoring",
@@ -1405,7 +1410,7 @@
         "passi": 4,
         "errori_comuni": 2
       },
-      "content_md5": "a2016a30cbfcf365d6a7fa20058ee938"
+      "content_md5": "e36a431c46bcfeb08a0d58c7c7f79614"
     },
     {
       "id": "clienti.azioni-rapide",
@@ -1436,7 +1441,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "9f087ae11fe51527a2f60d973ce60463"
+      "content_md5": "04b0dfdc2728be5c4d99910ae04a19f0"
     },
     {
       "id": "clienti.archiviare-eliminare",
@@ -1464,7 +1469,7 @@
         "passi": 3,
         "errori_comuni": 2
       },
-      "content_md5": "06e817d639d2a10bd8e03ccbeddd6979"
+      "content_md5": "aa05d86f47a57ef2aa27eba16a5539c6"
     },
     {
       "id": "match.come-funziona",
@@ -1498,7 +1503,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "71c7232e3701bdf1bf94f6f167692a30"
+      "content_md5": "3c6c45feb9b796cfec8e92de038f348a"
     },
     {
       "id": "match.scala-temperature",
@@ -1535,7 +1540,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "898bd54917f937a19d81703aef4faf79"
+      "content_md5": "b687d70b44c7c00f25a5a701eb07b0c4"
     },
     {
       "id": "match.14-criteri",
@@ -1570,7 +1575,7 @@
         "passi": 12,
         "errori_comuni": 2
       },
-      "content_md5": "96929146557c3c511133f31dd80111b1"
+      "content_md5": "cbb04e7789a6ed4c849fe77a20796ff6"
     },
     {
       "id": "match.lista-e-filtro",
@@ -1605,7 +1610,7 @@
         "passi": 8,
         "errori_comuni": 1
       },
-      "content_md5": "9f3011015fd406d76cbbfac1dc7452e6"
+      "content_md5": "137095046392cf0adc9ea2c533aa58e0"
     },
     {
       "id": "match.breakdown-dettaglio",
@@ -1635,7 +1640,7 @@
         "passi": 4,
         "errori_comuni": 0
       },
-      "content_md5": "f9f04746a1bcb06c2cf2fa649335bb31"
+      "content_md5": "5054c22edef3b32d49b549655c5b75db"
     },
     {
       "id": "match.match-per-immobile",
@@ -1666,7 +1671,7 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "48eb092573ce77ab0753715ea2ec7e72"
+      "content_md5": "e6bf48d48a88124de13a98721b088db1"
     },
     {
       "id": "match.match-per-cliente",
@@ -1697,7 +1702,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "9d1c2486fea992fc07d53ce57a1b3dbf"
+      "content_md5": "7f59b0a2963ff3e7c06d46662907caed"
     },
     {
       "id": "match.lead-scoring-ai",
@@ -1731,7 +1736,7 @@
         "passi": 5,
         "errori_comuni": 2
       },
-      "content_md5": "98c363730290139323ec743384a5a73b"
+      "content_md5": "f20d2941dd85e79214599ca915d65476"
     },
     {
       "id": "match.workflow-giornata",
@@ -1763,7 +1768,7 @@
         "passi": 6,
         "errori_comuni": 1
       },
-      "content_md5": "013b676e2634b0585ebba17c8865bbf4"
+      "content_md5": "41c15bc2655b79fbe1ff9b3b6b4d1c4a"
     },
     {
       "id": "match.zero-match",
@@ -1795,7 +1800,7 @@
         "passi": 5,
         "errori_comuni": 0
       },
-      "content_md5": "a409e88fdbab9e5f00bda25b04d2024a"
+      "content_md5": "68745843661715459d1660a676829ee5"
     },
     {
       "id": "match.ricalcolo-manuale",
@@ -1826,35 +1831,439 @@
         "passi": 5,
         "errori_comuni": 1
       },
-      "content_md5": "77ce23c492ea0594f0c83f5ec9f3d33f"
+      "content_md5": "f5ace8d676977a94259869926ccc1b36"
+    },
+    {
+      "id": "portali.a-cosa-serve",
+      "titolo": "A cosa serve il Publishing Center",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "publishing",
+        "primi-passi",
+        "panoramica"
+      ],
+      "correlati": [
+        "portali.catalogo-portali",
+        "portali.attivare-portale",
+        "portali.compliance-hard"
+      ],
+      "domanda_naturale": "A cosa serve il modulo Portali di ImmoWeb?",
+      "screenshot": [
+        "[SCREEN: cap6-portali-panoramica]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "11f0684d89e08a9991c6733b92802b32"
+    },
+    {
+      "id": "portali.catalogo-portali",
+      "titolo": "I portali disponibili nel catalogo v1 (chi c'è, chi manca)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "catalogo",
+        "subito",
+        "bakeca",
+        "wikicasa",
+        "facebook",
+        "google-business",
+        "portali-disponibili"
+      ],
+      "correlati": [
+        "portali.a-cosa-serve",
+        "portali.attivare-portale",
+        "portali.wizard-custom-portal"
+      ],
+      "domanda_naturale": "Quali portali posso attivare da OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap6-catalog-disponibili]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "2bb9929686632f2d27a0a6b4b32f936b"
+    },
+    {
+      "id": "portali.attivare-portale",
+      "titolo": "Attivare un portale (procedura standard)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "attivazione",
+        "credenziali",
+        "primi-passi"
+      ],
+      "correlati": [
+        "portali.catalogo-portali",
+        "portali.disattivare-portale",
+        "portali.sync-manuale",
+        "portali.compliance-hard"
+      ],
+      "domanda_naturale": "Come attivo un portale, per esempio Subito?",
+      "screenshot": [
+        "[SCREEN: cap6-modale-attivazione]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "0c88a1a1b15c36b95dab17ffc7566f31"
+    },
+    {
+      "id": "portali.disattivare-portale",
+      "titolo": "Disattivare o rimuovere un portale attivo",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "disattivare",
+        "rimuovere",
+        "disabled"
+      ],
+      "correlati": [
+        "portali.attivare-portale",
+        "portali.sync-manuale"
+      ],
+      "domanda_naturale": "Come disattivo temporaneamente un portale?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "de926db147e7d83997738dac1f8490d4"
+    },
+    {
+      "id": "portali.sync-manuale",
+      "titolo": "Forzare un sync manuale su un portale attivo",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "sync",
+        "manuale",
+        "aggiornamento"
+      ],
+      "correlati": [
+        "portali.sync-automatico",
+        "portali.compliance-hard",
+        "portali.log-sync"
+      ],
+      "domanda_naturale": "Come forzo la sincronizzazione di un portale?",
+      "screenshot": [
+        "[SCREEN: cap6-sync-manuale-esito]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "6f71eafae46f1ab54d2de7430e3fabd9"
+    },
+    {
+      "id": "portali.sync-automatico",
+      "titolo": "Il sync automatico giornaliero (06:00 UTC)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "sync",
+        "automatico",
+        "scheduler",
+        "notte"
+      ],
+      "correlati": [
+        "portali.sync-manuale",
+        "portali.log-sync"
+      ],
+      "domanda_naturale": "Quando si aggiornano automaticamente i portali?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "25ac03ea8427cbd0ff619557f220a6a9"
+    },
+    {
+      "id": "portali.compliance-hard",
+      "titolo": "Compliance HARD — perché un annuncio è escluso dal feed",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "compliance",
+        "ape",
+        "foto",
+        "prezzo",
+        "blocco",
+        "hard"
+      ],
+      "correlati": [
+        "portali.compliance-soft",
+        "portali.sync-manuale",
+        "immobili.creazione-manuale",
+        "immobili.fascicolo-ape"
+      ],
+      "domanda_naturale": "Perché un mio annuncio è bloccato dalla compliance?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "6c16e287b6a4b80e3a25e4dcb5cd05ff"
+    },
+    {
+      "id": "portali.compliance-soft",
+      "titolo": "Warning Compliance SOFT — l'annuncio è pubblicato lo stesso",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "portali",
+        "compliance",
+        "warning",
+        "soft",
+        "ipe",
+        "titolo",
+        "descrizione"
+      ],
+      "correlati": [
+        "portali.compliance-hard"
+      ],
+      "domanda_naturale": "Cosa sono i warning arancioni nella modale Compliance?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "e163bf16d369cb948963b7be2b2c7528"
+    },
+    {
+      "id": "portali.aprire-compliance",
+      "titolo": "Aprire la Compliance di un portale (modale)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "portali",
+        "compliance",
+        "modale",
+        "bloccati",
+        "dashboard"
+      ],
+      "correlati": [
+        "portali.compliance-hard",
+        "portali.sync-manuale"
+      ],
+      "domanda_naturale": "Come vedo quali annunci sono bloccati e perché?",
+      "screenshot": [
+        "[SCREEN: cap6-modale-compliance]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "9245fa2bf70f9cb08b1cb99205c1cebc"
+    },
+    {
+      "id": "portali.wizard-custom-portal",
+      "titolo": "Aggiungere un portale personalizzato (Universal Portal Wizard)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "portali",
+        "wizard",
+        "custom",
+        "personalizzato",
+        "feed_pull",
+        "regionale"
+      ],
+      "correlati": [
+        "portali.a-cosa-serve",
+        "portali.catalogo-portali",
+        "portali.feed-pubblico"
+      ],
+      "domanda_naturale": "Come aggiungo un portale regionale non presente nel catalogo?",
+      "screenshot": [
+        "[SCREEN: cap6-wizard-step4-conferma]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "45c2ff1c655cbf3f41669f0cf5fc70dd"
+    },
+    {
+      "id": "portali.feed-pubblico",
+      "titolo": "L'URL pubblico del feed XML della tua agenzia",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "portali",
+        "feed",
+        "xml",
+        "url",
+        "pubblico",
+        "osf_federata",
+        "generic_rss"
+      ],
+      "correlati": [
+        "portali.wizard-custom-portal",
+        "portali.compliance-hard"
+      ],
+      "domanda_naturale": "Qual è l'URL del feed XML della mia agenzia?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "01d4d0d9545772a10b2908d9a253095e"
+    },
+    {
+      "id": "portali.log-sync",
+      "titolo": "Cosa contengono i log di sync (audit trail)",
+      "modulo": "Portali",
+      "widget": null,
+      "capitolo": "06",
+      "source_file": "06-portali-publishing.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "portali",
+        "log",
+        "audit",
+        "sync",
+        "trigger",
+        "retry"
+      ],
+      "correlati": [
+        "portali.sync-automatico",
+        "portali.sync-manuale"
+      ],
+      "domanda_naturale": "Come vedo lo storico dei sync di un portale?",
+      "screenshot": [],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 1
+      },
+      "content_md5": "07249912299cf138501c45a37f1e5370"
     }
   ],
   "stats": {
-    "totale_voci": 56,
+    "totale_voci": 68,
     "per_capitolo": {
       "01": 10,
       "02": 8,
       "03": 15,
       "04": 12,
-      "05": 11
+      "05": 11,
+      "06": 12
     },
     "per_modulo": {
       "Primo accesso": 10,
       "Dashboard": 8,
       "Immobili": 15,
       "Clienti": 12,
-      "Match": 11
+      "Match": 11,
+      "Portali": 12
     },
     "per_livello": {
-      "base": 41,
-      "intermedio": 15
+      "base": 49,
+      "intermedio": 19
     },
     "per_pubblico": {
-      "titolare": 56,
-      "agente": 51,
-      "segreteria": 45
+      "titolare": 68,
+      "agente": 63,
+      "segreteria": 49
     },
-    "totale_correlati": 135,
-    "totale_tags_unici": 120
+    "totale_correlati": 166,
+    "totale_tags_unici": 161
   }
 }

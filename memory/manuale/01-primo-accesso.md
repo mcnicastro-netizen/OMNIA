@@ -154,7 +154,7 @@ Sapere dove trovi ogni cosa. La barra a sinistra è il tuo indice: da qui apri i
 | **Virtual Staging** | Studio per arredare stanze vuote con l'AI | Tutti |
 | **Mutui** | Comparatore mutui | Tutti |
 | **HAL Legal** | Chatbot giuridico con citazioni normative | Tutti gli utenti loggati |
-| **HAL Knowledge** | Chatbot che spiega come funziona la piattaforma (**in arrivo** — corpus in indicizzazione) | Tutti |
+| **HAL Knowledge** | Chatbot che spiega come funziona la piattaforma. Corpus manuale indicizzato — pronto all'uso. | Tutti |
 | **Collaboratori** | Inviti e gestione membri agenzia | Tutti (solo titolare può invitare) |
 | **Piano & Crediti** | Il tuo piano attuale, crediti residui, ricariche | Solo titolare |
 | **Impostazioni** | Dati agenzia, branding, dominio, notifiche | Solo titolare |
