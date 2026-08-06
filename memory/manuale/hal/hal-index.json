@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T12:06:40.840852+00:00",
-  "version": "v0.5-cap9",
+  "generated_at": "2026-08-06T12:28:24.946307+00:00",
+  "version": "v0.6-cap10",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -46,6 +46,11 @@
       "file": "09-virtual-staging.yaml",
       "md5": "f0c634e3a629d741450d1aaaa3789683",
       "voci_count": 12
+    },
+    {
+      "file": "10-hal-agent-crm.yaml",
+      "md5": "833b420239ddb8cd3c2a995e83efd181",
+      "voci_count": 13
     }
   ],
   "voci": [
@@ -3408,10 +3413,439 @@
         "errori_comuni": 2
       },
       "content_md5": "1475da0f55f98e4aafc13c05a8d439c3"
+    },
+    {
+      "id": "hal.cos-e",
+      "titolo": "Cos'è HAL Agent e dove lo trovi nel CRM",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "hal-agent",
+        "chat",
+        "ai",
+        "panoramica",
+        "primi-passi"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.improve-titolo-descrizione",
+        "hal.limiti-cosa-non-fa"
+      ],
+      "domanda_naturale": "Cos'è HAL Agent in OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap10-hal-chat-widget]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "2e15d8f652f1605a5b2071d2ad8a9672"
+    },
+    {
+      "id": "hal.chat-aprire",
+      "titolo": "Come apro la chat con HAL",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "chat",
+        "come-fare",
+        "streaming",
+        "sessione"
+      ],
+      "correlati": [
+        "hal.cos-e",
+        "hal.tool-crm",
+        "hal.rate-limit-chat"
+      ],
+      "domanda_naturale": "Come apro e uso la chat HAL?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 3
+      },
+      "content_md5": "e11f6a15fb70f7375c56de6402a346e2"
+    },
+    {
+      "id": "hal.tool-crm",
+      "titolo": "I 5 tool CRM whitelist di HAL (query only)",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "hal",
+        "tool",
+        "crm",
+        "query",
+        "whitelist",
+        "sola-lettura"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.limiti-cosa-non-fa"
+      ],
+      "domanda_naturale": "Cosa sa cercare HAL nel mio CRM?",
+      "screenshot": [
+        "[SCREEN: cap10-hal-chat-tool]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "f46c561410c76ef0f0c7eab2427066be"
+    },
+    {
+      "id": "hal.pipeline-tool-call",
+      "titolo": "Come HAL decide di usare un tool CRM (pipeline)",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "hal",
+        "pipeline",
+        "tool-use",
+        "gemini",
+        "json",
+        "streaming",
+        "sse"
+      ],
+      "correlati": [
+        "hal.tool-crm",
+        "hal.chat-aprire"
+      ],
+      "domanda_naturale": "Come fa HAL a capire quando deve consultare il CRM?",
+      "screenshot": [],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "46c07f9fefda3a1cf4d915aa6eaa59d7"
+    },
+    {
+      "id": "hal.rate-limit-chat",
+      "titolo": "Limite orario chat HAL (60 messaggi/ora)",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "rate-limit",
+        "quota",
+        "anti-abuso",
+        "chat"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.rate-limit-improve"
+      ],
+      "domanda_naturale": "Quanti messaggi HAL posso mandare all'ora?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "46dd3bdceb4991901e66b94a98d64c45"
+    },
+    {
+      "id": "hal.improve-titolo-descrizione",
+      "titolo": "Pulsante 'Migliora con HAL' - titolo e descrizione",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "improve",
+        "migliora",
+        "titolo",
+        "descrizione",
+        "copywriting",
+        "form"
+      ],
+      "correlati": [
+        "hal.improve-lingue-toni",
+        "hal.rate-limit-improve",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "A cosa serve il pulsante 'Migliora con HAL' nei form?",
+      "screenshot": [
+        "[SCREEN: cap10-hal-improve-modal]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "35dbc7ae9260b1063ac559441a7a4662"
+    },
+    {
+      "id": "hal.improve-lingue-toni",
+      "titolo": "Lingue e toni del pulsante Migliora con HAL",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "improve",
+        "lingue",
+        "toni",
+        "italiano",
+        "inglese",
+        "spagnolo",
+        "lusso",
+        "giovane"
+      ],
+      "correlati": [
+        "hal.improve-titolo-descrizione"
+      ],
+      "domanda_naturale": "Quali lingue e toni supporta 'Migliora con HAL'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 2
+      },
+      "content_md5": "d88f43897f292d9f5fdb4ae4d12bb6f2"
+    },
+    {
+      "id": "hal.rate-limit-improve",
+      "titolo": "Limite orario Migliora con HAL (60 chiamate/ora)",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "hal",
+        "improve",
+        "rate-limit",
+        "quota"
+      ],
+      "correlati": [
+        "hal.improve-titolo-descrizione",
+        "hal.rate-limit-chat"
+      ],
+      "domanda_naturale": "Quante volte all'ora posso usare 'Migliora con HAL'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "ef2f8c21ca3d1b9c8a4ab90023cf7f73"
+    },
+    {
+      "id": "hal.limiti-cosa-non-fa",
+      "titolo": "Cosa HAL Agent NON fa (limiti operativi e legali)",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "limiti",
+        "onesta-documentale",
+        "sola-lettura",
+        "legale",
+        "hal-legal"
+      ],
+      "correlati": [
+        "hal.tool-crm",
+        "hal.cos-e"
+      ],
+      "domanda_naturale": "Cosa NON puo' fare HAL Agent?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "bae6943552d7da81a4fa5a6165529067"
+    },
+    {
+      "id": "hal.sessioni-lista",
+      "titolo": "Elenco, ripresa ed eliminazione sessioni HAL",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "hal",
+        "sessioni",
+        "cronologia",
+        "elimina",
+        "persistenza"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.privacy-audit"
+      ],
+      "domanda_naturale": "Come vedo, riapro o elimino una sessione HAL?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "002f34b13790461acfde7fd263a4c20b"
+    },
+    {
+      "id": "hal.privacy-audit",
+      "titolo": "Cosa viene loggato da HAL e privacy dei dati",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "hal",
+        "audit",
+        "privacy",
+        "gdpr",
+        "log",
+        "tracciabilita"
+      ],
+      "correlati": [
+        "hal.sessioni-lista",
+        "hal.limiti-cosa-non-fa"
+      ],
+      "domanda_naturale": "Cosa viene registrato da HAL e come e' gestita la privacy?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "18e38f353ebced676df3c25337a28f1e"
+    },
+    {
+      "id": "hal.prompt-tips",
+      "titolo": "Prompt-tips per ottenere risposte utili da HAL",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "prompt",
+        "tips",
+        "best-practice",
+        "come-fare"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.tool-crm"
+      ],
+      "domanda_naturale": "Come formulo domande utili a HAL?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "c91d8d815d0f376f323eeb7e2d20b3e7"
+    },
+    {
+      "id": "hal.errori-comuni",
+      "titolo": "Errori comuni chat HAL - raccolta",
+      "modulo": "HAL Agent",
+      "widget": null,
+      "capitolo": "10",
+      "source_file": "10-hal-agent-crm.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "hal",
+        "errori",
+        "troubleshooting",
+        "503",
+        "429"
+      ],
+      "correlati": [
+        "hal.chat-aprire",
+        "hal.rate-limit-chat",
+        "hal.tool-crm"
+      ],
+      "domanda_naturale": "Perche' HAL da' errore? Come risolvo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "4cdc9c5496cf084e99383b730cf4f8c9"
     }
   ],
   "stats": {
-    "totale_voci": 104,
+    "totale_voci": 117,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -3421,7 +3855,8 @@
       "06": 12,
       "07": 12,
       "08": 12,
-      "09": 12
+      "09": 12,
+      "10": 13
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -3432,18 +3867,19 @@
       "Portali": 12,
       "Fascicolo": 12,
       "Sito web": 12,
-      "Virtual Staging": 12
+      "Virtual Staging": 12,
+      "HAL Agent": 13
     },
     "per_livello": {
-      "base": 75,
-      "intermedio": 29
+      "base": 83,
+      "intermedio": 34
     },
     "per_pubblico": {
-      "titolare": 104,
-      "agente": 90,
-      "segreteria": 61
+      "titolare": 117,
+      "agente": 102,
+      "segreteria": 68
     },
-    "totale_correlati": 245,
-    "totale_tags_unici": 256
+    "totale_correlati": 274,
+    "totale_tags_unici": 289
   }
 }

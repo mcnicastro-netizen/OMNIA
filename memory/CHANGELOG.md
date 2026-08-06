@@ -1,5 +1,136 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK G · Cap. 10 · HAL Agent CRM (Manuale + HAL YAML) + convenzione naming Fase 0
+
+**Tipo**: Feature docs — decimo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-TASK F approvato · Cap. 10 = HAL Agent CRM (`al_agent.py` + `AlChatWidget` + `AlImproveButton`).
+
+### Convenzione naming Fase 0 (D-060)
+- Nel **manuale** e negli **YAML HAL**: usiamo esclusivamente **"HAL"** / **"HAL Agent"**.
+- Nel **codice sorgente**: rimangono i nomi legacy `al_agent.py`, `AlChatWidget.jsx`, `AlImproveButton.jsx`, endpoint `/api/app/al/*`.
+- **Nessun rename tecnico previsto in Fase 0**. Nota esplicita in coda al capitolo per developer/support.
+
+### Cosa è cambiato
+
+**Nuovo Cap. 10 · HAL Agent CRM** (modulo di riferimento per la chat AI + pulsante Migliora):
+- **Nuovo capitolo** `memory/manuale/10-hal-agent-crm.md` (~10 sottocapitoli, ~500 righe): cos'è HAL Agent + i due punti di contatto (chat widget flottante e pulsante Migliora nei form), come aprire e usare la chat, 5 tool CRM whitelist con esempi domande, pipeline sotto il cofano (streaming SSE 6 eventi), limiti operativi (sola lettura, no legale, no web, no memoria fra sessioni, no foto), pulsante Migliora con HAL (titolo/descrizione, 3 lingue, 3 toni, sanitizer output), gestione sessioni (lista/apertura/eliminazione), audit e privacy, prompt-tips, errori comuni.
+- **Nuovo YAML HAL** `memory/manuale/hal/10-hal-agent-crm.yaml` (~600 righe, **13 voci**): `cos-e`, `chat-aprire`, `tool-crm`, `pipeline-tool-call`, `rate-limit-chat`, `improve-titolo-descrizione`, `improve-lingue-toni`, `rate-limit-improve`, `limiti-cosa-non-fa`, `sessioni-lista`, `privacy-audit`, `prompt-tips`, `errori-comuni`. Validato con `yaml.safe_load` + `_chunk_yaml_hal_file()` HAL RAG parser (13 chunk generati; fix minore: tag "503" e "429" quotati per evitare cast a int).
+- **`hal-index.json` rigenerato**: v0.6-cap10, ora **117 voci totali** (Cap. 1-10), 10 source files. Stats: base 83 · intermedio 34 · titolare 117 · agente 102 · segreteria 68 · 289 tag unici · 274 correlati.
+- **`IMPORT_HAL.md`** aggiornato a v0.6: header a 117 voci · nuova sezione "Smoke Cap. 10" con 3 query attese.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 10 con **5 righe placeholder** (3 essenziali + 2 utili). Totale index: **54 screenshot** catalogati.
+- **`GAP.md`**: aggiunta Sezione E per Cap. 10 con 15 punti verifica onestà 1:1 al codice (`al_agent.py` 706 righe + `AlChatWidget.jsx` + `AlImproveButton.jsx`); aggiornata Sezione A voce HAL Knowledge (104 → 117 voci).
+
+### Onestà documentale (D-051)
+
+**⚠ Correzione al briefing Founder**
+Il briefing del TASK indicava *"rate limit 60/h (chat + improve condivisi)"*. Rileggendo il codice `_check_rate_limit` (`al_agent.py:81-96`), i contatori sono in realtà **SEPARATI**:
+- `kind=None` (default per chat) → conta solo righe **senza** campo `kind`
+- `kind="improve"` → conta solo righe con `kind="improve"`
+
+Quindi: **chat 60/h AND improve 60/h contati indipendentemente in v1**. Non condivisi.
+- **Documentato onestamente** in §10.2, §10.6, §10.7 sia nel MD sia nelle voci `hal.rate-limit-chat` e `hal.rate-limit-improve`.
+- Se il Founder preferisce che siano davvero condivisi, va cambiato il codice (rimuovere la distinzione `kind` in `_check_rate_limit`) prima di aggiornare il manuale.
+
+**Altri punti onestà D-051**
+- **5 tool CRM whitelist** documentati 1:1 con `TOOLS` dict (`al_agent.py:185-191`). Zero invenzioni.
+- **Agency scoping auto-injected** in ogni tool via `_agency_id(user)` = `require_agency_membership`. Multi-tenant safe by design.
+- **Sola lettura CRM** documentata (system prompt esplicito su no delete/drop).
+- **No consulenza legale vincolante** documentata: HAL rimanda a **HAL Legal (in arrivo, NON attivo in v1)** o notaio/avvocato.
+- **Modello LLM**: `gemini-3-flash-preview` via `EMERGENT_LLM_KEY`, temperatura 0.2. Documentato onestamente.
+- **Chat SSE streaming**: 6 eventi documentati 1:1 (`session`, `thinking`, `tool`, `token`, `done`, `error`).
+- **Improve endpoint**: field `title` (max 80) o `description` (600-1200), lang `it|en|es`, tone `standard|lusso|giovane`. Pattern Pydantic verificati 1:1.
+- **Sanitizer improve output** documentato dettagliatamente (rimuove fence, prefissi, virgolette wrapping regolari/smart/francesi/tedesche).
+- **Regole ferree improve**: no prezzo/tel/email/URL, no dati inventati (dal system prompt).
+- **Sessioni**: max 30 turn cap → 60 messaggi. Strettamente per-utente. Titolare non vede chat degli altri utenti.
+- **Audit log**: documentato cosa viene loggato + cosa NON viene loggato + retention.
+- **Widget solo in ImmoWeb**: non appare in `/cloud` B2C.
+- **Distinzione HAL Agent CRM / HAL Fascicolo / HAL Knowledge**: 3 endpoint AI diversi, chiarita distinzione.
+- **Prompt injection resistente**: `agency_id` server-side non bypassabile.
+- **Cross-ref Cap. 3**: pulsante *"Migliora con HAL"* già cita correttamente Cap. 10 → nessuna correzione necessaria.
+
+### Verifiche post-scrittura
+1. **Reindex forzato HAL**: `POST /api/app/hal/knowledge/reindex` con body `{"force": true}` (super_admin).
+2. **3 query smoke test attese**:
+   - *"Cos'è HAL Agent in OMNIA?"* → `hal.cos-e`
+   - *"A cosa serve il pulsante 'Migliora con HAL' nei form?"* → `hal.improve-titolo-descrizione`
+   - *"Cosa NON può fare HAL Agent?"* → `hal.limiti-cosa-non-fa`
+3. Confidence attesa ≥ 0.15 su tutte e 3.
+4. `manual_hal_indexed >= 117`.
+
+### File modificati
+- `memory/manuale/10-hal-agent-crm.md` (nuovo, ~500 righe)
+- `memory/manuale/hal/10-hal-agent-crm.yaml` (nuovo, ~600 righe, 13 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.6-cap10, 117 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.6, 117 voci, Smoke Cap. 10)
+- `memory/manuale/hal/screenshots-index.md` (+ sezione Cap. 10 con 5 righe → 54 totali)
+- `memory/GAP.md` (Sezione E Cap. 10 con 15 punti onestà + aggiornamento Sezione A HAL Knowledge)
+- `memory/CHANGELOG.md` (questo entry)
+
+### Commit message consigliato
+```
+feat(docs): TASK G · Cap. 10 HAL Agent CRM (Manual + HAL YAML)
+
+Manual Cap. 10:
+- 10-hal-agent-crm.md (~500 lines, 10 subchapters)
+- 10-hal-agent-crm.yaml (13 HAL voci)
+- hal-index.json v0.6-cap10 (117 voci total, 10 source files)
+- IMPORT_HAL.md v0.6 (updated to 117 voci + Smoke Cap. 10)
+- screenshots-index.md (+5 rows Cap. 10 → 54 total)
+- GAP.md: Sezione E Cap. 10 (15 honesty points)
+
+Coverage: al_agent.py (706 lines) + AlChatWidget.jsx +
+AlImproveButton.jsx full mapping. Chat + streaming SSE
+(6 events) + 5 CRM tools whitelist + Improve title/desc
+(3 langs IT/EN/ES + 3 tones standard/lusso/giovane).
+
+Naming convention Fase 0 (D-060):
+- Manual + YAML: "HAL" / "HAL Agent" only
+- Code: al_agent.py, AlChatWidget, /api/app/al/* legacy names
+- No technical rename planned in Fase 0
+
+Honesty (D-051):
+- 5 tool whitelist = TOOLS dict exactly
+- Agency scoping auto-injected (multi-tenant safe)
+- Sola lettura CRM (no delete/drop tools)
+- No legal advice (HAL Legal in arrivo, NOT active v1)
+- CORREZIONE briefing: rate limits chat 60/h AND improve
+  60/h are SEPARATE counters, not shared (verified in code
+  _check_rate_limit kind=None vs kind="improve")
+- Gemini 3 Flash Preview, temperature 0.2 deterministic
+- SSE 6 events documented 1:1
+- Improve: title max 80, desc 600-1200, IT/EN/ES,
+  standard/lusso/giovane
+- Sanitizer removes fences, prefixes, wrapping quotes
+- No price/phone/email/URL in improve output
+- Sessions: max 30 turns cap, strictly per-user
+- Audit log detailed + retention explained (no auto TTL v1)
+- Chat widget only in ImmoWeb (not /cloud)
+- HAL Agent vs HAL Fascicolo vs HAL Knowledge: 3 distinct
+  endpoints, clarified
+- Prompt injection resistant (agency_id server-side)
+
+Validation:
+- yaml.safe_load OK on 10-hal-agent-crm.yaml (13 voci)
+- Minor YAML fix: tags "503" "429" quoted to prevent int cast
+- HAL RAG parser _chunk_yaml_hal_file() → 13 chunks OK
+- Total corpus YAML chunks = 117 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex {force: true}
+Expected: manual_hal_indexed >= 117
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 10
+- Se serve rate limit condiviso (chat+improve): modifica `al_agent.py:_check_rate_limit` prima di aggiornare manuale
+- Cap. 11 manuale (candidati: HAL Legal · Mutui · Import XML universale · Team & Ruoli)
+- (Rimandato) TASK H · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging
+
+**Progresso manuale**: 10/26 capitoli (38%). Totale voci HAL: **117**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK F · Cap. 9 · Virtual Staging (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — nono capitolo del Manuale Operativo.

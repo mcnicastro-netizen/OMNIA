@@ -146,6 +146,20 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 10 · HAL Agent CRM
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap10-hal-chat-widget` | Chat widget HAL aperto sopra una pagina ImmoWeb: pannello 380×580 con storico conversazione (2-3 turn), area input in basso, bottone Nuova sessione in header. Ideale con badge *"Sto pensando..."* visibile. | 🔴 | Il colpo d'occhio principale del capitolo. | — |
+| 2 | `cap10-hal-chat-tool` | Chat HAL in azione con badge *"🔍 Consulto query_properties..."* → risposta HAL con bullet list di 5 immobili trovati (mock: trilocali Milano, prezzi €280k-320k). | 🔴 | Serve per far capire i tool CRM in azione. | — |
+| 3 | `cap10-hal-improve-modal` | Modale *"Migliora con HAL"* aperta su un campo Descrizione: testo originale a sinistra (bozza approssimativa), testo migliorato a destra (paragrafo fluido 800 caratteri), selettore lingua IT/EN/ES con IT attivo, bottone **Applica**. | 🔴 | Il più importante per il caso d'uso PropertyForm/SellPage. | — |
+| 4 | `cap10-hal-sessions-list` | Pannello elenco sessioni HAL: 6-8 righe con preview primo messaggio + timestamp + counter messaggi + bottone Elimina per riga. | 🟡 | Utile ma opzionale. | — |
+| 5 | `cap10-hal-error-429` | Chat HAL con toast/messaggio rosso *"Limite orario raggiunto (60 msg/h). Attendi la finestra scorrevole"* dopo un rate limit. | 🟡 | Serve per didattica errori — può essere sostituito con testo. | — |
+
+**Totale Cap. 10**: 5 screenshot (3 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -184,3 +198,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 7) | Aggiunte 5 righe Cap. 7 · Fascicolo Immobile (4 essenziali, 1 utile). Totale index = **39 screenshot** catalogati. |
 | Feb 2026 (Cap. 8) | Aggiunte 5 righe Cap. 8 · Sito web agenzia (4 essenziali, 1 utile). Totale index = **44 screenshot** catalogati. |
 | Feb 2026 (Cap. 9) | Aggiunte 5 righe Cap. 9 · Virtual Staging (3 essenziali, 2 utili). Totale index = **49 screenshot** catalogati. |
+| Feb 2026 (Cap. 10) | Aggiunte 5 righe Cap. 10 · HAL Agent CRM (3 essenziali, 2 utili). Totale index = **54 screenshot** catalogati. |

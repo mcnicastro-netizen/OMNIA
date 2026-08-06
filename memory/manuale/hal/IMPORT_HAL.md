@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.5)
+# 📚 HAL Knowledge — Import & Cold Start (v0.6)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 9 Virtual Staging)
-**Corpus attuale**: **104 voci HAL YAML** su **9 capitoli** (Cap. 1-9) · 256 tag unici · 245 correlati
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 10 HAL Agent CRM)
+**Corpus attuale**: **117 voci HAL YAML** su **10 capitoli** (Cap. 1-10) · 289 tag unici · 274 correlati
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 9 e verifica 3 query smoke (vedi §"Smoke Cap. 9").
+**Prossimo passo**: reindex live post-Cap. 10 e verifica 3 query smoke (vedi §"Smoke Cap. 10").
 
 ---
 
@@ -92,15 +92,15 @@ Motivi:
 
 ```json
 {
-  "version": "v0.5-cap9",
+  "version": "v0.6-cap10",
   "stats": {
-    "totale_voci": 104,
-    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11, "06": 12, "07": 12, "08": 12, "09": 12},
-    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11, "Portali": 12, "Fascicolo": 12, "Sito web": 12, "Virtual Staging": 12},
-    "per_livello":  {"base": 75, "intermedio": 29},
-    "per_pubblico": {"titolare": 104, "agente": 90, "segreteria": 61},
-    "totale_correlati": 245,
-    "totale_tags_unici": 256
+    "totale_voci": 117,
+    "per_capitolo": {"01": 10, "02": 8, "03": 15, "04": 12, "05": 11, "06": 12, "07": 12, "08": 12, "09": 12, "10": 13},
+    "per_modulo":   {"Primo accesso": 10, "Dashboard": 8, "Immobili": 15, "Clienti": 12, "Match": 11, "Portali": 12, "Fascicolo": 12, "Sito web": 12, "Virtual Staging": 12, "HAL Agent": 13},
+    "per_livello":  {"base": 83, "intermedio": 34},
+    "per_pubblico": {"titolare": 117, "agente": 102, "segreteria": 68},
+    "totale_correlati": 274,
+    "totale_tags_unici": 289
   }
 }
 ```
@@ -273,7 +273,18 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | 06-Ago-2026 (Cap. 6) | **v0.2-cap6** | Cap. 6 Portali/Publishing aggiunto (+12 voci → 68). |
 | Feb-2026 (Cap. 7) | **v0.3-cap7** | Cap. 7 Fascicolo Immobile aggiunto (+12 voci → 80). Reindex live post-push. |
 | Feb-2026 (Cap. 8) | **v0.4-cap8** | Cap. 8 Sito web agenzia aggiunto (+12 voci → 92). Reindex live post-push. |
-| Feb-2026 (Cap. 9) | **v0.5-cap9** | Cap. 9 Virtual Staging aggiunto (+12 voci → **104**). Reindex live post-push. |
+| Feb-2026 (Cap. 9) | **v0.5-cap9** | Cap. 9 Virtual Staging aggiunto (+12 voci → 104). Reindex live post-push. |
+| Feb-2026 (Cap. 10) | **v0.6-cap10** | Cap. 10 HAL Agent CRM aggiunto (+13 voci → **117**). Convenzione naming Fase 0: HAL nel manuale, `al_*` nel codice invariato. |
+
+---
+
+## 🚦 Smoke Cap. 10 — 3 query attese dopo reindex
+
+1. **"Cos'è HAL Agent in OMNIA?"** → top-1 atteso `10-hal-agent-crm.yaml::hal.cos-e`
+2. **"A cosa serve il pulsante 'Migliora con HAL' nei form?"** → top-1 atteso `10-hal-agent-crm.yaml::hal.improve-titolo-descrizione`
+3. **"Cosa NON può fare HAL Agent?"** → top-1 atteso `10-hal-agent-crm.yaml::hal.limiti-cosa-non-fa` (risposta: sola lettura, no legale, no web, no memoria fra sessioni, no foto)
+
+Confidence attesa ≥ 0.15 su tutte e 3.
 
 ---
 
