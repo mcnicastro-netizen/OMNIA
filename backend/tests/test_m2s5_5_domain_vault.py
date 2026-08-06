@@ -24,7 +24,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 BASE_URL = os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://omnia-real-estate-1.preview.emergentagent.com",
+    "https://omnia-crm-docs.preview.emergentagent.com",
 ).rstrip("/")
 ADMIN_EMAIL = os.environ["OMNIA_ADMIN_EMAIL"]
 ADMIN_PASSWORD = os.environ["OMNIA_ADMIN_PASSWORD"]

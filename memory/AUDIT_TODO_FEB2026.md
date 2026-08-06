@@ -140,7 +140,7 @@ e aggiungerla al `.env` backend.
 
 ### N. Fallback hardcoded a preview URL obsoleto
 **File**: ~30 test files in `/app/backend/tests/`
-**Bug**: `BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-real-estate-1.preview.emergentagent.com")`
+**Bug**: `BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://omnia-crm-docs.preview.emergentagent.com")`
 L'URL preview di fallback è di una vecchia session. Ora il preview è
 `f8c52ffb-5b20-4d8b-8b44-4bf33a3b19dd.preview.emergentagent.com`.
 **Effetto**: se qualcuno lancia pytest senza `.env` caricato → chiama URL sbagliato, test rotti in silenzio.

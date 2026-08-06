@@ -18,7 +18,7 @@ Copiati/incollati fra 19 router: `_agency`, `_agency_id`, `_agency_id_of`,
 selezione multi-agency per `group_admin`.
 
 ### 2. Fix fallback preview URL obsoleto nei ~30 test file
-Fallback hardcoded `https://omnia-real-estate-1.preview.emergentagent.com`
+Fallback hardcoded `https://omnia-crm-docs.preview.emergentagent.com`
 è **la preview della prima sessione**. Se un giorno cambia il preview URL
 il fallback punterà al vecchio. **Rimedio**: `pytest.ini` con `env-file
 backend/.env` e rimuovere del tutto il fallback.

@@ -60,7 +60,7 @@ Il main agent NON esegue reindex né test live in questo commit. Istruzioni per 
 Nel test live post-TASK B-bis, il top-1 di **tutte le 5 query** era `CHANGELOG.md::Query test cold start` — il CHANGELOG conteneva letteralmente le stesse query documentate come esempi, creando un feedback loop che disturbava le citazioni fonti (Gemini generava risposte corrette ma citava il changelog invece del manuale).
 
 ### Verifiche live (preview URL)
-Eseguito su `https://omnia-real-estate-1.preview.emergentagent.com`:
+Eseguito su `https://omnia-crm-docs.preview.emergentagent.com`:
 
 1. **Purge chunk orfani** `CHANGELOG.md`: 137 chunk eliminati dal DB.
 2. **Reindex** `force=true`: 17 file scanned (era 18), **472 chunks** totali, **56/56 YAML manuale**.

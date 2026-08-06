@@ -2,7 +2,7 @@
 **Ultimo aggiornamento**: 6 Agosto 2026  
 **Branch di riferimento**: `main`  
 **Repo**: https://github.com/mcnicastro-netizen/OMNIA  
-**Preview Emergent**: https://omnia-real-estate-1.preview.emergentagent.com  
+**Preview Emergent**: https://omnia-crm-docs.preview.emergentagent.com  
 **Founder**: Marco Nicastro · credenziali test in `/app/memory/test_credentials.md` (non in GitHub)
 ---
 ## Regole operative (non negoziabili)
