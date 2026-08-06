@@ -2,7 +2,7 @@
 
 > File di appoggio per **temi strategici/tecnici** che il Founder ha esplicitamente segnalato come "da rivedere più avanti", **senza essere ancora decisioni**. Ogni voce va promossa in `DECISIONS.md` o `ROADMAP.md` quando si decide di procedere.
 
-**Ultimo aggiornamento**: 05 Febbraio 2026
+**Ultimo aggiornamento**: 06 Agosto 2026
 
 ---
 
@@ -284,3 +284,101 @@ Trasformare la landing da "brochure che racconta" a **demo interattiva che dimos
 - Chiusura M6 Omnia Academy (unlock pre-launch commerciale, D-035)
 - Rilascio pubblico di `/it/agenzie` come landing di conversione Track B
 - Sopravvivenza dei 4 widget a stress test 5 agenti paralleli (GAP #2 audit M2, Sprint 4)
+
+---
+
+## 🟠 A-005 — HAL Assist · supporto ticket con remediation guidata (e remote assist futuro)
+
+**Data inserimento**: 06-Ago-2026
+**Segnalato da**: Founder (Nicastro)
+**Contesto**: Durante la stesura del Manuale Operativo (Cap. 7–9) e HAL Knowledge RAG, il Founder ha immaginato un upgrade futuro: **HAL sul gestionale conosce abbastanza prodotto/codice da intervenire quando un cliente apre un ticket** — idealmente con **autorizzazione esplicita del titolare**, in stile assistenza remota (AnyDesk / TeamViewer / co-browsing).
+
+> **Nota di scope**: questa idea è **indipendente** da altri progetti esterni (es. repo open source di social listening). Resta **interna all'ecosistema OMNIA / ImmoWeb**.
+
+### 🎯 Visione Founder (north star)
+Dopo consenso del cliente, HAL **non solo spiega** ma **risolve** il problema (sync portali, compliance, configurazione, HAL reindex, ecc.) — riducendo carico L1/L2 umano e tempi di risoluzione.
+
+### Cosa esiste già (base da non rifare)
+| Modulo HAL attuale | Ruolo |
+|--------------------|--------|
+| **HAL Knowledge** | How-to utente (manuale YAML + GAP + doc interni) |
+| **HAL Agent CRM** | Chat + tool CRM read-only + *Migliora con HAL* su annunci |
+| **HAL Legal** | Q&A giuridico con citazioni (dominio separato) |
+
+A-005 è un **quarto pilastro**: **HAL Assist** orientato a **ticket + remediation**, non sostituto degli altri.
+
+### Architettura proposta (fasi — dalla più realistica alla più ambiziosa)
+
+**Fase 1 — Ticket intelligence (MVP)** 🟢 fattibile
+- Classificazione automatica ticket (Portali / Fascicolo / Billing / HAL / Import…)
+- RAG su: manuale + GAP + CHANGELOG + DECISIONS + **playbook per categoria** (10–15 scenari ricorrenti)
+- Output: diagnosi probabile + checklist verifica + bozza risposta al cliente
+- Escalation umana sotto soglia confidence (allineato D-051)
+
+**Fase 2 — Fix in-app con consenso** 🟢 fattibile (core OMNIA)
+- Azioni **whitelist server-side** eseguibili solo dopo click *"Autorizzo HAL Assist"* del **titolare** (`agency_admin`)
+- Esempi candidati: sync manuale portale, reindex HAL agenzia, reset flag compliance preview, riapertura wizard dominio
+- **Audit log immutabile** (chi, quando, cosa, esito) — prerequisito legale
+
+**Fase 3 — Guida in-app / co-browsing** 🟡 medio termine
+- HAL evidenzia passi nell'UI ImmoWeb (tooltip, tour contestuale sul ticket)
+- Opzionale: session replay / screen share **solo dentro l'app** (no desktop intero)
+- Utente conferma ogni step sensibile
+
+**Fase 4 — Supporto umano + HAL copilot** 🟡 medio termine
+- Operatore OMNIA in sessione remota (AnyDesk/TeamViewer) **solo su escalation**
+- HAL prepara diagnosi, script e monitora — **umano al mouse**, HAL in cuffia
+- Durata limitata (es. 30 min), consenso scritto, registrazione opzionale
+
+**Fase 5 — Remote unattended (HAL risolve da solo sul PC cliente)** 🔴 R&D / long-term
+- Tecnologia emergente (*computer use*, vision + automazione desktop)
+- **Non raccomandato** come target produzione B2B immobiliare nei prossimi 1–2 anni: GDPR, responsabilità civile, affidabilità click, variabilità PC cliente
+- Per un CRM **cloud** la maggior parte dei fix **non richiede** accesso al desktop
+
+### Corpus tecnico (cosa indicizzare — NON "tutto GitHub")
+- ❌ Indicizzare l'intero repo grezzo → rumoroso, costoso, rischio allucinazioni
+- ✅ Sottoinsieme curato:
+  - Playbook ticket + messaggi errore HTTP (`detail=...`) mappati a cause
+  - Router/moduli per area ad alto volume ticket (publishing, fascicolo, staging, billing, hal_knowledge)
+  - GAP.md, DECISIONS.md, runbook operativi Founder
+  - Test pytest come "specifica comportamentale" (estratti, non raw)
+
+### Perché AnyDesk non è il primo passo
+ImmoWeb è **SaaS browser-based**. I ticket tipici si risolvono **in cloud** (sync, compliance, crediti, permessi). AnyDesk serve solo per edge case locali (cache browser, antivirus, file Excel import sul PC) — **minoranza** del volume.
+
+### ⚠️ Rischi / vincoli (da risolvere prima di promuovere a DECISIONS)
+- **D-051 onestà**: HAL non deve promettere fix o UI inesistenti
+- **Multi-tenant**: zero leak dati tra agenzie nel contesto ticket
+- **GDPR / consenso**: remediation = trattamento dati; serve base giuridica + ToS + log
+- **Responsabilità**: azioni su annunci/portali/prezzi → serve human-in-the-loop o whitelist stretta
+- **Costo LLM**: ogni ticket con retrieval largo va budgettato (crediti supporto o piano Agency)
+- **Manutenzione**: reindex corpus tecnico ad ogni release, altrimenti HAL "conosce il codice di ieri"
+
+### Relazione con altri HAL (naming)
+- Brand utente sempre **HAL** (mai "AL" nel prodotto/supporto)
+- Proposta nome modulo: **HAL Assist** o **HAL Support**
+- Distinto da HAL Knowledge (FAQ) e HAL Legal (normativa)
+
+### Timing consigliato
+**NON ora** — dopo:
+- Manuale operativo ≥ **50%** (Cap. ~13+) o catalogo **15+ playbook ticket** ricorrenti osservati in preview/pilot
+- Sistema ticket formalizzato in ImmoWeb (anche minimale: form + stato + assegnazione)
+- HAL Knowledge stabile su corpus manuale (≥ 100 voci, smoke test routine)
+
+**Ordine suggerito**: Fase 1 → Fase 2 → Fase 3/4 → valutare Fase 5 solo se volume supporto lo giustifica.
+
+### Domande aperte per il Founder
+1. Ticket system: **interno ImmoWeb** o integrazione esterna (Zendesk, Freshdesk, email)?
+2. Chi può autorizzare remediation: **solo titolare** o anche agente senior?
+3. Fix automatici ammessi in v1: quali 5 azioni whitelist sono accettabili legalmente?
+4. Remote desktop: **mai**, **solo escalation umana**, o **pilota HAL+umano**?
+5. Pricing: HAL Assist incluso in Agency o add-on support premium?
+
+### Stato
+🟠 **DA APPROFONDIRE** — Founder ha chiesto esplicitamente di annotare come possibile future upgrade (06-Ago-2026). Nessuna implementazione, nessuna decisione presa.
+
+### Trigger di ripresa
+- Primi **10+ ticket ricorrenti** catalogati con causa root nota
+- Apertura canale supporto ufficiale (post-M6 o post-primi Founders)
+- Manuale + GAP coprono moduli ad alto volume ticket (Portali, Fascicolo, Staging, Billing)
+- Richiesta esplicita cliente Agency di SLA / assistenza proattiva
