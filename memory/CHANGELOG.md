@@ -1,5 +1,70 @@
 # OMNIA — Changelog
 
+## 2026-08-06 (notte) — 🧹 TASK B-ter · HAL corpus cleanup (Opzione 1)
+
+**Tipo**: Fix retrieval — rimozione file rumoroso dal corpus TF-IDF.
+**Fonte**: Founder 6 Ago 2026 · Post-TASK B-bis test live.
+
+### Cosa è cambiato
+- **`hal_knowledge.py`**: rimosso `CHANGELOG.md` da `CORPUS_FILES`. Aggiunto commento inline che spiega il motivo (feedback loop dovuto a query test documentate nel CHANGELOG stesso).
+
+### Motivo
+Nel test live post-TASK B-bis, il top-1 di **tutte le 5 query** era `CHANGELOG.md::Query test cold start` — il CHANGELOG conteneva letteralmente le stesse query documentate come esempi, creando un feedback loop che disturbava le citazioni fonti (Gemini generava risposte corrette ma citava il changelog invece del manuale).
+
+### Verifiche live (preview URL)
+Eseguito su `https://omnia-real-estate-1.preview.emergentagent.com`:
+
+1. **Purge chunk orfani** `CHANGELOG.md`: 137 chunk eliminati dal DB.
+2. **Reindex** `force=true`: 17 file scanned (era 18), **472 chunks** totali, **56/56 YAML manuale**.
+3. **5 query test rieseguite** — RISULTATO:
+
+| Q | Top-1 (post-cleanup) | Sim | Conf | Top-1 OK? |
+|:-:|-----|:-:|:-:|:-:|
+| 1 | `PROGRAMMA_OMNIA.md::M2.S3.5 ✅ — Link Property↔Seller` | 0.259 | high | ✅ |
+| 2 | **`03-immobili.yaml::Immobili`** 📚 | 0.241 | high | ✅ |
+| 3 | **`04-clienti.yaml::Clienti`** 📚 | 0.189 | medium | ✅ |
+| 4 | **`05-match.yaml::Match`** 📚 | 0.277 | high | ✅ |
+| 5 | **`04-clienti.yaml::Clienti`** 📚 | 0.249 | high | ✅ |
+
+- ✅ **0/5 top-1 = CHANGELOG** (target: 0/5) — feedback loop **eliminato**.
+- ✅ **4/5 top-1 = chunk YAML manuale** (Q1 va su PROGRAMMA_OMNIA, comunque fonte legittima).
+- ✅ **4/5 confidence ≥ 0.20 HIGH** (Q3 scende leggermente sotto in medium 0.189, ma comunque valida — non insufficient).
+- ✅ **0/5 insufficient_context**.
+
+### File modificati
+```
+♻️ backend/apps/immoweb/hal_knowledge.py       (rimosso CHANGELOG.md + commento)
+♻️ memory/GAP.md                               (voce HAL Knowledge v0.3 - corpus cleanup)
+♻️ memory/CHANGELOG.md                         (questo entry — che paradossalmente non è più nel corpus)
+```
+
+### Commit message
+```
+chore(hal-knowledge): exclude CHANGELOG from RAG corpus
+
+Post-live-test finding: CHANGELOG.md contains query test examples
+that create a TF-IDF feedback loop, forcing top-1 hits to point to
+"Query test cold start" section instead of the manual's YAML chunks.
+
+Fix:
+- Remove CHANGELOG.md from CORPUS_FILES in hal_knowledge.py
+
+Verified on preview (after purge + reindex force=true):
+- 0/5 top-1 = CHANGELOG (target 0/5) - loop resolved
+- 4/5 top-1 = manual YAML chunks (Q1 goes to PROGRAMMA_OMNIA, legit)
+- 4/5 confidence >= 0.20 HIGH
+- 0/5 insufficient_context
+- total chunks: 472 (was 609 including CHANGELOG noise)
+- manual_hal_indexed still 56
+```
+
+### Prossimo (attende Founder)
+- Verifica risposte HAL live via UI — le citazioni dovrebbero puntare al manuale
+- Se retrieval ancora migliorabile → TASK B-quater con Opzione 2 (boost YAML +0.15)
+- Oppure: TASK C · Cap. 6 · Portali/Publishing
+
+---
+
 ## 2026-08-06 (sera) — 🚀 TASK B-bis · HAL Knowledge ingest reale (Opzione A ATTIVA)
 
 **Tipo**: Attivazione motore RAG sulle 56 voci YAML del manuale (Cap. 1-5).

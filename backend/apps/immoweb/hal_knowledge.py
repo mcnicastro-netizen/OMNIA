@@ -64,7 +64,9 @@ CORPUS_FILES = [
     "PROGRAMMA_OMNIA.md",
     "ASPETTI_DA_APPROFONDIRE.md",
     "BUSINESS_MODEL.md",
-    "CHANGELOG.md",
+    # CHANGELOG.md ESCLUSO dal corpus RAG (TASK B-ter, 6-Ago-2026):
+    # documento di log troppo denso, cambia ogni giorno e — soprattutto —
+    # può contenere query test o esempi che creano feedback loop nel TF-IDF.
 ]
 MANUAL_DIR = MEMORY_ROOT / "manuale"
 HAL_YAML_DIR = MANUAL_DIR / "hal"  # voci HAL atomiche (Cap. 1..N)
