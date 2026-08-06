@@ -1,9 +1,11 @@
-# 💰 OMNIA — Pricing Book
+# 💰 OMNIA — Pricing Book (B2B agenzie)
 
-**Versione**: 3.0 (LISTINO UFFICIALE)
+**Versione**: 3.0 (LISTINO UFFICIALE B2B)
 **Ultima revisione**: 5 Agosto 2026 — approvato dal Founder
 **Stato**: 🟢 ATTIVO · sincronizzato con `backend/apps/billing/plans.py` + catalog Stripe sandbox
 **Sovrascrive**: v2.0 (bozza superata) e ogni listino Founders 50 precedente
+
+> 📎 **Per privati (portale ImmobilCloud)** → vedi **`PRICING_B2C.md`** v1.0 (rail carta one-shot, nessun credito).
 
 ---
 

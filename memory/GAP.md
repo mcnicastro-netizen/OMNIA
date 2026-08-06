@@ -91,6 +91,13 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Analytics A/B** — non menzionato (nessuna UI).
 - **Micro-tour Kling/Sora** — placeholder "in arrivo" in Cap. 3.6/3.7? No, in Cap. 13 (Virtual Staging). Cap. 3 non lo menziona.
 
+### Pricing B2C — 6-Ago-2026
+- **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
+- **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).
+- **Checkout Stripe B2C one-shot** = sprint successivo (endpoint `POST /api/billing/b2c/checkout` da implementare).
+- **Regola operativa cardine**: nessun servizio B2C sotto €0,99 (tranne lead magnet espliciti).
+- **B2B esclusivo** (non esposto lato /cloud): crediti, pacchetti ricarica, widget & API mensili, multiposting, CRM, Match, MLS.
+
 ---
 
 ## Sezione F · Azioni prossime (traccia in coda)

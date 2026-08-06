@@ -1,5 +1,80 @@
 # OMNIA — Changelog
 
+## 2026-08-06 — 🟢 TASK A-bis · Pricing B2C (ImmobilCloud privati)
+
+**Tipo**: Nuovo listino B2C separato + stub backend prodotti one-shot.
+**Fonte**: Founder 6 Agosto 2026 · Rail SEPARATO da B2B (crediti restano solo agenzie).
+
+### Cosa è stato costruito
+
+#### Nuovo listino ImmobilCloud B2C
+- **Rail** = Stripe carta one-shot. Zero crediti. Zero pacchetti minimi.
+- **Annunci privati** (ripristinati da v2.0 archivio git):
+  - 2 annunci attivi GRATIS
+  - Extra 90gg: €14,90 · Nascondi indirizzo: €5,90 · Foto extra pack 10: €3,90
+  - Premium >€1M / Affitti alti: €19,90
+  - Boost: Premium 30/90/180gg = €19,90/49,90/89,90 · TOP 30/90/180gg = €29,90/79,90/149,90
+- **Strumenti self-service `/cloud`**:
+  - **Valutatore base**: GRATIS 1×/12 mesi con email verificata (lead magnet)
+  - **Valutatore UNI 10750 + PDF**: **€2,99** (retail 5× vs B2B €0,60)
+  - **Comparatore mutui**: GRATIS illimitato (lead magnet → mediatore)
+  - **Virtual Staging**: €0,90/foto max 3 per annuncio UGC
+  - **HAL Legal**: €1,00/query con disclaimer obbligatorio
+  - 🔒 **Visura catastale**: "in arrivo" — non implementare checkout
+  - 🔒 **Planimetria catastale**: "in arrivo" — non implementare checkout (margine 20% troppo basso, validare fase 2)
+
+#### Regole operative documentate
+- ❌ **Nessun servizio B2C sotto €0,99** (tranne lead magnet espliciti gratuiti)
+- ❌ **Esclusi dal B2C**: crediti, pacchetti ricarica, widget & API mensili, multiposting, CRM, Match, MLS
+- ✅ **Anti-abuso**: email verify + cap annuali per lead magnet, rate limit 20 query/ora per IP su HAL Legal
+
+#### Documentazione margini (interno)
+Sezione dedicata in `PRICING_B2C.md` con costi vivi + Stripe fees ~1,4% + €0,25:
+- UNI 10750: €2,99 → **€2,55 netto (85%)**
+- HAL Legal: €1,00 → **€0,70 netto (70%)**
+- Virtual Staging: €0,90 → **€0,58 netto (65%)** ⚠️ borderline (funnel verso agenzia)
+
+#### Backend stub
+- ✨ NEW `backend/apps/billing/b2c_products.py` (156 righe):
+  - `B2C_ONE_SHOT_PRODUCTS` (3 prodotti attivi con `stripe_lookup_key`)
+  - `B2C_FREE_LEAD_MAGNETS` (2 gratuiti documentati)
+  - `B2C_COMING_SOON` (2 in arrivo: visura, planimetria — con `cost_ref_eur` per traccia)
+  - Helper: `get_b2c_product()`, `is_b2c_free()`, `is_b2c_coming_soon()`
+- 🚫 **Checkout Stripe B2C one-shot** NON implementato in questo sprint (endpoint `POST /api/billing/b2c/checkout` da fare nello sprint successivo)
+
+#### File modificati
+- ✨ NEW `memory/PRICING_B2C.md` (v1.0 · 7 sezioni · 220+ righe)
+- ✨ NEW `backend/apps/billing/b2c_products.py` (stub 156 righe)
+- ♻️ MOD `memory/PRICING_OMNIA.md` (v3.0 → titolo "B2B agenzie" + cross-link a PRICING_B2C.md)
+- ♻️ MOD `memory/GAP.md` (voce Pricing B2C 6-Ago-2026 in Sezione E)
+- ♻️ MOD `memory/CHANGELOG.md` (questo entry)
+
+### Commit message consigliato
+```
+feat(pricing): B2C catalog v1.0 + stub b2c_products
+
+Docs:
+- memory/PRICING_B2C.md v1.0 (ImmobilCloud privati)
+  - Annunci privati: 2 gratis, extra 14.90, Premium/TOP 30/90/180gg
+  - Strumenti self-service: UNI+PDF 2.99, staging 0.90, HAL Legal 1.00
+  - Lead magnet gratuiti: Valuator base 1×/12m, Mortgage compare
+  - Coming soon: visura, planimetria (fase 2)
+- PRICING_OMNIA.md v3.0 -> titolo "B2B agenzie" + cross-link a B2C
+
+Backend:
+- b2c_products.py stub (products, free lead magnets, coming soon)
+- Checkout Stripe B2C one-shot: sprint successivo
+
+Docs collaterali:
+- GAP.md: voce Pricing B2C 6-Ago-2026
+- CHANGELOG.md: TASK A-bis
+```
+
+### Prossimo (a discrezione Founder)
+- TASK B · HAL Knowledge v0 (cold start RAG su 56 voci) — attende "vai"
+
+---
+
 ## 2026-08-05 (micro-fix) — 🩹 Pricing valuator crediti
 
 **Tipo**: Micro-fix listino post-TASK A (richiesta Founder subito dopo push).
