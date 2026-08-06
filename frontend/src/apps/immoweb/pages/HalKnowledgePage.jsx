@@ -125,6 +125,18 @@ export default function HalKnowledgePage() {
           </p>
         </div>
 
+        {/* Corpus manuale in indicizzazione: mostra il banner finché
+            non ci sono chunk YAML del manuale nell'indice */}
+        {status && (status.manual_hal_indexed ?? 0) === 0 && (
+          <div
+            data-testid="hal-manual-indexing-banner"
+            className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          >
+            📖 <strong>Corpus manuale in indicizzazione</strong> — Le 56 voci del Manuale Operativo (Cap. 1-5) saranno disponibili a breve.
+            Nel frattempo HAL Knowledge risponde già su PRD, ROADMAP, DECISIONS e altri documenti tecnici.
+          </div>
+        )}
+
         {/* Question form */}
         <form onSubmit={submit} className="bg-white border border-stone-200 rounded-lg p-4 space-y-3">
           <label className="text-xs uppercase tracking-widest text-stone-500 block">La tua domanda</label>

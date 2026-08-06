@@ -394,9 +394,13 @@ _ROLES = ("agency_admin", "super_admin", "branch_admin", "group_admin", "agent")
 async def hal_status(user: dict = Depends(require_roles(*_ROLES))):
     db = Database.get()
     total = await db.hal_knowledge_chunks.count_documents({})
+    manual_hal_chunks = await db.hal_knowledge_chunks.count_documents(
+        {"file": {"$regex": r"\.yaml$"}}
+    )
     meta = await db.hal_knowledge_meta.find_one({"id": "singleton"}, {"_id": 0, "blob": 0})
     return {
         "chunks_indexed": total,
+        "manual_hal_indexed": manual_hal_chunks,  # >0 quando le voci YAML del manuale sono attive
         "index": meta or {"empty": True},
         "model": {"provider": MODEL_PROVIDER, "name": MODEL_NAME},
         "corpus_files": CORPUS_FILES,

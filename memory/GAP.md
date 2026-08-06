@@ -98,6 +98,13 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Regola operativa cardine**: nessun servizio B2C sotto €0,99 (tranne lead magnet espliciti).
 - **B2B esclusivo** (non esposto lato /cloud): crediti, pacchetti ricarica, widget & API mensili, multiposting, CRM, Match, MLS.
 
+### HAL Knowledge v0.1 cold start — 6-Ago-2026
+- **`hal-index.json`** generato programmaticamente dai 5 YAML manuale (56 voci · 47 KB · MD5 per voce e per file).
+- **`IMPORT_HAL.md`** documentazione operativa: strategia chunk (1 voce YAML = 1 chunk atomico), rendering testo chunk, 2 opzioni implementative (Opzione A raccomandata: loader YAML in `ingest_corpus`), 5 query test con voce attesa.
+- **Banner UI** aggiunto in `HalKnowledgePage.jsx`: mostra "corpus manuale in indicizzazione" finché `status.manual_hal_indexed === 0`.
+- **Backend `/status` endpoint**: aggiunto campo `manual_hal_indexed` che conta chunk con `file` `.yaml`.
+- **Non implementato in questo TASK B**: l'ingest reale delle 56 voci (Opzione A da applicare in commit separato). Motore TF-IDF resta invariato (D-061).
+
 ---
 
 ## Sezione F · Azioni prossime (traccia in coda)

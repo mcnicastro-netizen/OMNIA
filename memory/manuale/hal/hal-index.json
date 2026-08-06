@@ -1,0 +1,1860 @@
+{
+  "generated_at": "2026-08-06T09:06:31.531267+00:00",
+  "version": "v0.1-cold-start",
+  "source_files": [
+    {
+      "file": "01-primo-accesso.yaml",
+      "md5": "ad257aa007f03b72a9c9e95ab0906e9e",
+      "voci_count": 10
+    },
+    {
+      "file": "02-dashboard.yaml",
+      "md5": "4d2ebe2a34d34791826205c824ecd089",
+      "voci_count": 8
+    },
+    {
+      "file": "03-immobili.yaml",
+      "md5": "844e6fee2c955a0e4d083cfc1122252e",
+      "voci_count": 15
+    },
+    {
+      "file": "04-clienti.yaml",
+      "md5": "a3ecb03c3fe8f5a2a617050a8580432e",
+      "voci_count": 12
+    },
+    {
+      "file": "05-match.yaml",
+      "md5": "c26d5030132b083025f681ad728a01bc",
+      "voci_count": 11
+    }
+  ],
+  "voci": [
+    {
+      "id": "primo-accesso.cosa-e-omnia",
+      "titolo": "Cos'è OMNIA in tre minuti",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "orientamento",
+        "primi-passi",
+        "panoramica"
+      ],
+      "correlati": [
+        "primo-accesso.tour-barra-sinistra",
+        "hal-agents.introduzione",
+        "dashboard.panoramica-iniziale"
+      ],
+      "domanda_naturale": "Cos'è OMNIA e cosa ci posso fare?",
+      "screenshot": [
+        "[SCREEN: cap1-orientamento-generale]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 0
+      },
+      "content_md5": "ac45b565c6bd62aae7ca439b006b61cd"
+    },
+    {
+      "id": "primo-accesso.login-primo-ingresso",
+      "titolo": "Accedere per la prima volta a ImmoWeb",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "login",
+        "credenziali",
+        "primi-passi"
+      ],
+      "correlati": [
+        "primo-accesso.password-dimenticata",
+        "primo-accesso.cambiare-password",
+        "collaboratori.invita-collaboratore"
+      ],
+      "domanda_naturale": "Come entro in OMNIA la prima volta?",
+      "screenshot": [
+        "[SCREEN: cap1-login-form]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "ee462d3328edf8679ec665325f70656f"
+    },
+    {
+      "id": "primo-accesso.password-dimenticata",
+      "titolo": "Recuperare la password dimenticata",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "password",
+        "recupero",
+        "sicurezza"
+      ],
+      "correlati": [
+        "primo-accesso.login-primo-ingresso",
+        "primo-accesso.cambiare-password"
+      ],
+      "domanda_naturale": "Ho dimenticato la password, come faccio?",
+      "screenshot": [
+        "[SCREEN: cap1-forgot-password]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "16ef5c92251e68a84e809c5412981fbe"
+    },
+    {
+      "id": "primo-accesso.cambiare-password",
+      "titolo": "Cambiare la password in un secondo momento",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "password",
+        "profilo",
+        "sicurezza"
+      ],
+      "correlati": [
+        "primo-accesso.password-dimenticata",
+        "primo-accesso.profilo-utente"
+      ],
+      "domanda_naturale": "Come cambio la password mentre sono loggato?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "94508652018bdf233e1a975c1a8ffd4d"
+    },
+    {
+      "id": "primo-accesso.onboarding-agenzia",
+      "titolo": "Configurare l'agenzia al primo accesso (wizard 4 passi)",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "onboarding",
+        "configurazione",
+        "agenzia",
+        "primi-passi"
+      ],
+      "correlati": [
+        "impostazioni.dati-fiscali",
+        "sito-web.brand-studio",
+        "primo-accesso.tour-barra-sinistra"
+      ],
+      "domanda_naturale": "Come configuro la mia agenzia la prima volta?",
+      "screenshot": [
+        "[SCREEN: cap1-onboarding-step4-conferma]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 3
+      },
+      "content_md5": "ed75b3b166837faafe2438fe4fa3bfa4"
+    },
+    {
+      "id": "primo-accesso.tour-barra-sinistra",
+      "titolo": "Cosa contiene la barra a sinistra",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "navigazione",
+        "sidebar",
+        "orientamento"
+      ],
+      "correlati": [
+        "dashboard.panoramica-iniziale",
+        "immobili.creazione-manuale",
+        "clienti.anagrafica-nuovo-cliente"
+      ],
+      "domanda_naturale": "Cosa c'è nel menu di sinistra di ImmoWeb?",
+      "screenshot": [
+        "[SCREEN: cap1-sidebar-completa]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "7d27923f48bbf5099ccd41d2602138d3"
+    },
+    {
+      "id": "primo-accesso.cambio-lingua",
+      "titolo": "Cambiare la lingua dell'interfaccia",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "lingua",
+        "interfaccia",
+        "i18n"
+      ],
+      "correlati": [
+        "primo-accesso.profilo-utente"
+      ],
+      "domanda_naturale": "Come cambio la lingua di ImmoWeb?",
+      "screenshot": [
+        "[SCREEN: cap1-language-switcher]"
+      ],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "71971e0f8109fda86d75dcf6b2a040ee"
+    },
+    {
+      "id": "primo-accesso.profilo-utente",
+      "titolo": "Aggiornare il proprio profilo utente",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "profilo",
+        "account",
+        "personale"
+      ],
+      "correlati": [
+        "primo-accesso.cambiare-password",
+        "primo-accesso.selettore-agenzia"
+      ],
+      "domanda_naturale": "Come modifico il mio profilo e la mia foto?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "09598c245216e1fa3ed819ff5b3cfd47"
+    },
+    {
+      "id": "primo-accesso.selettore-agenzia",
+      "titolo": "Cambiare agenzia attiva (se sei in più agenzie)",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "agente",
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "multi-agenzia",
+        "franchising",
+        "selettore"
+      ],
+      "correlati": [
+        "primo-accesso.profilo-utente",
+        "collaboratori.invita-collaboratore"
+      ],
+      "domanda_naturale": "Sono in due agenzie diverse, come faccio a passare dall'una all'altra?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "e03fbb6a4a36d633f5b3390e01f6a7e6"
+    },
+    {
+      "id": "primo-accesso.uscire",
+      "titolo": "Uscire da ImmoWeb (logout)",
+      "modulo": "Primo accesso",
+      "widget": null,
+      "capitolo": "01",
+      "source_file": "01-primo-accesso.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "logout",
+        "sicurezza"
+      ],
+      "correlati": [
+        "primo-accesso.login-primo-ingresso"
+      ],
+      "domanda_naturale": "Come esco dal mio account?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 0
+      },
+      "content_md5": "648cf37167586b0a54e71908249196bc"
+    },
+    {
+      "id": "dashboard.panoramica-iniziale",
+      "titolo": "A cosa serve la Dashboard",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "orientamento",
+        "primi-passi"
+      ],
+      "correlati": [
+        "dashboard.6-contatori",
+        "dashboard.dove-vado-dopo",
+        "primo-accesso.tour-barra-sinistra"
+      ],
+      "domanda_naturale": "A cosa serve la Dashboard di ImmoWeb?",
+      "screenshot": [
+        "[SCREEN: cap2-dashboard-panoramica]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "b298c6c692c83a475a9f971b1bf538a0"
+    },
+    {
+      "id": "dashboard.6-contatori",
+      "titolo": "I sei contatori della Dashboard",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "kpi",
+        "contatori",
+        "panoramica"
+      ],
+      "correlati": [
+        "dashboard.immobili-attivi",
+        "dashboard.lead-aperti",
+        "dashboard.nuovi-match",
+        "dashboard.visite-settimana",
+        "dashboard.dove-vado-dopo"
+      ],
+      "domanda_naturale": "Cosa significano i sei numeri della Dashboard?",
+      "screenshot": [
+        "[SCREEN: cap2-dashboard-kpi-6cards]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "b44079fc82ba74de80ef450ff64e0d5b"
+    },
+    {
+      "id": "dashboard.immobili-attivi",
+      "titolo": "Come leggere \"Immobili attivi\"",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "immobili",
+        "kpi"
+      ],
+      "correlati": [
+        "immobili.creazione-manuale",
+        "immobili.pubblicare-bozza",
+        "dashboard.6-contatori"
+      ],
+      "domanda_naturale": "Perché sono importanti gli 'Immobili attivi' e cosa faccio se salgono o scendono?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "1968471d8058a93100a446040f4f0c72"
+    },
+    {
+      "id": "dashboard.lead-aperti",
+      "titolo": "Come leggere \"Lead aperti\"",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "lead",
+        "clienti",
+        "kpi"
+      ],
+      "correlati": [
+        "clienti.anagrafica-nuovo-cliente",
+        "clienti.filtro-per-stato",
+        "dashboard.6-contatori"
+      ],
+      "domanda_naturale": "Cosa faccio quando i 'Lead aperti' aumentano?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "36293da6646d551d4e00a2e262b02800"
+    },
+    {
+      "id": "dashboard.nuovi-match",
+      "titolo": "Come leggere \"Nuovi match (7gg)\"",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "match",
+        "matching",
+        "lead-scoring",
+        "kpi"
+      ],
+      "correlati": [
+        "match.come-funziona",
+        "match.lead-scoring",
+        "dashboard.6-contatori"
+      ],
+      "domanda_naturale": "Perché ho pochi 'Nuovi match' questa settimana?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "30ca738f6ce5068012ba8fe7b7e0cdbc"
+    },
+    {
+      "id": "dashboard.visite-settimana",
+      "titolo": "Come leggere \"Visite (7gg)\"",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "visite",
+        "agenda",
+        "kpi"
+      ],
+      "correlati": [
+        "dashboard.6-contatori",
+        "clienti.filtro-per-stato"
+      ],
+      "domanda_naturale": "Perché non vedo visite in agenda per questa settimana?",
+      "screenshot": [],
+      "counts": {
+        "passi": 2,
+        "errori_comuni": 1
+      },
+      "content_md5": "d204bf6cfe71c3837f0fdb05a2aa3394"
+    },
+    {
+      "id": "dashboard.collaboratori-inviti",
+      "titolo": "Come leggere \"Collaboratori\" e \"Inviti pendenti\"",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "collaboratori",
+        "inviti",
+        "kpi"
+      ],
+      "correlati": [
+        "collaboratori.invita-collaboratore",
+        "collaboratori.revoca-collaboratore",
+        "dashboard.6-contatori"
+      ],
+      "domanda_naturale": "Cosa mi dicono i numeri di 'Collaboratori' e 'Inviti pendenti'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 2,
+        "errori_comuni": 1
+      },
+      "content_md5": "9c358a46840ea8e1624447fad25ec8f5"
+    },
+    {
+      "id": "dashboard.dove-vado-dopo",
+      "titolo": "Dopo la Dashboard, dove vado?",
+      "modulo": "Dashboard",
+      "widget": null,
+      "capitolo": "02",
+      "source_file": "02-dashboard.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "dashboard",
+        "orientamento",
+        "routing"
+      ],
+      "correlati": [
+        "dashboard.6-contatori",
+        "clienti.filtro-per-stato",
+        "match.lead-scoring",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Cosa devo fare dopo aver visto la Dashboard?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 0
+      },
+      "content_md5": "502b3cbf8640f115479d6a569fe5c10b"
+    },
+    {
+      "id": "immobili.creazione-manuale",
+      "titolo": "Creare un nuovo immobile a mano",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "inserimento",
+        "primi-passi"
+      ],
+      "correlati": [
+        "immobili.caricare-foto",
+        "immobili.privacy-scegliere-livello",
+        "immobili.pubblicare-bozza",
+        "immobili.importare-csv"
+      ],
+      "domanda_naturale": "Come inserisco un nuovo immobile?",
+      "screenshot": [
+        "[SCREEN: cap3-property-form-nuovo]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "2ced7cd3fdba143c2acc7ebbae32a9e7"
+    },
+    {
+      "id": "immobili.importare-csv",
+      "titolo": "Importare immobili da file CSV",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "import",
+        "csv",
+        "migrazione"
+      ],
+      "correlati": [
+        "immobili.importare-xml",
+        "immobili.importare-xml-universale",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Come importo un elenco di immobili da CSV?",
+      "screenshot": [
+        "[SCREEN: cap3-import-csv-flow]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "d3b94148617b65960ba23044445a6afc"
+    },
+    {
+      "id": "immobili.importare-xml",
+      "titolo": "Importare immobili da XML (rapido)",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "import",
+        "xml",
+        "migrazione",
+        "feed"
+      ],
+      "correlati": [
+        "immobili.importare-csv",
+        "immobili.importare-xml-universale"
+      ],
+      "domanda_naturale": "Come importo immobili da un file o feed XML?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "d9b66bebfecaf06e433b0de30ce2a840"
+    },
+    {
+      "id": "immobili.importare-xml-universale",
+      "titolo": "Import XML universale con analisi (Menu Importa)",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "import",
+        "xml",
+        "migrazione",
+        "universal-importer"
+      ],
+      "correlati": [
+        "immobili.importare-xml",
+        "immobili.importare-csv"
+      ],
+      "domanda_naturale": "Devo migrare molti immobili da un altro gestionale, come faccio?",
+      "screenshot": [
+        "[SCREEN: cap3-xml-import-preview]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "d25fad746bfd3b38d53d43389f534a14"
+    },
+    {
+      "id": "immobili.caricare-foto",
+      "titolo": "Caricare fotografie di un immobile",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "foto",
+        "media",
+        "upload"
+      ],
+      "correlati": [
+        "immobili.impostare-copertina",
+        "immobili.pubblicare-bozza"
+      ],
+      "domanda_naturale": "Come aggiungo le foto a un immobile?",
+      "screenshot": [
+        "[SCREEN: cap3-photos-dropzone-cover]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 3
+      },
+      "content_md5": "efd69c61685609000129789dfb7e2f77"
+    },
+    {
+      "id": "immobili.impostare-copertina",
+      "titolo": "Impostare la foto di copertina",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "foto",
+        "copertina"
+      ],
+      "correlati": [
+        "immobili.caricare-foto"
+      ],
+      "domanda_naturale": "Come cambio la foto principale (di copertina)?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "e26c0bdf42da00ac3c6e691b361bb8b8"
+    },
+    {
+      "id": "immobili.privacy-4-livelli-cosa-sono",
+      "titolo": "Cosa sono i 4 livelli di privacy",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "privacy",
+        "gdpr",
+        "visibilita"
+      ],
+      "correlati": [
+        "immobili.privacy-scegliere-livello",
+        "immobili.nascondere-indirizzo"
+      ],
+      "domanda_naturale": "Cosa significano L1, L2, L3, L4 sulla privacy di un immobile?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "58a7a2b646787f95c1213693818caa19"
+    },
+    {
+      "id": "immobili.privacy-scegliere-livello",
+      "titolo": "Scegliere il livello di privacy di un immobile",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "privacy",
+        "esclusiva",
+        "riservatezza"
+      ],
+      "correlati": [
+        "immobili.privacy-4-livelli-cosa-sono",
+        "immobili.nascondere-indirizzo"
+      ],
+      "domanda_naturale": "Che livello di privacy metto per un immobile esclusivo?",
+      "screenshot": [
+        "[SCREEN: cap3-privacy-selector]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "f35eb42b31dc50d13d8adf44f6ef9acd"
+    },
+    {
+      "id": "immobili.nascondere-indirizzo",
+      "titolo": "Nascondere solo l'indirizzo esatto (senza cambiare privacy)",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "privacy",
+        "indirizzo"
+      ],
+      "correlati": [
+        "immobili.privacy-scegliere-livello"
+      ],
+      "domanda_naturale": "Voglio pubblicare pubblicamente ma senza mostrare la via, si può?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 0
+      },
+      "content_md5": "e6ea40e7caff7ffdc77e08f31387370b"
+    },
+    {
+      "id": "immobili.pubblicare-bozza",
+      "titolo": "Passare un immobile da Bozza a Pubblicato",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "stato",
+        "pubblicazione"
+      ],
+      "correlati": [
+        "immobili.cambiare-stato",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Ho creato un immobile ma non compare nei contatori, perché?",
+      "screenshot": [
+        "[SCREEN: cap3-state-select]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "774c54792d843b0581d7839b0e873fd8"
+    },
+    {
+      "id": "immobili.cambiare-stato",
+      "titolo": "Cambiare stato durante il ciclo di vita (Prenotato, Venduto, Affittato, Ritirato)",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "stato",
+        "ciclo-vita",
+        "archivio"
+      ],
+      "correlati": [
+        "immobili.pubblicare-bozza",
+        "immobili.eliminare-definitivo"
+      ],
+      "domanda_naturale": "Ho venduto un immobile, come lo tolgo dai portali?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "3b6fdb740930d88a588db90afc91808f"
+    },
+    {
+      "id": "immobili.eliminare-definitivo",
+      "titolo": "Eliminare definitivamente un immobile",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "immobili",
+        "eliminazione",
+        "archivio",
+        "definitivo"
+      ],
+      "correlati": [
+        "immobili.cambiare-stato"
+      ],
+      "domanda_naturale": "Posso cancellare un immobile per sempre?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "ce69ca0ed20637426f215d34d3602a9a"
+    },
+    {
+      "id": "immobili.fascicolo-panoramica",
+      "titolo": "Cos'è il Fascicolo Immobile e come funziona la checklist",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "fascicolo",
+        "documenti",
+        "rogito"
+      ],
+      "correlati": [
+        "immobili.fascicolo-caricare-documento",
+        "immobili.fascicolo-ape"
+      ],
+      "domanda_naturale": "A cosa serve il Fascicolo Immobile?",
+      "screenshot": [
+        "[SCREEN: cap3-fascicolo-checklist]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 0
+      },
+      "content_md5": "a31883c588167c577584cdc15537c591"
+    },
+    {
+      "id": "immobili.fascicolo-caricare-documento",
+      "titolo": "Caricare un documento nel Fascicolo",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "fascicolo",
+        "documenti",
+        "upload"
+      ],
+      "correlati": [
+        "immobili.fascicolo-panoramica",
+        "immobili.fascicolo-ape"
+      ],
+      "domanda_naturale": "Come carico la visura catastale nel Fascicolo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "9d3ea2a26d4044dacdb9dddfa3950840"
+    },
+    {
+      "id": "immobili.fascicolo-ape",
+      "titolo": "APE (Attestato Prestazione Energetica) — come gestirlo",
+      "modulo": "Immobili",
+      "widget": null,
+      "capitolo": "03",
+      "source_file": "03-immobili.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "immobili",
+        "fascicolo",
+        "ape",
+        "energia",
+        "tecnico"
+      ],
+      "correlati": [
+        "immobili.fascicolo-caricare-documento",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Come faccio l'APE dell'immobile?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "44cf2249a89740dc7f2191a5ba40b229"
+    },
+    {
+      "id": "clienti.creare-nuovo",
+      "titolo": "Creare un nuovo cliente in anagrafica",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "anagrafica",
+        "inserimento",
+        "primi-passi"
+      ],
+      "correlati": [
+        "clienti.tipi-cliente",
+        "clienti.stato-crm",
+        "clienti.preferenze-ricerca",
+        "clienti.import-csv-template"
+      ],
+      "domanda_naturale": "Come inserisco un nuovo cliente?",
+      "screenshot": [
+        "[SCREEN: cap4-client-form-nuovo]"
+      ],
+      "counts": {
+        "passi": 10,
+        "errori_comuni": 2
+      },
+      "content_md5": "0823a859977d7385746cc7d98c67b598"
+    },
+    {
+      "id": "clienti.tipi-cliente",
+      "titolo": "I cinque tipi di cliente",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "tipologia",
+        "funnel"
+      ],
+      "correlati": [
+        "clienti.creare-nuovo",
+        "clienti.preferenze-ricerca",
+        "clienti.collegare-immobile-venditore"
+      ],
+      "domanda_naturale": "Che differenza c'è tra Acquirente, Venditore, Affittuario, Proprietario e Investitore?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "eb1b0811ad8adcc8cee667012292d55e"
+    },
+    {
+      "id": "clienti.stato-crm",
+      "titolo": "Gli stati del funnel commerciale (workflow CRM)",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "funnel",
+        "stato",
+        "workflow",
+        "crm"
+      ],
+      "correlati": [
+        "clienti.creare-nuovo",
+        "dashboard.lead-aperti"
+      ],
+      "domanda_naturale": "Cosa significano gli stati Nuovo, Contattato, Qualificato, Trattativa?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "3e0576da2e0205eedaa65860cde8c722"
+    },
+    {
+      "id": "clienti.preferenze-ricerca",
+      "titolo": "Compilare le preferenze di ricerca di un acquirente",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "preferenze",
+        "match",
+        "ricerca",
+        "acquirenti"
+      ],
+      "correlati": [
+        "clienti.creare-nuovo",
+        "clienti.tipi-cliente",
+        "dashboard.nuovi-match"
+      ],
+      "domanda_naturale": "Come inserisco cosa cerca il cliente?",
+      "screenshot": [
+        "[SCREEN: cap4-preferences-form]"
+      ],
+      "counts": {
+        "passi": 11,
+        "errori_comuni": 2
+      },
+      "content_md5": "097cb5ae64e768832d6b2698d20c0a65"
+    },
+    {
+      "id": "clienti.gdpr-consenso",
+      "titolo": "Consenso GDPR e privacy",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "gdpr",
+        "privacy",
+        "compliance"
+      ],
+      "correlati": [
+        "clienti.creare-nuovo"
+      ],
+      "domanda_naturale": "Cosa faccio con il consenso GDPR del cliente?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "265e5bc2107c33d6792b2b998c40af95"
+    },
+    {
+      "id": "clienti.import-csv-template",
+      "titolo": "Importare clienti da CSV con template",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "clienti",
+        "import",
+        "csv",
+        "migrazione"
+      ],
+      "correlati": [
+        "clienti.smart-import-ai",
+        "clienti.creare-nuovo"
+      ],
+      "domanda_naturale": "Come importo tutti i miei clienti dal vecchio Excel?",
+      "screenshot": [
+        "[SCREEN: cap4-import-csv-flow]"
+      ],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 3
+      },
+      "content_md5": "71a1fcf4da274450484aa4b057fee860"
+    },
+    {
+      "id": "clienti.smart-import-ai",
+      "titolo": "Smart Import AI (qualsiasi file — Excel, vCard, testo)",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "clienti",
+        "import",
+        "ai",
+        "smart-import",
+        "vcard",
+        "xlsx",
+        "migrazione"
+      ],
+      "correlati": [
+        "clienti.import-csv-template",
+        "clienti.creare-nuovo"
+      ],
+      "domanda_naturale": "Ho un file Excel disordinato del vecchio CRM, come lo importo?",
+      "screenshot": [
+        "[SCREEN: cap4-smart-import-ai-preview]"
+      ],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 2
+      },
+      "content_md5": "088b2a288b7cc373567c18b6746cb8b7"
+    },
+    {
+      "id": "clienti.collegare-immobile-venditore",
+      "titolo": "Collegare un cliente venditore/proprietario a un immobile",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "clienti",
+        "immobili",
+        "venditore",
+        "proprietario",
+        "mandato",
+        "link"
+      ],
+      "correlati": [
+        "clienti.tipi-cliente",
+        "immobili.creazione-manuale"
+      ],
+      "domanda_naturale": "Come collego il proprietario alla scheda dell'immobile?",
+      "screenshot": [
+        "[SCREEN: cap4-property-seller-link]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "0d05f3b2ad335a02f3138fe5f839ae76"
+    },
+    {
+      "id": "clienti.smart-sorting-buckets",
+      "titolo": "Smart Sorting — i bucket per priorità (Roventi, Caldi, Tiepidi, Freddi)",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "smart-sorting",
+        "buckets",
+        "priorita",
+        "lead-scoring"
+      ],
+      "correlati": [
+        "clienti.temperatura-lead-scoring",
+        "clienti.azioni-rapide",
+        "dashboard.lead-aperti"
+      ],
+      "domanda_naturale": "Cosa sono i bucket 'Roventi', 'Caldi', 'Tiepidi' sopra la lista clienti?",
+      "screenshot": [
+        "[SCREEN: cap4-smart-sorting-buckets]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 1
+      },
+      "content_md5": "7e0348493dea2be99469a021ac6f8908"
+    },
+    {
+      "id": "clienti.temperatura-lead-scoring",
+      "titolo": "La temperatura (Lead Scoring AI) — introduzione",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "lead-scoring",
+        "ai",
+        "temperatura",
+        "priorita"
+      ],
+      "correlati": [
+        "clienti.smart-sorting-buckets",
+        "match.lead-scoring",
+        "dashboard.nuovi-match"
+      ],
+      "domanda_naturale": "Perché un cliente è marcato 'Rovente' e un altro 'Freddo'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 2
+      },
+      "content_md5": "a2016a30cbfcf365d6a7fa20058ee938"
+    },
+    {
+      "id": "clienti.azioni-rapide",
+      "titolo": "Azioni rapide su un cliente (Chiama, WhatsApp)",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "azioni-rapide",
+        "chiamata",
+        "whatsapp",
+        "quick-actions"
+      ],
+      "correlati": [
+        "clienti.smart-sorting-buckets"
+      ],
+      "domanda_naturale": "Come chiamo o mando un WhatsApp a un cliente dalla lista?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "9f087ae11fe51527a2f60d973ce60463"
+    },
+    {
+      "id": "clienti.archiviare-eliminare",
+      "titolo": "Archiviare o eliminare un cliente",
+      "modulo": "Clienti",
+      "widget": null,
+      "capitolo": "04",
+      "source_file": "04-clienti.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "clienti",
+        "archivio",
+        "eliminazione",
+        "chiusura"
+      ],
+      "correlati": [
+        "clienti.stato-crm"
+      ],
+      "domanda_naturale": "Come archivio o elimino un cliente che non è più attivo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 2
+      },
+      "content_md5": "06e817d639d2a10bd8e03ccbeddd6979"
+    },
+    {
+      "id": "match.come-funziona",
+      "titolo": "Come funziona il motore Match",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "matching",
+        "motore",
+        "primi-passi"
+      ],
+      "correlati": [
+        "match.scala-temperature",
+        "match.14-criteri",
+        "match.zero-match"
+      ],
+      "domanda_naturale": "Come funziona il matching in ImmoWeb?",
+      "screenshot": [
+        "[SCREEN: cap5-matches-lista]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "71c7232e3701bdf1bf94f6f167692a30"
+    },
+    {
+      "id": "match.scala-temperature",
+      "titolo": "La scala ROVENTE / CALDO / TIEPIDO / FREDDO",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "temperatura",
+        "priorita",
+        "rovente",
+        "caldo",
+        "tiepido",
+        "freddo"
+      ],
+      "correlati": [
+        "match.14-criteri",
+        "match.workflow-giornata",
+        "clienti.temperatura-lead-scoring"
+      ],
+      "domanda_naturale": "Cosa significano ROVENTE, CALDO, TIEPIDO, FREDDO?",
+      "screenshot": [
+        "[SCREEN: cap5-temperature-legenda]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "898bd54917f937a19d81703aef4faf79"
+    },
+    {
+      "id": "match.14-criteri",
+      "titolo": "I 14 criteri di scoring e i loro pesi",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "match",
+        "scoring",
+        "criteri",
+        "pesi",
+        "algoritmo"
+      ],
+      "correlati": [
+        "match.scala-temperature",
+        "match.breakdown-dettaglio",
+        "immobili.creazione-manuale",
+        "clienti.preferenze-ricerca"
+      ],
+      "domanda_naturale": "Come è calcolato il punteggio 0-100 di un match?",
+      "screenshot": [
+        "[SCREEN: cap5-scoring-breakdown]"
+      ],
+      "counts": {
+        "passi": 12,
+        "errori_comuni": 2
+      },
+      "content_md5": "96929146557c3c511133f31dd80111b1"
+    },
+    {
+      "id": "match.lista-e-filtro",
+      "titolo": "La pagina Match e il filtro Score minimo",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "lista",
+        "filtri",
+        "score",
+        "priorita"
+      ],
+      "correlati": [
+        "match.match-per-immobile",
+        "match.match-per-cliente",
+        "match.workflow-giornata"
+      ],
+      "domanda_naturale": "Come uso la pagina Match e il filtro Score minimo?",
+      "screenshot": [
+        "[SCREEN: cap5-lista-filtri]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 1
+      },
+      "content_md5": "9f3011015fd406d76cbbfac1dc7452e6"
+    },
+    {
+      "id": "match.breakdown-dettaglio",
+      "titolo": "Il breakdown del punteggio (dettaglio match)",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "match",
+        "dettaglio",
+        "breakdown",
+        "missing"
+      ],
+      "correlati": [
+        "match.14-criteri",
+        "match.lista-e-filtro"
+      ],
+      "domanda_naturale": "Come vedo perché un match ha un certo punteggio?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 0
+      },
+      "content_md5": "f9f04746a1bcb06c2cf2fa649335bb31"
+    },
+    {
+      "id": "match.match-per-immobile",
+      "titolo": "Vedere i match di un singolo immobile (\"chi vuole questo?\")",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "immobili",
+        "mandato",
+        "chi-vuole"
+      ],
+      "correlati": [
+        "match.match-per-cliente",
+        "match.lista-e-filtro"
+      ],
+      "domanda_naturale": "Ho un nuovo mandato, a chi lo propongo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "48eb092573ce77ab0753715ea2ec7e72"
+    },
+    {
+      "id": "match.match-per-cliente",
+      "titolo": "Vedere i match di un singolo cliente (\"cosa gli consiglio?\")",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "clienti",
+        "proposta",
+        "consulenza"
+      ],
+      "correlati": [
+        "match.match-per-immobile",
+        "clienti.preferenze-ricerca"
+      ],
+      "domanda_naturale": "Che immobili posso proporre a questo cliente?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "9d1c2486fea992fc07d53ce57a1b3dbf"
+    },
+    {
+      "id": "match.lead-scoring-ai",
+      "titolo": "Lead Scoring AI — cos'è e quando aggiornarlo",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "match",
+        "ai",
+        "lead-scoring",
+        "gemini",
+        "crediti"
+      ],
+      "correlati": [
+        "clienti.temperatura-lead-scoring",
+        "match.scala-temperature",
+        "clienti.smart-sorting-buckets"
+      ],
+      "domanda_naturale": "Cosa aggiunge il Lead Scoring AI oltre al punteggio automatico?",
+      "screenshot": [
+        "[SCREEN: cap5-lead-scoring-ai]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "98c363730290139323ec743384a5a73b"
+    },
+    {
+      "id": "match.workflow-giornata",
+      "titolo": "Workflow operativo — la giornata tipo sul modulo Match",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "workflow",
+        "power-hour",
+        "giornata-tipo",
+        "produttivita"
+      ],
+      "correlati": [
+        "match.scala-temperature",
+        "match.lista-e-filtro",
+        "clienti.azioni-rapide"
+      ],
+      "domanda_naturale": "Come organizzo la mattinata usando Match?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "013b676e2634b0585ebba17c8865bbf4"
+    },
+    {
+      "id": "match.zero-match",
+      "titolo": "Zero match — cosa fare quando la pagina è vuota",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "match",
+        "troubleshooting",
+        "zero-match",
+        "checklist"
+      ],
+      "correlati": [
+        "immobili.pubblicare-bozza",
+        "clienti.preferenze-ricerca",
+        "clienti.tipi-cliente"
+      ],
+      "domanda_naturale": "Perché la pagina Match è vuota?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "a409e88fdbab9e5f00bda25b04d2024a"
+    },
+    {
+      "id": "match.ricalcolo-manuale",
+      "titolo": "Aggiornare manualmente i punteggi AI (bottone \"⚡ Aggiorna AI\")",
+      "modulo": "Match",
+      "widget": null,
+      "capitolo": "05",
+      "source_file": "05-match.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "match",
+        "ricalcolo",
+        "ai",
+        "aggiornamento",
+        "crediti"
+      ],
+      "correlati": [
+        "match.lead-scoring-ai",
+        "clienti.temperatura-lead-scoring"
+      ],
+      "domanda_naturale": "Quando devo cliccare '⚡ Aggiorna AI'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "77ce23c492ea0594f0c83f5ec9f3d33f"
+    }
+  ],
+  "stats": {
+    "totale_voci": 56,
+    "per_capitolo": {
+      "01": 10,
+      "02": 8,
+      "03": 15,
+      "04": 12,
+      "05": 11
+    },
+    "per_modulo": {
+      "Primo accesso": 10,
+      "Dashboard": 8,
+      "Immobili": 15,
+      "Clienti": 12,
+      "Match": 11
+    },
+    "per_livello": {
+      "base": 41,
+      "intermedio": 15
+    },
+    "per_pubblico": {
+      "titolare": 56,
+      "agente": 51,
+      "segreteria": 45
+    },
+    "totale_correlati": 135,
+    "totale_tags_unici": 120
+  }
+}

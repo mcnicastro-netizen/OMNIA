@@ -1,5 +1,85 @@
 # OMNIA — Changelog
 
+## 2026-08-06 (pomeriggio) — 🧠 TASK B · HAL Knowledge v0 cold start
+
+**Tipo**: Cold start RAG su manuale Cap. 1-5 (56 voci HAL YAML).
+**Fonte**: Founder 6 Ago 2026 · Prossimo passo dopo TASK A-bis.
+
+### Cosa è stato costruito
+
+#### Deliverable 1 — `memory/manuale/hal/hal-index.json` (nuovo)
+Catalogo statico di **56 voci HAL** con metadati per lookup rapido:
+- `id`, `titolo`, `modulo`, `capitolo`, `source_file`
+- `pubblico`, `livello`, `tags`, `correlati`, `domanda_naturale`
+- `screenshot[]`, `counts` (passi + errori_comuni), `content_md5`
+- Stats globali: per capitolo (10/8/15/12/11) · per livello (base 41 · intermedio 15) · per pubblico (titolare 56 · agente 51 · segreteria 45) · 120 tag unici · 135 correlati
+- Fingerprint per invalidazione cache: `md5` per file sorgente + `content_md5` per voce
+- Size: 47 KB
+
+#### Deliverable 2 — `memory/manuale/hal/IMPORT_HAL.md` (nuovo)
+Documento operativo per l'indicizzazione:
+- Strategia chunk = **1 voce YAML atomica** (nessun re-split arbitrario)
+- Struttura testo chunk (`[TITOLO]`, `[DOMANDA]`, `[PASSI]`, `[ERRORI COMUNI]`, ecc.)
+- Metadati preservati per filtering/boosting
+- 2 opzioni implementative (A: integrata in `hal_knowledge.py` · B: script standalone). Raccomandata Opzione A.
+- Contesto tecnico: TF-IDF + cosine (D-061, no LLM cost per embedding)
+- **5 query test** documentate con voce attesa e confidence minima
+- Criteri accettazione cold start v0.1 (5/5 top-3, 4/5 confidence ≥0.20)
+
+#### Deliverable 3 — Banner "corpus manuale in indicizzazione"
+- Frontend `HalKnowledgePage.jsx`: banner ambra data-testid `hal-manual-indexing-banner` mostrato quando `status.manual_hal_indexed === 0`.
+- Backend `hal_knowledge.py`: aggiunto campo `manual_hal_indexed` in `GET /status` (count di chunk con `file` che finisce in `.yaml`).
+- Il banner scompare automaticamente non appena l'ingestion delle voci YAML è completata.
+
+#### Query test cold start (5 documentate)
+1. *"Come cancello un cliente che ha immobili in carico?"* → `clienti.archiviare-eliminare`
+2. *"Cosa vede un anonimo di un immobile marcato L3?"* → `immobili.privacy-4-livelli-cosa-sono`
+3. *"Perché un cliente è marcato ROVENTE?"* → `match.scala-temperature`
+4. *"Perché la pagina Match è vuota?"* → `match.zero-match`
+5. *"Ho un file Excel disordinato del vecchio CRM, come lo importo?"* → `clienti.smart-import-ai`
+
+### File modificati (per commit su GitHub)
+```
+✨ NEW    memory/manuale/hal/hal-index.json       (56 voci · 47 KB)
+✨ NEW    memory/manuale/hal/IMPORT_HAL.md        (guida operativa + 5 query test)
+♻️ MOD    backend/apps/immoweb/hal_knowledge.py   (+3 righe: manual_hal_indexed in /status)
+♻️ MOD    frontend/src/apps/immoweb/pages/HalKnowledgePage.jsx  (+9 righe: banner "in indicizzazione")
+♻️ MOD    memory/GAP.md                          (voce HAL Knowledge v0.1 in Sezione E)
+♻️ MOD    memory/CHANGELOG.md                    (questo entry)
+```
+
+### Commit message consigliato
+```
+feat(hal-knowledge): cold start v0.1 — index + docs + banner
+
+Deliverable:
+- memory/manuale/hal/hal-index.json (56 voci Cap. 1-5, metadati + MD5)
+- memory/manuale/hal/IMPORT_HAL.md (guida chunk-strategy + 5 query test)
+
+Backend:
+- hal_knowledge.py: /status ora espone manual_hal_indexed (chunk YAML count)
+
+Frontend:
+- HalKnowledgePage.jsx: banner "corpus manuale in indicizzazione"
+  visibile fino al primo ingest delle 56 voci YAML
+
+Non incluso in questo commit (arriva con il ingest reale):
+- Loader YAML dentro ingest_corpus() (Opzione A documentata in IMPORT_HAL.md)
+- Reindex prod + validazione 5 query test
+```
+
+### Note operative
+- **Nessun costo LLM speso** in questo TASK B (solo generazione index e docs).
+- **Nessuna modifica al motore TF-IDF** esistente (D-061 confermato).
+- Il vero ingest delle 56 voci si attiva quando il Founder darà OK per applicare l'Opzione A documentata (piccolo add-on `~30 righe` in `ingest_corpus`).
+
+### Prossimo (attende approvazione Founder)
+- Implementare Opzione A (loader YAML in `ingest_corpus`)
+- Eseguire reindex e verificare 5 query test
+- Oppure: proseguire con TASK C · Cap. 6 · Portali/Publishing
+
+---
+
 ## 2026-08-06 — 🟢 TASK A-bis · Pricing B2C (ImmobilCloud privati)
 
 **Tipo**: Nuovo listino B2C separato + stub backend prodotti one-shot.
