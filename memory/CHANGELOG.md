@@ -1,5 +1,79 @@
 # OMNIA — Changelog
 
+## 2026-08-05 — 🟢 TASK A · Pricing Sync (Listino Founder ufficiale)
+
+**Tipo**: Aggiornamento listino ufficiale + rigenerazione catalog Stripe sandbox.
+**Fonte**: Founder 5 Agosto 2026 · Sovrascrive PRICING_OMNIA v2.0 (bozza)
+
+### Cosa è stato costruito
+
+#### Nuovo listino Founders 12 mesi
+- **Starter** €49/mese · **Pro** €99/mese · **Agency** €249/mese
+- Crediti inclusi/mese: **120 · 1.200 · 3.600**
+- Max utenti: **3 · 10 · illimitati**
+- Max immobili: **30 · 200 · illimitati**
+- **Multiposting standard + Portal Wizard custom su tutti i piani** (D-041)
+
+#### Listino Standard (dopo 12 mesi Founders)
+- Starter €79 · Pro €179 · Agency €349
+
+#### Pacchetti crediti (ratio fisso 20 cr/€)
+- Mini €20→400 · Small €50→1.000 · Standard €100→2.000
+- Plus €250→5.000 · Power €500→10.000 · Enterprise €1.000→20.000
+
+#### Consumo crediti (valore 1 credito = €0,05)
+- SMS 4 · HAL Agents 4 · HAL Legal 12 · Virtual Staging 18
+- Valuator base 20 · Visura catastale 24 · Valuator UNI+PDF 40
+- APE search 60 · Micro-tour video 60
+- TOP 400 · Premium 1.000 · In Evidenza 2.000
+- **RIMOSSI**: planimetria catastale, ispezione ipotecaria (margini troppo bassi in v1)
+
+#### Sincronizzazione tecnica
+- ♻️ MOD `backend/apps/billing/plans.py` — riscritto (LAUNCH_PLANS + POST_TRACTION_PLANS + CREDIT_PACKAGES + CREDIT_COSTS + nuovo campo `credits_included_monthly`)
+- ✅ **Catalog Stripe sandbox rigenerato** con `python -m apps.billing.setup_stripe`:
+  - 4 Product+Price abbonamenti (starter/pro/agency/enterprise × monthly+yearly)
+  - 6 Product+Price pacchetti crediti (pkg_400/1000/2000/5000/10000/20000)
+  - Vecchi prezzi disattivati (idempotenza garantita)
+- ✅ API `/api/billing/plans` verificata: risponde con listino corretto + credits_included_monthly
+
+#### Documentazione
+- ♻️ RESCRITTO `memory/PRICING_OMNIA.md` v3.0 (listino ufficiale, sostituisce v2.0)
+  - Filosofia (7 regole), tabelle Founders/Standard, sistema crediti, break-even aggiornato, trigger operativi, sincronizzazione tecnica, storico versioni.
+- ♻️ MOD `memory/CHANGELOG.md` (questo entry)
+- ♻️ MOD `memory/PRD.md` (status update)
+- ♻️ MOD `memory/ROADMAP.md` (task A ✅)
+
+### Note importanti
+- **Enterprise resta nel catalogo** con prezzi legacy (€299/2990) per non rompere il modello dati — posizionamento e Custom API pricing rivisti in sessione dedicata.
+- **Break-even aggiornato**: 10 agency mix realistico → ≈€250 margine netto/mese (era break-even). 50 Founders pieno → ~€48k/anno (era ~€29k con listino €39/99/249).
+
+### File modificati (per commit su GitHub)
+```
+♻️ backend/apps/billing/plans.py           (listino sync)
+✨ memory/PRICING_OMNIA.md                 (v3.0 riscrittura completa)
+♻️ memory/CHANGELOG.md                     (questo entry)
+♻️ memory/PRD.md                            (status update)
+♻️ memory/ROADMAP.md                        (task A ✅)
+```
+
+**Commit message suggerito**:
+```
+feat(pricing): sync to Founder catalog 5-Aug-2026
+
+- Founders 12m: Starter €49, Pro €99, Agency €249
+- Standard: €79/179/349 · Credits included: 120/1200/3600
+- Credit packages: 6 tiers, fixed 20 cr/€ ratio
+- Credit costs: staging 18, legal 12, visura 24 (planim/ipoteca removed)
+- Regenerate Stripe sandbox catalog (idempotent)
+- Rewrite memory/PRICING_OMNIA.md v3.0
+```
+
+### Prossimi task
+- TASK B: HAL Knowledge v0 cold start su 56 voci (5 capitoli manuale)
+- TASK C: Cap. 6 · Portali/Publishing
+
+---
+
 ## 2026-02-27 (notte) — 🟢 Manuale Cap. 5 · Match + 3 fix v1.0.1 su Cap. 4
 
 **Tipo**: Documentazione manuale utente (Fase 2, iterazione 3) + fix redazionali basati su verifica codice.

@@ -76,10 +76,11 @@ class TestBillingPlans:
         plans = data.get("plans") or []
         tiers = {p["tier"] for p in plans}
         assert {"starter", "pro", "agency", "enterprise"}.issubset(tiers), f"got tiers={tiers}"
-        # 3 credit packages
+        # 6 credit packages (listino Founder 5-Ago-2026)
         pkgs = data.get("credit_packages") or []
         pkg_keys = {p["key"] for p in pkgs}
-        assert {"pkg_50", "pkg_200", "pkg_1000"}.issubset(pkg_keys), f"got pkg_keys={pkg_keys}"
+        assert {"pkg_400", "pkg_1000", "pkg_2000",
+                "pkg_5000", "pkg_10000", "pkg_20000"}.issubset(pkg_keys), f"got pkg_keys={pkg_keys}"
         # Enabled + test mode
         assert data.get("enabled") is True, "expected enabled=True (stripe in test mode)"
         assert data.get("mode") == "test", f"expected mode=test, got {data.get('mode')}"
@@ -87,8 +88,8 @@ class TestBillingPlans:
     def test_plan_prices(self, http):
         r = http.get(f"{API}/billing/plans")
         plans = {p["tier"]: p for p in r.json()["plans"]}
-        # Prices are 19/29/79/299 monthly
-        expected = {"starter": 19, "pro": 29, "agency": 79, "enterprise": 299}
+        # Founder catalog 5-Ago-2026: Starter 49, Pro 99, Agency 249, Enterprise 299
+        expected = {"starter": 49, "pro": 99, "agency": 249, "enterprise": 299}
         for tier, price in expected.items():
             p = plans.get(tier, {})
             monthly = p.get("price_monthly_eur") or p.get("monthly_price_eur") or p.get("price_monthly") or p.get("prices", {}).get("monthly")
@@ -97,7 +98,9 @@ class TestBillingPlans:
     def test_credit_package_prices(self, http):
         r = http.get(f"{API}/billing/plans")
         pkgs = {p["key"]: p for p in r.json()["credit_packages"]}
-        expected = {"pkg_50": 9, "pkg_200": 29, "pkg_1000": 119}
+        # Founder catalog 5-Ago-2026: ratio fisso 20 crediti/€
+        expected = {"pkg_400": 20, "pkg_1000": 50, "pkg_2000": 100,
+                    "pkg_5000": 250, "pkg_10000": 500, "pkg_20000": 1000}
         for k, price in expected.items():
             got = pkgs.get(k, {}).get("price_eur")
             assert got == price, f"{k}: expected {price}, got {got}"
@@ -122,7 +125,7 @@ class TestBillingCheckout:
 
     def test_credits_purchase(self, http, auth_headers):
         r = http.post(f"{API}/billing/credits/purchase",
-                      json={"package_key": "pkg_200"}, headers=auth_headers)
+                      json={"package_key": "pkg_1000"}, headers=auth_headers)
         assert r.status_code == 200, f"got {r.status_code}: {r.text[:400]}"
         data = r.json()
         assert data["checkout_url"].startswith("https://checkout.stripe.com/"), data

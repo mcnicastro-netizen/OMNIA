@@ -4,6 +4,20 @@
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
 **Founder**: mcnicastro-netizen
 
+- **Ultimo update (05-Ago-2026 — TASK A · Pricing Sync ufficiale)**:
+  - ✅ **Listino Founder 5-Ago-2026 sincronizzato** in codice + Stripe + docs:
+    - Founders 12m: Starter **€49** · Pro **€99** · Agency **€249** · crediti/mese **120/1200/3600**
+    - Standard: €79/179/349
+    - Pacchetti crediti 6 tier, ratio fisso 20 cr/€ (€20→400 fino a €1000→20000)
+    - Consumo: staging 18, HAL Legal 12, visura 24, valuator UNI+PDF 40, video 60, promozioni 400/1000/2000
+    - **Rimossi**: planimetria catastale, ispezione ipotecaria (margini bassi in v1)
+    - Multiposting + Portal Wizard custom **inclusi su tutti i piani**
+  - ✅ **Catalog Stripe sandbox rigenerato** (idempotente) via `python -m apps.billing.setup_stripe`.
+  - ♻️ `backend/apps/billing/plans.py` riscritto con nuovo campo `credits_included_monthly` esposto in `/api/billing/plans`.
+  - ✨ `memory/PRICING_OMNIA.md` v3.0 — LISTINO UFFICIALE (sostituisce ogni bozza precedente incluso v2.0).
+  - 📌 **Enterprise** resta con prezzi legacy €299/2990 — sessione dedicata su posizionamento + Custom API.
+  - 📌 **Break-even ricalcolato**: mix realistico 10 agency → +€250 margine/mese · 50 Founders pieno → ~€48k/anno.
+
 - **Ultimo update (27-Feb-2026 notte — Cap. 5 · Match + 3 fix v1.0.1 su Cap. 4)**:
   - ✅ **Cap. 5 · Match**: 11 sottocapitoli + **11 voci HAL YAML**. Copre motore matching, scala temperature 🔥🌶️☀️❄️ con range precisi (85/65/40 dal codice), 14 criteri di scoring con pesi esatti (Prezzo 17 · Operazione 14 · Città 12 · Tipologia 11 · … · Piano 3 = 100), pagina Match con filtri Score min, Lead Scoring AI (deterministic vs AI), workflow giornata tipo con power hour ROVENTI + regola 80/20, troubleshooting zero-match.
   - ✅ **3 Fix Cap. 4 · Clienti v1.0.1** (verificati sul backend):

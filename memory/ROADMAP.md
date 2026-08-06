@@ -1,13 +1,13 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 27 Febbraio 2026 (notte) — 🟢 **Sprint 2: Manuale Cap. 1-5 consegnati (56 voci HAL, 5/26 capitoli, 19%) + 3 fix v1.0.1 Cap. 4 verificati sul codice**
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md` (traccia discrepanze codice↔UI↔manuale)
+**Ultimo aggiornamento**: 5 Agosto 2026 — 🟢 **TASK A · Pricing Sync completato — listino Founder ufficiale sincronizzato in codice + Stripe + docs**
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md`, `PRICING_OMNIA.md` v3.0
 
 ---
 
 ## 🎯 PRIORITÀ v3.0 (vincolanti — 06 Lug 2026)
 
-**🚨 ORDINE TASSATIVO 23-Feb-2026 — vedi `PIANO_ESECUZIONE.md`** (documento autoritativo, sostituisce ogni altra priorità fino a Sprint 4 chiuso)
+**🚨 REGOLA OPERATIVA 5-Ago-2026**: dopo OGNI task, il main agent aggiorna e salva i file nel repo (branch main). Push effettivo via "Save to Github" (limite tecnico platform).
 
 ```
 SPRINT 1 🔴  Chiusura M2.5 al 100% → M2.5.5 Domain Vault ✅ + M2.6c Social Publisher ⏸️ (bloccato Meta App ID/Secret) + M2.6d Universal Portal Wizard ✅
@@ -18,14 +18,16 @@ SPRINT 2 🟡  M5.S2-pre Manuale Operativo + M5.S2 HAL Knowledge (RAG)
               ├─ Cap. 3 · Immobili ✅ (15 voci HAL, v1.0.1)
               ├─ Cap. 4 · Clienti ✅ (12 voci HAL, v1.0.1 — 3 fix)
               ├─ Cap. 5 · Match ✅ (11 voci HAL)
-              ├─ 🎯 DECISIONE FOUNDER: cold start HAL Knowledge RAG su 56 voci OR Cap. 6 · Fascicolo
-              ├─ Cap. 6-26 + placeholder Academy/MLS 🔴
-              └─ Ingestion HAL Knowledge RAG (in valutazione ora — corpus sufficiente per cold start)
+              ├─ TASK A · Pricing Sync ufficiale ✅ (5-Ago-2026)
+              ├─ TASK B · HAL Knowledge v0 (cold start RAG su 56 voci) 🟡 NEXT
+              ├─ TASK C · Cap. 6 · Portali/Publishing 🔴
+              ├─ Cap. 7-26 + placeholder Academy/MLS 🔴
+              └─ TASK D · Screenshot kit — RIMANDATO (placeholder ok, post-pricing)
 SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
 SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness
 ```
 
-**Ultimo item chiuso**: ✅ **Manuale Cap. 5 · Match** (27-Feb-2026 notte) — 11 voci HAL validate, scala temperature con range esatti dal codice, 14 pesi criteri di scoring. Fix Cap. 4 v1.0.1: 3 correzioni verificate direttamente sul backend (bucket, delete, visibilità).
+**Ultimo item chiuso**: ✅ **TASK A · Pricing Sync** (5-Ago-2026) — Listino Founder ufficiale (Starter €49, Pro €99, Agency €249) sincronizzato in `plans.py`, catalog Stripe sandbox rigenerato, `PRICING_OMNIA.md` v3.0 riscritto (sostituisce v2.0 bozza). Break-even ricalcolato: 50 Founders pieno → ~€48k/anno.
 
 🛑 **Fuori scope fino a Sprint 4 chiuso**: video promo brand, nuove landing marketing, aspetti da approfondire A-001/A-002/A-003, APE integration, M4, M6, pre-launch commerciale.
 
