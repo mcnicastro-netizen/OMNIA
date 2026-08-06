@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP OMNIA — Stato avanzamento
 
-**Ultimo aggiornamento**: 27 Febbraio 2026 (sera) — 🟢 **Sprint 2: Manuale Cap. 1-4 consegnati (45 voci HAL, 4/26 capitoli, 15%) · GAP.md formale · fix L4 privacy + Dashboard**
-**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md` (nuovo — traccia discrepanze codice↔UI↔manuale)
+**Ultimo aggiornamento**: 27 Febbraio 2026 (notte) — 🟢 **Sprint 2: Manuale Cap. 1-5 consegnati (56 voci HAL, 5/26 capitoli, 19%) + 3 fix v1.0.1 Cap. 4 verificati sul codice**
+**Riferimento completo**: vedi `PROGRAMMA_OMNIA.md` (v3.1 — ordine P0→P4), `CHANGELOG.md`, `DECISIONS.md`, `GAP.md` (traccia discrepanze codice↔UI↔manuale)
 
 ---
 
@@ -16,15 +16,16 @@ SPRINT 2 🟡  M5.S2-pre Manuale Operativo + M5.S2 HAL Knowledge (RAG)
               ├─ Cap. 1 · Primo Accesso ✅ (10 voci HAL, v1.0.2)
               ├─ Cap. 2 · Dashboard ✅ (8 voci HAL)
               ├─ Cap. 3 · Immobili ✅ (15 voci HAL, v1.0.1)
-              ├─ Cap. 4 · Clienti ✅ (12 voci HAL)
-              ├─ Cap. 5 · Match 🟡 NEXT (Lead Scoring dettagliato)
+              ├─ Cap. 4 · Clienti ✅ (12 voci HAL, v1.0.1 — 3 fix)
+              ├─ Cap. 5 · Match ✅ (11 voci HAL)
+              ├─ 🎯 DECISIONE FOUNDER: cold start HAL Knowledge RAG su 56 voci OR Cap. 6 · Fascicolo
               ├─ Cap. 6-26 + placeholder Academy/MLS 🔴
-              └─ Ingestion HAL Knowledge RAG (post Cap. 5, corpus cold start pronto)
+              └─ Ingestion HAL Knowledge RAG (in valutazione ora — corpus sufficiente per cold start)
 SPRINT 3 🟢  Chiusura backlog M3 (ricerca avanzata + privacy) + M5.S4 (Reverse Staging + Video + A/B)
 SPRINT 4 🔵  Perf hardening (async geocoding + projection list) + Deploy readiness
 ```
 
-**Ultimo item chiuso**: ✅ **Manuale Cap. 4 · Clienti** (27-Feb-2026 sera) — 12 voci HAL validate, Smart Import AI documentato, property-seller link. Fix v1.0.1 su Cap. 3 (L4 privacy), Cap. 1 v1.0.2 (attività recenti). GAP.md formale creato.
+**Ultimo item chiuso**: ✅ **Manuale Cap. 5 · Match** (27-Feb-2026 notte) — 11 voci HAL validate, scala temperature con range esatti dal codice, 14 pesi criteri di scoring. Fix Cap. 4 v1.0.1: 3 correzioni verificate direttamente sul backend (bucket, delete, visibilità).
 
 🛑 **Fuori scope fino a Sprint 4 chiuso**: video promo brand, nuove landing marketing, aspetti da approfondire A-001/A-002/A-003, APE integration, M4, M6, pre-launch commerciale.
 

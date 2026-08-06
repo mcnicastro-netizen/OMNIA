@@ -4,6 +4,15 @@
 **Data**: Gennaio 2026 (ultimo update: 27-Feb-2026 — micro-cleanup Stripe/R9)
 **Founder**: mcnicastro-netizen
 
+- **Ultimo update (27-Feb-2026 notte — Cap. 5 · Match + 3 fix v1.0.1 su Cap. 4)**:
+  - ✅ **Cap. 5 · Match**: 11 sottocapitoli + **11 voci HAL YAML**. Copre motore matching, scala temperature 🔥🌶️☀️❄️ con range precisi (85/65/40 dal codice), 14 criteri di scoring con pesi esatti (Prezzo 17 · Operazione 14 · Città 12 · Tipologia 11 · … · Piano 3 = 100), pagina Match con filtri Score min, Lead Scoring AI (deterministic vs AI), workflow giornata tipo con power hour ROVENTI + regola 80/20, troubleshooting zero-match.
+  - ✅ **3 Fix Cap. 4 · Clienti v1.0.1** (verificati sul backend):
+    - Bucket Venditori: filtro codice è `client_type not in SEARCHER_TYPES` (indipendente da immobili collegati).
+    - Delete client con immobili collegati: il backend blocca con 409, il manuale ora documenta il messaggio *"Impossibile eliminare: N immobile/i in carico"* e i passi per riassegnare.
+    - Visibilità agente: `list_clients` filtra solo per `agency_id`. Titolare + agente + segreteria vedono TUTTA l'anagrafica agenzia; il campo "agente assegnato" è solo per statistiche.
+  - 📸 Screenshots-index: +5 voci Cap. 5. Totale 28 screenshot catalogati.
+  - 📈 **Progresso manuale**: 5/26 capitoli (19%). Totale voci HAL: **56**. Prossimo (attesa decisione Founder): cold start HAL Knowledge RAG **OR** Cap. 6 · Fascicolo.
+
 - **Ultimo update (27-Feb-2026 sera — Cap. 4 · Clienti + fix v1.0.1/v1.0.2 + GAP.md formale)**:
   - ✅ **Cap. 4 · Clienti**: 7 sottocapitoli + **12 voci HAL YAML**. Copre anagrafica (5 tipi cliente, 7 stati CRM, GDPR), preferenze di ricerca, Import CSV con template, Smart Import AI (formati .csv/.xlsx/.vcf/.txt, powered by Gemini), collegamento property-seller, Smart Sorting con bucket 🔥🌶️☀️❄️ e Lead Scoring intro.
   - ✅ **Fix Cap. 3 v1.0.1** — L4 privacy: rimosso "e le agenzie in rete" (MLS network M4 non ancora implementato). L4 = solo team di agenzia.

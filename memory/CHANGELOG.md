@@ -1,5 +1,58 @@
 # OMNIA — Changelog
 
+## 2026-02-27 (notte) — 🟢 Manuale Cap. 5 · Match + 3 fix v1.0.1 su Cap. 4
+
+**Tipo**: Documentazione manuale utente (Fase 2, iterazione 3) + fix redazionali basati su verifica codice.
+
+### Cosa è stato costruito
+
+#### 3 Fix Cap. 4 · Clienti v1.0.1
+Verificati direttamente sul backend prima della correzione:
+- **Bucket Venditori** — codice `clients_smart.py`: filtro è `client_type not in SEARCHER_TYPES`, quindi contiene tutti i clienti Venditore/Proprietario/Investitore **indipendentemente** da immobili collegati. Corretto errore precedente ("con almeno un immobile collegato").
+- **Delete client con immobili collegati** — codice `clients.py:135-180`: il backend risponde 409 con detail *"client_has_linked_properties"*. Nel manuale documentato che il sistema **blocca l'eliminazione** e richiede riassegnazione/rimozione preventiva dai singoli immobili.
+- **Visibilità agente** — codice `clients.py:29-75`: `list_clients` filtra solo per `agency_id`. Corretto: **tutti (titolare/agente/segreteria) vedono l'intera anagrafica clienti dell'agenzia**. Il campo *"agente assegnato"* serve per statistiche, non per limitare la vista.
+
+Fix applicati sia a `04-clienti.md` che a `hal/04-clienti.yaml` (nuova voce di errore comune sull'eliminazione bloccata + 2 passi aggiuntivi).
+
+#### Cap. 5 · Match (11 voci HAL)
+- **11 sottocapitoli** (`/app/memory/manuale/05-match.md`, ~350 righe):
+  - 5.1 Come funziona il motore (compatibilità, non previsione)
+  - 5.2 Scala temperature: 🔥 **85-100** · 🌶️ **65-84** · ☀️ **40-64** · ❄️ **<40** (soglie verificate dal codice `lead_scoring.py` — 85/65/40)
+  - 5.3 **I 14 criteri di scoring con pesi esatti dal codice `matching.py`**: Prezzo 17 · Operazione 14 · Città 12 · Tipologia 11 · Superficie 7 · Features 6 · Zona 5 · Locali 5 · Camere 4 · Bagni 4 · Condizione 4 · Energia 4 · Multimedia 4 · Piano 3 = **100**
+  - 5.4 Pagina Match e filtro Score min (40+/50+/65+/85+ verificati da `MatchesPage.jsx`, default 50)
+  - 5.5 Match per immobile ("chi vuole questo?")
+  - 5.6 Match per cliente ("cosa gli consiglio?")
+  - 5.7 Lead Scoring AI (differenza dal deterministic, costo crediti Emergent LLM)
+  - 5.8 Filtri e ricerca
+  - 5.9 Workflow operativo "giornata tipo" con power hour ROVENTI 09:00-09:30 + regola 80/20
+  - 5.10 Zero match troubleshooting (checklist 5 punti)
+  - 5.11 Errori comuni
+- **11 voci HAL YAML** validate in `/app/memory/manuale/hal/05-match.yaml` (~430 righe): `come-funziona`, `scala-temperature`, `14-criteri`, `lista-e-filtro`, `breakdown-dettaglio`, `match-per-immobile`, `match-per-cliente`, `lead-scoring-ai`, `workflow-giornata`, `zero-match`, `ricalcolo-manuale`.
+- Operazione incompatibile documentata come **score 0 secco** (hard incompatibility).
+
+#### Screenshots Index aggiornato
+- 5 nuovi screenshot Cap. 5 (`cap5-matches-lista`, `temperature-legenda`, `scoring-breakdown`, `lista-filtri`, `lead-scoring-ai`).
+- **Totale index: 28 placeholder screenshot** (Cap. 1: 8, Cap. 2: 2, Cap. 3: 7, Cap. 4: 6, Cap. 5: 5).
+
+### File creati/modificati
+- ✨ NEW `/app/memory/manuale/05-match.md` (~350 righe)
+- ✨ NEW `/app/memory/manuale/hal/05-match.yaml` (11 voci, ~430 righe)
+- ♻️ MOD `/app/memory/manuale/04-clienti.md` (3 fix)
+- ♻️ MOD `/app/memory/manuale/hal/04-clienti.yaml` (3 fix)
+- ♻️ MOD `/app/memory/manuale/hal/screenshots-index.md` (Cap. 5 sezione, +5 screenshot)
+
+### Numeri aggiornati
+- **56 voci HAL** validate su 5 capitoli (di 26 previsti — **19% del manuale**)
+- **28 screenshot** placeholder catalogati
+- **5/26 capitoli** completi
+
+### Prossime decisioni Founder
+- **A**: Approvare Cap. 5 e procedere con cold start HAL Knowledge (RAG su 56 voci — verifica pipeline embeddings + retrieval + test query semantiche)
+- **B**: Approvare Cap. 5 e proseguire con Cap. 6 · Fascicolo (dedicato)
+- Raccomandazione: opzione A prima di ingoiare tutti i 26 capitoli in un colpo solo.
+
+---
+
 ## 2026-02-27 (sera) — 🟢 Manuale Cap. 4 · Clienti + fix v1.0.1/v1.0.2 + GAP.md formale
 
 **Tipo**: Documentazione manuale utente (Fase 2 iterazione) + fix redazionali.
