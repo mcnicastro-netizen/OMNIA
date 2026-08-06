@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T11:10:22.656958+00:00",
-  "version": "v0.3-cap7",
+  "generated_at": "2026-08-06T11:46:02.347804+00:00",
+  "version": "v0.4-cap8",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -35,6 +35,11 @@
     {
       "file": "07-fascicolo-immobile.yaml",
       "md5": "ab350f525bfd22b74a72250d8b95bb66",
+      "voci_count": 12
+    },
+    {
+      "file": "08-sito-web.yaml",
+      "md5": "8a75af77933c6cf241c5325d166dd189",
       "voci_count": 12
     }
   ],
@@ -2618,10 +2623,392 @@
         "errori_comuni": 1
       },
       "content_md5": "76aa5ee34ebbda3f6ab04d3a61f583e1"
+    },
+    {
+      "id": "sito.a-cosa-serve",
+      "titolo": "A cosa serve il modulo Sito web di ImmoWeb",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "publishing",
+        "panoramica",
+        "primi-passi"
+      ],
+      "correlati": [
+        "sito.brand-extractor",
+        "sito.temi-disponibili",
+        "sito.custom-domain"
+      ],
+      "domanda_naturale": "A cosa serve il modulo Sito web?",
+      "screenshot": [
+        "[SCREEN: cap8-website-panoramica]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "4da18e839a7c647db8c06b1f2f6a1c7a"
+    },
+    {
+      "id": "sito.brand-extractor",
+      "titolo": "Come funziona il Brand Extractor",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "brand",
+        "extractor",
+        "ai",
+        "gemini",
+        "palette"
+      ],
+      "correlati": [
+        "sito.auto-configura",
+        "sito.temi-disponibili"
+      ],
+      "domanda_naturale": "Come estraggo il brand dal mio sito esistente?",
+      "screenshot": [
+        "[SCREEN: cap8-brand-extractor]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 3
+      },
+      "content_md5": "e7efb1cec1dee5b10c22d02116b5d43b"
+    },
+    {
+      "id": "sito.temi-disponibili",
+      "titolo": "I 4 temi disponibili (Minimal, Classic, Bold, Luxury)",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "temi",
+        "design",
+        "minimal",
+        "classic",
+        "bold",
+        "luxury"
+      ],
+      "correlati": [
+        "sito.applicare-tema",
+        "sito.auto-configura",
+        "sito.brand-extractor"
+      ],
+      "domanda_naturale": "Quali temi posso scegliere per il sito?",
+      "screenshot": [
+        "[SCREEN: cap8-theme-picker]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "c572e78a113a7f03fa05213a4b7b93bb"
+    },
+    {
+      "id": "sito.applicare-tema",
+      "titolo": "Come applico un tema al sito",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "temi",
+        "applicare",
+        "palette",
+        "override"
+      ],
+      "correlati": [
+        "sito.temi-disponibili",
+        "sito.live-preview"
+      ],
+      "domanda_naturale": "Come applico un tema al mio sito?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "ed7946432b14d819016309b4be948bb3"
+    },
+    {
+      "id": "sito.auto-configura",
+      "titolo": "Auto-configurazione del sito dal brand estratto",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "auto-configure",
+        "brand",
+        "extractor",
+        "ai"
+      ],
+      "correlati": [
+        "sito.brand-extractor",
+        "sito.applicare-tema"
+      ],
+      "domanda_naturale": "Come applico automaticamente il brand estratto al sito?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "0b40e946e9a21310fd0ae70989fca09c"
+    },
+    {
+      "id": "sito.live-preview",
+      "titolo": "Anteprima live del sito nel CRM",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "preview",
+        "iframe",
+        "verifica"
+      ],
+      "correlati": [
+        "sito.applicare-tema",
+        "sito.vetrina-pubblica"
+      ],
+      "domanda_naturale": "Come vedo l'anteprima del sito prima di pubblicarlo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "11cd6c2eb7bfd8a36a7b7467e21d7458"
+    },
+    {
+      "id": "sito.vetrina-pubblica",
+      "titolo": "Cosa mostra la vetrina pubblica del sito",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "vetrina",
+        "home",
+        "immobili",
+        "seo"
+      ],
+      "correlati": [
+        "sito.a-cosa-serve",
+        "sito.scheda-pubblica",
+        "immobili.stato-ciclo-vita"
+      ],
+      "domanda_naturale": "Cosa vede un visitatore sulla home del mio sito OMNIA?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "806752db7669718b8126e7ebb33230b5"
+    },
+    {
+      "id": "sito.scheda-pubblica",
+      "titolo": "Cosa contiene la scheda pubblica di un immobile",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "scheda",
+        "immobile",
+        "seo",
+        "schema-org",
+        "condivisione"
+      ],
+      "correlati": [
+        "sito.vetrina-pubblica",
+        "sito.share-sociale",
+        "immobili.foto-ordinamento"
+      ],
+      "domanda_naturale": "Cosa vede un visitatore sulla scheda pubblica di un immobile?",
+      "screenshot": [
+        "[SCREEN: cap8-scheda-pubblica]"
+      ],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 2
+      },
+      "content_md5": "7d0cd304a45f7be8407b3114f3266e9c"
+    },
+    {
+      "id": "sito.share-sociale",
+      "titolo": "Come si condivide un immobile sui social",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "sito-web",
+        "share",
+        "whatsapp",
+        "facebook",
+        "email",
+        "condivisione"
+      ],
+      "correlati": [
+        "sito.scheda-pubblica"
+      ],
+      "domanda_naturale": "Come si condivide un immobile su WhatsApp o Facebook?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "5460e974b2386cd58ba9ad170853b078"
+    },
+    {
+      "id": "sito.custom-domain",
+      "titolo": "Come collego il mio dominio custom (www.tuoagenzia.it)",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "sito-web",
+        "dominio",
+        "dns",
+        "cname",
+        "txt",
+        "custom-domain"
+      ],
+      "correlati": [
+        "sito.custom-domain-verifica",
+        "sito.custom-domain-ssl"
+      ],
+      "domanda_naturale": "Come collego il mio dominio al sito OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap8-custom-domain-flow]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 3
+      },
+      "content_md5": "0e403f6a79e4d2a8f15b914b7b32e710"
+    },
+    {
+      "id": "sito.custom-domain-verifica",
+      "titolo": "Verifica DNS del dominio custom",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "sito-web",
+        "dominio",
+        "dns",
+        "verifica",
+        "txt",
+        "cname"
+      ],
+      "correlati": [
+        "sito.custom-domain",
+        "sito.custom-domain-ssl"
+      ],
+      "domanda_naturale": "Come verifico che i DNS del mio dominio siano configurati?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 3
+      },
+      "content_md5": "7132448949c28feb70267d4d6f6d5940"
+    },
+    {
+      "id": "sito.custom-domain-ssl",
+      "titolo": "Attivazione SSL sul dominio custom (step super_admin)",
+      "modulo": "Sito web",
+      "widget": null,
+      "capitolo": "08",
+      "source_file": "08-sito-web.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "sito-web",
+        "dominio",
+        "ssl",
+        "https",
+        "letsencrypt",
+        "super-admin"
+      ],
+      "correlati": [
+        "sito.custom-domain",
+        "sito.custom-domain-verifica"
+      ],
+      "domanda_naturale": "Perche' il mio dominio verificato non risponde in HTTPS?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "df25075569843a3275b05557e2344336"
     }
   ],
   "stats": {
-    "totale_voci": 80,
+    "totale_voci": 92,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -2629,7 +3016,8 @@
       "04": 12,
       "05": 11,
       "06": 12,
-      "07": 12
+      "07": 12,
+      "08": 12
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -2638,18 +3026,19 @@
       "Clienti": 12,
       "Match": 11,
       "Portali": 12,
-      "Fascicolo": 12
+      "Fascicolo": 12,
+      "Sito web": 12
     },
     "per_livello": {
-      "base": 59,
-      "intermedio": 21
+      "base": 68,
+      "intermedio": 24
     },
     "per_pubblico": {
-      "titolare": 80,
-      "agente": 75,
+      "titolare": 92,
+      "agente": 78,
       "segreteria": 54
     },
-    "totale_correlati": 190,
-    "totale_tags_unici": 181
+    "totale_correlati": 217,
+    "totale_tags_unici": 215
   }
 }

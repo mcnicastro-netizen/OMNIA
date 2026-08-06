@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 7 Fascicolo Immobile · aggiunta Sezione E Cap. 7 · micro-fix cross-ref Cap. 3 §3.6/§3.7 · fix Cap. 1 §1.4 portali v1)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 8 Sito web agenzia · aggiunta Sezione E Cap. 8)
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -30,7 +30,7 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-7) indicizzato con **80 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-8) indicizzato con **92 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
 | **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | ✅ Coperto in Cap. 7 · Fascicolo Immobile §7.5. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
@@ -117,6 +117,23 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Cross-ref sistemata anche in Cap. 3**: rimosso link errato "Cap. 8 · Portali" (portali è Cap. 6), rimossa citazione "Immobiliare.it" in tabella errori comuni §3.7 (allineamento a v1 8-portali).
 - **Voce eliminazione documento** (`fascicolo.eliminare-documento`): il backend `DELETE` non discrimina il ruolo (segreteria può eliminare tecnicamente). Il manuale lo documenta come vincolo procedurale/policy: segreteria "usa con cura", non "non può". Onestà.
 - **Render Virtual Staging embedded** (`fascicolo.staging-nel-fascicolo`): il Fascicolo mostra fino a 12 render con status=done presi da `virtual_staging_jobs` (`fascicolo.py:153-156`). Il capitolo chiarisce che il Fascicolo non lancia nuovi render (rimando al modulo dedicato).
+
+### Cap. 8 · Sito web agenzia — Feb 2026
+- **4 temi documentati (Minimal, Classic, Bold, Luxury)** coincidono 1:1 con `THEME_CATALOG` in `themes.py` (linee 32-69). Palette e tipografia default = `DEFAULT_PALETTES` + `DEFAULT_TYPOGRAPHY` (linee 79-95).
+- **Nessun custom CSS in v1**: documentato onestamente. Gli override consentiti sono solo su palette (4 hex `^#[0-9A-Fa-f]{6}$`), typography (font-family CSS), logo_url (max 500 char), tagline (max 200 char) — verificato in `ApplyThemeRequest` Pydantic (`themes.py:622-627`).
+- **Brand Extractor**: documentato che usa **Gemini 3 Flash** via EMERGENT_LLM_KEY con schema JSON strutturato (`brand_extractor.py:28-66 SYSTEM_PROMPT`). Errori `emergent_llm_key_missing` (503), `ai_response_invalid` (502), `extraction_failed` (502), `fetch_failed`, `invalid_url_scheme` (400) tutti mappati 1:1 al codice (`brand_extractor.py:131-162`).
+- **Auto-configurazione**: `auto_pick_theme(brand_profile)` mapping documentato 1:1 (`themes.py:132-149`): voice=`lusso`→luxury, header=`bold`/card=`image_dominant`→bold, voice=`familiare`/`amichevole`→classic, voice=`tecnico`→bold, altrimenti→minimal. Palette dedotta da `_palette_from_brand_profile` con validazione hex (`themes.py:152-161`). `no_extracted_profile` (400) documentato come errore.
+- **Live Preview**: iframe punta a `/api/p/{slug}/?t={timestamp}` (anti-cache). Endpoint transient `GET /website/preview/{theme_id}` esposto ma usato solo dal componente iframe (`themes.py:743-777`), header `X-Robots-Tag: noindex` per non farsi indicizzare. Documentato onestamente.
+- **Sito pubblico** servito da `apps/immoweb/site.py`: la home carica **max 200 immobili** (`site.py:127`), la sitemap **max 5000** (`site.py:100`). Solo `status: active` (`site.py:98,126`). Ordinamento `updated_at` decrescente. Documentato 1:1.
+- **Schema.org JSON-LD**: `RealEstateAgent` sulla home (`themes.py:498-503`) + `Product` con `additionalType: RealEstateListing` + `offers` sulla scheda (`themes.py:584-601`). Con `areaServed = città` e `seller = agenzia`.
+- **Share block**: **4 canali** — WhatsApp (`wa.me`), Facebook (`sharer.php`), Email (`mailto:`), Copia link (`navigator.clipboard`) — con SVG inline, no script terzi. Fallback textarea per copy in browser vecchi (`themes.py:405-447`). Documentato onestamente.
+- **Foto pubbliche** (`/api/public/property/{pid}/photo/{idx}`): 3 formati storage documentati — Object Storage cifrato (H10) via `get_object`, URL esterna (302 redirect), base64 legacy (`data:...`). Header cache `public, max-age=86400` (`site.py:32-78`).
+- **Custom Domain — flusso 4-step con UN passo manuale**: onestà D-051 esplicita che l'attivazione SSL richiede lo step del super_admin sul pannello Emergent (`custom_domain.py:200-214` `_notify_super_admin_new_request`). Tempo tipico 24-48h lavorative documentato.
+- **DNS check** — TXT + CNAME risolti contro `1.1.1.1` (Cloudflare) e `8.8.8.8` (Google) tramite `dnspython` (`custom_domain.py:100-137`). Il TXT deve essere esattamente `omnia-verify={token}` (`custom_domain.py:149-152`). Il CNAME accetta anche A record che coincidono con il target risolto (`custom_domain.py:163-171`). Tutto documentato 1:1.
+- **`CNAME_TARGET` = `agencies.omniarealestateecosystem.it`** (default env `OMNIA_CUSTOM_DOMAIN_CNAME_TARGET`, `custom_domain.py:46`). **`TXT_RECORD_PREFIX` = `_omnia-challenge`** (`custom_domain.py:50`). Documentati esatti.
+- **`RESERVED_SUFFIXES`** documentati (`omniarealestateecosystem.it`, `emergent.host`, `emergentagent.com` — `custom_domain.py:52-58`) → il manuale spiega perché non puoi richiedere quei domini.
+- **Domain workflow endpoints**: `POST /website/domain/request`, `POST /website/domain/verify`, `DELETE /website/domain`, `GET /website/domain`, `GET /website/domain/admin/pending` (super_admin only). Documentati 1:1.
+- **Cosa NON è documentato (out of scope per manuale user-facing)**: middleware hostname routing `host_routing.py`, il DB agency schema completo `agencies.website.*`, tag `metadata` avanzati. Sezione D applicabile — non aggiunta perché nessuno chiede.
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.

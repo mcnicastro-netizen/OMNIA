@@ -118,6 +118,20 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 8 · Sito web agenzia
+
+| # | ID | Cosa mostrare | Priorità | Note | Fatto |
+|---|----|---------------|:-:|------|:-:|
+| 1 | `cap8-website-panoramica` | Vista completa pagina Sito web: hero + 4 sezioni visibili (Brand Extractor, Temi, Live Preview, Dominio personalizzato). L'iframe della preview mostra il sito pubblico brandato *Immobiliare Rossi*. | 🔴 | Agenzia demo con tema Classic attivo e 6-8 immobili nella vetrina. | — |
+| 2 | `cap8-brand-extractor` | Sezione Brand Extractor con URL già estratta (`https://www.nicastroimmobiliare.it/`): pannello risultato con confidence 78/100 verde, 4 chip palette, pill voice=professionale, header=classic, card=shadow_lift + bottone verde **⚡ Applica automaticamente**. | 🔴 | Confidence alta per mostrare il caso "ideale". | — |
+| 3 | `cap8-theme-picker` | Griglia 4 card temi (Minimal, Classic, Bold, Luxury) con anteprima palette a 3 chip su ognuna. Card "Classic" evidenziata come **✓ Attivo** in verde. | 🔴 | Serve come colpo d'occhio didattico sui 4 stili. | — |
+| 4 | `cap8-scheda-pubblica` | Screenshot della **scheda pubblica di un immobile** aperto dall'anteprima: hero titolo + prezzo grande + griglia foto + tabella caratteristiche + share block (WhatsApp/FB/Email/Copia link). | 🔴 | Immobile demo: appartamento Belpasso 3 locali, tema Classic per estetica istituzionale. Il più importante del capitolo. | — |
+| 5 | `cap8-custom-domain-flow` | Sezione Custom Domain con dominio `www.nicastroimmobiliare.it` già in stato **pending** (badge ambra): pannello DNS instructions con record TXT (`_omnia-challenge...`) + CNAME (`agencies.omnia...`) + bottone **Copia** + bottone **Verifica DNS**. | 🟡 | Utile ma opzionale: alcuni founder non arriveranno a questo step subito. | — |
+
+**Totale Cap. 8**: 5 screenshot (4 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -154,3 +168,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Ago 2026 | Aggiunte 5 righe Cap. 5 · Match |
 | Feb 2026 (Cap. 6) | Aggiunte 6 righe Cap. 6 · Portali / Publishing (5 essenziali, 1 utile) |
 | Feb 2026 (Cap. 7) | Aggiunte 5 righe Cap. 7 · Fascicolo Immobile (4 essenziali, 1 utile). Totale index = **39 screenshot** catalogati. |
+| Feb 2026 (Cap. 8) | Aggiunte 5 righe Cap. 8 · Sito web agenzia (4 essenziali, 1 utile). Totale index = **44 screenshot** catalogati. |

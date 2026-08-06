@@ -1,5 +1,97 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK E · Cap. 8 · Sito web agenzia (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — ottavo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-TASK D approvato · Cap. 8 = Sito web (site.py + themes.py + custom_domain.py + brand_extractor.py).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 8 · Sito web agenzia** (nuovo modulo verticale, mai documentato prima):
+- **Nuovo capitolo** `memory/manuale/08-sito-web.md` (~10 sottocapitoli, ~450 righe): panoramica sito pubblico OMNIA (`/api/p/{slug}/`), Brand Extractor (Gemini 3 Flash), catalogo 4 temi (Minimal/Classic/Bold/Luxury) con palette + tipografia default 1:1 al codice, auto-configurazione con heuristic mapping onesta, Live Preview iframe con anti-cache timestamp, vetrina pubblica (max 200 immobili, ordinati per updated_at desc), scheda pubblica con foto + share block 4 canali (WhatsApp/FB/Email/Copia link) + JSON-LD schema.org, workflow custom domain 4-step (TXT + CNAME → verifica DNS → attivazione SSL manuale super_admin), sitemap.xml, SEO, errori comuni.
+- **Nuovo YAML HAL** `memory/manuale/hal/08-sito-web.yaml` (~450 righe, **12 voci**): `a-cosa-serve`, `brand-extractor`, `temi-disponibili`, `applicare-tema`, `auto-configura`, `live-preview`, `vetrina-pubblica`, `scheda-pubblica`, `share-sociale`, `custom-domain`, `custom-domain-verifica`, `custom-domain-ssl`. Validato con `yaml.safe_load` + `_chunk_yaml_hal_file()` HAL RAG parser (12 chunk generati senza errori).
+- **`memory/manuale/hal/hal-index.json` rigenerato**: v0.4-cap8, ora **92 voci totali** (Cap. 1-8), 8 source files con md5 aggiornati, stats: base 68 · intermedio 24 · titolare 92 · agente 78 · segreteria 54 · 215 tag unici · 217 correlati.
+- **`memory/manuale/hal/IMPORT_HAL.md`** aggiornato a v0.4: header a 92 voci · nuova sezione "Smoke Cap. 8" con 3 query attese post-reindex · storico versioni esteso (v0.3-cap7 → v0.4-cap8).
+- **`memory/manuale/hal/screenshots-index.md`**: aggiunta sezione Cap. 8 con **5 nuove righe placeholder** (4 essenziali + 1 utile). Totale index: **44 screenshot** catalogati.
+- **`memory/GAP.md`**: aggiunta Sezione E per Cap. 8 con 14 punti di verifica onestà 1:1 al codice (`site.py`, `themes.py`, `brand_extractor.py`, `custom_domain.py`, WebsitePage.jsx); aggiornato Sezione A voce HAL Knowledge (80 → 92 voci).
+
+### Onestà documentale (D-051)
+- **4 temi documentati coincidono 1:1 con `THEME_CATALOG`** (`themes.py:32-69`). Zero invenzioni. Nessun claim su tema "in arrivo".
+- **Custom CSS NON supportato in v1**: dichiarato esplicitamente. Gli unici override sono palette (4 hex), typography (font-family), logo, tagline — tutto validato Pydantic (`ApplyThemeRequest`).
+- **Brand Extractor**: dichiarato che usa **Gemini 3 Flash** via EMERGENT_LLM_KEY. Errori mappati 1:1 al codice (`emergent_llm_key_missing` 503, `ai_response_invalid` 502, `extraction_failed` 502, `fetch_failed`, `invalid_url_scheme` 400).
+- **Custom Domain — SSL manuale**: onestà D-051 esplicita che l'attivazione SSL richiede **UNO step manuale del super_admin** sul pannello Emergent (Settings → Custom Domains) DOPO la verifica DNS. Tempo tipico 24-48h lavorative documentato onestamente. Il manuale NON promette SSL automatico.
+- **DNS check dettagliato**: TXT + CNAME risolti contro `1.1.1.1` (Cloudflare) e `8.8.8.8` (Google), `CNAME_TARGET = agencies.omniarealestateecosystem.it`, `TXT_RECORD_PREFIX = _omnia-challenge`. Tutto verificato in `custom_domain.py:100-183`.
+- **Reserved suffixes** documentati (`omniarealestateecosystem.it`, `emergent.host`, `emergentagent.com`): il manuale spiega perché non puoi richiedere quei domini.
+- **Sito pubblico limiti**: max 200 immobili in home + 5000 in sitemap. Solo `status: active`. Documentato onestamente.
+- **NO tracking pubblico by default**: il manuale dichiara che OMNIA non integra Google Analytics o simili (privacy by design).
+- **NO CMS / blog / pagine libere**: dichiarato esplicitamente. Il sito è vetrina immobili + schede, punto.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder dopo il push:
+1. **Reindex forzato HAL**: `POST /api/app/hal/knowledge/reindex` con body `{"force": true}` (super_admin).
+2. **3 query smoke test attese** (post-Cap. 8):
+   - *"Come collego il mio dominio al sito OMNIA?"* → top-1 atteso `08-sito-web.yaml::sito.custom-domain`
+   - *"Come estraggo il brand dal mio sito esistente?"* → top-1 atteso `08-sito-web.yaml::sito.brand-extractor`
+   - *"Quali temi posso scegliere per il sito?"* → top-1 atteso `08-sito-web.yaml::sito.temi-disponibili`
+3. Confidence attesa ≥ 0.15 su tutte e 3.
+4. Verificare che `/api/app/hal/knowledge/status` risponda `manual_hal_indexed >= 92`.
+
+### File modificati
+- `memory/manuale/08-sito-web.md` (nuovo, ~450 righe)
+- `memory/manuale/hal/08-sito-web.yaml` (nuovo, ~450 righe, 12 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.4-cap8, 92 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.4, 92 voci, Smoke Cap. 8)
+- `memory/manuale/hal/screenshots-index.md` (+ sezione Cap. 8 con 5 righe → 44 totali)
+- `memory/GAP.md` (Sezione E Cap. 8 con 14 punti onestà + aggiornamento Sezione A HAL Knowledge)
+- `memory/CHANGELOG.md` (questo entry)
+
+### Commit message consigliato
+```
+feat(docs): TASK E · Cap. 8 Sito web agenzia (Manual + HAL YAML)
+
+Manual Cap. 8:
+- 08-sito-web.md (~450 lines, 10 subchapters)
+- 08-sito-web.yaml (12 HAL voci, ~450 lines)
+- hal-index.json v0.4-cap8 (92 voci total, 8 source files)
+- IMPORT_HAL.md v0.4 (updated to 92 voci + Smoke Cap. 8)
+- screenshots-index.md (+5 rows Cap. 8 → 44 total)
+
+Coverage: site.py (public site), themes.py (4 themes),
+brand_extractor.py (Gemini extraction), custom_domain.py
+(TXT+CNAME workflow). Frontend WebsitePage.jsx mapped 1:1.
+
+Honesty (D-051):
+- 4 themes match THEME_CATALOG code exactly. No invented.
+- No custom CSS in v1: explicitly stated.
+- Custom Domain SSL activation requires manual super_admin
+  step on Emergent panel (24-48h). Not promised automatic.
+- Gemini 3 Flash usage disclosed for Brand Extractor.
+- DNS check details 1:1 (1.1.1.1 + 8.8.8.8, TXT format,
+  CNAME target, reserved suffixes).
+- Public site limits: 200 home, 5000 sitemap, active only.
+- No public tracking / Analytics by default (privacy by design).
+- No CMS / blog / free pages.
+
+Validation:
+- yaml.safe_load OK on 08-sito-web.yaml (12 voci)
+- HAL RAG parser _chunk_yaml_hal_file() → 12 chunks OK
+- Total corpus YAML chunks = 92 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex {force: true}
+Expected: manual_hal_indexed >= 92
+```
+
+### Prossimi passi
+- Founder: eseguire reindex prod + 3 smoke query Cap. 8
+- Cap. 9 manuale (candidati onesti: Virtual Staging · HAL Agent CRM · Mutui · Import universale XML)
+- (Rimandato) TASK F · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe one-shot · Billing UI listino Founder
+
+**Progresso manuale**: 8/26 capitoli (31%). Totale voci HAL: **92**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK D · Cap. 7 · Fascicolo Immobile (Manuale + HAL YAML) + micro-fix
 
 **Tipo**: Feature docs — settimo capitolo del Manuale Operativo + 4 micro-fix aperti.
