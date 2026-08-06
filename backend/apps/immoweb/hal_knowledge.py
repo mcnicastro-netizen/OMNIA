@@ -32,10 +32,11 @@ import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from uuid import uuid4
 
 import numpy as np
+import yaml
 from scipy.sparse import csr_matrix
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
@@ -66,6 +67,7 @@ CORPUS_FILES = [
     "CHANGELOG.md",
 ]
 MANUAL_DIR = MEMORY_ROOT / "manuale"
+HAL_YAML_DIR = MANUAL_DIR / "hal"  # voci HAL atomiche (Cap. 1..N)
 
 CHUNK_WORDS = 500          # ~500 parole per chunk
 CHUNK_OVERLAP = 50         # 50 parole di overlap
@@ -90,7 +92,7 @@ class KnowledgeChunk(OmniaBaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
     file: str
     section: Optional[str] = None
-    chunk_id: int
+    chunk_id: Union[int, str]  # int per .md sequenziale, str stabile (voce YAML id) per manuale
     text: str
     md5_source: str
     token_count: int = 0
@@ -161,6 +163,83 @@ def _chunk_file(file_name: str, md_text: str) -> List[Dict[str, Any]]:
     return out
 
 
+def _render_voce_hal(v: Dict[str, Any]) -> str:
+    """Serializza una voce HAL YAML atomica in testo indicizzabile.
+
+    Struttura documentata in IMPORT_HAL.md:
+    [TITOLO] · [MODULO] · [DOMANDA] · [A COSA SERVE] · [QUANDO SI USA] ·
+    [PASSI] · [ERRORI COMUNI] · [PERMESSI] · [TAGS]
+    """
+    contenuto = v.get("contenuto", {}) or {}
+    lines: List[str] = [
+        f"[TITOLO] {v.get('titolo', '')}",
+        f"[MODULO] {v.get('modulo', '')}",
+        f"[DOMANDA] {v.get('domanda_naturale', '')}",
+        f"[A COSA SERVE] {contenuto.get('a_cosa_serve', '').strip()}",
+        f"[QUANDO SI USA] {contenuto.get('quando_si_usa', '').strip()}",
+    ]
+    passi = contenuto.get("passi") or []
+    if passi:
+        lines.append("[PASSI]")
+        for p in passi:
+            lines.append(f"- {p}")
+    errori = contenuto.get("errori_comuni") or []
+    if errori:
+        lines.append("[ERRORI COMUNI]")
+        for e in errori:
+            problema = (e.get("problema") or "").strip()
+            soluzione = (e.get("soluzione") or "").strip()
+            lines.append(f"- {problema} -> {soluzione}")
+    permessi = contenuto.get("permessi") or []
+    if permessi:
+        lines.append("[PERMESSI]")
+        for perm in permessi:
+            lines.append(f"- {perm}")
+    tags = v.get("tags") or []
+    if tags:
+        lines.append(f"[TAGS] {', '.join(tags)}")
+    return "\n".join(lines)
+
+
+def _chunk_yaml_hal_file(file_name: str, raw_bytes: bytes) -> List[Dict[str, Any]]:
+    """Estrae chunk atomici da un file YAML del manuale HAL.
+
+    - 1 voce YAML = 1 chunk indipendente (chunk_id = v["id"], stringa stabile)
+    - md5_source = MD5 del file YAML intero (invalidazione file-level)
+    - metadata preservati per filtering/boosting futuri
+    """
+    md5 = hashlib.md5(raw_bytes).hexdigest()
+    try:
+        data = yaml.safe_load(raw_bytes.decode("utf-8")) or {}
+    except yaml.YAMLError as exc:
+        logger.exception("HAL YAML parse failed for %s: %s", file_name, exc)
+        return []
+    voci = data.get("voci") or []
+    out: List[Dict[str, Any]] = []
+    for v in voci:
+        vid = v.get("id")
+        if not vid:
+            continue
+        text = _render_voce_hal(v)
+        out.append({
+            "file": file_name,
+            "section": v.get("modulo") or "",
+            "chunk_id": vid,           # stringa stabile (es. "clienti.smart-import-ai")
+            "text": text,
+            "md5_source": md5,
+            "token_count": len(text.split()),
+            "metadata": {
+                "id": vid,
+                "modulo": v.get("modulo"),
+                "livello": v.get("livello"),
+                "tags": v.get("tags") or [],
+                "correlati": v.get("correlati") or [],
+                "domanda_naturale": v.get("domanda_naturale"),
+            },
+        })
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Ingestion (idempotent)
 # ---------------------------------------------------------------------------
@@ -172,34 +251,72 @@ async def _list_corpus_files() -> List[Path]:
         if p.exists():
             files.append(p)
     if MANUAL_DIR.exists():
-        files.extend(sorted(MANUAL_DIR.glob("*.md")))
+        # Solo i .md del manuale (prosa). I .yaml sono gestiti da _list_hal_yaml_files.
+        for f in sorted(MANUAL_DIR.glob("*.md")):
+            files.append(f)
     return files
 
 
+def _list_hal_yaml_files() -> List[Path]:
+    """Elenca i file .yaml del manuale HAL, escludendo hal-index* (metadata)."""
+    if not HAL_YAML_DIR.exists():
+        return []
+    out: List[Path] = []
+    for f in sorted(HAL_YAML_DIR.glob("*.yaml")):
+        if f.name.startswith("hal-index"):
+            continue
+        out.append(f)
+    return out
+
+
 async def ingest_corpus(force: bool = False) -> Dict[str, Any]:
-    """Ingest markdown corpus into `hal_knowledge_chunks`.
+    """Ingest markdown + HAL YAML corpus into `hal_knowledge_chunks`.
 
     Idempotent: if the file's MD5 matches the last-known md5 for that file,
     the file is skipped unless force=True.
+
+    - .md files: chunk per sezione con word window (CHUNK_WORDS/OVERLAP).
+    - .yaml del manuale HAL: 1 voce = 1 chunk atomico (chunk_id = v["id"]).
     """
     db = Database.get()
-    files = await _list_corpus_files()
     report = {"scanned": 0, "reingested": [], "skipped": [], "total_chunks": 0}
 
-    for path in files:
+    # --- 1. Corpus .md tradizionale ------------------------------------
+    for path in await _list_corpus_files():
         report["scanned"] += 1
         text = path.read_text(encoding="utf-8")
         md5 = hashlib.md5(text.encode("utf-8")).hexdigest()
-        existing_md5 = None
-        existing = await db.hal_knowledge_chunks.find_one({"file": path.name}, {"md5_source": 1})
-        if existing:
-            existing_md5 = existing.get("md5_source")
+        existing = await db.hal_knowledge_chunks.find_one(
+            {"file": path.name}, {"md5_source": 1}
+        )
+        existing_md5 = existing.get("md5_source") if existing else None
         if not force and existing_md5 == md5:
             report["skipped"].append(path.name)
             continue
-        # purge old chunks for this file
         await db.hal_knowledge_chunks.delete_many({"file": path.name})
         chunks = _chunk_file(path.name, text)
+        if chunks:
+            for c in chunks:
+                c["id"] = str(uuid4())
+                c["updated_at"] = utcnow_iso()
+            await db.hal_knowledge_chunks.insert_many(chunks)
+        report["reingested"].append({"file": path.name, "chunks": len(chunks)})
+        report["total_chunks"] += len(chunks)
+
+    # --- 2. Manuale HAL YAML (1 voce = 1 chunk atomico) ----------------
+    for path in _list_hal_yaml_files():
+        report["scanned"] += 1
+        raw = path.read_bytes()
+        md5 = hashlib.md5(raw).hexdigest()
+        existing = await db.hal_knowledge_chunks.find_one(
+            {"file": path.name}, {"md5_source": 1}
+        )
+        existing_md5 = existing.get("md5_source") if existing else None
+        if not force and existing_md5 == md5:
+            report["skipped"].append(path.name)
+            continue
+        await db.hal_knowledge_chunks.delete_many({"file": path.name})
+        chunks = _chunk_yaml_hal_file(path.name, raw)
         if chunks:
             for c in chunks:
                 c["id"] = str(uuid4())

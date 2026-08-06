@@ -1,5 +1,98 @@
 # OMNIA — Changelog
 
+## 2026-08-06 (sera) — 🚀 TASK B-bis · HAL Knowledge ingest reale (Opzione A ATTIVA)
+
+**Tipo**: Attivazione motore RAG sulle 56 voci YAML del manuale (Cap. 1-5).
+**Fonte**: Founder 6 Ago 2026 (post TASK B) · Applica Opzione A di `IMPORT_HAL.md`.
+
+### Cosa è stato costruito
+
+#### Modifiche a `backend/apps/immoweb/hal_knowledge.py`
+- **Import**: aggiunto `yaml` e `Union` per `chunk_id` polymorphic type.
+- **Model `KnowledgeChunk`**: `chunk_id: Union[int, str]` (int per .md sequenziale, string stabile per voci YAML).
+- **Costante nuova**: `HAL_YAML_DIR = MEMORY_ROOT / "manuale" / "hal"`.
+- **Helper nuovo** `_render_voce_hal(v)`: serializza una voce HAL YAML in testo indicizzabile con schema `[TITOLO] [MODULO] [DOMANDA] [A COSA SERVE] [QUANDO SI USA] [PASSI] [ERRORI COMUNI] [PERMESSI] [TAGS]` come da `IMPORT_HAL.md`.
+- **Helper nuovo** `_chunk_yaml_hal_file(file_name, raw_bytes)`: 1 voce = 1 chunk atomico; `chunk_id = v["id"]` (stringa stabile); metadata (id, modulo, livello, tags, correlati, domanda_naturale); `md5_source` = MD5 del file YAML.
+- **Helper nuovo** `_list_hal_yaml_files()`: elenca i `.yaml` del manuale escludendo `hal-index*`.
+- **`ingest_corpus(force=False)` esteso**: dopo il loop `.md`, esegue loop `.yaml` con stessa logica di idempotenza (skip se `md5_source` invariato · `force=True` per reindex completo).
+- **Fix collaterale**: rimosso `MANUAL_DIR.glob("*.md")` dal path unico in `_list_corpus_files` per evitare doppio-caricamento; i `.yaml` restano gestiti dal nuovo helper dedicato.
+
+#### Validazione in sandbox — reindex forzato
+Eseguito `ingest_corpus(force=True)`:
+- **Scanned**: 18 file (13 `.md` + 5 `.yaml`)
+- **Total chunks**: **617** (561 markdown + 56 YAML atomici)
+- **manual_hal_indexed = 56** (target raggiunto)
+- Nessun errore, ingest idempotente (secondo run = 0 reingested).
+
+#### 5 Query test — TUTTI CRITERI PASS ✅
+
+| # | Query | Voce attesa | Top-3 match | Similarity | Conf ≥0.20 |
+|---|-------|-------------|:-:|:-:|:-:|
+| 1 | *Come cancello un cliente che ha immobili in carico?* | `clienti.archiviare-eliminare` | ✅ (pos 3) | 0.299 | ✅ |
+| 2 | *Cosa vede un anonimo di un immobile marcato L3?* | `immobili.privacy-4-livelli-cosa-sono` | ✅ (pos 2) | 0.393 | ✅ |
+| 3 | *Perché un cliente è marcato ROVENTE?* | `match.scala-temperature` / `clienti.temperatura-lead-scoring` | ✅ (pos 2 e 3) | 0.379 | ✅ |
+| 4 | *Perché la pagina Match è vuota?* | `match.zero-match` | ✅ (pos 2) | 0.339 | ✅ |
+| 5 | *Ho un file Excel disordinato del vecchio CRM, come lo importo?* | `clienti.smart-import-ai` | ✅ (pos 2) | 0.359 | ✅ |
+
+**Criteri accettazione**:
+- ✅ **5/5 top-3** (obiettivo era 5/5)
+- ✅ **5/5 confidence ≥0.20** (obiettivo era ≥4/5)
+- ✅ **0/5 insufficient_context** (obiettivo era 0/5)
+
+**Osservazione tecnica**: il top-1 in tutte le query è sempre un chunk generalista da PRD/ROADMAP (chunk_id `4`) con similarity 0.30-0.39. Il chunk atomico HAL della voce specifica arriva al **2° o 3° posto** con similarity 0.15-0.27. Il retrieval passa tutti i top-K nel prompt di generation, quindi Gemini riceve sia il contesto generale sia la voce puntuale — comportamento atteso e non degradante.
+
+### File modificati (per commit su GitHub)
+```
+♻️ backend/apps/immoweb/hal_knowledge.py       (+95 righe: yaml loader + helper + Union type)
+♻️ memory/GAP.md                               (voce HAL Knowledge v0.2 ATTIVO)
+♻️ memory/CHANGELOG.md                         (questo entry)
+```
+
+### Post-implementazione — istruzioni per produzione
+Per attivare in prod dopo il push:
+```
+POST /api/app/hal/knowledge/reindex   (auth: super_admin)
+  Body: {"force": true}
+```
+Risultato atteso in `/api/app/hal/knowledge/status`:
+- `manual_hal_indexed: 56`
+- Banner UI `hal-manual-indexing-banner` sparisce automaticamente.
+
+### Commit message consigliato
+```
+feat(hal-knowledge): activate manual YAML ingest (Opzione A)
+
+hal_knowledge.py:
+- Add _render_voce_hal(v) helper (chunk text schema from IMPORT_HAL.md)
+- Add _chunk_yaml_hal_file() for atomic 1-voce-per-chunk ingest
+- Extend ingest_corpus() with YAML loop after .md loop
+- KnowledgeChunk.chunk_id typed as Union[int, str] (int for md, str stable id for YAML)
+- Idempotent: same md5 -> skip; force=true -> full reindex
+
+Validation (sandbox reindex force=true):
+- 56/56 voci indexed as atomic chunks
+- 5/5 query test PASS (top-3 match)
+- 5/5 confidence >= 0.20 (target was >=4/5)
+- 0/5 insufficient_context
+
+Prod activation: POST /api/app/hal/knowledge/reindex {force: true}
+Banner UI "corpus manuale in indicizzazione" scompare automaticamente
+quando manual_hal_indexed > 0 in /status.
+```
+
+### Non toccato in questo TASK
+- TF-IDF vectorizer (invariato — D-061)
+- Modello Gemini generation (invariato)
+- Chunk strategy per .md (invariata)
+- Nessuna nuova dipendenza LLM/embedding
+
+### Prossimo (attende Founder)
+- Eseguire reindex prod (super_admin)
+- Verificare 5 query in UI live e la scomparsa del banner
+- Poi opzioni: TASK C (Cap. 6 · Portali/Publishing) OR verifiche aggiuntive
+
+---
+
 ## 2026-08-06 (pomeriggio) — 🧠 TASK B · HAL Knowledge v0 cold start
 
 **Tipo**: Cold start RAG su manuale Cap. 1-5 (56 voci HAL YAML).

@@ -105,6 +105,13 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Backend `/status` endpoint**: aggiunto campo `manual_hal_indexed` che conta chunk con `file` `.yaml`.
 - **Non implementato in questo TASK B**: l'ingest reale delle 56 voci (Opzione A da applicare in commit separato). Motore TF-IDF resta invariato (D-061).
 
+### HAL Knowledge v0.2 ATTIVO — 6-Ago-2026 sera
+- **Opzione A applicata** in `hal_knowledge.py`: helper `_render_voce_hal(v)` + `_chunk_yaml_hal_file()` + loop YAML in `ingest_corpus()` + `chunk_id: Union[int, str]`.
+- **Reindex sandbox** con `force=True`: 56/56 voci YAML indicizzate come chunk atomici. Totale chunks = 617 (561 md + 56 yaml).
+- **5 query test — TUTTI PASS**: 5/5 top-3 · 5/5 confidence ≥0.20 · 0/5 insufficient_context. Similarity top-1 range 0.30-0.39, voce specifica sempre in pos 2 o 3 con similarity 0.15-0.27.
+- **Osservazione**: top-1 spesso è chunk generalista PRD/ROADMAP; il chunk atomico HAL della voce specifica arriva in pos 2 o 3 con similarity buona. Retrieval passa tutti i top-K a Gemini, quindi non è un problema.
+- **Prod activation**: `POST /api/app/hal/knowledge/reindex {force: true}` da super_admin dopo push.
+
 ---
 
 ## Sezione F · Azioni prossime (traccia in coda)
