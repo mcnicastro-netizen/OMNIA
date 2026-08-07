@@ -39,18 +39,19 @@ def test_status_117(session):
     assert r.status_code == 200, r.text[:300]
     data = r.json()
     count = data.get("manual_hal_indexed") or data.get("indexed") or data.get("total_voci")
-    # Post-Cap. 11 aspettiamo 129, questa asserzione storica va aggiornata:
-    assert count in (117, 129), f"Expected 117 (pre-Cap.11) or 129 (post-Cap.11), got {count}"
+    # Post-Cap. 11 aspettavamo 129; ora post-Cap. 13 aspettiamo 155.
+    assert count in (117, 129, 142, 155), f"Expected 117/129/142/155 (pre→post Cap. 11/12/13), got {count}"
 
 
 def test_status_129(session):
-    """Post-Cap. 11 H-bis · 129 voci attese"""
+    """Post-Cap. 11 H-bis · 129 voci attese (o più con capitoli successivi)"""
     r = session.get(f"{BASE_URL}/api/app/hal/knowledge/status", timeout=30)
     assert r.status_code == 200, r.text[:300]
     data = r.json()
-    print(f"\nSTATUS 129: {json.dumps(data, ensure_ascii=False)[:600]}")
+    print(f"\nSTATUS 129+: {json.dumps(data, ensure_ascii=False)[:600]}")
     count = data.get("manual_hal_indexed") or data.get("indexed") or data.get("total_voci")
-    assert count == 129, f"Expected 129 indexed voices post-Cap.11 H-bis, got {count}"
+    # Accettato: 129 (post-Cap.11 H-bis), 142 (post-Cap.12), 155 (post-Cap.13)
+    assert count in (129, 142, 155), f"Expected 129/142/155 indexed voices, got {count}"
 
 
 def test_cap11_disclaimer_tub(session):

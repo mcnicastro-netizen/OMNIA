@@ -578,7 +578,12 @@ async def hal_ask(
         raise HTTPException(status_code=502, detail=f"generation_error:{type(e).__name__}")
 
     sources = [
-        {"file": c["file"], "section": c.get("section"), "similarity": c["similarity"]}
+        {
+            "file": c["file"],
+            "section": c.get("section"),
+            "chunk_id": c.get("chunk_id"),
+            "similarity": c["similarity"],
+        }
         for c in chunks
     ]
     status = "high" if best_sim >= CONFIDENCE_HIGH else "medium"
