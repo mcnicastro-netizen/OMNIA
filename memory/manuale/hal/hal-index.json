@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T08:24:25.509873+00:00",
-  "version": "v0.7.1-cap11-hbis",
+  "generated_at": "2026-08-07T08:34:45.030885+00:00",
+  "version": "v0.7.2-cap11-hbis",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -54,7 +54,7 @@
     },
     {
       "file": "11-mutui-comparatore.yaml",
-      "md5": "0becdb797e3e7a10a40d07e981a178dd",
+      "md5": "3fbf172bc80b5486aaf25f7229510125",
       "voci_count": 12
     }
   ],
@@ -3892,7 +3892,7 @@
         "passi": 4,
         "errori_comuni": 1
       },
-      "content_md5": "90798fd99e30ff9301189e98bef48671"
+      "content_md5": "2c70125a6335d9a1725e68d283a03eea"
     },
     {
       "id": "mutui.dove-lo-trovi",

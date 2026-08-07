@@ -14,7 +14,7 @@ voci:
     domanda_naturale: "Cos'è il Comparatore Mutui di OMNIA? A cosa serve?"
     contenuto:
       a_cosa_serve: >
-        Motore matematico + tabella curata di 14 offerte di 9 banche
+        Motore matematico + tabella curata di 14 offerte di 8 banche
         italiane. Da prezzo immobile + anticipo + durata + tipo tasso
         calcola rata mensile, TAEG, costo totale, anticipo minimo,
         sostenibilita' vs reddito. Ordinato per miglior TAEG.
@@ -27,7 +27,7 @@ voci:
         - "Motore in 4 stage: LTV check, TAN=benchmark+spread, rata
           ammortamento francese, TAEG via IRR, controllo soglia usura
           TEGM Banca d'Italia."
-        - "14 offerte curate manualmente su 9 banche italiane (Intesa,
+        - "14 offerte curate manualmente su 8 banche italiane (Intesa,
           UniCredit, BPER, Credit Agricole, MPS, BNL, ING, Webank)."
         - "Dati aggiornati trimestralmente (ultimo aggiornamento
           Giugno 2026, campo data_updated_at)."
