@@ -1,8 +1,16 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 13 · Team & Ruoli)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 14 · Import XML)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK K · Cap. 14 · Import XML / Migrazione)**:
+  - ✅ **Cap. 14 · Import XML** (Migrazione da altro gestionale): 12 sottocapitoli + **13 voci HAL YAML** (`import.cos-e`, `import.dove-trovarlo`, `import.flusso-preview-commit`, `import.file-xml-requisiti`, `import.mapping-tabelle`, `import.dedupe`, `import.simulazione-dry-run`, `import.divergenze`, `import.risultato-commit`, `import.errori`, `import.limitazioni-v1`, `import.checklist-migrazione`, `import.collegamenti`). Copertura 1:1 con `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe).
+  - ✅ **Onestà documentale (D-051)**: 3 endpoint reali (POST /preview, POST /commit, GET /session/{id}), ruolo agency_admin+super_admin obbligatorio, TTL session 10min in-memory (non persistita), tabelle mapping esatte (TYPE_CODE_MAP 18 codici, ENERGY_CODE_MAP 19, OPERATION_CODE_MAP 6, FEATURE_KEYWORDS 25), regola `looks_like_property` ≥3 tag, guard `missing_city_or_title`, cap divergences 50 + samples 5, dedupe scoped a agency_id, batch insert 100 (ordered=False), metadata `_import_source` + `_import_reference` per audit, stato default `approved`+`listed`+no agent_id, dry-run non consuma session, copy anti-competitor D-050.
+  - ✅ **Limiti v1 dichiarati esplicitamente**: no CSV/JSON/Excel, no sync automatica, no wizard mappatura, no rollback batch, no session persistita, no preview foto, no import clienti/lead via XML, no fuzzy match dedupe, no auto-assign agent, no storico import UI.
+  - ✅ **`hal-index.json` rigenerato**: v0.10-cap14, **168 voci totali** (Cap. 1-14), 14 source files.
+  - 📸 Screenshots-index: +3 righe Cap. 14. Totale 66 screenshot catalogati.
+  - 📈 **Progresso manuale**: 14/26 capitoli (54%). Totale voci HAL: **168**. Prossimo: reindex prod super_admin + smoke 3/3 Cap. 14, poi Cap. 15+ (HAL Legal se attivato, Impostazioni, Domain Vault, Billing, Universal Export).
 
 - **Ultimo update (Feb 2026 — TASK J · Cap. 13 · Team & Ruoli / Collaboratori)**:
   - ✅ **Cap. 13 · Team & Ruoli** (Collaboratori): 13 sottocapitoli + **13 voci HAL YAML** (`team.cos-e`, `team.dove-trovarlo`, `team.ruoli-disponibili`, `team.invitare-membro`, `team.tab-inviti`, `team.accettare-invito`, `team.lista-membri`, `team.chi-puo-invitare`, `team.onboarding-vs-invito`, `team.utente-gia-registrato`, `team.errori-comuni`, `team.limitazioni-v1`, `team.collegamenti`). Copertura 1:1 con `invites.py` (286 righe) + `agencies.py` (180 righe) + `MembersPage.jsx` (225 righe) + `InviteMemberModal.jsx` (134 righe) + `AcceptInvitePage.jsx` (186 righe).

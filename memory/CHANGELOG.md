@@ -1,5 +1,145 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK K · Cap. 14 · Import XML / Migrazione (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — quattordicesimo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-Cap. 13 approvato · Cap. 14 = Import XML da altro gestionale (`xml_import.py` + `universal_xml.py` + `ImportXmlPage.jsx`).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 14 · Import XML** (Migrazione da altro gestionale):
+- **Nuovo capitolo** `memory/manuale/14-import-xml.md` (~380 righe, 12 sottocapitoli): cos'è + dove trovarlo, flusso 2 fasi Preview→Commit, tabelle di mapping (18 codici tipologia, 19 energetici, 6 contratto, 25 keyword features), divergenze, dedupe per `reference_code`, simulazione dry-run, requisiti file XML (encoding UTF-8, `looks_like_property` ≥3 tag), errori comuni (400/413/422/404/403), risultato commit (stato default immobili + `_import_source` metadata), limiti onesti v1 (no CSV/JSON/Excel, no sync, no rollback batch, no session persistita, no fuzzy match, no auto-assign agent, no storico import UI), checklist migrazione 10-step, cross-ref Cap. 3/4/6/12/13.
+- **Nuovo YAML HAL** `memory/manuale/hal/14-import-xml.yaml` (~610 righe, **13 voci**): `import.cos-e`, `import.dove-trovarlo`, `import.flusso-preview-commit`, `import.file-xml-requisiti`, `import.mapping-tabelle`, `import.dedupe`, `import.simulazione-dry-run`, `import.divergenze`, `import.risultato-commit`, `import.errori`, `import.limitazioni-v1`, `import.checklist-migrazione`, `import.collegamenti`. Validato con `_chunk_yaml_hal_file()` (13/13 chunk generati). Fix minori applicati: tag numerici `"400"/"413"/"422"/"404"/"403"` quotati per evitare `TypeError` in `_render_voce_hal`.
+- **`hal-index.json` rigenerato**: v0.10-cap14 · **168 voci totali** (Cap. 1-14) · 14 source files con MD5 aggiornati.
+- **`IMPORT_HAL.md`** aggiornato a v0.10: header a 168 voci · nuova sezione "Smoke Cap. 14" con 3 query attese · storico versioni esteso.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 14 con **3 righe placeholder** (2 essenziali + 1 utile). Totale: **66 screenshot** catalogati.
+- **`GAP.md`**: aggiunta sezione Cap. 14 con **20 punti verifica onestà 1:1** al codice (endpoint reali, ruoli require_roles, TTL session, tabelle di mapping esatte, errori API, guard obbligatori, metadati tracciabilità, stato default immobili importati, limiti v1).
+- **`SPRINT_STATUS.md`**: TASK K aggiunto · progresso 14/26 capitoli (54%) · 168 voci HAL · Post Cap. 14 con reindex live pending.
+
+### Onestà documentale (D-051)
+
+**Punti onestà principali**
+- **Endpoints reali 1:1** con `xml_import.py`: `POST /preview`, `POST /commit`, `GET /session/{id}` sotto prefix `/api/app/import`. Payload di request/response documentati con Pydantic models esatti.
+- **Ruolo required**: `agency_admin` + `super_admin` (esplicito su tutti e 3 gli endpoint). Zero pattern "auth vaga".
+- **Estensioni**: `.xml` (UI) + `.txt` (backend workaround) documentate entrambe onestamente.
+- **Limiti dimensione**: min 40 byte, max 50 MB con codici errore esatti (`file_empty_or_too_small` 400, `file_too_large` 413).
+- **Session in-memory** (`_PREVIEW_SESSIONS` dict Python) NON persistita — documentata come "scompare al restart backend". TTL 10 minuti (`_PREVIEW_TTL_SECONDS = 10 * 60`).
+- **Session ID pattern** `prv_{millis}_{user_id[:8]}` documentato letteralmente.
+- **Ownership check**: `session_owner_mismatch` (403) e `session_agency_mismatch` (403) documentati.
+- **Tabelle mapping esatte** (universal_xml.py:39-119): `TYPE_CODE_MAP` (18 codici), `ENERGY_CODE_MAP` (19 codici), `OPERATION_CODE_MAP` (6 codici), `CATEGORY_MAP` (3 lettere), `FEATURE_KEYWORDS` (25 keyword), `CONDITION_KEYWORDS` (5 pattern). Nessuna invenzione.
+- **Regola `looks_like_property`**: ≥3 tag fra ~16 indicatori documentati esplicitamente. Guard obbligatorio `missing_city_or_title` documentato.
+- **Cap divergences UI**: 50 righe (`divergences[:50]`) documentato.
+- **Samples cap 5** con struttura esatta (reference_code, title, city, ...) — solo `photos_count` (no thumbnail) documentato onestamente.
+- **Dedupe scope**: `agency_id + reference_code IN [...]` esatto. Isolamento multi-tenant garantito.
+- **Batch insert 100 con `ordered=False`** documentato.
+- **Metadata tracciabilità post-import**: `_import_source: "universal_xml_importer_v1"` e `_import_reference: <riferimento o attribute id>` — documentati per audit.
+- **Stato default immobili importati**: `moderation_status="approved"`, `is_listed_on_immobilcloud=true`, `visibility="public"`, `is_private_listing=false`, `view_count=0`, `lead_count=0`, **nessun `agent_id`** — documentato onestamente ("vanno assegnati manualmente").
+- **Dry-run non consuma la session**, commit reale sì. Differenza operativa documentata.
+- **Copy anti-competitor**: label sempre *"il tuo attuale gestionale"* / *"il tuo attuale fornitore"* — mai nomi vendor (né in UI né in codice). Scelta prodotto D-050 documentata.
+- **Limiti v1 espliciti in `import.limitazioni-v1`**: no CSV/JSON/Excel, no sync automatica, no wizard mappatura, no rollback batch, no session persistita, no preview foto (solo count), no import clienti/lead via XML, no fuzzy match dedupe, no auto-assign agent, no storico import UI.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder (super_admin):
+1. `POST /api/app/hal/knowledge/reindex?force=true`.
+2. Verifica `manual_hal_indexed >= 168`.
+3. Smoke Cap. 14 3/3 attese:
+   - *"Come importo il portafoglio da un altro gestionale?"* → `import.cos-e` (o `import.checklist-migrazione`)
+   - *"Cosa succede se importo due volte lo stesso file XML?"* → `import.dedupe`
+   - *"Posso importare i clienti da XML?"* → `import.limitazioni-v1`
+4. Confidence attesa ≥ 0.15 su tutte e 3.
+
+### File modificati
+- `memory/manuale/14-import-xml.md` (nuovo, ~380 righe)
+- `memory/manuale/hal/14-import-xml.yaml` (nuovo, ~610 righe, 13 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.10-cap14, 168 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.10, 168 voci, Smoke Cap. 14)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe Cap. 14 → 66 totali)
+- `memory/GAP.md` (Sezione Cap. 14 con 20 punti onestà)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (TASK K completato · 14/26 · 168 voci · 54%)
+
+### Commit message consigliato
+
+```
+feat(docs): TASK K · Cap. 14 Import XML (Manual + HAL YAML)
+
+Manual Cap. 14 (Import XML / Migrazione da altro gestionale):
+- 14-import-xml.md (~380 lines, 12 subchapters)
+- 14-import-xml.yaml (13 HAL voci, ~610 lines)
+- hal-index.json v0.10-cap14 (168 voci total, 14 source files)
+- IMPORT_HAL.md v0.10 (updated to 168 voci + Smoke Cap. 14)
+- screenshots-index.md (+3 rows Cap. 14 → 66 total)
+- GAP.md: Cap. 14 section (20 honesty points)
+- SPRINT_STATUS.md updated (14/26 · 168 voci · 54%)
+
+Coverage: xml_import.py (192 lines) + universal_xml.py (546 lines)
++ ImportXmlPage.jsx (341 lines) full mapping.
+
+Honesty (D-051):
+- Endpoints 1:1: POST /preview, POST /commit, GET /session/{id}
+- Role required: agency_admin + super_admin (require_roles)
+- Extensions: .xml (UI) + .txt (backend workaround)
+- Size limits: 40 bytes min, 50MB max (400/413)
+- Session in-memory (dict), TTL 10min, NOT persisted
+- Session ID pattern: prv_{millis}_{user_id[:8]}
+- Ownership: session_owner_mismatch + session_agency_mismatch (403)
+- Error codes 1:1: file_must_be_xml, file_empty_or_too_small,
+  file_too_large, no_property_records_detected,
+  preview_session_not_found_or_expired
+- Mapping tables exact (universal_xml.py:39-119):
+  * TYPE_CODE_MAP 18 codes → 12 OMNIA types
+  * ENERGY_CODE_MAP 19 codes
+  * OPERATION_CODE_MAP 6 codes (V/A/S/R/RB/ASTA)
+  * FEATURE_KEYWORDS 25 keywords → boolean
+  * CONDITION_KEYWORDS 5 patterns
+- looks_like_property: ≥3 tags from ~16 indicators
+- Guard: skip if missing city OR title
+- Divergences cap 50, samples cap 5, no thumbnails
+- Dedupe: reference_code + agency_id scope
+- Batch insert 100 (ordered=False)
+- Metadata: _import_source, _import_reference for audit
+- Default state: approved + listed + public + no agent_id
+- Dry-run doesn't consume session, real commit does
+- Copy anti-competitor: never vendor names ('il tuo attuale
+  gestionale' - D-050)
+
+Limits v1 explicit:
+- No CSV/JSON/Excel (XML only)
+- No sync (one-shot manual)
+- No mapping wizard (heuristic tables hardcoded)
+- No batch rollback
+- Session in-memory (lost on restart)
+- No photo preview (count only)
+- No client/lead import via XML
+- Dedupe: exact reference_code only (no fuzzy match)
+- No auto-assign agent post-import
+- No import history UI
+
+Validation:
+- yaml.safe_load OK on 14-import-xml.yaml (13 voci)
+- Fix during drafting: tags "400"/"413"/"422"/"404"/"403"
+  quoted as strings to prevent _render_voce_hal TypeError
+- _chunk_yaml_hal_file() → 13 chunks OK
+- Total corpus YAML chunks = 168 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: manual_hal_indexed >= 168
+Smoke 3/3 Cap. 14:
+- import.cos-e (come importo)
+- import.dedupe (importare 2 volte lo stesso file)
+- import.limitazioni-v1 (posso importare i clienti? no v1)
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 14
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging · Sito Web v2
+- Cap. 15+ manuale (candidati: HAL Legal (se attivato) · Impostazioni · Domain Vault · Billing · Universal Export)
+
+**Progresso manuale**: 14/26 capitoli (54%). Totale voci HAL: **168**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK J · Cap. 13 · Team & Ruoli (Collaboratori) (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — tredicesimo capitolo del Manuale Operativo.

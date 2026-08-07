@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.9)
+# 📚 HAL Knowledge — Import & Cold Start (v0.10)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 13 · Team & Ruoli / Collaboratori)
-**Corpus attuale**: **155 voci HAL YAML** su **13 capitoli** (Cap. 1-13)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 14 · Import XML / Migrazione)
+**Corpus attuale**: **168 voci HAL YAML** su **14 capitoli** (Cap. 1-14)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 13 e verifica 3 query smoke (vedi §"Smoke Cap. 13").
+**Prossimo passo**: reindex live post-Cap. 14 e verifica 3 query smoke (vedi §"Smoke Cap. 14").
 
 ---
 
@@ -280,14 +280,15 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (H-bis) | **v0.7.1-cap11-hbis** | Fix onestà D-051 Cap. 11: 9→**8 banche distinte** (banks_count=8 in /mutui/config), 11→**9 offerte Consap**, ING NON Consap (né Fisso né Variabile). Voce rinominata `mutui.offerte-14-banche-9` → `mutui.offerte-14-banche-8`. |
 | Feb-2026 (Cap. 12) | **v0.8-cap12** | Cap. 12 HAL Knowledge (meta-doc del RAG stesso) aggiunto (+13 voci → 142). Copertura hal_knowledge.py (617 righe) + HalKnowledgePage.jsx (307 righe): TF-IDF + Gemini 3 Flash Preview, corpus 7 file + Cap. 1-11, CHANGELOG.md escluso (B-ter), soglie confidence 0.08/0.20, storico per-utente, reindex super_admin idempotente. Distinzione D-040 fra HAL Knowledge / HAL Agent CRM / HAL Legal. |
 | Feb-2026 (Cap. 13) | **v0.9-cap13** | Cap. 13 Team & Ruoli / Collaboratori aggiunto (+13 voci → 155). Copertura `invites.py` (286 righe) + `agencies.py` (180 righe) + `MembersPage.jsx` (225 righe) + `InviteMemberModal.jsx` (134 righe) + `AcceptInvitePage.jsx` (186 righe): magic-link invite 7gg, ruoli agency_admin/agent (segreteria = concetto operativo), stati pending/accepted/revoked/expired, upgrade role solo se client. |
+| Feb-2026 (Cap. 14) | **v0.10-cap14** | Cap. 14 Import XML / Migrazione da altro gestionale aggiunto (+13 voci → 168). Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe): flusso 2 fasi Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (TYPE_CODE_MAP 18 codici, ENERGY_CODE_MAP 19, OPERATION_CODE_MAP 6, FEATURE_KEYWORDS 25), zero riferimenti a competitor, limiti v1 esplicit (no CSV, no sync, no rollback batch). |
 
 ---
 
-## 🚦 Smoke Cap. 13 — 3 query attese dopo reindex
+## 🚦 Smoke Cap. 14 — 3 query attese dopo reindex
 
-1. **"Come invito un collega nella mia agenzia?"** → top-1 atteso `13-team-ruoli.yaml::team.invitare-membro`
-2. **"Quali ruoli posso assegnare a un collaboratore?"** → top-1 atteso `13-team-ruoli.yaml::team.ruoli-disponibili`
-3. **"Posso rimuovere un membro dal team?"** → top-1 atteso `13-team-ruoli.yaml::team.limitazioni-v1` (risposta onesta: **no**, non c'è UI di rimozione in v1)
+1. **"Come importo il portafoglio da un altro gestionale?"** → top-1 atteso `14-import-xml.yaml::import.cos-e` (o `import.checklist-migrazione`)
+2. **"Cosa succede se importo due volte lo stesso file XML?"** → top-1 atteso `14-import-xml.yaml::import.dedupe`
+3. **"Posso importare i clienti da XML?"** → top-1 atteso `14-import-xml.yaml::import.limitazioni-v1` (risposta onesta: **no**, solo immobili · per clienti CSV in Cap. 4)
 
 Confidence attesa ≥ 0.15 su tutte e 3.
 

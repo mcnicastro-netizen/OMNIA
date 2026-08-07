@@ -196,6 +196,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 14 · Import XML (Migrazione)
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `import-xml-upload` | Pagina *"Importa da altro gestionale"* con area drag&drop vuota, bottone *"Scegli file"*, sottotitolo che menziona *"il tuo attuale gestionale"* (mai vendor specifico). | 🔴 | — |
+| 2 | `import-xml-preview` | Preview post-upload con banner verde *"Analisi completata: X/Y immobili leggibili"*, 3 cards *"Per tipologia / Per contratto / Per città"*, tabella samples 5 righe, toggle *"Salta immobili già presenti"* attivo, bottoni *"Simulazione"* e *"Importa in OMNIA"*. | 🔴 | — |
+| 3 | `import-xml-commit-result` | Banner verde di successo *"✅ Import completato: N immobili importati con successo, M saltati (già presenti)"* dopo il commit reale. | 🟡 | Utile ma opzionale. |
+
+**Totale Cap. 14**: 3 screenshot (2 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -238,3 +250,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 11) | Aggiunte 3 righe Cap. 11 · Mutui (panoramica + sostenibilità + piano ammortamento — tutte essenziali). Totale index = **57 screenshot** catalogati. |
 | Feb 2026 (Cap. 12) | Aggiunte 3 righe Cap. 12 · HAL Knowledge (panoramica + risposta+fonti + status-badge). Totale index = **60 screenshot** catalogati. |
 | Feb 2026 (Cap. 13) | Aggiunte 3 righe Cap. 13 · Team & Ruoli / Collaboratori (members-list + invite-modal + accept-invite — tutte essenziali). Totale index = **63 screenshot** catalogati. |
+| Feb 2026 (Cap. 14) | Aggiunte 3 righe Cap. 14 · Import XML (upload + preview + commit-result — 2 essenziali + 1 utile). Totale index = **66 screenshot** catalogati. |

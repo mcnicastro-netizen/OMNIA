@@ -233,6 +233,35 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **NO endpoint remove/change role**: `agencies.py` + `invites.py` non espongono `DELETE /agencies/me/members/{id}` né `PATCH` sul role di un user. Documentato esplicitamente in §13.12.
 - **Cross-ref**: Cap. 1 (Primo accesso), Cap. 3 (privacy L4 = team agenzia via `agency_ids`), Cap. 10 (HAL Agent CRM multi-tenant), Cap. 12 (HAL Knowledge legge Cap. 13 come corpus).
 
+### Cap. 14 · Import XML (Migrazione da altro gestionale) — Feb 2026
+- **Endpoint reali documentati 1:1** con `xml_import.py`: `POST /api/app/import/xml/preview` (multipart file), `POST /api/app/import/xml/commit` (session_id, skip_duplicates_by_ref, dry_run), `GET /api/app/import/xml/session/{id}`. Prefix `/import` sotto `/api/app`.
+- **Ruolo richiesto**: `agency_admin` + `super_admin` (`require_roles("agency_admin", "super_admin")` esplicito su tutti e 3 gli endpoint). Documentato onestamente ("agent non ha accesso").
+- **Estensioni accettate**: `.xml` (frontend) + `.txt` (backend workaround). Documentato entrambi.
+- **Limiti dimensione**: min 40 byte, max 50 MB. Documentato con codici errore esatti (`file_empty_or_too_small` 400, `file_too_large` 413).
+- **Session in-memory** (`_PREVIEW_SESSIONS` dict Python, `xml_import.py:37`) con **TTL 10 minuti** (`_PREVIEW_TTL_SECONDS = 10 * 60`). Documentata onestamente come "non persistita, scompare al restart backend".
+- **Session ID pattern**: `prv_{millis}_{user_id[:8]}` (`xml_import.py:91`). Documentato letteralmente.
+- **Session owner check**: `session_owner_mismatch` (403) + `session_agency_mismatch` (403) documentati.
+- **Errori API 1:1**: `file_must_be_xml` (400), `file_empty_or_too_small` (400), `file_too_large` (413), `no_property_records_detected` (422), `preview_session_not_found_or_expired` (404), `session_owner_mismatch` (403), `session_agency_mismatch` (403). Tutti nella voce `import.errori`.
+- **Tabelle di mapping esatte** (universal_xml.py:39-119):
+  - `TYPE_CODE_MAP` 18 codici → 12 tipi documentati 1:1 (3=appartamento, 10/33=villa, 31=attico, ecc.)
+  - `ENERGY_CODE_MAP` 19 codici documentati (1-8 lettera semplice, 10-19 A4-G, 99=exempt)
+  - `OPERATION_CODE_MAP` 6 codici (V/A/S/R/RB/ASTA)
+  - `CATEGORY_MAP` 3 lettere (R/U/C)
+  - `FEATURE_KEYWORDS` 25 keyword (balcon, terraz, giardin, piscin, ecc.) → boolean features
+  - `CONDITION_KEYWORDS` 5 pattern
+- **Regola `looks_like_property`**: elemento XML valido se contiene ≥3 tag fra ~16 indicatori (prezzo, canone, mq, citta/città, tipologia, codice_tipologia, indirizzo, titolo, riferimento, surface, city, price, url*). Documentata.
+- **Guard obbligatorio post-parse**: skip se manca `city` O `title` → finisce in `divergences` come `missing_city_or_title`. Documentato onestamente.
+- **Cap divergences UI**: max 50 righe (`divergences[:50]` in `ParseReport.to_dict`). Documentato.
+- **ParseReport samples**: max 5 immobili con `{reference_code, title, city, property_type, operation, price, rent_monthly, surface_sqm, photos_count}`. Solo photos_count, no thumbnail — documentato onestamente.
+- **Dedupe scope**: match per `reference_code` + `agency_id` (isolamento multi-tenant garantito). Documentato.
+- **Batch insert**: 100 per volta con `ordered=False` (`xml_import.py:153-156`). Documentato.
+- **Metadati tracciabilità in DB**: `_import_source: "universal_xml_importer_v1"` e `_import_reference: <riferimento o attribute id>` — documentati per audit super_admin.
+- **Stato default immobili importati**: `moderation_status="approved"`, `is_listed_on_immobilcloud=true`, `visibility="public"`, `is_private_listing=false`, `view_count=0`, `lead_count=0` — nessun `agent_id` assegnato. Documentato onestamente ("vanno assegnati manualmente").
+- **Dry-run non consuma la session**, commit reale sì. Documentato con differenza operativa.
+- **Copy anti-competitor**: label sempre *"il tuo attuale gestionale"* / *"il tuo attuale fornitore"* — mai nomi vendor. Documentato come scelta prodotto D-050.
+- **Limiti v1 espliciti in `import.limitazioni-v1`**: no CSV/JSON/Excel, no sync automatica, no wizard mappatura, no rollback batch, no session persistita, no preview foto (solo count), no import clienti/lead via XML, no fuzzy match dedupe, no auto-assign agent, no storico import UI.
+- **Cross-ref**: Cap. 3 (Immobili post-import), Cap. 4 (clienti via `/clients/csv-import`), Cap. 6 (Portali & Publishing), Cap. 12 (HAL Knowledge legge Cap. 14), Cap. 13 (permessi agency_admin).
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).

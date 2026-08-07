@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T09:44:13.727675+00:00",
-  "version": "v0.9-cap13",
+  "generated_at": "2026-08-07T10:49:44.986698+00:00",
+  "version": "v0.10-cap14",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -65,6 +65,11 @@
     {
       "file": "13-team-ruoli.yaml",
       "md5": "235d39be97f54bd8c7e7de1471261a54",
+      "voci_count": 13
+    },
+    {
+      "file": "14-import-xml.yaml",
+      "md5": "06635af601bbbaf1f584647e9fef9270",
       "voci_count": 13
     }
   ],
@@ -5186,10 +5191,472 @@
         "errori_comuni": 1
       },
       "content_md5": "5d0cfca0f66921003b1b47cf67d56846"
+    },
+    {
+      "id": "import.cos-e",
+      "titolo": "Cos'è il modulo Import XML (migrazione da altro gestionale)",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "migrazione",
+        "gestionale",
+        "universal-xml-importer",
+        "primi-passi",
+        "one-shot",
+        "agenzia"
+      ],
+      "correlati": [
+        "import.dove-trovarlo",
+        "import.flusso-preview-commit",
+        "import.limitazioni-v1"
+      ],
+      "domanda_naturale": "Cos'è Import XML? A cosa serve?",
+      "screenshot": [
+        "[SCREEN: import-xml-upload]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "06a63e8b6cd639ab2ec61361d1c1f92f"
+    },
+    {
+      "id": "import.dove-trovarlo",
+      "titolo": "Dove trovare Import XML in ImmoWeb",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "dove-si-trova",
+        "sidebar",
+        "navigazione",
+        "migrazione",
+        "route"
+      ],
+      "correlati": [
+        "import.cos-e",
+        "import.flusso-preview-commit"
+      ],
+      "domanda_naturale": "Dove trovo Import XML? Come ci accedo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "880b2bc82566f3b03e597b75489b7f9a"
+    },
+    {
+      "id": "import.flusso-preview-commit",
+      "titolo": "Il flusso a 2 fasi Preview → Commit",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "flusso",
+        "preview",
+        "commit",
+        "due-fasi",
+        "dry-run",
+        "sicurezza",
+        "no-sorprese"
+      ],
+      "correlati": [
+        "import.cos-e",
+        "import.simulazione-dry-run",
+        "import.dedupe"
+      ],
+      "domanda_naturale": "Come funziona il flusso di import? Cosa succede prima e dopo il click?",
+      "screenshot": [
+        "[SCREEN: import-xml-preview]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "25437e7cdfd83295928e8d1634be80d6"
+    },
+    {
+      "id": "import.file-xml-requisiti",
+      "titolo": "Cosa deve contenere il file XML per essere letto correttamente",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "import",
+        "xml",
+        "file",
+        "requisiti",
+        "struttura",
+        "tag",
+        "riferimento",
+        "citta",
+        "titolo",
+        "encoding"
+      ],
+      "correlati": [
+        "import.cos-e",
+        "import.mapping-tabelle",
+        "import.errori"
+      ],
+      "domanda_naturale": "Che formato deve avere il file XML? Quali tag servono?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "5bdb54f3ad549f7cca4c7724eb64257e"
+    },
+    {
+      "id": "import.mapping-tabelle",
+      "titolo": "Tabelle di mapping - codici tipologia, energia, contratto",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "import",
+        "xml",
+        "mapping",
+        "tipologia",
+        "codice-tipologia",
+        "energia",
+        "classe-energetica",
+        "contratto",
+        "operation",
+        "features",
+        "keyword"
+      ],
+      "correlati": [
+        "import.file-xml-requisiti",
+        "import.divergenze"
+      ],
+      "domanda_naturale": "Come vengono tradotti i codici numerici del vecchio gestionale in tipi OMNIA?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "e1e68d432b512b34ca928bdd804ef329"
+    },
+    {
+      "id": "import.dedupe",
+      "titolo": "Dedupe per reference_code - evitare doppioni",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "dedupe",
+        "deduplica",
+        "doppioni",
+        "reference-code",
+        "riferimento",
+        "skip-duplicates"
+      ],
+      "correlati": [
+        "import.flusso-preview-commit",
+        "import.simulazione-dry-run"
+      ],
+      "domanda_naturale": "Come evito di importare due volte lo stesso immobile?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "7718ee006067ba56ee1395d29198761e"
+    },
+    {
+      "id": "import.simulazione-dry-run",
+      "titolo": "Simulazione dry-run - contare senza scrivere",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "simulazione",
+        "dry-run",
+        "prova",
+        "nessuna-scrittura",
+        "count"
+      ],
+      "correlati": [
+        "import.dedupe",
+        "import.flusso-preview-commit"
+      ],
+      "domanda_naturale": "Posso vedere quanti immobili sarebbero inseriti senza fare l'import vero?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "2c64ee40d8ac308aac38183fd14713ea"
+    },
+    {
+      "id": "import.divergenze",
+      "titolo": "Cosa sono le divergenze e come leggerle",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "import",
+        "xml",
+        "divergenze",
+        "divergences",
+        "scartati",
+        "warning",
+        "campanelli-allarme",
+        "audit"
+      ],
+      "correlati": [
+        "import.file-xml-requisiti",
+        "import.mapping-tabelle"
+      ],
+      "domanda_naturale": "Che sono le 'divergenze rilevate' nella preview?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "a79d3ab121eca56cf32baf26d14ede48"
+    },
+    {
+      "id": "import.risultato-commit",
+      "titolo": "Cosa succede dopo il commit - stato immobili importati",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "commit",
+        "risultato",
+        "immobili-importati",
+        "moderation",
+        "visibility",
+        "agent-id"
+      ],
+      "correlati": [
+        "import.flusso-preview-commit",
+        "import.limitazioni-v1"
+      ],
+      "domanda_naturale": "Cosa succede agli immobili appena importati? Sono subito visibili?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "97561f3bc191004ddc26f1de9d28575b"
+    },
+    {
+      "id": "import.errori",
+      "titolo": "Errori comuni Import XML",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "errori",
+        "troubleshooting",
+        "file-must-be-xml",
+        "file-too-large",
+        "session-not-found",
+        "no-property-records",
+        "400",
+        "413",
+        "422",
+        "404",
+        "403"
+      ],
+      "correlati": [
+        "import.file-xml-requisiti",
+        "import.flusso-preview-commit"
+      ],
+      "domanda_naturale": "Perche' l'import non funziona? Codici errore comuni",
+      "screenshot": [],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 1
+      },
+      "content_md5": "bc5c2113e4c5487725cfa68519de6e83"
+    },
+    {
+      "id": "import.limitazioni-v1",
+      "titolo": "Limiti v1 di Import XML (D-051 onesto)",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "import",
+        "xml",
+        "limiti",
+        "cosa-non-fa",
+        "csv",
+        "json",
+        "sync",
+        "wizard",
+        "rollback",
+        "session-in-memory",
+        "agent-id",
+        "storico",
+        "d-051"
+      ],
+      "correlati": [
+        "import.cos-e",
+        "import.flusso-preview-commit"
+      ],
+      "domanda_naturale": "Cosa NON fa Import XML? Posso usarlo per CSV o sync automatica?",
+      "screenshot": [],
+      "counts": {
+        "passi": 11,
+        "errori_comuni": 2
+      },
+      "content_md5": "5208e44822a63e868e0fde595cae09da"
+    },
+    {
+      "id": "import.checklist-migrazione",
+      "titolo": "Checklist migrazione da altro gestionale",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "checklist",
+        "migrazione",
+        "procedura",
+        "step-by-step",
+        "best-practice"
+      ],
+      "correlati": [
+        "import.flusso-preview-commit",
+        "import.risultato-commit"
+      ],
+      "domanda_naturale": "Come faccio una migrazione completa? Procedura passo-passo",
+      "screenshot": [],
+      "counts": {
+        "passi": 10,
+        "errori_comuni": 1
+      },
+      "content_md5": "73374f30c50b1f4d6930975be2b5bccf"
+    },
+    {
+      "id": "import.collegamenti",
+      "titolo": "Collegamenti fra Import XML e altri moduli",
+      "modulo": "Import XML",
+      "widget": null,
+      "capitolo": "14",
+      "source_file": "14-import-xml.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "import",
+        "xml",
+        "cross-ref",
+        "immobili",
+        "clienti",
+        "portali",
+        "hal-knowledge",
+        "team"
+      ],
+      "correlati": [
+        "import.cos-e",
+        "import.risultato-commit"
+      ],
+      "domanda_naturale": "Che rapporto c'e' fra Import XML e gli altri moduli OMNIA?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "b5d222b9864987dd0d13115579f00a2f"
     }
   ],
   "stats": {
-    "totale_voci": 155,
+    "totale_voci": 168,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -5203,7 +5670,8 @@
       "10": 13,
       "11": 12,
       "12": 13,
-      "13": 13
+      "13": 13,
+      "14": 13
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -5218,19 +5686,20 @@
       "HAL Agent": 13,
       "Mutui": 12,
       "HAL Knowledge": 13,
-      "Collaboratori": 13
+      "Collaboratori": 13,
+      "Import XML": 13
     },
     "per_livello": {
-      "base": 109,
-      "intermedio": 46
+      "base": 118,
+      "intermedio": 50
     },
     "per_pubblico": {
-      "titolare": 154,
+      "titolare": 167,
       "agente": 133,
       "segreteria": 92,
-      "super_admin": 12
+      "super_admin": 25
     },
-    "totale_correlati": 365,
-    "totale_tags_unici": 452
+    "totale_correlati": 394,
+    "totale_tags_unici": 501
   }
 }
