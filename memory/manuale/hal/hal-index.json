@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T12:28:24.946307+00:00",
-  "version": "v0.6-cap10",
+  "generated_at": "2026-08-07T07:14:10.835693+00:00",
+  "version": "v0.6.1-cap10-gbis",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -44,7 +44,7 @@
     },
     {
       "file": "09-virtual-staging.yaml",
-      "md5": "f0c634e3a629d741450d1aaaa3789683",
+      "md5": "ed996184e07398cfc6a54cc8f629c893",
       "voci_count": 12
     },
     {
@@ -3270,19 +3270,28 @@
         "costo",
         "prezzo",
         "fal-ai",
-        "pricing"
+        "pricing",
+        "prezzo-render",
+        "quanto-costa",
+        "costo-render",
+        "18-crediti",
+        "0-90-euro",
+        "euro",
+        "listino",
+        "virtual-staging-costo"
       ],
       "correlati": [
         "staging.modalita",
-        "staging.varianti-parallele"
+        "staging.varianti-parallele",
+        "staging.cos-e"
       ],
-      "domanda_naturale": "Quanto costa un render Virtual Staging?",
+      "domanda_naturale": "Quanto costa un render Virtual Staging? Quanto spendo in crediti per lo staging?",
       "screenshot": [],
       "counts": {
         "passi": 6,
         "errori_comuni": 2
       },
-      "content_md5": "99fc674ea417d648def218487431b5c9"
+      "content_md5": "86ed09b43b8075e80037c6f32e452d57"
     },
     {
       "id": "staging.watermark",
@@ -3879,7 +3888,7 @@
       "agente": 102,
       "segreteria": 68
     },
-    "totale_correlati": 274,
-    "totale_tags_unici": 289
+    "totale_correlati": 275,
+    "totale_tags_unici": 297
   }
 }

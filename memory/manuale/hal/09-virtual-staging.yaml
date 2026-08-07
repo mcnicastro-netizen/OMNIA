@@ -328,15 +328,19 @@ voci:
     widget: null
     pubblico: [titolare, agente]
     livello: intermedio
-    tags: [staging, crediti, costo, prezzo, fal-ai, pricing]
+    tags: [staging, crediti, costo, prezzo, fal-ai, pricing, prezzo-render, quanto-costa, costo-render, 18-crediti, "0-90-euro", euro, listino, virtual-staging-costo]
     correlati:
       - staging.modalita
       - staging.varianti-parallele
-    domanda_naturale: "Quanto costa un render Virtual Staging?"
+      - staging.cos-e
+    domanda_naturale: "Quanto costa un render Virtual Staging? Quanto spendo in crediti per lo staging?"
     contenuto:
       a_cosa_serve: >
-        Sapere quanto spendi in crediti B2B per ogni render e capire
-        il margine per definire il posizionamento.
+        Prezzo render Virtual Staging. Sapere quanto costa un render in
+        crediti B2B (18 crediti = 0,90 euro lordi), capire il margine
+        per definire il posizionamento. Voce di riferimento per tutte
+        le domande su "quanto costa lo staging", "costo staging",
+        "prezzo render virtuale", "listino Virtual Staging".
       quando_si_usa: >
         Quando lanci un job (per pianificare il consumo crediti),
         quando confronti prezzi listino, o per formazione staff.

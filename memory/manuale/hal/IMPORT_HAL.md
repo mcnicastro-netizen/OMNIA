@@ -274,7 +274,16 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 7) | **v0.3-cap7** | Cap. 7 Fascicolo Immobile aggiunto (+12 voci → 80). Reindex live post-push. |
 | Feb-2026 (Cap. 8) | **v0.4-cap8** | Cap. 8 Sito web agenzia aggiunto (+12 voci → 92). Reindex live post-push. |
 | Feb-2026 (Cap. 9) | **v0.5-cap9** | Cap. 9 Virtual Staging aggiunto (+12 voci → 104). Reindex live post-push. |
-| Feb-2026 (Cap. 10) | **v0.6-cap10** | Cap. 10 HAL Agent CRM aggiunto (+13 voci → **117**). Convenzione naming Fase 0: HAL nel manuale, `al_*` nel codice invariato. |
+| Feb-2026 (Cap. 10) | **v0.6-cap10** | Cap. 10 HAL Agent CRM aggiunto (+13 voci → 117). Convenzione naming Fase 0: HAL nel manuale, `al_*` nel codice invariato. |
+| Feb-2026 (G-bis) | **v0.6.1-cap10-gbis** | Micro-fix retrieval Cap. 9 `staging.crediti-costo` (+8 tag, +1 correlato, domanda_naturale estesa, a_cosa_serve arricchito con "prezzo render"). Nessun voce aggiunta, totale resta 117. |
+
+---
+
+## 🚦 Smoke Cap. 9 — 1 query di verifica G-bis
+
+Da eseguire dopo reindex per verificare la fix retrieval:
+
+- **"Quanto costa un render Virtual Staging?"** → top-1 atteso **`09-virtual-staging.yaml::staging.crediti-costo`** (era `07-fascicolo-immobile.yaml::fascicolo.staging-nel-fascicolo` a sim 0.334 pre-fix). Confidence attesa ≥ 0.20.
 
 ---
 

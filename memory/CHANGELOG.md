@@ -1,5 +1,77 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 🔧 Micro-fix G-bis · Retrieval Cap. 9 `staging.crediti-costo`
+
+**Tipo**: Retrieval quality fix — nessuna nuova voce, solo arricchimento tag/correlati/domanda_naturale/a_cosa_serve sulla voce esistente.
+**Motivo**: Nel smoke test post-Cap. 10 la query *"Quanto costa un render Virtual Staging?"* dava top-1 su `07-fascicolo-immobile.yaml::fascicolo.staging-nel-fascicolo` (sim 0.334) invece che sul Cap. 9. Cap. 9 arrivava #2 e #3. Causa: il Fascicolo cita "Render Virtual Staging" nelle voci correlate con termini simili; la voce `staging.crediti-costo` non aveva keyword mirate su "quanto costa / prezzo / listino".
+
+### Cosa è cambiato
+
+**`memory/manuale/hal/09-virtual-staging.yaml` · voce `staging.crediti-costo`**:
+- **tags**: `[staging, crediti, costo, prezzo, fal-ai, pricing]` (6) → **14 tag** con l'aggiunta di: `prezzo-render`, `quanto-costa`, `costo-render`, `18-crediti`, `0-90-euro` (quotata per non essere parsata come numero), `euro`, `listino`, `virtual-staging-costo`.
+- **correlati**: aggiunto `staging.cos-e` (era mancante — collegava solo a `modalita` e `varianti-parallele`).
+- **domanda_naturale**: da *"Quanto costa un render Virtual Staging?"* a *"Quanto costa un render Virtual Staging? Quanto spendo in crediti per lo staging?"* (doppia formulazione = più match TF-IDF).
+- **a_cosa_serve**: espanso con termini di ricerca esplicit: *"Prezzo render Virtual Staging. Sapere quanto costa un render in crediti B2B (18 crediti = 0,90 euro lordi)... Voce di riferimento per tutte le domande su 'quanto costa lo staging', 'costo staging', 'prezzo render virtuale', 'listino Virtual Staging'."*
+
+**`memory/manuale/hal/hal-index.json` rigenerato**:
+- Versione: **v0.6.1-cap10-gbis** (bump minore, no cambio schema).
+- Voci totali: **117** (invariato).
+- md5 file `09-virtual-staging.yaml` aggiornato.
+- content_md5 voce `staging.crediti-costo` aggiornato.
+- Totali stats: 297 tag unici (era 289) · 275 correlati (era 274).
+
+**`memory/manuale/hal/IMPORT_HAL.md`**: aggiunta riga v0.6.1-cap10-gbis nello storico versioni + sezione *"Smoke Cap. 9 — 1 query di verifica G-bis"* con query attesa.
+
+### Verifica post-fix
+Il Founder eseguirà:
+1. `POST /api/app/hal/knowledge/reindex?force=true` (super_admin)
+2. Smoke: *"Quanto costa un render Virtual Staging?"* → top-1 atteso `09-virtual-staging.yaml::staging.crediti-costo`, confidence ≥ 0.20.
+
+### Conferme
+- **Rate limit HAL chat vs improve = SEPARATI** (60/h ciascuno). Founder conferma di **non** toccare `al_agent.py`. Ok mantenere due contatori distinti come da codice `_check_rate_limit` (`al_agent.py:81-96`).
+
+### File modificati
+- `memory/manuale/hal/09-virtual-staging.yaml` (voce `staging.crediti-costo`)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.6.1-cap10-gbis)
+- `memory/manuale/hal/IMPORT_HAL.md` (+ Smoke G-bis)
+- `memory/SPRINT_STATUS.md` (post-Cap. 10 + task G-bis + prossimo Cap. 11 Mutui + rate limit confermato)
+- `memory/CHANGELOG.md` (questo entry)
+
+### Commit message consigliato
+```
+fix(docs): G-bis · retrieval boost Cap. 9 staging.crediti-costo
+
+Post-Cap. 10 smoke uncovered: "Quanto costa un render Virtual
+Staging?" → top-1 wrongly matched 07-fascicolo-immobile.yaml
+(sim 0.334) instead of Cap. 9. Cap. 9 was #2 and #3.
+
+Voice staging.crediti-costo enriched:
+- tags: 6 → 14 (+ prezzo-render, quanto-costa, costo-render,
+  18-crediti, "0-90-euro" (quoted), euro, listino,
+  virtual-staging-costo)
+- correlati: + staging.cos-e
+- domanda_naturale: doppia formulazione (quanto costa +
+  quanto spendo in crediti)
+- a_cosa_serve: expanded with retrieval keywords
+
+hal-index.json v0.6.1-cap10-gbis (bump minor, no schema).
+117 voci total unchanged. 297 tags (+8), 275 correlati (+1).
+
+Rate limit HAL chat vs improve: confirmed SEPARATE (60/h
+each). No change to al_agent.py.
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: "Quanto costa un render Virtual Staging?" →
+  09-virtual-staging.yaml::staging.crediti-costo (top-1)
+Confidence >= 0.20.
+```
+
+### Prossimo passo
+Cap. 11 Mutui (dopo reindex + smoke G-bis del Founder).
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK G · Cap. 10 · HAL Agent CRM (Manuale + HAL YAML) + convenzione naming Fase 0
 
 **Tipo**: Feature docs — decimo capitolo del Manuale Operativo.
