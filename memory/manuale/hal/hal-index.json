@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T07:14:10.835693+00:00",
-  "version": "v0.6.1-cap10-gbis",
+  "generated_at": "2026-08-07T07:37:09.841690+00:00",
+  "version": "v0.7-cap11",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -51,6 +51,11 @@
       "file": "10-hal-agent-crm.yaml",
       "md5": "833b420239ddb8cd3c2a995e83efd181",
       "voci_count": 13
+    },
+    {
+      "file": "11-mutui-comparatore.yaml",
+      "md5": "0bf9e4e92028bcee45271eb01a8fbc89",
+      "voci_count": 12
     }
   ],
   "voci": [
@@ -3851,10 +3856,406 @@
         "errori_comuni": 2
       },
       "content_md5": "4cdc9c5496cf084e99383b730cf4f8c9"
+    },
+    {
+      "id": "mutui.cos-e",
+      "titolo": "Cos'è il Comparatore Mutui di OMNIA",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "comparatore",
+        "mutuo",
+        "prestito",
+        "casa",
+        "panoramica",
+        "banche"
+      ],
+      "correlati": [
+        "mutui.dove-lo-trovi",
+        "mutui.motore",
+        "mutui.disclaimer-tub"
+      ],
+      "domanda_naturale": "Cos'è il Comparatore Mutui di OMNIA? A cosa serve?",
+      "screenshot": [
+        "[SCREEN: cap11-mutui-panoramica]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "90798fd99e30ff9301189e98bef48671"
+    },
+    {
+      "id": "mutui.dove-lo-trovi",
+      "titolo": "Dove trovi il Comparatore Mutui (B2C, B2B, widget)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "dove-si-trova",
+        "b2c",
+        "b2b",
+        "widget",
+        "immobilcloud",
+        "immoweb"
+      ],
+      "correlati": [
+        "mutui.cos-e",
+        "mutui.lead-capture"
+      ],
+      "domanda_naturale": "Dove trovo il Comparatore Mutui? Come si accede?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "af2b1438ec81c817b78c22469c42e914"
+    },
+    {
+      "id": "mutui.motore",
+      "titolo": "Come funziona il motore matematico (ammortamento francese + TAEG)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "mutui",
+        "motore",
+        "matematica",
+        "ammortamento-francese",
+        "taeg",
+        "irr",
+        "tan"
+      ],
+      "correlati": [
+        "mutui.tegm-soglia-usura",
+        "mutui.piano-ammortamento"
+      ],
+      "domanda_naturale": "Come viene calcolato il TAEG del mutuo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "0964908614f2051bf4c558aa07463bf3"
+    },
+    {
+      "id": "mutui.ltv-consap-under36",
+      "titolo": "Vincolo LTV e Fondo Consap under-36 prima casa",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "mutui",
+        "ltv",
+        "consap",
+        "under-36",
+        "prima-casa",
+        "fondo-garanzia"
+      ],
+      "correlati": [
+        "mutui.motore",
+        "mutui.disclaimer-tub"
+      ],
+      "domanda_naturale": "Cos'è il Fondo Consap per gli under-36? Fino a quanto posso finanziare?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 3
+      },
+      "content_md5": "a5a0aea0341c7932a40a6987fc210fab"
+    },
+    {
+      "id": "mutui.sostenibilita-rata-reddito",
+      "titolo": "Sostenibilita' rata/reddito (max 35%)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "sostenibilita",
+        "reddito",
+        "rata",
+        "35-percento",
+        "budget"
+      ],
+      "correlati": [
+        "mutui.motore",
+        "mutui.ltv-consap-under36"
+      ],
+      "domanda_naturale": "La rata del mutuo e' sostenibile? Quanto posso permettermi?",
+      "screenshot": [
+        "[SCREEN: cap11-mutui-sostenibilita]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "1a1ff36bf69bf3eeb2ec8065e0f2f439"
+    },
+    {
+      "id": "mutui.offerte-14-banche-9",
+      "titolo": "Le 14 offerte curate di 9 banche italiane",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "banche",
+        "offerte",
+        "spread",
+        "intesa",
+        "unicredit",
+        "ing",
+        "webank"
+      ],
+      "correlati": [
+        "mutui.dati-aggiornamento",
+        "mutui.motore"
+      ],
+      "domanda_naturale": "Quali banche compaiono nel comparatore? Perche' proprio queste?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "c2be50a2bb3434b8a33f757ad21a4e74"
+    },
+    {
+      "id": "mutui.tegm-soglia-usura",
+      "titolo": "TEGM Banca d'Italia e soglia usura",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "mutui",
+        "tegm",
+        "soglia-usura",
+        "banca-italia",
+        "compliance",
+        "legale"
+      ],
+      "correlati": [
+        "mutui.motore",
+        "mutui.dati-aggiornamento"
+      ],
+      "domanda_naturale": "Cos'è la soglia usura del mutuo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "cfd5576ccabb403c6f66f6e71bfd9de7"
+    },
+    {
+      "id": "mutui.piano-ammortamento",
+      "titolo": "Piano ammortamento mensile e per anno",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "piano-ammortamento",
+        "mensile",
+        "capitale",
+        "interessi"
+      ],
+      "correlati": [
+        "mutui.motore"
+      ],
+      "domanda_naturale": "Come vedo il piano di ammortamento del mutuo?",
+      "screenshot": [
+        "[SCREEN: cap11-mutui-piano-ammortamento]"
+      ],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 2
+      },
+      "content_md5": "e8fd8a7181904eaae0dd26de51703521"
+    },
+    {
+      "id": "mutui.lanciare-simulazione",
+      "titolo": "Come lancio una simulazione (passi B2C)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "come-fare",
+        "simulazione",
+        "passi",
+        "form"
+      ],
+      "correlati": [
+        "mutui.dove-lo-trovi",
+        "mutui.motore"
+      ],
+      "domanda_naturale": "Come faccio una simulazione mutuo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 10,
+        "errori_comuni": 3
+      },
+      "content_md5": "ec39b7c76ddb27fe37cd7693a00b29e2"
+    },
+    {
+      "id": "mutui.lead-capture",
+      "titolo": "Lead capture B2C e GDPR",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "mutui",
+        "lead",
+        "gdpr",
+        "privacy",
+        "b2c",
+        "mortgage-leads"
+      ],
+      "correlati": [
+        "mutui.dove-lo-trovi"
+      ],
+      "domanda_naturale": "I lead del comparatore mutui dove finiscono?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "fd15a8f0f159dfb29899750fe73a49b0"
+    },
+    {
+      "id": "mutui.dati-aggiornamento",
+      "titolo": "Aggiornamento dati (cadenza trimestrale, no scraping)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "mutui",
+        "aggiornamento",
+        "dati",
+        "trimestrale",
+        "tegm",
+        "eurirs",
+        "no-scraping"
+      ],
+      "correlati": [
+        "mutui.tegm-soglia-usura",
+        "mutui.offerte-14-banche-9"
+      ],
+      "domanda_naturale": "Con quale frequenza si aggiornano i dati del comparatore mutui?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "6ac57650e3caefc7f907ff08a61c5ef6"
+    },
+    {
+      "id": "mutui.disclaimer-tub",
+      "titolo": "Disclaimer legale art. 128-sexies TUB (obbligatorio)",
+      "modulo": "Mutui",
+      "widget": null,
+      "capitolo": "11",
+      "source_file": "11-mutui-comparatore.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "mutui",
+        "disclaimer",
+        "legale",
+        "tub",
+        "mediazione-creditizia",
+        "compliance"
+      ],
+      "correlati": [
+        "mutui.cos-e",
+        "mutui.lead-capture"
+      ],
+      "domanda_naturale": "Il comparatore e' una offerta di mutuo? OMNIA e' mediatore creditizio?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "bbd9823e2d3dc2dab5f37399eaa81e3d"
     }
   ],
   "stats": {
-    "totale_voci": 117,
+    "totale_voci": 129,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -3865,7 +4266,8 @@
       "07": 12,
       "08": 12,
       "09": 12,
-      "10": 13
+      "10": 13,
+      "11": 12
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -3877,18 +4279,19 @@
       "Fascicolo": 12,
       "Sito web": 12,
       "Virtual Staging": 12,
-      "HAL Agent": 13
+      "HAL Agent": 13,
+      "Mutui": 12
     },
     "per_livello": {
-      "base": 83,
-      "intermedio": 34
+      "base": 90,
+      "intermedio": 39
     },
     "per_pubblico": {
-      "titolare": 117,
-      "agente": 102,
-      "segreteria": 68
+      "titolare": 129,
+      "agente": 112,
+      "segreteria": 73
     },
-    "totale_correlati": 275,
-    "totale_tags_unici": 297
+    "totale_correlati": 298,
+    "totale_tags_unici": 346
   }
 }

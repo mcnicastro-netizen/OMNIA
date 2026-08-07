@@ -1,5 +1,5 @@
 # OMNIA — Sprint Status (handoff agenti)
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 10 HAL Agent CRM + G-bis retrieval fix)  
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 Mutui comparatore)  
 **Branch di riferimento**: `main`  
 **Repo**: https://github.com/mcnicastro-netizen/OMNIA  
 **Preview Emergent**: https://omnia-crm-docs.preview.emergentagent.com  
@@ -28,7 +28,8 @@
 | **E** Manuale Cap. 8 Sito web | ✅ | `08-sito-web.md` + 12 voci YAML · index **92 voci** · copertura site.py + themes.py + brand_extractor.py + custom_domain.py |
 | **F** Manuale Cap. 9 Virtual Staging | ✅ | `09-virtual-staging.md` + 12 voci YAML · index **104 voci** · copertura virtual_staging.py (SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
 | **G** Manuale Cap. 10 HAL Agent CRM | ✅ | `10-hal-agent-crm.md` + 13 voci YAML · index **117 voci** · reindex + smoke 3/3 PASS · convenzione naming Fase 0 HAL/al_* |
-| **G-bis** Micro-fix retrieval Cap. 9 `staging.crediti-costo` | ✅ | tags 6→14 · +correlato `staging.cos-e` · domanda_naturale doppia · a_cosa_serve arricchito (prezzo/listino/quanto costa) · index v0.6.1-cap10-gbis · totale 117 voci invariato |
+| **G-bis** Micro-fix retrieval Cap. 9 `staging.crediti-costo` | ✅ | tags 6→14 · +correlato `staging.cos-e` · domanda_naturale doppia · a_cosa_serve arricchito · index v0.6.1-cap10-gbis · retrieval fix validated by testing_agent (top-1 sim 0.379 vs 0.334 fascicolo #2) |
+| **H** Manuale Cap. 11 Mutui comparatore | ✅ | `11-mutui-comparatore.md` + 12 voci YAML · index **129 voci** · copertura mutui.py + mortgage_data.py (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer 128-sexies TUB) |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -43,10 +44,11 @@
 | 8 | Sito web agenzia | 12 | ✅ v1.0 (site + themes + brand extractor + custom domain) |
 | 9 | Virtual Staging | 12 | ✅ v1.0 (pipeline SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
 | 10 | HAL Agent CRM | 13 | ✅ v1.0 (chat + 5 tool CRM, streaming SSE, Migliora con HAL 3 langs+3 toni, naming Fase 0) |
-| 11–26 | — | — | ⏳ |
+| 11 | Mutui comparatore | 12 | ✅ v1.0 (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer TUB 128-sexies) |
+| 12–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **10/26 capitoli (38%)** · **117 voci HAL** · **54 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **11/26 capitoli (42%)** · **129 voci HAL** · **57 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -56,17 +58,16 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.6.1-cap10-gbis |
+| Index | `hal-index.json` v0.7-cap11 |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
-| Post Cap. 6 | 68 voci ✅ reindex fatto |
-| Post Cap. 7 | 80 voci ✅ reindex fatto (Feb 2026) |
-| Post Cap. 8 | 92 voci ✅ reindex fatto (Feb 2026) |
-| Post Cap. 9 | 104 voci ✅ reindex fatto (Feb 2026, insieme Cap. 10) |
-| Post Cap. 10 | **117 voci ✅ reindex + smoke 3/3 PASS** (Feb 2026) |
-| Post G-bis | Reindex Founder da eseguire (voci invariate 117, ma content_md5 `staging.crediti-costo` cambiato + md5 file Cap. 9 cambiato) |
+| Post Cap. 10 | 117 voci ✅ reindex + smoke 3/3 PASS |
+| Post G-bis | 117 voci ✅ reindex + smoke retrieval fix validato (testing_agent) |
+| Post Cap. 11 | **Atteso 129** — reindex live in corso |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke G-bis (verifica retrieval)**:
-- *Quanto costa un render Virtual Staging?* → atteso top-1 `09-virtual-staging.yaml::staging.crediti-costo`, confidence ≥ 0.20
+**Smoke Cap. 11**:
+1. *Cos'è il Comparatore Mutui di OMNIA?* → `mutui.cos-e`
+2. *Come viene calcolato il TAEG del mutuo?* → `mutui.motore`
+3. *OMNIA è mediatore creditizio?* → `mutui.disclaimer-tub` (risposta: **no**, art. 128-sexies TUB)
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05
@@ -81,13 +82,12 @@
 ## Prossimi task (ordine Founder)
 | # | Task | Priorità |
 |---|------|:--------:|
-| 1 | Reindex HAL post-G-bis + 1 smoke costo staging | 🔴 Founder |
-| 2 | **Cap. 11 Mutui** (prossimo capitolo manuale) | 🟢 |
-| 3 | Billing UI listino Founder | 🟡 |
-| 4 | B2C Stripe checkout | 🟡 |
-| 5 | Screenshot kit (TASK H) | 🟡 |
-| 6 | Hard-gate crediti Virtual Staging (pre-check saldo) | 🟢 |
-| 7 | Sito Web v2 · scope da definire (P0 Hero+Chi Siamo+Contatti+Footer + extractor esteso) | 🟠 aperta |
+| 1 | **Cap. 12 HAL Knowledge** (meta-doc del RAG stesso) | 🟢 |
+| 2 | Billing UI listino Founder | 🟡 |
+| 3 | B2C Stripe checkout | 🟡 |
+| 4 | Screenshot kit (TASK I) | 🟡 |
+| 5 | Hard-gate crediti Virtual Staging (pre-check saldo) | 🟢 |
+| 6 | Sito Web v2 · scope da definire (P0 Hero+Chi Siamo+Contatti+Footer + extractor esteso) | 🟠 aperta |
 ---
 ## Micro-fix aperti
 _Tutti chiusi. G-bis retrieval Cap. 9 applicato (Feb 2026)._

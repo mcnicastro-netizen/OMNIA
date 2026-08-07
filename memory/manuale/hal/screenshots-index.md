@@ -160,6 +160,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 11 · Mutui comparatore
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap11-mutui-panoramica` | Form comparatore + tabella risultati ordinata per TAEG: 4-6 offerte visibili con banca/rata/TAEG + badge "Consap under-36" quando attivo. In fondo disclaimer legale in evidenza. | 🔴 | — |
+| 2 | `cap11-mutui-sostenibilita` | Card sostenibilità con reddito 3.000€ + best rata 890€ → badge verde "Sostenibile · 29,7% del reddito" + max_sustainable_rata 1.050€. | 🔴 | — |
+| 3 | `cap11-mutui-piano-ammortamento` | Modale piano ammortamento espanso: tabella primi 12 mesi con colonne mese/rata/interessi/capitale/saldo residuo + riepilogo annuale sotto. | 🔴 | — |
+
+**Totale Cap. 11**: 3 screenshot (tutti essenziali).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -199,3 +211,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 8) | Aggiunte 5 righe Cap. 8 · Sito web agenzia (4 essenziali, 1 utile). Totale index = **44 screenshot** catalogati. |
 | Feb 2026 (Cap. 9) | Aggiunte 5 righe Cap. 9 · Virtual Staging (3 essenziali, 2 utili). Totale index = **49 screenshot** catalogati. |
 | Feb 2026 (Cap. 10) | Aggiunte 5 righe Cap. 10 · HAL Agent CRM (3 essenziali, 2 utili). Totale index = **54 screenshot** catalogati. |
+| Feb 2026 (Cap. 11) | Aggiunte 3 righe Cap. 11 · Mutui (panoramica + sostenibilità + piano ammortamento — tutte essenziali). Totale index = **57 screenshot** catalogati. |

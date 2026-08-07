@@ -1,5 +1,60 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK H · Cap. 11 · Mutui comparatore (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — undicesimo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-Cap. 10 G-bis validato · Cap. 11 = Mutui comparatore (`mutui.py` + `mortgage_data.py` + `MortgageComparator.jsx`).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 11 · Mutui comparatore**:
+- **Nuovo capitolo** `memory/manuale/11-mutui-comparatore.md` (~11 sottocapitoli, ~450 righe): cos'è il comparatore + 3 punti di contatto (B2C `/cloud/mutui` + tool CRM `/it/app/tools/mutui` + widget partner), motore matematico 4-stage (LTV check + ammortamento francese + TAEG via IRR + soglia usura TEGM), vincoli LTV standard 80% + Consap under-36 95%, sostenibilità rata/reddito (max 35%), 14 offerte curate 9 banche, piano ammortamento, lead capture B2C con GDPR, aggiornamento dati trimestrale D-037 no scraping, disclaimer legale art. 128-sexies TUB.
+- **Nuovo YAML HAL** `memory/manuale/hal/11-mutui-comparatore.yaml` (~500 righe, **12 voci**): `cos-e`, `dove-lo-trovi`, `motore`, `ltv-consap-under36`, `sostenibilita-rata-reddito`, `offerte-14-banche-9`, `tegm-soglia-usura`, `piano-ammortamento`, `lanciare-simulazione`, `lead-capture`, `dati-aggiornamento`, `disclaimer-tub`.
+- **`hal-index.json` rigenerato**: v0.7-cap11 · **129 voci totali** (Cap. 1-11).
+- **`IMPORT_HAL.md`** aggiornato a v0.7: header a 129 voci · sezione Smoke Cap. 11.
+- **`screenshots-index.md`**: +3 righe Cap. 11 (tutte essenziali) → **57 screenshot**.
+- **`GAP.md`**: Sezione E Cap. 11 con 15 punti verifica onestà 1:1 al codice (`mutui.py` 278 righe + `mortgage_data.py` 70 righe); aggiornata Sezione A HAL Knowledge (117 → 129 voci).
+
+### Onestà documentale (D-051 · cruciale per compliance mutui)
+- **Disclaimer legale art. 128-sexies TUB** documentato con testo integrale + motivazione. OMNIA NON è mediatore creditizio (non iscritto OAM), NON percepisce compensi da banche. Il disclaimer è parte del response API, non rimovibile.
+- **D-037 no scraping**: dichiarato esplicitamente. Motivo: siti banche instabili + termini d'uso vietano + qualità dati curati batte scraping.
+- **Dati orientativi** (`DATA_UPDATED_AT = "2026-06"`) aggiornati manualmente ogni trimestre.
+- **Errore massimo tipico ±0.20% TAEG** se ritardo > 3 mesi: dichiarato per gestire aspettative.
+- **14 offerte curate 9 banche** = elenco esatto `BANK_OFFERS` (`mortgage_data.py:27-70`). No convenzione commerciale (D-037).
+- **Consap under-36**: requisiti extra ISEE ≤ 40k **NON verificati** dal comparatore (dichiarato onestamente). Il plafond del Fondo può esaurirsi in corso d'anno. Il tasso Consap ha un cap che il comparatore v1 non applica.
+- **Sostenibilità v1**: comparatore vede solo reddito, non altri prestiti/spese/coobbligati. Regola d'oro se ratio > 30%: avvisare cliente.
+- **Lead capture v1**: repository di interesse, no funnel commerciale attivo, no nurturing, no forward banche, no dashboard super_admin.
+- **GDPR consent hard-gate NON attivo v1**: lead salvato anche senza consenso. Right to be forgotten via email.
+- **Piano ammortamento v1 limits**: no tasso misto, no surroga, no estinzione anticipata.
+- **HAL Legal in arrivo** per domande legali mutui (surroga, rinegoziazione, Consap decadenza): non attivo v1.
+
+### Verifiche post-scrittura
+1. `POST /api/app/hal/knowledge/reindex?force=true` (super_admin)
+2. 3 smoke query attese:
+   - *"Cos'è il Comparatore Mutui di OMNIA?"* → `mutui.cos-e`
+   - *"Come viene calcolato il TAEG del mutuo?"* → `mutui.motore`
+   - *"OMNIA è mediatore creditizio?"* → `mutui.disclaimer-tub` (risposta: **no**)
+3. `manual_hal_indexed >= 129`.
+
+### File modificati
+- `memory/manuale/11-mutui-comparatore.md` (nuovo)
+- `memory/manuale/hal/11-mutui-comparatore.yaml` (nuovo, 12 voci)
+- `memory/manuale/hal/hal-index.json` (v0.7-cap11, 129 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (v0.7)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe → 57)
+- `memory/GAP.md` (Sezione E Cap. 11)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md`
+
+### Prossimi passi
+- Cap. 12 manuale — **HAL Knowledge** (il RAG stesso, che meta-documenta se stesso)
+- (Rimandato) TASK I · Screenshot kit reali
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging · Sito Web v2
+
+**Progresso manuale**: 11/26 capitoli (42%). Totale voci HAL: **129**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 🔧 Micro-fix G-bis · Retrieval Cap. 9 `staging.crediti-costo`
 
 **Tipo**: Retrieval quality fix — nessuna nuova voce, solo arricchimento tag/correlati/domanda_naturale/a_cosa_serve sulla voce esistente.

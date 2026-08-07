@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 10 HAL Agent CRM · aggiunta Sezione E Cap. 10 · convenzione naming Fase 0 HAL/al_*)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 Mutui comparatore · aggiunta Sezione E Cap. 11)
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -30,7 +30,7 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-10) indicizzato con **117 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-11) indicizzato con **129 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
 | **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | ✅ Coperto in Cap. 7 · Fascicolo Immobile §7.5. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
@@ -175,6 +175,25 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **HAL Agent CRM vs HAL Fascicolo vs HAL Knowledge**: chiarita distinzione fra 3 endpoint AI diversi (chat CRM `/al/chat` in Cap. 10, analisi documentale `/fascicolo/{id}/analyze` in Cap. 7, retrieval manuale `/hal/knowledge/ask` in Cap. 12 futuro).
 - **Cross-ref Cap. 3**: pulsante *"Migliora con HAL"* già citato correttamente in `03-immobili.md` §3.7 con rimando a Cap. 10. **Nessuna correzione necessaria**.
 - **Widget solo in ImmoWeb**: il chat widget flottante appare solo dentro le pagine ImmoWeb (non in `/cloud` B2C). Documentato in errori comuni.
+
+### Cap. 11 · Mutui comparatore — Feb 2026
+- **14 offerte curate di 9 banche** documentate 1:1 con `BANK_OFFERS` in `mortgage_data.py:27-70`. Zero invenzioni. Elenco esplicito banche+prodotti.
+- **Motore matematico** documentato 1:1 (`mutui.py`): ammortamento francese (`french_installment` line 69), TAEG via IRR bisezione (`compute_taeg` line 77), benchmark Eurirs/Euribor (`_benchmark` line 100), soglia usura TEGM.
+- **Parametri economici** verificati 1:1: EURIRS `{10: 2.94, 15: 3.05, 20: 3.17, 25: 3.15, 30: 3.12}`, EURIBOR_3M `2.05`, TEGM `{fisso: 4.05, variabile: 4.08}`, soglie usura `{fisso: 9.0625%, variabile: 9.10%}`, MAX_LTV_STANDARD 80%, MAX_LTV_UNDER36 95%, MAX_RATA_REDDITO 35%, imposta sostitutiva 0.25% prima / 2% seconda.
+- **Data aggiornamento** (`DATA_UPDATED_AT = "2026-06"`): dichiarata onestamente nel manuale (§11.5, §11.9). Cadenza trimestrale consigliata.
+- **Consap under-36 prima casa**: documentato che serve **entrambi** i flag (age_under_36 + first_home) + `consap:true` sull'offerta. 11 offerte Consap-eligible su 14 (esclusi BNL, ING Variabile, Webank).
+- **Endpoint** documentati 1:1: `GET /mutui/config`, `POST /mutui/compare`, `POST /mutui/plan`, `POST /mutui/lead`. Prefix `/mutui` sotto ImmobilCloud B2C.
+- **Disclaimer legale obbligatorio** documentato onestamente con testo integrale + motivazione **art. 128-sexies TUB** (mediazione creditizia riservata). OMNIA non è iscritta OAM, non percepisce compensi da banche. Il disclaimer è **parte del response API** e non è rimovibile lato client.
+- **D-037 no scraping** documentato esplicitamente: nessuno scraping automatico su siti banche. Motivo: siti instabili + termini d'uso spesso vietano + qualità dati curati batte scraping.
+- **Nessuna API pubblica banche italiane** per spread mutui in v1: documentato onestamente.
+- **Errore massimo tipico ±0.20% sul TAEG** se ritardo aggiornamento > 3 mesi: dichiarato per gestire aspettative.
+- **Sostenibilità rata/reddito** limitazioni onestà D-051: comparatore vede solo reddito. La banca vede anche altri prestiti, spese fisse, coobbligati. Regola d'oro: se ratio > 30% avvisare cliente (non 35%).
+- **Lead capture v1**: repository di interesse (`mortgage_leads` collection). **Nessun funnel commerciale attivo**, nessuna dashboard super_admin, nessuna nurturing email, nessun forward a banche. Documentato onestamente come "roadmap".
+- **GDPR consent hard-gate NON attivo v1**: dichiarato. Lead salvato anche senza consenso (`gdpr_consent: false`). Right to be forgotten via email `privacy@omniarealestateecosystem.it`.
+- **Piano ammortamento v1 limits**: no tasso misto, no surroga, no estinzione anticipata. Documentato.
+- **Widget partner embeddabile** (Track B) menzionato ma dettagli tecnici (API key, credit balance, rate limit partner) non documentati (out of scope Cap. 11 utente-facing).
+- **HAL Legal in arrivo** per domande legali su mutui (surroga, rinegoziazione, decadenza Consap): rimando esplicito, non attivo v1.
+- **Cross-ref Cap. 3, Cap. 8, Cap. 10** documentati come collegamenti utili (prezzo immobile → rata simulata, widget embed sito agenzia, HAL Agent CRM per query natural language).
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
