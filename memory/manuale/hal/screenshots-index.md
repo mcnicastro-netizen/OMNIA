@@ -208,6 +208,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 15 · Social Publisher
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap15-social-panoramica` | Pagina Social Publisher con 3 card canali (Facebook Page blu #1877F2, Instagram Business rosa #E4405F, Telegram azzurro #26A5E4), badge status "Attivo" su almeno un canale, elenco *"Post recenti"* con 3-5 righe in basso. | 🔴 | — |
+| 2 | `cap15-config-modal` | Modale *"Configura canale Facebook Page"* aperta: campi `Facebook Page ID` e `Page Access Token` compilati (mascherati), pulsante *"Salva credenziali"*, badge testo *"Le credenziali verranno cifrate AES-256-GCM"* per rassicurare l'utente. | 🔴 | — |
+| 3 | `cap15-publish-multichannel` | Modale di pubblicazione dalla scheda immobile: 3 checkbox canali (FB/IG/TG), textarea caption pre-riempita con caption default, anteprima foto principale, bottone *"Pubblica adesso"* + indicatore risultato multi-canale (ok/fail per canale). | 🔴 | — |
+
+**Totale Cap. 15**: 3 screenshot (tutti essenziali).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -251,3 +263,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 12) | Aggiunte 3 righe Cap. 12 · HAL Knowledge (panoramica + risposta+fonti + status-badge). Totale index = **60 screenshot** catalogati. |
 | Feb 2026 (Cap. 13) | Aggiunte 3 righe Cap. 13 · Team & Ruoli / Collaboratori (members-list + invite-modal + accept-invite — tutte essenziali). Totale index = **63 screenshot** catalogati. |
 | Feb 2026 (Cap. 14) | Aggiunte 3 righe Cap. 14 · Import XML (upload + preview + commit-result — 2 essenziali + 1 utile). Totale index = **66 screenshot** catalogati. |
+| Feb 2026 (Cap. 15) | Aggiunte 3 righe Cap. 15 · Social Publisher (panoramica + config-modal + publish-multichannel — tutte essenziali). Totale index = **69 screenshot** catalogati. |

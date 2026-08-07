@@ -1,8 +1,16 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 14 · Import XML)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 15 · Social Publisher)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK L · Cap. 15 · Social Publisher)**:
+  - ✅ **Cap. 15 · Social Publisher** (Facebook, Instagram, Telegram): 12 sottocapitoli + **14 voci HAL YAML** (`social.cos-e`, `social.dove-trovarlo`, `social.canali-supportati`, `social.credenziali-facebook`, `social.credenziali-instagram`, `social.credenziali-telegram`, `social.configurare-canale`, `social.validare-canale`, `social.pubblicare-immobile`, `social.caption-default`, `social.audit-log`, `social.errori`, `social.limitazioni-v1`, `social.collegamenti`). Copertura 1:1 con `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe).
+  - ✅ **Onestà documentale (D-051)**: 8 endpoint reali sotto `/api/app/publishing/social/*`, 3 canali supportati (Literal ChannelType), ruoli agency_admin/super_admin/branch_admin/group_admin, white label D-041 esplicito ("OMNIA never posts under its own identity"), credenziali AES-GCM cifrate, API base Meta Graph v20.0 + Telegram Bot API, caption limits esatti (2000 safe, 1024 Telegram photo), credential fields per canale documentati 1:1 con SOCIAL_CATALOG, IG richiede image_url HTTPS, flusso 2-step IG (container→publish), caption default 5-righe con emoji fisse 📍 💶 📐, audit `social_posts` (success + failed), counter live posts_ok/posts_failed, status transitions active/pending/disabled/error, 12+ codici errore mappati.
+  - ✅ **Limiti v1 dichiarati esplicitamente**: no scheduling (solo on-demand), no X/LinkedIn/TikTok/YouTube/WhatsApp/Threads, no carosello, no video/reel/story, no editor caption con preview, no template caption per agenzia, no analytics engagement, no auto-refresh token FB long-lived, no bulk publish, no rollback multi-canale, no preview finale, no moderazione pre-pubblicazione.
+  - ✅ **`hal-index.json` rigenerato**: v0.11-cap15, **182 voci totali** (Cap. 1-15), 15 source files.
+  - 📸 Screenshots-index: +3 righe Cap. 15. Totale 69 screenshot catalogati.
+  - 📈 **Progresso manuale**: 15/26 capitoli (58%). Totale voci HAL: **182**. Prossimo: reindex prod super_admin + smoke 3/3 Cap. 15, poi Cap. 16+ (HAL Legal se attivato, Domain Vault, Compliance HARD/SOFT, Impostazioni, Billing UI).
 
 - **Ultimo update (Feb 2026 — TASK K · Cap. 14 · Import XML / Migrazione)**:
   - ✅ **Cap. 14 · Import XML** (Migrazione da altro gestionale): 12 sottocapitoli + **13 voci HAL YAML** (`import.cos-e`, `import.dove-trovarlo`, `import.flusso-preview-commit`, `import.file-xml-requisiti`, `import.mapping-tabelle`, `import.dedupe`, `import.simulazione-dry-run`, `import.divergenze`, `import.risultato-commit`, `import.errori`, `import.limitazioni-v1`, `import.checklist-migrazione`, `import.collegamenti`). Copertura 1:1 con `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe).

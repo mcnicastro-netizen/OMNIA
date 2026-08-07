@@ -1,5 +1,146 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK L · Cap. 15 · Social Publisher (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — quindicesimo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-Cap. 14 approvato · Cap. 15 = Social Publisher (`social_publisher.py` + `SocialPublisherPage.jsx`).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 15 · Social Publisher** (Facebook, Instagram, Telegram):
+- **Nuovo capitolo** `memory/manuale/15-social-publisher.md` (~380 righe, 12 sottocapitoli): cos'è + white label D-041, dove trovarlo, i 3 canali supportati (FB Page/IG Business/Telegram), come configurare (self-service 3 step), dove trovare le credenziali per canale, validazione live, flusso publish on-demand multi-canale, caption automatica default 5-righe con emoji fisse, audit log `social_posts`, errori comuni (409/422/502/404), limiti onesti v1 (no scheduling/analytics/carosello/X/LinkedIn/TikTok/bulk/rollback/template/moderazione), cross-ref Cap. 3/6/8/12/13.
+- **Nuovo YAML HAL** `memory/manuale/hal/15-social-publisher.yaml` (~610 righe, **14 voci**): `social.cos-e`, `social.dove-trovarlo`, `social.canali-supportati`, `social.credenziali-facebook`, `social.credenziali-instagram`, `social.credenziali-telegram`, `social.configurare-canale`, `social.validare-canale`, `social.pubblicare-immobile`, `social.caption-default`, `social.audit-log`, `social.errori`, `social.limitazioni-v1`, `social.collegamenti`. Validato con `_chunk_yaml_hal_file()` (14/14 chunk generati). Fix minori: tag numerici `"422"/"409"/"502"/"404"` quotati; typo `permezi` → `permessi`.
+- **`hal-index.json` rigenerato**: v0.11-cap15 · **182 voci totali** (Cap. 1-15) · 15 source files con MD5 aggiornati.
+- **`IMPORT_HAL.md`** aggiornato a v0.11: header a 182 voci · nuova sezione "Smoke Cap. 15" con 3 query attese · storico versioni esteso.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 15 con **3 righe placeholder** (tutte essenziali). Totale: **69 screenshot** catalogati.
+- **`GAP.md`**: aggiunta sezione Cap. 15 con **25+ punti verifica onestà 1:1** al codice (endpoint reali, ruoli, canali Literal, white label D-041, AES-GCM, API base Meta/Telegram, caption limits, credential fields, errori, flow publish, audit, counter, status, limiti v1).
+- **`SPRINT_STATUS.md`**: TASK L aggiunto · progresso 15/26 capitoli (58%) · 182 voci HAL · Post Cap. 15 reindex live pending.
+
+### Onestà documentale (D-051)
+
+**Punti onestà principali**
+- **Endpoints reali 1:1** con `social_publisher.py`: 8 endpoint sotto `/api/app/publishing/social/*` (`GET /catalog`, `GET/POST/PATCH/DELETE /channels`, `POST /channels/{id}/validate`, `POST /publish`, `GET /posts`).
+- **3 canali supportati esatti** (Literal `ChannelType`): `facebook_page`, `instagram_business`, `telegram`. Zero invenzioni. X/LinkedIn/TikTok esplicitamente esclusi v1.
+- **Ruoli `_ROLES`**: `agency_admin`, `super_admin`, `branch_admin`, `group_admin`. Agent semplice NO accesso.
+- **White label D-041**: esplicitamente citato nel docstring del modulo (`social_publisher.py:11-12`) — "OMNIA never posts under its own identity". Documentato onestamente come regola cardine.
+- **Credenziali AES-GCM cifrate** via `encrypt_dict()`. Campo `credentials_encrypted` sempre escluso dalle risposte GET (`_public_channel`).
+- **API base 1:1**: `GRAPH_BASE = "https://graph.facebook.com/v20.0"`, `TELEGRAM_BASE = "https://api.telegram.org"`, `HTTP_TIMEOUT = 20.0`.
+- **Caption limits 1:1**: `CAPTION_MAX = 2000`, `TELEGRAM_CAPTION_MAX = 1024`. Troncatura FB 4900/IG 2100/Telegram-testo 4096 documentati.
+- **Credential fields 1:1** per canale (SOCIAL_CATALOG statico).
+- **IG richiede image_url HTTPS** (`instagram_requires_image` 422).
+- **IG flusso 2-step**: container → media_publish.
+- **Errori API 1:1**: tutti i 12+ codici errore mappati con detail esatto e HTTP code.
+- **Uno canale per tipo per agenzia**: `409 channel_already_configured`.
+- **Caption default `_build_default_caption` 1:1**: 5 righe max, emoji fisse 📍 💶 📐, prezzo formattato con `.` separatore, suffisso `€/mese` se rent_monthly ma non price, descrizione a 800 char, no placeholder D-051.
+- **Publish flow per canale** documentato esattamente come nel codice.
+- **`ok` top-level `true` solo se tutti** i canali success (no rollback multi-canale, documentato).
+- **Audit log `social_posts`** con success + failed loggati entrambi.
+- **Counter `posts_ok`/`posts_failed`** live sulla card canale.
+- **Status transitions**: create→active, validate KO→error, publish KO→error, patch→active/disabled.
+- **NO auto-refresh token FB long-lived** documentato onestamente.
+- **Limiti v1 espliciti in `social.limitazioni-v1`**: no scheduling, no X/LinkedIn/TikTok/YouTube/WhatsApp/Threads, no carosello, no video/reel/story, no editor caption, no template caption, no analytics engagement, no auto-refresh token, no bulk publish, no rollback multi-canale, no preview finale, no moderazione pre-pubblicazione.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder (super_admin):
+1. `POST /api/app/hal/knowledge/reindex?force=true`.
+2. Verifica `manual_hal_indexed >= 182`.
+3. Smoke Cap. 15 3/3 attese:
+   - *"Come pubblico un immobile su Facebook e Instagram?"* → `social.pubblicare-immobile`
+   - *"Come ottengo il bot token per Telegram?"* → `social.credenziali-telegram`
+   - *"Posso programmare la pubblicazione per domani?"* → `social.limitazioni-v1` (risposta onesta: **no** v1)
+4. Confidence attesa ≥ 0.15 su tutte e 3.
+
+### File modificati
+- `memory/manuale/15-social-publisher.md` (nuovo, ~380 righe)
+- `memory/manuale/hal/15-social-publisher.yaml` (nuovo, ~610 righe, 14 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.11-cap15, 182 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.11, 182 voci, Smoke Cap. 15)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe Cap. 15 → 69 totali)
+- `memory/GAP.md` (Sezione Cap. 15 con 25+ punti onestà)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (TASK L completato · 15/26 · 182 voci · 58%)
+
+### Commit message consigliato
+
+```
+feat(docs): TASK L · Cap. 15 Social Publisher (Manual + HAL YAML)
+
+Manual Cap. 15 (Social Publisher · FB Page + IG Business + Telegram):
+- 15-social-publisher.md (~380 lines, 12 subchapters)
+- 15-social-publisher.yaml (14 HAL voci, ~610 lines)
+- hal-index.json v0.11-cap15 (182 voci total, 15 source files)
+- IMPORT_HAL.md v0.11 (updated to 182 voci + Smoke Cap. 15)
+- screenshots-index.md (+3 rows Cap. 15 → 69 total)
+- GAP.md: Cap. 15 section (25+ honesty points)
+- SPRINT_STATUS.md updated (15/26 · 182 voci · 58%)
+
+Coverage: social_publisher.py (578 lines) + SocialPublisherPage.jsx
+(470 lines) full mapping.
+
+Honesty (D-051):
+- Endpoints 1:1: 8 endpoints under /api/app/publishing/social/*
+- ChannelType Literal: facebook_page, instagram_business, telegram
+- Roles _ROLES: agency_admin, super_admin, branch_admin, group_admin
+- White label D-041: OMNIA never posts under its own identity
+- Credentials AES-GCM encrypted via encrypt_dict
+- API base 1:1: GRAPH_BASE v20.0, TELEGRAM_BASE, HTTP_TIMEOUT 20s
+- Caption limits: CAPTION_MAX=2000, TELEGRAM_CAPTION_MAX=1024
+- Credential fields exact for each channel (SOCIAL_CATALOG)
+- IG requires image_url HTTPS (instagram_requires_image 422)
+- IG 2-step flow: /media container → /media_publish
+- Error codes 1:1: unsupported_channel, missing_credentials,
+  channel_already_configured (409), channel_not_found,
+  page_id_mismatch, instagram_requires_image, meta_error, 
+  telegram_error, instagram_container_missing_id,
+  channels_required, property_not_found
+- One channel per type per agency (409)
+- Default caption: 5 rows max, emojis 📍 💶 📐, price format,
+  description trimmed to 800 chars, no placeholders
+- Publish flow per channel exactly as in code
+- ok top-level true only if all channels success
+- Audit social_posts logs both success and failed
+- Counters posts_ok/posts_failed live on channel card
+- Status transitions: create→active, validate KO→error
+- No auto-refresh FB long-lived token
+
+Limits v1 explicit:
+- No scheduling (only on-demand)
+- No X/LinkedIn/TikTok/YouTube/WhatsApp/Threads
+- No carousel, video, reels, stories
+- No caption editor with preview
+- No custom caption templates per agency
+- No engagement analytics
+- No token auto-refresh
+- No bulk publish
+- No multi-channel rollback
+- No final preview
+- No pre-publish moderation
+
+Validation:
+- yaml.safe_load OK on 15-social-publisher.yaml (14 voci)
+- Fixes during drafting: tags "422"/"409"/"502"/"404" quoted,
+  typo permezi → permessi
+- _chunk_yaml_hal_file() → 14 chunks OK
+- Total corpus YAML chunks = 182 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: manual_hal_indexed >= 182
+Smoke 3/3 Cap. 15:
+- social.pubblicare-immobile (come pubblico su FB+IG)
+- social.credenziali-telegram (come ottengo bot token)
+- social.limitazioni-v1 (posso programmare? no v1)
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 15
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging · Sito Web v2
+- Cap. 16+ manuale (candidati: HAL Legal (se attivato) · Domain Vault · Compliance HARD/SOFT · Impostazioni · Billing UI)
+
+**Progresso manuale**: 15/26 capitoli (58%). Totale voci HAL: **182**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK K · Cap. 14 · Import XML / Migrazione (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — quattordicesimo capitolo del Manuale Operativo.

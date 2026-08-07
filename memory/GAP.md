@@ -262,6 +262,36 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Limiti v1 espliciti in `import.limitazioni-v1`**: no CSV/JSON/Excel, no sync automatica, no wizard mappatura, no rollback batch, no session persistita, no preview foto (solo count), no import clienti/lead via XML, no fuzzy match dedupe, no auto-assign agent, no storico import UI.
 - **Cross-ref**: Cap. 3 (Immobili post-import), Cap. 4 (clienti via `/clients/csv-import`), Cap. 6 (Portali & Publishing), Cap. 12 (HAL Knowledge legge Cap. 14), Cap. 13 (permessi agency_admin).
 
+### Cap. 15 · Social Publisher (Facebook, Instagram, Telegram) — Feb 2026
+- **Endpoint reali documentati 1:1** con `social_publisher.py`: `GET /catalog`, `GET /channels`, `POST /channels`, `PATCH /channels/{id}`, `DELETE /channels/{id}`, `POST /channels/{id}/validate`, `POST /publish`, `GET /posts`. Prefix `/publishing/social` sotto `/api/app`.
+- **Ruoli richiesti**: `agency_admin`, `super_admin`, `branch_admin`, `group_admin` (tuple `_ROLES`, `social_publisher.py:333`). Documentato onestamente ("agent semplice non ha accesso").
+- **3 canali supportati esatti** (`ChannelType` Literal a `social_publisher.py:51`): `facebook_page`, `instagram_business`, `telegram`. Zero invenzioni.
+- **White label D-041 esplicito**: "OMNIA never posts under its own identity" (`social_publisher.py:11-12`). Documentato onestamente come regola cardine.
+- **Credenziali cifrate AES-GCM** via `encrypt_dict()` (`social_publisher.py:35, 373`). Campo `credentials_encrypted` sempre escluso da tutte le response GET (`_public_channel`, `social_publisher.py:142-143`). Nessuna decodifica lato UI documentata.
+- **API base**: `GRAPH_BASE = "https://graph.facebook.com/v20.0"`, `TELEGRAM_BASE = "https://api.telegram.org"`, `HTTP_TIMEOUT = 20.0` — documentati 1:1.
+- **Caption limits documentati 1:1**: `CAPTION_MAX = 2000` (safe globale), `TELEGRAM_CAPTION_MAX = 1024`. Troncatura FB 4900, IG 2100, Telegram 4096 (testo) — documentati.
+- **Credential fields per canale** (SOCIAL_CATALOG `social_publisher.py:53-84`):
+  - `facebook_page`: `page_id` + `access_token` (permesso `pages_manage_posts`)
+  - `instagram_business`: `ig_user_id` + `access_token` (Page Access Token della Pagina collegata)
+  - `telegram`: `bot_token` (da @BotFather) + `chat_id` (@nomecanale o numerico)
+- **IG richiede image_url HTTPS** esplicito (`instagram_requires_image` 422 in `publish_instagram_business`, `social_publisher.py:296-297`) — documentato.
+- **IG flusso 2-step**: POST /media (crea container) → POST /media_publish (`social_publisher.py:298-309`) — documentato.
+- **Errori API 1:1**: `unsupported_channel` (422), `missing_credentials:<fields>` (422), `channel_already_configured` (409), `channel_not_found` (404), `page_id_mismatch` (422 validate FB), `instagram_requires_image` (422), `meta_error:{code}:{msg}` (502), `telegram_error:{desc}` (502), `instagram_container_missing_id` (502), `channels_required` (422 publish), `property_not_found` (404). Tutti in `social.errori`.
+- **Uno canale per tipo per agenzia**: `409 channel_already_configured` se secondo tentativo con stesso `channel` per stessa `agency_id` (`social_publisher.py:358-360`). Documentato.
+- **Caption default** (`_build_default_caption`, `social_publisher.py:157-189`): 5 righe max con emoji fisse `📍 💶 📐`, prezzo formattato con separatore migliaia italiano, suffisso `€/mese` se `rent_monthly` senza `price`, descrizione tagliata a 800 char. Nessun placeholder se dato mancante. Documentato 1:1.
+- **Publish flow per canale**:
+  - FB con foto → `POST /{page_id}/photos` (path `/photos`). Senza foto ma con listing_url → `POST /{page_id}/feed` con parametro `link` (`social_publisher.py:275-290`).
+  - IG → POST /{ig_user_id}/media (creazione container) + POST /{ig_user_id}/media_publish.
+  - Telegram con foto → `sendPhoto`, senza foto → `sendMessage` (troncato a 4096).
+- **Publish result payload**: `{property_id, results: {canale: {ok, external_id|error}}, ok: bool}`. `ok` top-level è `true` solo se **tutti** i canali success. Documentato onestamente ("no rollback multi-canale").
+- **Audit log `social_posts`**: ogni tentativo (success O failed) produce un record (`_record_post`, `social_publisher.py:546-562`) con `caption[:2000]`, `external_id`, `error`, timestamps. Documentato.
+- **Counter live**: `posts_ok` + `posts_failed` incrementati su `social_channels` ad ogni tentativo (`$inc` in `social_publisher.py:517, 537`). Documentato come "badge live sulla card canale".
+- **Status canale** (`SocialChannel.status`): `active` | `pending` | `disabled` | `error`. Transizione: create→active, validate KO→error, publish KO→error, patch status→active o disabled. Documentato.
+- **NO auto-refresh token FB long-lived**: la libreria non ha job cron per rinnovare. Documentato come "rinnovi manuale dalle Impostazioni canale".
+- **Multi-tenant safe by design**: ogni endpoint filtra per `agency_id` estratto da `require_agency_404`. Scope isolato.
+- **Limiti v1 espliciti in `social.limitazioni-v1`**: no scheduling, no X/LinkedIn/TikTok/YouTube/WhatsApp/Threads, no carosello, no video/reel/story, no editor caption, no template caption, no analytics engagement, no auto-refresh token, no bulk publish, no rollback multi-canale, no preview finale, no moderazione pre-pubblicazione.
+- **Cross-ref**: Cap. 3 (bottone "Pubblica sui social" parte da scheda immobile), Cap. 6 (sync engine portali = feed pull, distinto da social = push), Cap. 8 (listing_url = URL sito agenzia), Cap. 12 (HAL Knowledge legge Cap. 15), Cap. 13 (ruoli richiesti).
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).

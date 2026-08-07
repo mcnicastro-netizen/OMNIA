@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T10:49:44.986698+00:00",
-  "version": "v0.10-cap14",
+  "generated_at": "2026-08-07T11:20:38.189670+00:00",
+  "version": "v0.11-cap15",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -71,6 +71,11 @@
       "file": "14-import-xml.yaml",
       "md5": "06635af601bbbaf1f584647e9fef9270",
       "voci_count": 13
+    },
+    {
+      "file": "15-social-publisher.yaml",
+      "md5": "2e32f21ff7952d4aa1bbaa63eda486bb",
+      "voci_count": 14
     }
   ],
   "voci": [
@@ -5653,10 +5658,525 @@
         "errori_comuni": 1
       },
       "content_md5": "b5d222b9864987dd0d13115579f00a2f"
+    },
+    {
+      "id": "social.cos-e",
+      "titolo": "Cos'è il Social Publisher (pubblicazione su FB, IG, Telegram)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "publisher",
+        "facebook",
+        "instagram",
+        "telegram",
+        "panoramica",
+        "primi-passi",
+        "marketing",
+        "white-label",
+        "d-041"
+      ],
+      "correlati": [
+        "social.dove-trovarlo",
+        "social.canali-supportati",
+        "social.pubblicare-immobile"
+      ],
+      "domanda_naturale": "Cos'è il Social Publisher? A cosa serve?",
+      "screenshot": [
+        "[SCREEN: cap15-social-panoramica]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "9a286ac9148f389c73cf1b1814b553c2"
+    },
+    {
+      "id": "social.dove-trovarlo",
+      "titolo": "Dove trovare Social Publisher in ImmoWeb",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "publisher",
+        "dove-si-trova",
+        "sidebar",
+        "navigazione",
+        "route"
+      ],
+      "correlati": [
+        "social.cos-e",
+        "social.canali-supportati"
+      ],
+      "domanda_naturale": "Dove trovo Social Publisher? Come ci accedo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "c184e1b3e0ef38abfa3a52a5722e698b"
+    },
+    {
+      "id": "social.canali-supportati",
+      "titolo": "Quali canali social sono supportati (FB Page, IG Business, Telegram)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "canali",
+        "facebook-page",
+        "instagram-business",
+        "telegram",
+        "meta-graph",
+        "bot-api",
+        "twitter",
+        "tiktok",
+        "linkedin",
+        "limitazioni"
+      ],
+      "correlati": [
+        "social.cos-e",
+        "social.credenziali-facebook",
+        "social.credenziali-instagram",
+        "social.credenziali-telegram"
+      ],
+      "domanda_naturale": "Su quali social posso pubblicare? Ci sono X/Twitter, TikTok o LinkedIn?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "c2c9c4f3215d498a2c188b8d742f041b"
+    },
+    {
+      "id": "social.credenziali-facebook",
+      "titolo": "Come ottengo le credenziali Facebook Page",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "facebook",
+        "credenziali",
+        "page-id",
+        "access-token",
+        "meta-business",
+        "graph-explorer",
+        "long-lived"
+      ],
+      "correlati": [
+        "social.configurare-canale",
+        "social.errori"
+      ],
+      "domanda_naturale": "Come ottengo il page_id e l'access_token di Facebook?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "7c5e24de60c21a77ab3f1e5ff2f79034"
+    },
+    {
+      "id": "social.credenziali-instagram",
+      "titolo": "Come ottengo le credenziali Instagram Business",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "instagram",
+        "credenziali",
+        "ig-user-id",
+        "access-token",
+        "business",
+        "collegato-pagina",
+        "https"
+      ],
+      "correlati": [
+        "social.credenziali-facebook",
+        "social.configurare-canale",
+        "social.errori"
+      ],
+      "domanda_naturale": "Come ottengo l'ig_user_id di Instagram Business?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "71bb3657c00c51e51d116862ba3a6238"
+    },
+    {
+      "id": "social.credenziali-telegram",
+      "titolo": "Come ottengo le credenziali Telegram (bot_token + chat_id)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "telegram",
+        "credenziali",
+        "bot-token",
+        "chat-id",
+        "botfather",
+        "canale",
+        "admin",
+        "userinfobot"
+      ],
+      "correlati": [
+        "social.configurare-canale",
+        "social.errori"
+      ],
+      "domanda_naturale": "Come creo il bot Telegram? Come trovo il chat_id del canale?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 2
+      },
+      "content_md5": "366d43ba30f4256d2549640dc03ec3a1"
+    },
+    {
+      "id": "social.configurare-canale",
+      "titolo": "Configurare un canale social (self-service, 3 step)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "configurare",
+        "self-service",
+        "canale",
+        "modale",
+        "credenziali",
+        "cifrate",
+        "aes-gcm",
+        "sicurezza"
+      ],
+      "correlati": [
+        "social.credenziali-facebook",
+        "social.credenziali-instagram",
+        "social.credenziali-telegram",
+        "social.validare-canale"
+      ],
+      "domanda_naturale": "Come configuro un canale social su OMNIA?",
+      "screenshot": [
+        "[SCREEN: cap15-config-modal]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 2
+      },
+      "content_md5": "f8053632b49d000bf40a74a8dd951f4e"
+    },
+    {
+      "id": "social.validare-canale",
+      "titolo": "Validare un canale (test di connessione live)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "validare",
+        "validation",
+        "test-connessione",
+        "live",
+        "display-name",
+        "status",
+        "error",
+        "meta",
+        "telegram"
+      ],
+      "correlati": [
+        "social.configurare-canale",
+        "social.errori",
+        "social.canali-supportati"
+      ],
+      "domanda_naturale": "Come verifico che le credenziali social funzionano davvero?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "308dc60b36a2855498e2c11e4b28b20f"
+    },
+    {
+      "id": "social.pubblicare-immobile",
+      "titolo": "Pubblicare un immobile sui social (on-demand multi-canale)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "pubblicare",
+        "publish",
+        "immobile",
+        "on-demand",
+        "multi-canale",
+        "caption",
+        "image-url",
+        "external-id"
+      ],
+      "correlati": [
+        "social.caption-default",
+        "social.audit-log",
+        "social.errori"
+      ],
+      "domanda_naturale": "Come pubblico un immobile su Facebook e Instagram con un click?",
+      "screenshot": [
+        "[SCREEN: cap15-publish-multichannel]"
+      ],
+      "counts": {
+        "passi": 10,
+        "errori_comuni": 2
+      },
+      "content_md5": "4b0371c4857f054a0f20491a31f47a0c"
+    },
+    {
+      "id": "social.caption-default",
+      "titolo": "La caption automatica di default (dai dati immobile)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "caption",
+        "didascalia",
+        "default",
+        "auto-generata",
+        "emoji",
+        "titolo",
+        "prezzo",
+        "citta",
+        "mq",
+        "descrizione"
+      ],
+      "correlati": [
+        "social.pubblicare-immobile",
+        "social.limitazioni-v1"
+      ],
+      "domanda_naturale": "Come viene creata la caption automatica del post?",
+      "screenshot": [],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 1
+      },
+      "content_md5": "67868f1d6f4b3a0a3d2a66b0361e3d27"
+    },
+    {
+      "id": "social.audit-log",
+      "titolo": "Audit log dei post social (collezione social_posts)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "audit",
+        "log",
+        "social-posts",
+        "storico",
+        "external-id",
+        "tracciabilita",
+        "counter"
+      ],
+      "correlati": [
+        "social.pubblicare-immobile",
+        "social.errori"
+      ],
+      "domanda_naturale": "Dove vedo lo storico dei post pubblicati? Come traccio i fallimenti?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "9dd9863dee938b98e8c26b031e179532"
+    },
+    {
+      "id": "social.errori",
+      "titolo": "Errori comuni Social Publisher e come risolverli",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "errori",
+        "troubleshooting",
+        "meta-error",
+        "telegram-error",
+        "422",
+        "409",
+        "502",
+        "404",
+        "page-id-mismatch",
+        "instagram-requires-image"
+      ],
+      "correlati": [
+        "social.validare-canale",
+        "social.credenziali-facebook",
+        "social.credenziali-instagram",
+        "social.credenziali-telegram"
+      ],
+      "domanda_naturale": "Perche' il post non parte? Codici errore comuni",
+      "screenshot": [],
+      "counts": {
+        "passi": 14,
+        "errori_comuni": 1
+      },
+      "content_md5": "d45aad297ba2b1793a08eb7bbacf61a1"
+    },
+    {
+      "id": "social.limitazioni-v1",
+      "titolo": "Limiti v1 di Social Publisher (D-051 onesto)",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "social",
+        "limiti",
+        "cosa-non-fa",
+        "scheduling",
+        "carosello",
+        "video",
+        "reel",
+        "analytics",
+        "engagement",
+        "twitter",
+        "tiktok",
+        "linkedin",
+        "bulk",
+        "template",
+        "moderazione",
+        "d-051"
+      ],
+      "correlati": [
+        "social.cos-e",
+        "social.canali-supportati"
+      ],
+      "domanda_naturale": "Cosa NON fa il Social Publisher? Ha scheduling, analytics, X/Twitter?",
+      "screenshot": [],
+      "counts": {
+        "passi": 12,
+        "errori_comuni": 2
+      },
+      "content_md5": "b8dc1827566012023d558b2ea976619b"
+    },
+    {
+      "id": "social.collegamenti",
+      "titolo": "Collegamenti fra Social Publisher e altri moduli",
+      "modulo": "Social Publisher",
+      "widget": null,
+      "capitolo": "15",
+      "source_file": "15-social-publisher.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "social",
+        "cross-ref",
+        "immobili",
+        "portali",
+        "publishing",
+        "sito-web",
+        "hal-knowledge",
+        "team",
+        "distinzione"
+      ],
+      "correlati": [
+        "social.cos-e",
+        "social.canali-supportati"
+      ],
+      "domanda_naturale": "Che rapporto c'e' fra Social Publisher, Portali e Sito web?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "021eb0de237472b67bd232e3569e5a4e"
     }
   ],
   "stats": {
-    "totale_voci": 168,
+    "totale_voci": 182,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -5671,7 +6191,8 @@
       "11": 12,
       "12": 13,
       "13": 13,
-      "14": 13
+      "14": 13,
+      "15": 14
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -5687,19 +6208,20 @@
       "Mutui": 12,
       "HAL Knowledge": 13,
       "Collaboratori": 13,
-      "Import XML": 13
+      "Import XML": 13,
+      "Social Publisher": 14
     },
     "per_livello": {
-      "base": 118,
-      "intermedio": 50
+      "base": 126,
+      "intermedio": 56
     },
     "per_pubblico": {
-      "titolare": 167,
+      "titolare": 181,
       "agente": 133,
       "segreteria": 92,
-      "super_admin": 25
+      "super_admin": 39
     },
-    "totale_correlati": 394,
-    "totale_tags_unici": 501
+    "totale_correlati": 432,
+    "totale_tags_unici": 571
   }
 }

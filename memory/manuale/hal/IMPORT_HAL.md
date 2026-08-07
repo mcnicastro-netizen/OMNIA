@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.10)
+# 📚 HAL Knowledge — Import & Cold Start (v0.11)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 14 · Import XML / Migrazione)
-**Corpus attuale**: **168 voci HAL YAML** su **14 capitoli** (Cap. 1-14)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 15 · Social Publisher)
+**Corpus attuale**: **182 voci HAL YAML** su **15 capitoli** (Cap. 1-15)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 14 e verifica 3 query smoke (vedi §"Smoke Cap. 14").
+**Prossimo passo**: reindex live post-Cap. 15 e verifica 3 query smoke (vedi §"Smoke Cap. 15").
 
 ---
 
@@ -281,14 +281,15 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 12) | **v0.8-cap12** | Cap. 12 HAL Knowledge (meta-doc del RAG stesso) aggiunto (+13 voci → 142). Copertura hal_knowledge.py (617 righe) + HalKnowledgePage.jsx (307 righe): TF-IDF + Gemini 3 Flash Preview, corpus 7 file + Cap. 1-11, CHANGELOG.md escluso (B-ter), soglie confidence 0.08/0.20, storico per-utente, reindex super_admin idempotente. Distinzione D-040 fra HAL Knowledge / HAL Agent CRM / HAL Legal. |
 | Feb-2026 (Cap. 13) | **v0.9-cap13** | Cap. 13 Team & Ruoli / Collaboratori aggiunto (+13 voci → 155). Copertura `invites.py` (286 righe) + `agencies.py` (180 righe) + `MembersPage.jsx` (225 righe) + `InviteMemberModal.jsx` (134 righe) + `AcceptInvitePage.jsx` (186 righe): magic-link invite 7gg, ruoli agency_admin/agent (segreteria = concetto operativo), stati pending/accepted/revoked/expired, upgrade role solo se client. |
 | Feb-2026 (Cap. 14) | **v0.10-cap14** | Cap. 14 Import XML / Migrazione da altro gestionale aggiunto (+13 voci → 168). Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe): flusso 2 fasi Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (TYPE_CODE_MAP 18 codici, ENERGY_CODE_MAP 19, OPERATION_CODE_MAP 6, FEATURE_KEYWORDS 25), zero riferimenti a competitor, limiti v1 esplicit (no CSV, no sync, no rollback batch). |
+| Feb-2026 (Cap. 15) | **v0.11-cap15** | Cap. 15 Social Publisher (FB Page + IG Business + Telegram) aggiunto (+14 voci → 182). Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe): white label D-041 (ogni post sotto la Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), Meta Graph v20 + Telegram Bot API, caption default 5-righe con emoji, audit `social_posts`, limiti v1 (no X/LinkedIn/TikTok, no carosello/video, no analytics engagement, no bulk publish). |
 
 ---
 
-## 🚦 Smoke Cap. 14 — 3 query attese dopo reindex
+## 🚦 Smoke Cap. 15 — 3 query attese dopo reindex
 
-1. **"Come importo il portafoglio da un altro gestionale?"** → top-1 atteso `14-import-xml.yaml::import.cos-e` (o `import.checklist-migrazione`)
-2. **"Cosa succede se importo due volte lo stesso file XML?"** → top-1 atteso `14-import-xml.yaml::import.dedupe`
-3. **"Posso importare i clienti da XML?"** → top-1 atteso `14-import-xml.yaml::import.limitazioni-v1` (risposta onesta: **no**, solo immobili · per clienti CSV in Cap. 4)
+1. **"Come pubblico un immobile su Facebook e Instagram?"** → top-1 atteso `15-social-publisher.yaml::social.pubblicare-immobile`
+2. **"Come ottengo il bot token per Telegram?"** → top-1 atteso `15-social-publisher.yaml::social.credenziali-telegram`
+3. **"Posso programmare la pubblicazione per domani?"** → top-1 atteso `15-social-publisher.yaml::social.limitazioni-v1` (risposta onesta: **no**, solo on-demand v1)
 
 Confidence attesa ≥ 0.15 su tutte e 3.
 

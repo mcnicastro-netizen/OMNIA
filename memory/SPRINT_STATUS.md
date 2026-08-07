@@ -34,6 +34,7 @@
 | **I** Manuale Cap. 12 HAL Knowledge | ✅ | `12-hal-knowledge.md` + 13 voci YAML · index **142 voci** · v0.8-cap12 · meta-doc RAG (motore TF-IDF+Gemini, corpus 7 file, soglie confidence 0.08/0.20, distinzione D-040 tre HAL, limiti v1). Copertura `hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe. |
 | **J** Manuale Cap. 13 Team & Ruoli (Collaboratori) | ✅ | `13-team-ruoli.md` + 13 voci YAML · index **155 voci** · v0.9-cap13 · magic-link invite 7gg, ruoli `agency_admin`/`agent` (segreteria = concetto operativo), 4 stati invito (pending/accepted/revoked/expired), upgrade role solo se client, token nel fragment (L5). Copertura `invites.py` + `agencies.py` + `MembersPage.jsx` + `InviteMemberModal.jsx` + `AcceptInvitePage.jsx`. |
 | **K** Manuale Cap. 14 Import XML (Migrazione) | ✅ | `14-import-xml.md` + 13 voci YAML · index **168 voci** · v0.10-cap14 · flusso Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (18 tipi + 19 energetiche + 6 contratti + 25 features), zero riferimenti competitor. Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe). |
+| **L** Manuale Cap. 15 Social Publisher | ✅ | `15-social-publisher.md` + 14 voci YAML · index **182 voci** · v0.11-cap15 · white label D-041 (post sotto Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), 3 canali (FB Page/IG Business/Telegram), caption default 5-righe con emoji fisse, audit `social_posts`. Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe). |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -52,10 +53,11 @@
 | 12 | HAL Knowledge | 13 | ✅ v1.0 (motore TF-IDF+Gemini 3 Flash, corpus 7 file + Cap. 1-11, soglie confidence, distinzione D-040 tre HAL, limiti v1) |
 | 13 | Team & Ruoli (Collaboratori) | 13 | ✅ v1.0 (magic-link 7gg, ruoli agency_admin/agent, 4 stati invito, upgrade role solo se client, segreteria = concetto operativo) |
 | 14 | Import XML (Migrazione) | 13 | ✅ v1.0 (flusso Preview→Commit, session 10min, dedupe reference_code, dry-run, tabelle mapping 18 tipi/19 energetiche/6 contratti/25 features, zero riferimenti competitor) |
-| 15–26 | — | — | ⏳ |
+| 15 | Social Publisher | 14 | ✅ v1.0 (FB Page/IG Business/Telegram, white label D-041, credenziali AES-GCM, on-demand push, caption default 5-righe, audit social_posts, no scheduling/analytics/carosello v1) |
+| 16–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **14/26 capitoli (54%)** · **168 voci HAL** · **66 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **15/26 capitoli (58%)** · **182 voci HAL** · **69 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -65,7 +67,7 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.10-cap14 |
+| Index | `hal-index.json` v0.11-cap15 |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
 | Post Cap. 10 | 117 voci ✅ reindex + smoke 3/3 PASS |
 | Post G-bis | 117 voci ✅ reindex + smoke retrieval fix validato (testing_agent) |
@@ -73,12 +75,13 @@
 | Post H-bis | 129 voci ✅ reindex live (id voce rinominato + md5 cambiati) |
 | Post Cap. 12 | 142 voci ✅ reindex live + smoke 3/3 PASS (high: 0.293/0.217/0.478) |
 | Post Cap. 13 | 155 voci ⏳ reindex live pending (super_admin) |
-| Post Cap. 14 | **168 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 14 | 168 voci ⏳ reindex live pending (super_admin) |
+| Post Cap. 15 | **182 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke Cap. 14**:
-1. *Come importo il portafoglio da un altro gestionale?* → `import.cos-e` (o `import.checklist-migrazione`)
-2. *Cosa succede se importo due volte lo stesso file XML?* → `import.dedupe`
-3. *Posso importare i clienti da XML?* → `import.limitazioni-v1` (risposta onesta: **no**, solo immobili)
+**Smoke Cap. 15**:
+1. *Come pubblico un immobile su Facebook e Instagram?* → `social.pubblicare-immobile`
+2. *Come ottengo il bot token per Telegram?* → `social.credenziali-telegram`
+3. *Posso programmare la pubblicazione per domani?* → `social.limitazioni-v1` (risposta onesta: **no**, solo on-demand v1)
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05
