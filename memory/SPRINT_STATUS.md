@@ -1,5 +1,5 @@
 # OMNIA — Sprint Status (handoff agenti)
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 Mutui comparatore)  
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 H-bis · fix onestà 8 banche/9 Consap)  
 **Branch di riferimento**: `main`  
 **Repo**: https://github.com/mcnicastro-netizen/OMNIA  
 **Preview Emergent**: https://omnia-crm-docs.preview.emergentagent.com  
@@ -30,6 +30,7 @@
 | **G** Manuale Cap. 10 HAL Agent CRM | ✅ | `10-hal-agent-crm.md` + 13 voci YAML · index **117 voci** · reindex + smoke 3/3 PASS · convenzione naming Fase 0 HAL/al_* |
 | **G-bis** Micro-fix retrieval Cap. 9 `staging.crediti-costo` | ✅ | tags 6→14 · +correlato `staging.cos-e` · domanda_naturale doppia · a_cosa_serve arricchito · index v0.6.1-cap10-gbis · retrieval fix validated by testing_agent (top-1 sim 0.379 vs 0.334 fascicolo #2) |
 | **H** Manuale Cap. 11 Mutui comparatore | ✅ | `11-mutui-comparatore.md` + 12 voci YAML · index **129 voci** · copertura mutui.py + mortgage_data.py (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer 128-sexies TUB) |
+| **H-bis** Allineamento D-051 Cap. 11 al codice | ✅ | Fix onestà: 9→**8 banche distinte** (banks_count=8), 11→**9 offerte Consap**, ING interamente fuori Consap. Voce YAML rinominata `mutui.offerte-14-banche-9` → `-banche-8`. Index v0.7.1-cap11-hbis. |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -44,7 +45,7 @@
 | 8 | Sito web agenzia | 12 | ✅ v1.0 (site + themes + brand extractor + custom domain) |
 | 9 | Virtual Staging | 12 | ✅ v1.0 (pipeline SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
 | 10 | HAL Agent CRM | 13 | ✅ v1.0 (chat + 5 tool CRM, streaming SSE, Migliora con HAL 3 langs+3 toni, naming Fase 0) |
-| 11 | Mutui comparatore | 12 | ✅ v1.0 (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer TUB 128-sexies) |
+| 11 | Mutui comparatore | 12 | ✅ v1.0.1 (H-bis: 8 banche, 9 Consap, ING interamente fuori Consap, disclaimer TUB 128-sexies) |
 | 12–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
@@ -58,11 +59,12 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.7-cap11 |
+| Index | `hal-index.json` v0.7.1-cap11-hbis |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
 | Post Cap. 10 | 117 voci ✅ reindex + smoke 3/3 PASS |
 | Post G-bis | 117 voci ✅ reindex + smoke retrieval fix validato (testing_agent) |
-| Post Cap. 11 | **Atteso 129** — reindex live in corso |
+| Post Cap. 11 | 129 voci ✅ reindex + smoke 3/3 PASS |
+| Post H-bis | **Reindex live in corso** — voci invariate 129, ma id voce rinominato + md5 cambiati |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
 **Smoke Cap. 11**:
 1. *Cos'è il Comparatore Mutui di OMNIA?* → `mutui.cos-e`

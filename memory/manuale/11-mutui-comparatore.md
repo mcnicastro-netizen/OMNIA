@@ -1,7 +1,7 @@
 # Capitolo 11 · Mutui — comparatore ipotecario
 
 > **Cosa trovi in questo capitolo**
-> Il **Comparatore Mutui** simula in modo orientativo l'importo della rata, il TAEG e il costo totale di un mutuo prima casa/seconda casa, confrontando fino a **14 offerte curate** di **9 banche italiane**. Serve al proprietario in vendita per capire "quanto rende mensilmente" un immobile a un potenziale acquirente, e all'acquirente/lead per orientarsi prima del colloquio bancario. Il capitolo copre: come funziona il motore, dove trovi il comparatore (B2C + tool CRM), i vincoli LTV/Consap under-36, sostenibilità rata/reddito, disclaimer legale e limitazioni v1.
+> Il **Comparatore Mutui** simula in modo orientativo l'importo della rata, il TAEG e il costo totale di un mutuo prima casa/seconda casa, confrontando fino a **14 offerte curate** di **8 banche italiane**. Serve al proprietario in vendita per capire "quanto rende mensilmente" un immobile a un potenziale acquirente, e all'acquirente/lead per orientarsi prima del colloquio bancario. Il capitolo copre: come funziona il motore, dove trovi il comparatore (B2C + tool CRM), i vincoli LTV/Consap under-36, sostenibilità rata/reddito, disclaimer legale e limitazioni v1.
 
 **Cosa NON è (D-051 onestà — regola cardine)**
 - Non è **offerta al pubblico** né **mediazione creditizia** ai sensi dell'**art. 128-sexies TUB**. È una simulazione informativa.
@@ -15,7 +15,7 @@
 ## 11.1 · Cos'è il Comparatore Mutui e dove lo trovi
 
 **In una frase**
-Un motore matematico + tabella curata di 14 offerte di 9 banche italiane che, a partire da prezzo immobile + anticipo + durata + tipo tasso, ti dice **quanto pagheresti di rata mensile**, **quanto TAEG**, **quanto costo totale**, **quanto anticipo minimo serve** e **se la rata è sostenibile** rispetto al tuo reddito.
+Un motore matematico + tabella curata di 14 offerte di 8 banche italiane che, a partire da prezzo immobile + anticipo + durata + tipo tasso, ti dice **quanto pagheresti di rata mensile**, **quanto TAEG**, **quanto costo totale**, **quanto anticipo minimo serve** e **se la rata è sostenibile** rispetto al tuo reddito.
 
 **I tre punti di contatto**
 
@@ -108,15 +108,14 @@ Se il TAEG di un'offerta ti sembra strano, capisci **come è stato calcolato** e
 - Se sei sopra i 36 anni al momento del contratto → **decade il beneficio Consap**, anche se avevi meno di 36 al preventivo.
 - Il **tasso Consap** è vincolato ad un **cap** (media Eurirs 10 anni + spread max ~0,45%) — alcune offerte curate potrebbero non rispettarlo. Il comparatore in v1 **non applica ancora** il cap.
 
-**Offerte Consap-eligible in v1** (11 su 14 — dato Giugno 2026)
+**Offerte Consap-eligible in v1** (9 su 14 — dato Giugno 2026)
 - Intesa Sanpaolo (Domus Fisso + Variabile)
 - UniCredit (Mutuo UniCredit Fisso + Variabile)
 - BPER Banca (Fisso + Variabile)
 - Crédit Agricole (CA Fisso + Variabile)
 - Banca MPS (MPS Fisso)
-- ING (Arancio Fisso — no Variabile)
 
-**Offerte NON Consap** (3 su 14): BNL, ING Variabile, Webank Fisso + Variabile → filtrate se attivi il flag under-36.
+**Offerte NON Consap** (5 su 14): BNL Fisso, ING Arancio **Fisso**, ING Arancio **Variabile**, Webank Fisso + Variabile → filtrate se attivi il flag under-36.
 
 ---
 
@@ -159,10 +158,12 @@ Se il rapporto rata/reddito è **> 30%**, avvisa già il cliente: la pratica sar
 | UniCredit | ✅ | ✅ | ✅ |
 | BPER Banca | ✅ | ✅ | ✅ |
 | Crédit Agricole | ✅ | ✅ | ✅ |
-| Banca MPS | ✅ | ⬜ (non in v1) | ✅ |
+| Banca MPS | ✅ | ⬜ (non in v1) | ✅ (solo Fisso) |
 | BNL BNP Paribas | ✅ | ⬜ (non in v1) | ❌ |
-| ING | ✅ Arancio | ✅ Arancio | Solo Fisso ✅ |
+| ING | ✅ Arancio | ✅ Arancio | ❌ (nessuna offerta ING Consap in v1) |
 | Webank (BPM) | ✅ | ✅ | ❌ |
+
+**Totale**: **14 offerte** di **8 banche distinte** · **9 offerte Consap-eligible** · **5 non-Consap**.
 
 **Range spread osservato Giugno 2026**
 - **Fisso**: 0,40% (Webank più aggressivo) → 0,80% (BNL). ING/Webank spesso più economici (canale digitale).
@@ -354,4 +355,4 @@ Ogni trimestre la **Banca d'Italia** pubblica la nuova rilevazione **TEGM** (Q1:
 
 ---
 
-**Versione**: v1.0 · Feb 2026 (TASK H · Cap. 11 Mutui comparatore)
+**Versione**: v1.0.1 · Feb 2026 (TASK H-bis · allineamento D-051 al codice: 8 banche / 9 Consap / ING interamente fuori Consap)

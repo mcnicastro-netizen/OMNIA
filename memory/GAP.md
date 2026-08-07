@@ -1,6 +1,6 @@
 # 🕳️ GAP.md — Discrepanze codice ↔ UI ↔ Manuale
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 Mutui comparatore · aggiunta Sezione E Cap. 11)
+**Ultimo aggiornamento**: Feb 2026 (post-H-bis · fix onestà Cap. 11 8 banche/9 Consap)
 **Scope**: elenco funzioni backend senza UI, moduli deprecati/in transizione, duplicati da consolidare, elementi esclusi dal manuale per scelta.
 **Come si aggiorna**: ogni volta che scrivi un nuovo capitolo del manuale, aggiungi qui i gap intercettati. Il file cresce col progetto e serve come "verità operativa" per il prossimo agente.
 
@@ -177,11 +177,11 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Widget solo in ImmoWeb**: il chat widget flottante appare solo dentro le pagine ImmoWeb (non in `/cloud` B2C). Documentato in errori comuni.
 
 ### Cap. 11 · Mutui comparatore — Feb 2026
-- **14 offerte curate di 9 banche** documentate 1:1 con `BANK_OFFERS` in `mortgage_data.py:27-70`. Zero invenzioni. Elenco esplicito banche+prodotti.
+- **14 offerte curate di 8 banche distinte** documentate 1:1 con `BANK_OFFERS` in `backend/apps/immocloud/data/mortgage_data.py:27-70`. Zero invenzioni. Elenco esplicito banche+prodotti. Endpoint `GET /mutui/config` restituisce `banks_count=8` (verificato H-bis). **H-bis correzione**: la v1.0 del capitolo diceva "9 banche" — errore, sono 8 distinte (Intesa, UniCredit, BPER, Credit Agricole, MPS, BNL, ING, Webank).
 - **Motore matematico** documentato 1:1 (`mutui.py`): ammortamento francese (`french_installment` line 69), TAEG via IRR bisezione (`compute_taeg` line 77), benchmark Eurirs/Euribor (`_benchmark` line 100), soglia usura TEGM.
 - **Parametri economici** verificati 1:1: EURIRS `{10: 2.94, 15: 3.05, 20: 3.17, 25: 3.15, 30: 3.12}`, EURIBOR_3M `2.05`, TEGM `{fisso: 4.05, variabile: 4.08}`, soglie usura `{fisso: 9.0625%, variabile: 9.10%}`, MAX_LTV_STANDARD 80%, MAX_LTV_UNDER36 95%, MAX_RATA_REDDITO 35%, imposta sostitutiva 0.25% prima / 2% seconda.
 - **Data aggiornamento** (`DATA_UPDATED_AT = "2026-06"`): dichiarata onestamente nel manuale (§11.5, §11.9). Cadenza trimestrale consigliata.
-- **Consap under-36 prima casa**: documentato che serve **entrambi** i flag (age_under_36 + first_home) + `consap:true` sull'offerta. 11 offerte Consap-eligible su 14 (esclusi BNL, ING Variabile, Webank).
+- **Consap under-36 prima casa**: documentato che serve **entrambi** i flag (age_under_36 + first_home) + `consap:true` sull'offerta. **9 offerte Consap-eligible su 14** (Intesa Fisso+Var, UniCredit Fisso+Var, BPER Fisso+Var, Credit Agricole Fisso+Var, MPS Fisso). **5 non-Consap**: BNL Fisso, ING Fisso, ING Variabile, Webank Fisso, Webank Variabile. **H-bis correzione**: la v1.0 diceva "11 su 14 Consap, ING solo Fisso Consap" — errore, ING è **interamente fuori dal Consap** (né Fisso né Variabile).
 - **Endpoint** documentati 1:1: `GET /mutui/config`, `POST /mutui/compare`, `POST /mutui/plan`, `POST /mutui/lead`. Prefix `/mutui` sotto ImmobilCloud B2C.
 - **Disclaimer legale obbligatorio** documentato onestamente con testo integrale + motivazione **art. 128-sexies TUB** (mediazione creditizia riservata). OMNIA non è iscritta OAM, non percepisce compensi da banche. Il disclaimer è **parte del response API** e non è rimovibile lato client.
 - **D-037 no scraping** documentato esplicitamente: nessuno scraping automatico su siti banche. Motivo: siti instabili + termini d'uso spesso vietano + qualità dati curati batte scraping.

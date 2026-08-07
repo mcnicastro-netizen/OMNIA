@@ -141,9 +141,11 @@ voci:
         - "LTV max UNDER-36 PRIMA CASA = 95% (Fondo Consap, garanzia
           statale)."
         - "Attiva flag 'Prima casa' + 'Under 36' nel form."
-        - "Comparatore filtra solo offerte con consap:true (11 su 14
-          in v1: Intesa, UniCredit, BPER, Credit Agricole, MPS, ING
-          Fisso). Escluse: BNL, ING Variabile, Webank."
+        - "Comparatore filtra solo offerte con consap:true (9 su 14
+          in v1: Intesa Fisso+Var, UniCredit Fisso+Var, BPER Fisso+Var,
+          Credit Agricole Fisso+Var, MPS Fisso). Escluse (5 su 14):
+          BNL Fisso, ING Fisso, ING Variabile, Webank Fisso, Webank
+          Variabile."
       errori_comuni:
         - problema: "Ho i requisiti Consap ma la banca me lo nega"
           soluzione: >
@@ -204,8 +206,8 @@ voci:
         - Titolare, agente
     screenshot: ["[SCREEN: cap11-mutui-sostenibilita]"]
 
-  - id: mutui.offerte-14-banche-9
-    titolo: Le 14 offerte curate di 9 banche italiane
+  - id: mutui.offerte-14-banche-8
+    titolo: Le 14 offerte curate di 8 banche italiane
     modulo: Mutui
     widget: null
     pubblico: [titolare, agente]
@@ -221,16 +223,21 @@ voci:
         Se il cliente chiede una banca specifica non presente, se
         l'agente vuole capire il ventaglio di scelta.
       passi:
-        - "9 banche in v1 (Giugno 2026): Intesa Sanpaolo (Domus), UniCredit,
+        - "8 banche in v1 (Giugno 2026): Intesa Sanpaolo (Domus), UniCredit,
           BPER Banca, Credit Agricole, Banca MPS, BNL BNP Paribas, ING
-          (Arancio), Webank (BPM)."
+          (Arancio), Webank (BPM). Endpoint GET /mutui/config restituisce
+          banks_count=8."
         - "14 offerte totali: 7 fisso + 7 variabile. MPS solo fisso.
           BNL solo fisso in v1."
         - "Spread fisso range: 0.40% (Webank piu' aggressivo) - 0.80%
           (BNL). ING/Webank canale digitale spesso piu' economici."
         - "Spread variabile range: 0.80% (Webank) - 1.25% (BPER)."
-        - "Consap under-36 eligible: 11 su 14 (BNL, ING Variabile,
-          Webank Fisso+Variabile NON consap)."
+        - "Consap under-36 eligible: 9 offerte su 14 (Intesa Fisso+Var,
+          UniCredit Fisso+Var, BPER Fisso+Var, Credit Agricole Fisso+
+          Var, MPS Fisso). NON Consap: BNL Fisso, ING Fisso, ING
+          Variabile, Webank Fisso, Webank Variabile (5 su 14)."
+        - "IMPORTANTE: ING NON ha offerte Consap in v1 (ne' fisso ne'
+          variabile). Correzione onestà D-051 H-bis rispetto v1.0."
         - "Manca in v1: Deutsche Bank, BPM Fideuram, Findomestic, Kiron,
           Facile.it, banche cooperative/popolari locali, fintech."
         - "D-037: nessuna convenzione commerciale con banche.
@@ -247,6 +254,12 @@ voci:
             Sono banche digitali. Il cliente sceglie in base a: sconto
             economico (digitale) vs supporto locale (sportello vicino).
             Il comparatore ordina per TAEG, poi il cliente decide.
+        - problema: "Ho attivato Consap under-36 ma non vedo offerta ING"
+          soluzione: >
+            Corretto: ING (sia Fisso sia Variabile) NON e' Consap-
+            eligible in v1. Attivando Under-36 prima casa filtri solo
+            le 9 offerte Consap (Intesa, UniCredit, BPER, CA, MPS
+            Fisso).
       permessi:
         - Titolare, agente
     screenshot: []
@@ -423,7 +436,7 @@ voci:
     pubblico: [titolare]
     livello: intermedio
     tags: [mutui, aggiornamento, dati, trimestrale, tegm, eurirs, no-scraping]
-    correlati: [mutui.tegm-soglia-usura, mutui.offerte-14-banche-9]
+    correlati: [mutui.tegm-soglia-usura, mutui.offerte-14-banche-8]
     domanda_naturale: "Con quale frequenza si aggiornano i dati del comparatore mutui?"
     contenuto:
       a_cosa_serve: >

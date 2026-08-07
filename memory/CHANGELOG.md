@@ -1,5 +1,94 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 🔧 TASK H-bis · Allineamento D-051 Cap. 11 al codice
+
+**Tipo**: Onestà documentale — correzione conteggi banche/Consap sul Cap. 11 Mutui.
+**Fonte**: Founder Feb 2026 · Verifica codice sorgente `backend/apps/immocloud/data/mortgage_data.py` in `BANK_OFFERS`.
+
+### Cosa era sbagliato nel Cap. 11 v1.0 (TASK H)
+
+Il capitolo v1.0 scritto in TASK H diceva:
+- ❌ "9 banche italiane" → **corretto: 8 banche distinte** (endpoint `/mutui/config` restituisce `banks_count=8`)
+- ❌ "11 offerte Consap-eligible su 14 · ING Fisso è Consap" → **corretto: 9 offerte Consap su 14 · ING è interamente fuori dal Consap** (né Fisso né Variabile hanno `consap:true`)
+- ❌ "Escluse Consap: BNL, ING Variabile, Webank" (3 su 14) → **corretto: 5 offerte escluse** (BNL Fisso, ING Fisso, ING Variabile, Webank Fisso, Webank Variabile)
+
+### Root cause
+Errore di rilettura del `BANK_OFFERS` durante la stesura Cap. 11. La lista effettiva in codice ha:
+- **8 banche distinte**: Intesa Sanpaolo (2 offerte), UniCredit (2), BPER Banca (2), Crédit Agricole (2), Banca MPS (1), BNL BNP Paribas (1), ING (2), Webank/BPM (2) = 14 offerte totali.
+- **`consap:true`** solo su: Intesa Fisso+Var, UniCredit Fisso+Var, BPER Fisso+Var, CA Fisso+Var, MPS Fisso = **9 offerte**.
+
+### Fix applicati (8 file)
+
+1. **`memory/manuale/11-mutui-comparatore.md`** → v1.0.1:
+   - Intro: 9 → **8 banche**
+   - §11.1: "9 banche italiane" → "8 banche italiane"
+   - §11.5: tabella ING marcata ❌ (era "Solo Fisso ✅"); nota aggiornata "9 offerte Consap-eligible · 5 non-Consap"; lista escluse Consap corretta
+   - Versione footer: v1.0 → **v1.0.1** con nota H-bis
+
+2. **`memory/manuale/hal/11-mutui-comparatore.yaml`**:
+   - Voce rinominata: `mutui.offerte-14-banche-9` → **`mutui.offerte-14-banche-8`**
+   - Passi aggiornati: 9→8 banche, endpoint `/mutui/config banks_count=8`, 9 Consap su 14, ING NON Consap
+   - Aggiunto errore comune "Ho attivato Consap under-36 ma non vedo offerta ING" con spiegazione onestà
+   - Nella voce `mutui.ltv-consap-under36`: 11→9 offerte Consap, lista escluse aggiornata a 5
+   - Aggiornato tutti i riferimenti a `mutui.offerte-14-banche-9` in `correlati:` (1 occorrenza in `mutui.dati-aggiornamento`)
+
+3. **`memory/manuale/hal/hal-index.json`** → **v0.7.1-cap11-hbis**:
+   - md5 file `11-mutui-comparatore.yaml` aggiornato
+   - id voce cambiato da `mutui.offerte-14-banche-9` → `mutui.offerte-14-banche-8`
+   - content_md5 di 2 voci aggiornato (`offerte-14-banche-8` + `ltv-consap-under36`)
+   - Totale voci: 129 (invariato)
+
+4. **`memory/SPRINT_STATUS.md`**: aggiunta riga TASK H-bis · Post Cap. 11 confermato 129 voci ✅ reindex
+
+5. **`memory/GAP.md`** Sezione E Cap. 11: corretti 2 punti (14 offerte/8 banche + 9 Consap con ING interamente fuori) con nota esplicita "H-bis correzione" · aggiornato path `backend/apps/immocloud/data/mortgage_data.py`
+
+6. **`memory/CHANGELOG.md`** (questo entry in cima)
+
+7. **`memory/manuale/hal/IMPORT_HAL.md`** → v0.7.1 header + riga storico H-bis
+
+8. **`backend/tests/test_hal_retrieval_gbis.py`** → aggiunti 2 test: `test_status_129` (verifica `manual_hal_indexed == 129`) e `test_cap11_disclaimer_tub` (verifica top-1 `mutui.disclaimer-tub` sulla query "OMNIA è mediatore creditizio?")
+
+### Verifica post-fix
+Il main agent esegue:
+1. `POST /api/app/hal/knowledge/reindex?force=true` (super_admin)
+2. `manual_hal_indexed == 129` atteso
+3. Smoke Cap. 11 3/3 PASS:
+   - *"Cos'è il Comparatore Mutui di OMNIA?"* → `mutui.cos-e`
+   - *"Come viene calcolato il TAEG del mutuo?"* → `mutui.motore`
+   - *"OMNIA è mediatore creditizio?"* → `mutui.disclaimer-tub` (risposta: **no**, 128-sexies TUB)
+
+### Onestà D-051 (lesson learned)
+- Non affidarsi a memoria/scan visivo del codice: usare **conteggio programmatico** (`set(o['bank'] for o in BANK_OFFERS)` → 8) prima di scrivere numeri nel manuale.
+- Cross-verifica con **endpoint pubblico** (`/mutui/config` restituisce `banks_count`) → è la fonte di verità.
+- Il TASK H-bis prende ~30 minuti quando applicato subito · sarebbe costato molto di più se scoperto da un cliente dopo aver visto ING assente nella lista Consap.
+
+### Commit message consigliato
+```
+fix(docs): H-bis · align Cap. 11 D-051 to mortgage_data.py
+
+Corrections vs Cap. 11 v1.0:
+- 9 → 8 distinct banks (banks_count=8 in /mutui/config)
+- 11 → 9 Consap offers on 14 total
+- ING NOT Consap (neither Fisso nor Variabile)
+- 3 → 5 non-Consap offers (added ING Fisso to exclusions)
+
+Renamed HAL voce: mutui.offerte-14-banche-9 → -banche-8
+Updated: MD Cap. 11 v1.0.1, YAML voce + correlati refs,
+hal-index.json v0.7.1-cap11-hbis, GAP.md Section E,
+IMPORT_HAL.md v0.7.1, SPRINT_STATUS.md, tests +2.
+
+Root cause: visual scan error during Cap. 11 drafting.
+Lesson: verify with programmatic count on BANK_OFFERS +
+cross-check with /mutui/config public endpoint.
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: manual_hal_indexed: 129 (unchanged)
+Smoke 3/3 PASS Cap. 11
+```
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK H · Cap. 11 · Mutui comparatore (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — undicesimo capitolo del Manuale Operativo.

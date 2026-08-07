@@ -1,6 +1,6 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.7)
+# 📚 HAL Knowledge — Import & Cold Start (v0.7.1)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 Mutui comparatore)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 H-bis · allineamento D-051 8 banche/9 Consap)
 **Corpus attuale**: **129 voci HAL YAML** su **11 capitoli** (Cap. 1-11)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
 **Prossimo passo**: reindex live post-Cap. 10 e verifica 3 query smoke (vedi §"Smoke Cap. 10").
@@ -276,7 +276,8 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 9) | **v0.5-cap9** | Cap. 9 Virtual Staging aggiunto (+12 voci → 104). Reindex live post-push. |
 | Feb-2026 (Cap. 10) | **v0.6-cap10** | Cap. 10 HAL Agent CRM aggiunto (+13 voci → 117). Convenzione naming Fase 0: HAL nel manuale, `al_*` nel codice invariato. |
 | Feb-2026 (G-bis) | **v0.6.1-cap10-gbis** | Micro-fix retrieval Cap. 9 `staging.crediti-costo` (+8 tag, +1 correlato, domanda_naturale estesa, a_cosa_serve arricchito con "prezzo render"). Nessun voce aggiunta, totale resta 117. |
-| Feb-2026 (Cap. 11) | **v0.7-cap11** | Cap. 11 Mutui comparatore aggiunto (+12 voci → **129**). Reindex live post-push. |
+| Feb-2026 (Cap. 11) | **v0.7-cap11** | Cap. 11 Mutui comparatore aggiunto (+12 voci → 129). Reindex live post-push. |
+| Feb-2026 (H-bis) | **v0.7.1-cap11-hbis** | Fix onestà D-051 Cap. 11: 9→**8 banche distinte** (banks_count=8 in /mutui/config), 11→**9 offerte Consap**, ING NON Consap (né Fisso né Variabile). Voce rinominata `mutui.offerte-14-banche-9` → `mutui.offerte-14-banche-8`. |
 
 ---
 
