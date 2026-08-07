@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.7.1)
+# 📚 HAL Knowledge — Import & Cold Start (v0.8)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 11 H-bis · allineamento D-051 8 banche/9 Consap)
-**Corpus attuale**: **129 voci HAL YAML** su **11 capitoli** (Cap. 1-11)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 12 · HAL Knowledge come meta-capitolo del RAG)
+**Corpus attuale**: **142 voci HAL YAML** su **12 capitoli** (Cap. 1-12)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 10 e verifica 3 query smoke (vedi §"Smoke Cap. 10").
+**Prossimo passo**: reindex live post-Cap. 12 e verifica 3 query smoke (vedi §"Smoke Cap. 12").
 
 ---
 
@@ -278,6 +278,17 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (G-bis) | **v0.6.1-cap10-gbis** | Micro-fix retrieval Cap. 9 `staging.crediti-costo` (+8 tag, +1 correlato, domanda_naturale estesa, a_cosa_serve arricchito con "prezzo render"). Nessun voce aggiunta, totale resta 117. |
 | Feb-2026 (Cap. 11) | **v0.7-cap11** | Cap. 11 Mutui comparatore aggiunto (+12 voci → 129). Reindex live post-push. |
 | Feb-2026 (H-bis) | **v0.7.1-cap11-hbis** | Fix onestà D-051 Cap. 11: 9→**8 banche distinte** (banks_count=8 in /mutui/config), 11→**9 offerte Consap**, ING NON Consap (né Fisso né Variabile). Voce rinominata `mutui.offerte-14-banche-9` → `mutui.offerte-14-banche-8`. |
+| Feb-2026 (Cap. 12) | **v0.8-cap12** | Cap. 12 HAL Knowledge (meta-doc del RAG stesso) aggiunto (+13 voci → 142). Copertura hal_knowledge.py (617 righe) + HalKnowledgePage.jsx (307 righe): TF-IDF + Gemini 3 Flash Preview, corpus 7 file + Cap. 1-11, CHANGELOG.md escluso (B-ter), soglie confidence 0.08/0.20, storico per-utente, reindex super_admin idempotente. Distinzione D-040 fra HAL Knowledge / HAL Agent CRM / HAL Legal. |
+
+---
+
+## 🚦 Smoke Cap. 12 — 3 query attese dopo reindex
+
+1. **"Cos'è HAL Knowledge e a cosa serve?"** → top-1 atteso `12-hal-knowledge.yaml::halk.cos-e`
+2. **"Cosa significa 'alta confidence' sulla risposta di HAL?"** → top-1 atteso `12-hal-knowledge.yaml::halk.badge-confidence`
+3. **"Qual è la differenza fra HAL Knowledge e HAL Agent CRM?"** → top-1 atteso `12-hal-knowledge.yaml::halk.distinzione-tre-hal`
+
+Confidence attesa ≥ 0.15 su tutte e 3.
 
 ---
 

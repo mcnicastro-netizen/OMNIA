@@ -1,8 +1,16 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 6 · Portali/Publishing)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 12 · HAL Knowledge)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK I · Cap. 12 · HAL Knowledge)**:
+  - ✅ **Cap. 12 · HAL Knowledge** (meta-doc del RAG stesso): 12 sottocapitoli + **13 voci HAL YAML** (`halk.cos-e`, `halk.dove-lo-trovi`, `halk.come-porre-domanda`, `halk.badge-confidence`, `halk.fonti-citate`, `halk.corpus`, `halk.motore`, `halk.insufficient-context`, `halk.storico`, `halk.reindex`, `halk.status-badge`, `halk.distinzione-tre-hal`, `halk.limiti`). Copertura 1:1 con `hal_knowledge.py` (617 righe) + `HalKnowledgePage.jsx` (307 righe).
+  - ✅ **Onestà documentale (D-051)**: soglie confidence 0.08/0.20 esatte, `TOP_K=5`, `CHUNK_WORDS=500/50`, corpus 7 file fondamentali (CHANGELOG escluso B-ter), modello `gemini-3-flash-preview` via Emergent LLM Key, reindex super_admin-only con MD5-idempotenza, storico 15 fetch/8 UI, super_admin vede storico di tutti, indice JSON (no pickle) per sicurezza H9, `insufficient_context` come feature D-051 zero-invenzioni, distinzione D-040 fra HAL Knowledge / HAL Agent CRM / HAL Legal.
+  - ✅ **Limiti onestamente dichiarati**: no multilingua (corpus IT), no embeddings neurali (TF-IDF D-061), no memoria multi-turn, no feedback loop utente, no rate limit dedicato v1, no scraping/web search, no multitenant a corpus (isolamento è HAL Agent CRM), no TTL storico sessioni.
+  - ✅ **`hal-index.json` rigenerato**: v0.8-cap12, **142 voci totali** (Cap. 1-12), 12 source files con MD5 aggiornati.
+  - 📸 Screenshots-index: +3 righe Cap. 12. Totale 60 screenshot catalogati.
+  - 📈 **Progresso manuale**: 12/26 capitoli (46%). Totale voci HAL: **142**. Prossimo: reindex prod super_admin + smoke 3/3 Cap. 12, poi Cap. 13+ (candidati: HAL Legal · Team & Ruoli · Impostazioni · Domain Vault).
 
 - **Ultimo update (Feb 2026 — TASK C · Cap. 6 · Portali/Publishing)**:
   - ✅ **Cap. 6 · Portali/Publishing**: 9 sottocapitoli + **12 voci HAL YAML**. Copre a-cosa-serve del Publishing Center, catalogo 8 portali del `CATALOG_SEED` (Subito · Bakeca · Kijiji · Wikicasa · FB Marketplace · Google Business · Attico · Case24), attivazione con form credenziali AES-256-GCM, sync daily 06:00 UTC + sync manuale con retry 60/300/1800s, Compliance HARD (5 regole: prezzo · superficie · APE valida · ≥3 foto · indirizzo) + SOFT (4 warning), modale Compliance con top-5 reasons + lista bloccati, Universal Portal Wizard M2.6d (4 step feed_pull only), feed XML pubblico osf_federata/generic_rss, log audit trail.

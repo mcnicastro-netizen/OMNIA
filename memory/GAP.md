@@ -30,7 +30,7 @@ Endpoint esistenti e testati, ma non esposti nell'interfaccia. Non sono bug: son
 | **Cron system introspection** | `cron.py` | Nessun pannello per elencare job attivi. Solo super_admin via CLI. | 🟢 Code | Fuori scope manuale. |
 | **Privacy audit trail completo** | `property_privacy.py` `GET /privacy` (con `audit_events`) | UI mostra solo il livello attuale, non lo storico "chi ha cambiato cosa e quando". | 🟠 UX | Menzionato brevemente in Cap. 3.4 (frase "ogni modifica lascia un registro"). |
 | **Micro-tour video Kling / Sora 2** | `micro_tour_video.py` — `POST /kling/property/{pid}` (202) e `POST /sora2/property/{pid}` | 501 su `/kenburns/property/{pid}` è placeholder documentato. UI Ken Burns non esiste. | 🟢 Code | Cap. 13.3 in Sprint 3 (M5.S4.3). Placeholder "In arrivo" oggi. |
-| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-11) indicizzato con **129 voci**. Cap. 12 nel manuale è ancora da scrivere ma non serve annotazione "in arrivo" in UI. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
+| **HAL Knowledge corpus** | `hal_knowledge.py` | ✅ Attivo — corpus manuale (Cap. 1-12) indicizzato con **142 voci**. Cap. 12 (meta-doc del RAG stesso) scritto in Feb 2026. | 🟢 | Menzionare normalmente nella sidebar (fix Cap. 1 v1.0.3, Feb 2026). |
 | **AI Smart Import Clienti** | `clients_ai_import.py` | UI esiste dentro Import clienti ma non è "in primo piano" (scheda dedicata). | 🟢 UX | Da coprire in Cap. 4 · Clienti se rimane nascosta, altrimenti valorizzarla nel manuale come "AI Smart Import". |
 | **Analisi AI Fascicolo** | `fascicolo.py` `POST /fascicolo/{id}/analyze` | Ok — invocato da UI del Fascicolo. Non è un vero gap. | 🟢 | ✅ Coperto in Cap. 7 · Fascicolo Immobile §7.5. |
 | **`POST /photos/upload-tmp`** | `properties.py:329` | Usato dietro le quinte quando crei un immobile e carichi foto prima di salvare. Utente non lo sa. | 🟢 Code | Trasparente. Nessuna menzione manuale. |
@@ -194,6 +194,24 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Widget partner embeddabile** (Track B) menzionato ma dettagli tecnici (API key, credit balance, rate limit partner) non documentati (out of scope Cap. 11 utente-facing).
 - **HAL Legal in arrivo** per domande legali su mutui (surroga, rinegoziazione, decadenza Consap): rimando esplicito, non attivo v1.
 - **Cross-ref Cap. 3, Cap. 8, Cap. 10** documentati come collegamenti utili (prezzo immobile → rata simulata, widget embed sito agenzia, HAL Agent CRM per query natural language).
+
+### Cap. 12 · HAL Knowledge — Feb 2026
+- **Meta-capitolo**: HAL Knowledge documenta se stesso. Il rischio narcisismo/ricorsivo è controllato — le voci descrivono il codice reale (`hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe), non l'idea generica di RAG.
+- **7 documenti fondamentali in `CORPUS_FILES`** documentati 1:1 con `hal_knowledge.py:59-70`: `PRD.md`, `ROADMAP.md`, `DECISIONS.md`, `AUDIT_M2.md`, `PROGRAMMA_OMNIA.md`, `ASPETTI_DA_APPROFONDIRE.md`, `BUSINESS_MODEL.md`. **`CHANGELOG.md` esplicitamente escluso** dopo TASK B-ter (commento inline in codice conferma motivazione feedback loop).
+- **Soglie confidence documentate 1:1**: `CONFIDENCE_MIN=0.08` e `CONFIDENCE_HIGH=0.20` (`hal_knowledge.py:77-78`). Badge UI: verde ≥0.20, ambra 0.08-0.20, rosso <0.08.
+- **TOP_K=5 fonti restituite** (`hal_knowledge.py:76`). `CHUNK_WORDS=500` + `CHUNK_OVERLAP=50` per gli `.md` (`hal_knowledge.py:74-75`).
+- **Modello LLM**: `gemini-3-flash-preview` via Emergent LLM Key (`MODEL_PROVIDER="gemini"`, `MODEL_NAME="gemini-3-flash-preview"` in `hal_knowledge.py:80-81`). Documentato 1:1.
+- **Ruoli permessi**: tutti i ruoli agenzia (`agency_admin, super_admin, branch_admin, group_admin, agent`) documentati come da tuple `_ROLES` in `hal_knowledge.py:509`. Segreteria mappata come "utente agenzia autenticato" nel manuale.
+- **Reindex**: **solo super_admin** (`Depends(require_roles("super_admin"))` a `hal_knowledge.py:532`). Idempotente su MD5. `force=true` disponibile.
+- **Persistenza indice JSON (no pickle)**: dichiarata onestamente come scelta di sicurezza H9 D-051 (`hal_knowledge.py:376-398`).
+- **Chunk YAML atomici**: 1 voce = 1 chunk con serializzazione strutturata `[TITOLO][MODULO][DOMANDA][A COSA SERVE][QUANDO SI USA][PASSI][ERRORI COMUNI][PERMESSI][TAGS]` — `_render_voce_hal` (`hal_knowledge.py:168-203`). Documentato 1:1.
+- **Storico max 15 righe fetch** (`GET /history?limit=15` in `HalKnowledgePage.jsx:50`), mostrate le prime **8** nella UI (`.slice(0, 8)` in `HalKnowledgePage.jsx:253`). Documentato 1:1.
+- **Super_admin vede storico di tutti** (`hal_knowledge.py:614` — filtro rimosso quando `user.role == "super_admin"`). Documentato esplicitamente come "audit/debug corpus".
+- **`insufficient_context` è comportamento voluto D-051 zero-invenzioni**. Il chunk sotto soglia produce un log con `answer: null` in `hal_knowledge_sessions` (utile per capire i gap del corpus).
+- **D-040 · 3 bottoni fisici**: distinzione fra HAL Agent CRM (`/api/app/al/chat`), HAL Knowledge (`/api/app/hal/knowledge/ask`), HAL Legal (in arrivo). Chiarita esplicitamente nel capitolo.
+- **Limiti onestamente dichiarati**: no multilingua (corpus IT), no embeddings neurali (TF-IDF D-061), no memoria multi-turn, no feedback loop utente, no rate limit dedicato v1, no scraping/web search, no multitenant a corpus, no TTL storico sessioni.
+- **Sample questions in UI**: 5 domande esempio hardcoded in `HalKnowledgePage.jsx:19-25` (`SAMPLE_QUESTIONS`). Documentate 1:1.
+- **`min_length=3, max_length=1000`** su `KnowledgeAskRequest.question` (`hal_knowledge.py:89`). Documentati come vincoli Pydantic hard.
 
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.

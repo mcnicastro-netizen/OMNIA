@@ -31,6 +31,7 @@
 | **G-bis** Micro-fix retrieval Cap. 9 `staging.crediti-costo` | ✅ | tags 6→14 · +correlato `staging.cos-e` · domanda_naturale doppia · a_cosa_serve arricchito · index v0.6.1-cap10-gbis · retrieval fix validated by testing_agent (top-1 sim 0.379 vs 0.334 fascicolo #2) |
 | **H** Manuale Cap. 11 Mutui comparatore | ✅ | `11-mutui-comparatore.md` + 12 voci YAML · index **129 voci** · copertura mutui.py + mortgage_data.py (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer 128-sexies TUB) |
 | **H-bis** Allineamento D-051 Cap. 11 al codice | ✅ | Fix onestà: 9→**8 banche distinte** (banks_count=8), 11→**9 offerte Consap**, ING interamente fuori Consap. Voce YAML rinominata `mutui.offerte-14-banche-9` → `-banche-8`. Index v0.7.1-cap11-hbis. |
+| **I** Manuale Cap. 12 HAL Knowledge | ✅ | `12-hal-knowledge.md` + 13 voci YAML · index **142 voci** · v0.8-cap12 · meta-doc RAG (motore TF-IDF+Gemini, corpus 7 file, soglie confidence 0.08/0.20, distinzione D-040 tre HAL, limiti v1). Copertura `hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe. |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -46,10 +47,11 @@
 | 9 | Virtual Staging | 12 | ✅ v1.0 (pipeline SAM2+Flux+ESRGAN, 5 stili, 6 stanze, reverse mode, watermark AGCM) |
 | 10 | HAL Agent CRM | 13 | ✅ v1.0 (chat + 5 tool CRM, streaming SSE, Migliora con HAL 3 langs+3 toni, naming Fase 0) |
 | 11 | Mutui comparatore | 12 | ✅ v1.0.1 (H-bis: 8 banche, 9 Consap, ING interamente fuori Consap, disclaimer TUB 128-sexies) |
-| 12–26 | — | — | ⏳ |
+| 12 | HAL Knowledge | 13 | ✅ v1.0 (motore TF-IDF+Gemini 3 Flash, corpus 7 file + Cap. 1-11, soglie confidence, distinzione D-040 tre HAL, limiti v1) |
+| 13–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **11/26 capitoli (42%)** · **129 voci HAL** · **57 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **12/26 capitoli (46%)** · **142 voci HAL** · **60 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -59,17 +61,18 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.7.1-cap11-hbis |
+| Index | `hal-index.json` v0.8-cap12 |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
 | Post Cap. 10 | 117 voci ✅ reindex + smoke 3/3 PASS |
 | Post G-bis | 117 voci ✅ reindex + smoke retrieval fix validato (testing_agent) |
 | Post Cap. 11 | 129 voci ✅ reindex + smoke 3/3 PASS |
-| Post H-bis | **Reindex live in corso** — voci invariate 129, ma id voce rinominato + md5 cambiati |
+| Post H-bis | 129 voci ✅ reindex live (id voce rinominato + md5 cambiati) |
+| Post Cap. 12 | **142 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke Cap. 11**:
-1. *Cos'è il Comparatore Mutui di OMNIA?* → `mutui.cos-e`
-2. *Come viene calcolato il TAEG del mutuo?* → `mutui.motore`
-3. *OMNIA è mediatore creditizio?* → `mutui.disclaimer-tub` (risposta: **no**, art. 128-sexies TUB)
+**Smoke Cap. 12**:
+1. *Cos'è HAL Knowledge e a cosa serve?* → `halk.cos-e`
+2. *Cosa significa 'alta confidence' sulla risposta di HAL?* → `halk.badge-confidence`
+3. *Qual è la differenza fra HAL Knowledge e HAL Agent CRM?* → `halk.distinzione-tre-hal`
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05
@@ -84,12 +87,12 @@
 ## Prossimi task (ordine Founder)
 | # | Task | Priorità |
 |---|------|:--------:|
-| 1 | **Cap. 12 HAL Knowledge** (meta-doc del RAG stesso) | 🟢 |
-| 2 | Billing UI listino Founder | 🟡 |
-| 3 | B2C Stripe checkout | 🟡 |
-| 4 | Screenshot kit (TASK I) | 🟡 |
-| 5 | Hard-gate crediti Virtual Staging (pre-check saldo) | 🟢 |
-| 6 | Sito Web v2 · scope da definire (P0 Hero+Chi Siamo+Contatti+Footer + extractor esteso) | 🟠 aperta |
+| 1 | Billing UI listino Founder | 🟡 |
+| 2 | B2C Stripe checkout | 🟡 |
+| 3 | Screenshot kit (TASK I) | 🟡 |
+| 4 | Hard-gate crediti Virtual Staging (pre-check saldo) | 🟢 |
+| 5 | Sito Web v2 · scope da definire (P0 Hero+Chi Siamo+Contatti+Footer + extractor esteso) | 🟠 aperta |
+| 6 | Cap. 13+ manuale (candidati: HAL Legal · Team & Ruoli · Impostazioni · Domain Vault) | 🟢 |
 ---
 ## Micro-fix aperti
 _Tutti chiusi. G-bis retrieval Cap. 9 applicato (Feb 2026)._

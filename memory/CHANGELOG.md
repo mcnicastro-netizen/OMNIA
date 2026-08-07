@@ -1,5 +1,120 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK I · Cap. 12 · HAL Knowledge (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — dodicesimo capitolo del Manuale Operativo (meta-doc del RAG stesso).
+**Fonte**: Founder Feb 2026 · Post-Cap. 11 H-bis approvato · Cap. 12 = HAL Knowledge (`hal_knowledge.py` + `HalKnowledgePage.jsx`).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 12 · HAL Knowledge** (meta-doc del RAG che risponde sul manuale OMNIA):
+- **Nuovo capitolo** `memory/manuale/12-hal-knowledge.md` (~12 sottocapitoli, ~340 righe): cos'è HAL Knowledge + dove trovarlo, come porre una domanda, come leggere il badge di confidence (soglie 0.08/0.20), cosa c'è nel corpus (7 file fondamentali + Cap. 1-11 manuale, CHANGELOG escluso B-ter), come funziona il motore (TF-IDF + Gemini 3 Flash Preview via Emergent LLM Key), storico per-utente, reindex super_admin idempotente su MD5, insufficient_context come feature D-051, distinzione D-040 fra HAL Knowledge / HAL Agent CRM / HAL Legal, limiti onesti v1 (no multilingua, no embeddings neurali, no memoria multi-turn, no feedback loop utente, no rate limit dedicato, no scraping, no multitenant a corpus).
+- **Nuovo YAML HAL** `memory/manuale/hal/12-hal-knowledge.yaml` (~410 righe, **13 voci**): `halk.cos-e`, `halk.dove-lo-trovi`, `halk.come-porre-domanda`, `halk.badge-confidence`, `halk.fonti-citate`, `halk.corpus`, `halk.motore`, `halk.insufficient-context`, `halk.storico`, `halk.reindex`, `halk.status-badge`, `halk.distinzione-tre-hal`, `halk.limiti`. Validato con `_chunk_yaml_hal_file()` HAL RAG parser (13/13 chunk generati OK).
+- **`hal-index.json` rigenerato**: v0.8-cap12 · **142 voci totali** (Cap. 1-12) · 12 source files con MD5 aggiornati.
+- **`IMPORT_HAL.md`** aggiornato a v0.8: header a 142 voci · nuova sezione "Smoke Cap. 12" con 3 query attese · storico versioni esteso.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 12 con **3 righe placeholder** (2 essenziali + 1 utile). Totale index: **60 screenshot** catalogati.
+- **`GAP.md`**: aggiunta Sezione E per Cap. 12 con 15 punti verifica onestà 1:1 al codice (`hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe); aggiornato Sezione A voce HAL Knowledge (129 → 142 voci, Cap. 12 scritto).
+- **`SPRINT_STATUS.md`**: TASK I aggiunto in tabella completati · progresso 12/26 capitoli · 142 voci HAL · Post Cap. 12 con reindex live pending.
+
+### Onestà documentale (D-051)
+
+**Meta-capitolo controllato — no ricorsività narcisistica**
+Le voci descrivono il **codice reale** (`hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe), non l'idea generica di RAG. Ogni claim mappa 1:1 su costanti/righe di codice specifiche.
+
+**Punti onestà D-051 principali**
+- **7 documenti fondamentali in `CORPUS_FILES`** documentati 1:1 (`hal_knowledge.py:59-70`): PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA_OMNIA, ASPETTI_DA_APPROFONDIRE, BUSINESS_MODEL. **`CHANGELOG.md` esplicitamente escluso** (TASK B-ter) — commento inline in codice conferma motivazione feedback loop TF-IDF.
+- **Soglie confidence**: `CONFIDENCE_MIN=0.08` e `CONFIDENCE_HIGH=0.20` (`hal_knowledge.py:77-78`). Badge UI: verde ≥0.20, ambra 0.08-0.20, rosso <0.08. Documentati 1:1 sia nel MD sia nella voce `halk.badge-confidence`.
+- **TOP_K=5 fonti retrieval** + `CHUNK_WORDS=500` + `CHUNK_OVERLAP=50` (`hal_knowledge.py:74-76`) documentati.
+- **Modello LLM**: `gemini-3-flash-preview` via Emergent LLM Key, temperatura fissa in `LlmChat` default (`hal_knowledge.py:495-499`). Documentato 1:1.
+- **Ruoli permessi**: tuple `_ROLES = ("agency_admin", "super_admin", "branch_admin", "group_admin", "agent")` (`hal_knowledge.py:509`) mappata al manuale come "tutti i ruoli agenzia autenticati".
+- **Reindex solo super_admin**: `Depends(require_roles("super_admin"))` (`hal_knowledge.py:532`). Idempotente su MD5 (`force=False` default), reingest completo con `force=true`.
+- **Persistenza indice JSON (no pickle)**: scelta di sicurezza H9 D-051 documentata onestamente (`hal_knowledge.py:376-398`).
+- **`insufficient_context` è feature D-051**: comportamento voluto, non bug. Il chunk sotto soglia produce log con `answer: null` in `hal_knowledge_sessions` per audit e debug corpus.
+- **Storico max 15 fetch server, 8 mostrati in UI** (`HalKnowledgePage.jsx:50` + `.slice(0, 8)` in :253) documentato 1:1.
+- **Super_admin vede storico di tutti**: `hal_knowledge.py:614` — filtro user_id rimosso quando `user.role == "super_admin"`. Documentato esplicitamente come "audit/debug corpus".
+- **D-040 · 3 bottoni fisici**: distinzione fra HAL Agent CRM (`/api/app/al/chat`), HAL Knowledge (`/api/app/hal/knowledge/ask`), HAL Legal (in arrivo). Chiarita esplicitamente.
+- **Limiti onesti v1**: no multilingua (corpus IT), no embeddings neurali (TF-IDF D-061), no memoria multi-turn, no feedback loop utente, no rate limit dedicato v1, no scraping/web search, no multitenant a corpus (isolamento è HAL Agent CRM by `agency_id`), no TTL storico sessioni.
+- **Sample questions in UI**: 5 domande esempio hardcoded in `HalKnowledgePage.jsx:19-25` documentate 1:1 nel MD.
+- **`min_length=3, max_length=1000`** su `KnowledgeAskRequest.question` (`hal_knowledge.py:89`) documentati come vincoli Pydantic hard.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder (super_admin):
+1. `POST /api/app/hal/knowledge/reindex?force=true`.
+2. Verifica `manual_hal_indexed >= 142`.
+3. Smoke Cap. 12 3/3 attese:
+   - *"Cos'è HAL Knowledge e a cosa serve?"* → `halk.cos-e`
+   - *"Cosa significa 'alta confidence' sulla risposta di HAL?"* → `halk.badge-confidence`
+   - *"Qual è la differenza fra HAL Knowledge e HAL Agent CRM?"* → `halk.distinzione-tre-hal`
+4. Confidence attesa ≥ 0.15 su tutte e 3 (voci del meta-capitolo hanno keyword molto specifiche, tipicamente alta confidence).
+
+### File modificati
+- `memory/manuale/12-hal-knowledge.md` (nuovo, ~340 righe)
+- `memory/manuale/hal/12-hal-knowledge.yaml` (nuovo, ~410 righe, 13 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.8-cap12, 142 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.8, 142 voci, Smoke Cap. 12)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe Cap. 12 → 60 totali)
+- `memory/GAP.md` (Sezione E Cap. 12 con 15 punti onestà + aggiornamento Sezione A HAL Knowledge)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (TASK I completato · 12/26 · 142 voci)
+
+### Commit message consigliato
+
+```
+feat(docs): TASK I · Cap. 12 HAL Knowledge (Manual + HAL YAML)
+
+Manual Cap. 12 (meta-doc del RAG stesso):
+- 12-hal-knowledge.md (~340 lines, 12 subchapters)
+- 12-hal-knowledge.yaml (13 HAL voci, ~410 lines)
+- hal-index.json v0.8-cap12 (142 voci total, 12 source files)
+- IMPORT_HAL.md v0.8 (updated to 142 voci + Smoke Cap. 12)
+- screenshots-index.md (+3 rows Cap. 12 → 60 total)
+- GAP.md: Sezione E Cap. 12 (15 honesty points)
+- SPRINT_STATUS.md updated (12/26 · 142 voci)
+
+Coverage: hal_knowledge.py (617 lines) + HalKnowledgePage.jsx
+(307 lines) full mapping. Meta-doc: TF-IDF + Gemini 3 Flash
+Preview, corpus 7 fondamentali + Cap. 1-11 manuale, CHANGELOG
+excluded (B-ter), thresholds 0.08/0.20, top-K 5, chunk 500/50
+words, JSON index (no pickle H9), super_admin only reindex,
+history 15 fetch/8 shown, D-040 three HAL distinction.
+
+Honesty (D-051):
+- 7 CORPUS_FILES 1:1 to code
+- CHANGELOG explicitly excluded (feedback loop rationale)
+- Thresholds CONFIDENCE_MIN=0.08 / CONFIDENCE_HIGH=0.20 exact
+- TOP_K=5 / CHUNK_WORDS=500 / CHUNK_OVERLAP=50 documented
+- Model gemini-3-flash-preview via Emergent LLM Key
+- _ROLES tuple mapped to "utenti agenzia autenticati"
+- Reindex super_admin only, idempotent on MD5
+- JSON index (no pickle) - H9 security choice
+- insufficient_context is feature D-051 (zero hallucination)
+- History 15 fetch / 8 shown UI, super_admin sees all
+- D-040 three HAL: Knowledge / Agent CRM / Legal
+- Limits v1: no multilingua, no embeddings, no memory,
+  no feedback loop, no rate limit dedicato, no scraping,
+  no multitenant corpus, no TTL history
+
+Validation:
+- yaml.safe_load OK on 12-hal-knowledge.yaml (13 voci)
+- _chunk_yaml_hal_file() HAL RAG parser → 13 chunks OK
+- Total corpus YAML chunks = 142 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: manual_hal_indexed >= 142
+Smoke 3/3 Cap. 12: halk.cos-e / halk.badge-confidence /
+halk.distinzione-tre-hal
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 12
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging · Sito Web v2
+- Cap. 13+ manuale (candidati onesti: HAL Legal · Team & Ruoli · Impostazioni · Domain Vault)
+
+**Progresso manuale**: 12/26 capitoli (46%). Totale voci HAL: **142**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 🔧 TASK H-bis · Allineamento D-051 Cap. 11 al codice
 
 **Tipo**: Onestà documentale — correzione conteggi banche/Consap sul Cap. 11 Mutui.

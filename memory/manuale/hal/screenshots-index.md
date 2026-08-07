@@ -172,6 +172,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 12 · HAL Knowledge
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap12-halk-panoramica` | Pagina HAL Knowledge caricata: titolo *"Chiedi ad HAL"*, campo di testo vuoto con placeholder, 5 domande di esempio cliccabili in basso, badge di stato in alto a destra (`📚 617 chunk · 4200 termini | 🤖 gemini-3-flash-preview`). | 🔴 | — |
+| 2 | `cap12-halk-risposta-fonti` | Risposta HAL renderizzata: prosa con marker `[FONTE 1]`, badge verde "Alta confidence · 32%" in alto a destra, blocco *"Fonti citate"* sotto con 3-5 righe (file .yaml del manuale, sezione, percentuale similarity). | 🔴 | — |
+| 3 | `cap12-halk-status-badge` | Zoom sul badge di stato in alto a destra della pagina HAL Knowledge, con dettaglio dei contatori (chunks_indexed, vocab_size, model name). | 🟡 | Utile ma opzionale. | — |
+
+**Totale Cap. 12**: 3 screenshot (2 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -212,3 +224,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 9) | Aggiunte 5 righe Cap. 9 · Virtual Staging (3 essenziali, 2 utili). Totale index = **49 screenshot** catalogati. |
 | Feb 2026 (Cap. 10) | Aggiunte 5 righe Cap. 10 · HAL Agent CRM (3 essenziali, 2 utili). Totale index = **54 screenshot** catalogati. |
 | Feb 2026 (Cap. 11) | Aggiunte 3 righe Cap. 11 · Mutui (panoramica + sostenibilità + piano ammortamento — tutte essenziali). Totale index = **57 screenshot** catalogati. |
+| Feb 2026 (Cap. 12) | Aggiunte 3 righe Cap. 12 · HAL Knowledge (panoramica + risposta+fonti + status-badge). Totale index = **60 screenshot** catalogati. |
