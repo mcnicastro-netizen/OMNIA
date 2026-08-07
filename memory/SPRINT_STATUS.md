@@ -32,6 +32,7 @@
 | **H** Manuale Cap. 11 Mutui comparatore | ✅ | `11-mutui-comparatore.md` + 12 voci YAML · index **129 voci** · copertura mutui.py + mortgage_data.py (14 offerte 9 banche, TAEG IRR, Consap under-36, disclaimer 128-sexies TUB) |
 | **H-bis** Allineamento D-051 Cap. 11 al codice | ✅ | Fix onestà: 9→**8 banche distinte** (banks_count=8), 11→**9 offerte Consap**, ING interamente fuori Consap. Voce YAML rinominata `mutui.offerte-14-banche-9` → `-banche-8`. Index v0.7.1-cap11-hbis. |
 | **I** Manuale Cap. 12 HAL Knowledge | ✅ | `12-hal-knowledge.md` + 13 voci YAML · index **142 voci** · v0.8-cap12 · meta-doc RAG (motore TF-IDF+Gemini, corpus 7 file, soglie confidence 0.08/0.20, distinzione D-040 tre HAL, limiti v1). Copertura `hal_knowledge.py` 617 righe + `HalKnowledgePage.jsx` 307 righe. |
+| **J** Manuale Cap. 13 Team & Ruoli (Collaboratori) | ✅ | `13-team-ruoli.md` + 13 voci YAML · index **155 voci** · v0.9-cap13 · magic-link invite 7gg, ruoli `agency_admin`/`agent` (segreteria = concetto operativo), 4 stati invito (pending/accepted/revoked/expired), upgrade role solo se client, token nel fragment (L5). Copertura `invites.py` + `agencies.py` + `MembersPage.jsx` + `InviteMemberModal.jsx` + `AcceptInvitePage.jsx`. |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -48,10 +49,11 @@
 | 10 | HAL Agent CRM | 13 | ✅ v1.0 (chat + 5 tool CRM, streaming SSE, Migliora con HAL 3 langs+3 toni, naming Fase 0) |
 | 11 | Mutui comparatore | 12 | ✅ v1.0.1 (H-bis: 8 banche, 9 Consap, ING interamente fuori Consap, disclaimer TUB 128-sexies) |
 | 12 | HAL Knowledge | 13 | ✅ v1.0 (motore TF-IDF+Gemini 3 Flash, corpus 7 file + Cap. 1-11, soglie confidence, distinzione D-040 tre HAL, limiti v1) |
-| 13–26 | — | — | ⏳ |
+| 13 | Team & Ruoli (Collaboratori) | 13 | ✅ v1.0 (magic-link 7gg, ruoli agency_admin/agent, 4 stati invito, upgrade role solo se client, segreteria = concetto operativo) |
+| 14–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **12/26 capitoli (46%)** · **142 voci HAL** · **60 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **13/26 capitoli (50%)** · **155 voci HAL** · **63 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -61,18 +63,19 @@
 | YAML ingest | ✅ attivo |
 | Corpus .md | PRD, ROADMAP, DECISIONS, AUDIT_M2, PROGRAMMA, ASPETTI, BUSINESS_MODEL |
 | **Escluso** | ~~CHANGELOG.md~~ (B-ter) |
-| Index | `hal-index.json` v0.8-cap12 |
+| Index | `hal-index.json` v0.9-cap13 |
 | Live B-bis | `manual_hal_indexed: 56` ✅ |
 | Post Cap. 10 | 117 voci ✅ reindex + smoke 3/3 PASS |
 | Post G-bis | 117 voci ✅ reindex + smoke retrieval fix validato (testing_agent) |
 | Post Cap. 11 | 129 voci ✅ reindex + smoke 3/3 PASS |
 | Post H-bis | 129 voci ✅ reindex live (id voce rinominato + md5 cambiati) |
-| Post Cap. 12 | **142 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 12 | 142 voci ✅ reindex live + smoke 3/3 PASS (high: 0.293/0.217/0.478) |
+| Post Cap. 13 | **155 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke Cap. 12**:
-1. *Cos'è HAL Knowledge e a cosa serve?* → `halk.cos-e`
-2. *Cosa significa 'alta confidence' sulla risposta di HAL?* → `halk.badge-confidence`
-3. *Qual è la differenza fra HAL Knowledge e HAL Agent CRM?* → `halk.distinzione-tre-hal`
+**Smoke Cap. 13**:
+1. *Come invito un collega nella mia agenzia?* → `team.invitare-membro`
+2. *Quali ruoli posso assegnare a un collaboratore?* → `team.ruoli-disponibili`
+3. *Posso rimuovere un membro dal team?* → `team.limitazioni-v1` (risposta onesta: **no** in v1)
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05

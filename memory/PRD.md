@@ -1,8 +1,16 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 12 · HAL Knowledge)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 13 · Team & Ruoli)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK J · Cap. 13 · Team & Ruoli / Collaboratori)**:
+  - ✅ **Cap. 13 · Team & Ruoli** (Collaboratori): 13 sottocapitoli + **13 voci HAL YAML** (`team.cos-e`, `team.dove-trovarlo`, `team.ruoli-disponibili`, `team.invitare-membro`, `team.tab-inviti`, `team.accettare-invito`, `team.lista-membri`, `team.chi-puo-invitare`, `team.onboarding-vs-invito`, `team.utente-gia-registrato`, `team.errori-comuni`, `team.limitazioni-v1`, `team.collegamenti`). Copertura 1:1 con `invites.py` (286 righe) + `agencies.py` (180 righe) + `MembersPage.jsx` (225 righe) + `InviteMemberModal.jsx` (134 righe) + `AcceptInvitePage.jsx` (186 righe).
+  - ✅ **Onestà documentale (D-051)**: ruoli invitabili SOLO `agent` + `agency_admin` (segreteria = concetto operativo NON ruolo backend), `INVITE_EXPIRY_DAYS=7` esatto, idempotenza pending (refresh token+scadenza), sicurezza L5 token nel fragment, ruoli non invitabili documentati (super_admin/client/group_admin/branch_admin/branch_agent), upgrade role solo se `client` con tabella verità 6 casi, auto-login post-accept, password min 8 + bcrypt, elenco membri visibile anche a `agent` (no require_roles), revoca NON retroattiva su accepted, onboarding promuove server-side a `agency_admin` (S2 sicurezza), vincolo one-owner.
+  - ✅ **Limiti onestamente dichiarati**: no rimozione membro UI, no cambio ruolo post-join, no toggle is_active UI, no audit log UI, no permessi granulari per membro, no franchising, no notifica real-time, no transfer ownership.
+  - ✅ **`hal-index.json` rigenerato**: v0.9-cap13, **155 voci totali** (Cap. 1-13), 13 source files con MD5 aggiornati.
+  - 📸 Screenshots-index: +3 righe Cap. 13. Totale 63 screenshot catalogati.
+  - 📈 **Progresso manuale**: 13/26 capitoli (50%). Totale voci HAL: **155**. Prossimo: reindex prod super_admin + smoke 3/3 Cap. 13, poi Cap. 14+ (HAL Legal se attivato, Impostazioni, Domain Vault, Billing, Universal Import XML).
 
 - **Ultimo update (Feb 2026 — TASK I · Cap. 12 · HAL Knowledge)**:
   - ✅ **Cap. 12 · HAL Knowledge** (meta-doc del RAG stesso): 12 sottocapitoli + **13 voci HAL YAML** (`halk.cos-e`, `halk.dove-lo-trovi`, `halk.come-porre-domanda`, `halk.badge-confidence`, `halk.fonti-citate`, `halk.corpus`, `halk.motore`, `halk.insufficient-context`, `halk.storico`, `halk.reindex`, `halk.status-badge`, `halk.distinzione-tre-hal`, `halk.limiti`). Copertura 1:1 con `hal_knowledge.py` (617 righe) + `HalKnowledgePage.jsx` (307 righe).

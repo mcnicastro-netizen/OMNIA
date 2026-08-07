@@ -51,7 +51,7 @@ Il tuo titolare (o il servizio OMNIA se ti sei registrato tu stesso) ti ha invia
 
 **Errori comuni**
 - *"Email o password sbagliata"*: controlla di avere copiato la password senza spazi iniziali/finali. Se hai fatto copia-incolla dalla mail, spesso viene copiato uno spazio in più.
-- *"Il link scade dopo 24 ore"*: se hai ricevuto un invito e non l'hai aperto in tempo, chiedi al titolare di re-inviarlo dalla sezione **Collaboratori**.
+- *"Il link scade dopo 7 giorni"*: se hai ricevuto un invito e non l'hai aperto in tempo, chiedi al titolare di re-inviarlo dalla sezione **Collaboratori** (Cap. 13).
 
 ### 1.2.2 Ho dimenticato la password
 
@@ -170,7 +170,7 @@ Sapere dove trovi ogni cosa. La barra a sinistra è il tuo indice: da qui apri i
 
 - **Titolare (agency_admin)**: vede tutto.
 - **Agente**: vede Dashboard, Immobili, Clienti, Match, Virtual Staging, Mutui, HAL Legal, HAL Knowledge, Collaboratori.
-- **Segreteria** (concetto operativo, si logga come *agente* con permessi ridotti dal titolare): stesso menu dell'agente, ma il titolare può nascondere singole voci dalle **Impostazioni → Collaboratori**.
+- **Segreteria** (concetto operativo, si logga come *agente* con ruolo backend `agent` — cfr. Cap. 13): stesso menu dell'agente. Nota D-051: in v1 non esiste UI per nascondere singole voci del menu per membro; permessi granulari per collaboratore non sono disponibili (cfr. Cap. 13 §13.12 limiti v1).
 
 ---
 
@@ -220,7 +220,7 @@ Sarai riportato alla schermata di accesso.
 ## Voci correlate (fuori capitolo)
 
 - **Cap. 2 · Dashboard** — cosa fare appena entrato
-- **Cap. 20 · Collaboratori** — come il titolare invita agenti/segreteria
+- **Cap. 13 · Team & Ruoli (Collaboratori)** — come il titolare invita agenti/segreteria (magic-link 7gg, ruoli `agency_admin`/`agent`, limiti v1)
 - **Cap. 24 · Impostazioni** — dove modificare dati agenzia e branding
 
 ---

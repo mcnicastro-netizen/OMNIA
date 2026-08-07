@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T09:06:44.819875+00:00",
-  "version": "v0.8-cap12",
+  "generated_at": "2026-08-07T09:44:13.727675+00:00",
+  "version": "v0.9-cap13",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -60,6 +60,11 @@
     {
       "file": "12-hal-knowledge.yaml",
       "md5": "203cd148a6989aa5cbf3e6071c720c6f",
+      "voci_count": 13
+    },
+    {
+      "file": "13-team-ruoli.yaml",
+      "md5": "235d39be97f54bd8c7e7de1471261a54",
       "voci_count": 13
     }
   ],
@@ -4718,10 +4723,473 @@
         "errori_comuni": 1
       },
       "content_md5": "8c0cfb9c1cf1d92d9608059179347bc2"
+    },
+    {
+      "id": "team.cos-e",
+      "titolo": "Cos'è il modulo Collaboratori (team & ruoli agenzia)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "team",
+        "membri",
+        "ruoli",
+        "panoramica",
+        "primi-passi",
+        "agenzia"
+      ],
+      "correlati": [
+        "team.dove-trovarlo",
+        "team.ruoli-disponibili",
+        "team.invitare-membro"
+      ],
+      "domanda_naturale": "Cos'è il modulo Collaboratori? A cosa serve?",
+      "screenshot": [
+        "[SCREEN: team-members-list]"
+      ],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "d9383ab51d193b813602053092ca6d5c"
+    },
+    {
+      "id": "team.dove-trovarlo",
+      "titolo": "Dove trovare Collaboratori in ImmoWeb",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "dove-si-trova",
+        "sidebar",
+        "navigazione",
+        "accesso",
+        "route"
+      ],
+      "correlati": [
+        "team.cos-e",
+        "team.chi-puo-invitare"
+      ],
+      "domanda_naturale": "Dove trovo Collaboratori? Come ci accedo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "2b806e8b57a22c4ac757f23ef916b9bf"
+    },
+    {
+      "id": "team.ruoli-disponibili",
+      "titolo": "Quali ruoli posso assegnare a un collaboratore (agency_admin vs agent)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "ruoli",
+        "agency-admin",
+        "agent",
+        "segreteria",
+        "permessi",
+        "agenzia",
+        "d-051"
+      ],
+      "correlati": [
+        "team.invitare-membro",
+        "team.chi-puo-invitare",
+        "team.limitazioni-v1"
+      ],
+      "domanda_naturale": "Quali ruoli posso assegnare a un collaboratore quando lo invito?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "350ad5b60c7adb8f9d445df6858eaa0a"
+    },
+    {
+      "id": "team.invitare-membro",
+      "titolo": "Invitare un collega nella mia agenzia (magic link email 7 giorni)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "invito",
+        "magic-link",
+        "email",
+        "invitare-collega",
+        "aggiungere-membro",
+        "agente",
+        "titolare"
+      ],
+      "correlati": [
+        "team.tab-inviti",
+        "team.accettare-invito",
+        "team.errori-comuni",
+        "team.ruoli-disponibili"
+      ],
+      "domanda_naturale": "Come invito un collega nella mia agenzia?",
+      "screenshot": [
+        "[SCREEN: team-invite-modal]"
+      ],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "a0c19d8e62cb0f69113c66e05523101e"
+    },
+    {
+      "id": "team.tab-inviti",
+      "titolo": "Tab Inviti - stati pending/accepted/revoked/expired e revoca",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "tab-inviti",
+        "stati",
+        "pending",
+        "accepted",
+        "revoked",
+        "expired",
+        "revocare",
+        "magic-link"
+      ],
+      "correlati": [
+        "team.invitare-membro",
+        "team.accettare-invito",
+        "team.errori-comuni"
+      ],
+      "domanda_naturale": "Come vedo gli inviti che ho mandato? Come li revoco?",
+      "screenshot": [],
+      "counts": {
+        "passi": 8,
+        "errori_comuni": 2
+      },
+      "content_md5": "e367b1cb37039bcbd78851c1245efcda"
+    },
+    {
+      "id": "team.accettare-invito",
+      "titolo": "Come si accetta un invito (verify token + set password + auto-login)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "agente",
+        "segreteria",
+        "titolare"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "accettare-invito",
+        "magic-link",
+        "password",
+        "auto-login",
+        "verify",
+        "token"
+      ],
+      "correlati": [
+        "team.invitare-membro",
+        "team.utente-gia-registrato",
+        "team.errori-comuni"
+      ],
+      "domanda_naturale": "Ho ricevuto un invito email, come lo accetto?",
+      "screenshot": [
+        "[SCREEN: team-accept-invite]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 3
+      },
+      "content_md5": "0f19a995afb16ea65b527af04d693fa2"
+    },
+    {
+      "id": "team.lista-membri",
+      "titolo": "Elenco membri agenzia - cosa vedo e chi",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "membri",
+        "lista",
+        "elenco",
+        "chi-e-in-agenzia",
+        "tabella-membri"
+      ],
+      "correlati": [
+        "team.cos-e",
+        "team.ruoli-disponibili"
+      ],
+      "domanda_naturale": "Come vedo l'elenco dei membri della mia agenzia?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 2
+      },
+      "content_md5": "407d225b32475ac491888dc9dd5018f1"
+    },
+    {
+      "id": "team.chi-puo-invitare",
+      "titolo": "Chi puo' invitare nuovi membri (permessi effettivi)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "permessi",
+        "chi-puo-invitare",
+        "agency-admin",
+        "agent",
+        "ruoli",
+        "403",
+        "sicurezza"
+      ],
+      "correlati": [
+        "team.ruoli-disponibili",
+        "team.invitare-membro"
+      ],
+      "domanda_naturale": "Chi puo' invitare nuovi membri? Un agente puo' farlo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "066720af0b4338665f293bd8fbe69877"
+    },
+    {
+      "id": "team.onboarding-vs-invito",
+      "titolo": "Onboarding titolare vs invito agente - due percorsi diversi",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "collaboratori",
+        "onboarding",
+        "agency-admin",
+        "promozione",
+        "register",
+        "signup",
+        "S2",
+        "one-owner"
+      ],
+      "correlati": [
+        "team.ruoli-disponibili",
+        "team.utente-gia-registrato"
+      ],
+      "domanda_naturale": "Come diventa titolare il primo utente di un'agenzia?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "c4f2b4d3a6ec900c401f9b415ce348a2"
+    },
+    {
+      "id": "team.utente-gia-registrato",
+      "titolo": "Utente gia' registrato che accetta un invito - link agenzia + upgrade role",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "collaboratori",
+        "utente-esistente",
+        "client",
+        "upgrade-role",
+        "link-agenzia",
+        "accept",
+        "agency-ids"
+      ],
+      "correlati": [
+        "team.accettare-invito",
+        "team.onboarding-vs-invito"
+      ],
+      "domanda_naturale": "Cosa succede se accetto un invito ma sono gia' registrato in OMNIA?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "0607265f92ed5d0c15486743473db66f"
+    },
+    {
+      "id": "team.errori-comuni",
+      "titolo": "Errori comuni del modulo Collaboratori",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "errori",
+        "troubleshooting",
+        "user-already-member",
+        "invite-expired",
+        "invite-invalid",
+        "invite-used",
+        "403",
+        "400",
+        "404"
+      ],
+      "correlati": [
+        "team.invitare-membro",
+        "team.accettare-invito",
+        "team.tab-inviti"
+      ],
+      "domanda_naturale": "Perche' l'invito non funziona? Errori comuni sui Collaboratori",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "1664d461f45e82ed0e9f4a3fdb65bcf1"
+    },
+    {
+      "id": "team.limitazioni-v1",
+      "titolo": "Limiti v1 del modulo Collaboratori (D-051 onesto)",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "collaboratori",
+        "limiti",
+        "cosa-non-fa",
+        "rimozione-membro",
+        "cambio-ruolo",
+        "segreteria",
+        "franchising",
+        "audit",
+        "onestà",
+        "d-051"
+      ],
+      "correlati": [
+        "team.ruoli-disponibili",
+        "team.cos-e"
+      ],
+      "domanda_naturale": "Posso rimuovere un membro dal team? Posso cambiare ruolo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 1
+      },
+      "content_md5": "48e9400da21ff194b29f858c40174c15"
+    },
+    {
+      "id": "team.collegamenti",
+      "titolo": "Collegamenti fra Collaboratori e altri moduli",
+      "modulo": "Collaboratori",
+      "widget": null,
+      "capitolo": "13",
+      "source_file": "13-team-ruoli.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "segreteria"
+      ],
+      "livello": "base",
+      "tags": [
+        "collaboratori",
+        "cross-ref",
+        "primo-accesso",
+        "hal-knowledge",
+        "impostazioni",
+        "immobili",
+        "privacy"
+      ],
+      "correlati": [
+        "team.cos-e",
+        "team.ruoli-disponibili"
+      ],
+      "domanda_naturale": "Che rapporto c'e' fra Collaboratori e gli altri moduli OMNIA?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "5d0cfca0f66921003b1b47cf67d56846"
     }
   ],
   "stats": {
-    "totale_voci": 142,
+    "totale_voci": 155,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -4734,7 +5202,8 @@
       "09": 12,
       "10": 13,
       "11": 12,
-      "12": 13
+      "12": 13,
+      "13": 13
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -4748,19 +5217,20 @@
       "Virtual Staging": 12,
       "HAL Agent": 13,
       "Mutui": 12,
-      "HAL Knowledge": 13
+      "HAL Knowledge": 13,
+      "Collaboratori": 13
     },
     "per_livello": {
-      "base": 99,
-      "intermedio": 43
+      "base": 109,
+      "intermedio": 46
     },
     "per_pubblico": {
-      "titolare": 141,
-      "agente": 124,
-      "segreteria": 84,
-      "super_admin": 5
+      "titolare": 154,
+      "agente": 133,
+      "segreteria": 92,
+      "super_admin": 12
     },
-    "totale_correlati": 332,
-    "totale_tags_unici": 400
+    "totale_correlati": 365,
+    "totale_tags_unici": 452
   }
 }

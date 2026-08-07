@@ -1,5 +1,126 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK J · Cap. 13 · Team & Ruoli (Collaboratori) (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — tredicesimo capitolo del Manuale Operativo.
+**Fonte**: Founder Feb 2026 · Post-Cap. 12 approvato + reindex live PASS · Cap. 13 = Team & Ruoli / Collaboratori (`invites.py` + `agencies.py` + `MembersPage.jsx` + `InviteMemberModal.jsx` + `AcceptInvitePage.jsx`).
+
+### Cosa è cambiato
+
+**Nuovo Cap. 13 · Team & Ruoli** (Collaboratori):
+- **Nuovo capitolo** `memory/manuale/13-team-ruoli.md` (~330 righe, 13 sottocapitoli): cos'è il modulo Collaboratori + due esperienze titolare/agente, dove trovarlo (`/it/app/members`), ruoli disponibili (`agency_admin` vs `agent`, segreteria = concetto operativo NON ruolo backend), invito via magic-link email con scadenza 7 giorni + refresh idempotente su pending, tab Inviti con 4 stati (pending/accepted/revoked/expired) + revoca, flusso accept (verify token + set password + auto-login), elenco membri (`GET /me/members` senza `require_roles`), chi può invitare (solo `agency_admin`/`super_admin`), onboarding titolare (create_agency promuove server-side) vs invito agente, utente già registrato (upgrade role solo se `client`), errori comuni (user_already_member, invite_invalid/used_or_revoked/expired, 403, agency_already_exists, franchising_roles_use_group_flow), limiti onesti v1 (no rimozione membro, no cambio ruolo post-join, no segreteria backend, no is_active toggle UI, no audit log UI, no permessi granulari, no franchising, no notifica real-time, no transfer ownership).
+- **Nuovo YAML HAL** `memory/manuale/hal/13-team-ruoli.yaml` (~570 righe, **13 voci**): `team.cos-e`, `team.dove-trovarlo`, `team.ruoli-disponibili`, `team.invitare-membro`, `team.tab-inviti`, `team.accettare-invito`, `team.lista-membri`, `team.chi-puo-invitare`, `team.onboarding-vs-invito`, `team.utente-gia-registrato`, `team.errori-comuni`, `team.limitazioni-v1`, `team.collegamenti`. Validato con `_chunk_yaml_hal_file()` HAL RAG parser (13/13 chunk generati OK). Fix minori applicati durante drafting: tag numerici `403/400/404` quotati come stringhe, permesso con `:` nel testo quotato per evitare interpretazione YAML come mapping.
+- **`hal-index.json` rigenerato**: v0.9-cap13 · **155 voci totali** (Cap. 1-13) · 13 source files con MD5 aggiornati.
+- **`IMPORT_HAL.md`** aggiornato a v0.9: header a 155 voci · nuova sezione "Smoke Cap. 13" con 3 query attese · storico versioni esteso.
+- **`screenshots-index.md`**: aggiunta sezione Cap. 13 con **3 righe placeholder** (tutte essenziali). Totale index: **63 screenshot** catalogati.
+- **`GAP.md`**: aggiunta Sezione E per Cap. 13 con 15 punti verifica onestà 1:1 al codice (`invites.py` 286 righe + `agencies.py` 180 righe + `MembersPage.jsx` 225 righe + `InviteMemberModal.jsx` 134 righe + `AcceptInvitePage.jsx` 186 righe).
+- **`SPRINT_STATUS.md`**: TASK J aggiunto in tabella completati · progresso 13/26 capitoli · 155 voci HAL · Post Cap. 13 con reindex live pending.
+
+### Onestà documentale (D-051)
+
+**Punti onestà principali**
+- **Ruoli invitabili**: **solo** `agent` e `agency_admin` (le due opzioni esatte del select in `InviteMemberModal.jsx:100-102`). Zero invenzioni. Nessun ruolo `segreteria` backend — è mansione operativa.
+- **`INVITE_EXPIRY_DAYS=7`** (`invites.py:32`) documentato come "7 giorni".
+- **Idempotenza pending invite**: rigenera token+expires_at invece di duplicare (`invites.py:64-83`).
+- **Sicurezza L5 · token nel fragment `#token=...`**: non finisce nei log server (`AcceptInvitePage.jsx:16-18`).
+- **Ruoli NON invitabili documentati esplicitamente**: `super_admin` (team OMNIA), `client` (B2C), `group_admin/branch_admin/branch_agent` (bloccati da `POST /agencies` con 403 `franchising_roles_use_group_flow`).
+- **Upgrade role solo se `client`** (`invites.py:246-253`): tabella verità con 6 casi (`client→agent`, `client→agency_admin`, `agent→agent`, `agent→agency_admin` no upgrade, `agency_admin→agent` no downgrade, `agency_admin→agency_admin`).
+- **Endpoints pubblici accept/verify**: `POST /invites/accept` e `GET /invites/verify` senza auth — sicurezza garantita dal token.
+- **Auto-login post-accept**: cookies httpOnly+secure+sameSite=none, redirect a dashboard dopo 1,5 sec.
+- **Password minima 8 caratteri** (form `minLength=8` + bcrypt hashing server-side).
+- **Elenco membri visibile anche a `agent`**: `GET /me/members` usa solo `get_current_user`, nessun `require_roles`. Documentato onestamente.
+- **Tab Inviti protetta**: `GET /me/invites` richiede `agency_admin/super_admin`. Token mai leakato (proiezione MongoDB `{"token": 0}`).
+- **Revoca invito NON retroattiva**: se già `accepted`, il collega è dentro e la revoca dell'invito non lo rimuove.
+- **Onboarding titolare promuove server-side** a `agency_admin` (`agencies.py:94-99`) — sicurezza S2, nessun ruolo privilegiato in signup pubblico.
+- **Vincolo one-owner**: `agency_admin` può possedere solo 1 agenzia (`agency_already_exists` a 400).
+- **Limiti v1 dichiarati esplicitamente** in §13.12: no rimozione membro, no cambio ruolo, no is_active toggle, no audit log UI, no permessi granulari per membro, no franchising, no notifica real-time, no transfer ownership.
+
+### Verifiche post-scrittura
+Istruzioni per il Founder (super_admin):
+1. `POST /api/app/hal/knowledge/reindex?force=true`.
+2. Verifica `manual_hal_indexed >= 155`.
+3. Smoke Cap. 13 3/3 attese:
+   - *"Come invito un collega nella mia agenzia?"* → `team.invitare-membro`
+   - *"Quali ruoli posso assegnare a un collaboratore?"* → `team.ruoli-disponibili`
+   - *"Posso rimuovere un membro dal team?"* → `team.limitazioni-v1` (risposta onesta: **no** in v1)
+4. Confidence attesa ≥ 0.15 su tutte e 3.
+
+### File modificati
+- `memory/manuale/13-team-ruoli.md` (nuovo, ~330 righe)
+- `memory/manuale/hal/13-team-ruoli.yaml` (nuovo, ~570 righe, 13 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.9-cap13, 155 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (aggiornato a v0.9, 155 voci, Smoke Cap. 13)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe Cap. 13 → 63 totali)
+- `memory/GAP.md` (Sezione E Cap. 13 con 15 punti onestà)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (TASK J completato · 13/26 · 155 voci)
+
+### Commit message consigliato
+
+```
+feat(docs): TASK J · Cap. 13 Team & Ruoli (Manual + HAL YAML)
+
+Manual Cap. 13 (Collaboratori / Team & Ruoli):
+- 13-team-ruoli.md (~330 lines, 13 subchapters)
+- 13-team-ruoli.yaml (13 HAL voci, ~570 lines)
+- hal-index.json v0.9-cap13 (155 voci total, 13 source files)
+- IMPORT_HAL.md v0.9 (updated to 155 voci + Smoke Cap. 13)
+- screenshots-index.md (+3 rows Cap. 13 → 63 total)
+- GAP.md: Sezione E Cap. 13 (15 honesty points)
+- SPRINT_STATUS.md updated (13/26 · 155 voci · 50%)
+
+Coverage: invites.py (286 lines) + agencies.py (180 lines)
++ MembersPage.jsx (225 lines) + InviteMemberModal.jsx (134 lines)
++ AcceptInvitePage.jsx (186 lines) full mapping.
+
+Honesty (D-051):
+- Roles invitable: exactly `agent` and `agency_admin`
+  (select values from InviteMemberModal)
+- No `segreteria` backend role (concept only, invited as `agent`)
+- INVITE_EXPIRY_DAYS=7 documented exactly
+- Idempotent pending refresh (token + expires_at update)
+- L5 security: token in fragment #token=... (no server logs)
+- Non-invitable roles listed: super_admin, client,
+  group/branch (blocked by POST /agencies with 403)
+- Role upgrade only if pre-invite role == `client`
+  (invites.py:246-253) - documented in truth table
+- Public endpoints accept/verify (no auth, token guarantees)
+- Auto-login post-accept (httpOnly cookies + refresh + redirect)
+- Password min 8 + bcrypt
+- Member list visible to `agent` too (no require_roles)
+- Invite tab protected (agency_admin/super_admin only)
+- Revoke NOT retroactive on accepted invites
+- Onboarding promotes server-side to agency_admin (S2)
+- One-owner constraint (agency_already_exists)
+- Limits v1 explicit: no remove member, no role change,
+  no is_active UI, no audit log UI, no granular perms,
+  no franchising, no realtime notifications, no ownership transfer
+
+Validation:
+- yaml.safe_load OK on 13-team-ruoli.yaml (13 voci)
+- Fixes during drafting: tags "403"/"400"/"404" quoted as strings,
+  permessi with ':' quoted to prevent YAML mapping interpretation
+- _chunk_yaml_hal_file() HAL RAG parser → 13 chunks OK
+- Total corpus YAML chunks = 155 (matches index)
+
+Prod activation:
+POST /api/app/hal/knowledge/reindex?force=true
+Expected: manual_hal_indexed >= 155
+Smoke 3/3 Cap. 13:
+- team.invitare-membro (invitare collega)
+- team.ruoli-disponibili (quali ruoli)
+- team.limitazioni-v1 (rimuovere membro? no v1)
+```
+
+### Prossimi passi
+- Founder: reindex prod + 3 smoke query Cap. 13
+- (Backlog) B2C Checkout Stripe · Billing UI Founder · Hard-gate crediti staging · Sito Web v2
+- Cap. 14+ manuale (candidati: HAL Legal (se attivato) · Impostazioni · Domain Vault · Billing · Universal Import XML)
+
+**Progresso manuale**: 13/26 capitoli (50%). Totale voci HAL: **155**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK I · Cap. 12 · HAL Knowledge (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — dodicesimo capitolo del Manuale Operativo (meta-doc del RAG stesso).

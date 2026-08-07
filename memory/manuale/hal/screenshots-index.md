@@ -184,6 +184,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 13 · Team & Ruoli (Collaboratori)
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `team-members-list` | Pagina Collaboratori con tab **Membri** attiva: tabella con 3-5 righe (Nome, Email, Ruolo badge `AGENT`/`AGENCY_ADMIN`, Stato "Attivo"). Bottone *"+ Invita membro"* in alto a destra visibile. | 🔴 | — |
+| 2 | `team-invite-modal` | Modal "Invita nuovo membro" aperto sopra la pagina Collaboratori: campo Email compilato con `agente@esempio.it`, Nome opzionale, select **Ruolo** aperto che mostra le due opzioni **Agent** e **Agency admin**. | 🔴 | — |
+| 3 | `team-accept-invite` | Pagina `/accept-invite` dal punto di vista del collega invitato: intestazione con nome agenzia (*"Nicastro Immobiliare"*) + ruolo assegnato + email in evidenza, form con campi Nome e Password (min 8), bottone "Accetta invito". | 🔴 | — |
+
+**Totale Cap. 13**: 3 screenshot (tutti essenziali).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -225,3 +237,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 10) | Aggiunte 5 righe Cap. 10 · HAL Agent CRM (3 essenziali, 2 utili). Totale index = **54 screenshot** catalogati. |
 | Feb 2026 (Cap. 11) | Aggiunte 3 righe Cap. 11 · Mutui (panoramica + sostenibilità + piano ammortamento — tutte essenziali). Totale index = **57 screenshot** catalogati. |
 | Feb 2026 (Cap. 12) | Aggiunte 3 righe Cap. 12 · HAL Knowledge (panoramica + risposta+fonti + status-badge). Totale index = **60 screenshot** catalogati. |
+| Feb 2026 (Cap. 13) | Aggiunte 3 righe Cap. 13 · Team & Ruoli / Collaboratori (members-list + invite-modal + accept-invite — tutte essenziali). Totale index = **63 screenshot** catalogati. |

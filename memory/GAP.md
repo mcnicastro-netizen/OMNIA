@@ -213,6 +213,26 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Sample questions in UI**: 5 domande esempio hardcoded in `HalKnowledgePage.jsx:19-25` (`SAMPLE_QUESTIONS`). Documentate 1:1.
 - **`min_length=3, max_length=1000`** su `KnowledgeAskRequest.question` (`hal_knowledge.py:89`). Documentati come vincoli Pydantic hard.
 
+### Cap. 13 · Team & Ruoli (Collaboratori) — Feb 2026
+- **Ruoli invitabili documentati 1:1**: `agent` + `agency_admin` (i due valori esatti del select del modal, `InviteMemberModal.jsx:100-102`). Zero invenzioni. Zero ruolo `segreteria` backend (segreteria = concetto operativo/mansione, chi la svolge è invitato come `agent`).
+- **`INVITE_EXPIRY_DAYS=7`** (`invites.py:32`) documentato come "scadenza 7 giorni" nel manuale.
+- **Idempotenza sull'email**: se esiste pending invite per la stessa email nella stessa agenzia, il POST rigenera **token + `expires_at`** invece di duplicare il record (`invites.py:64-83`). Documentato onestamente.
+- **`user_already_member`** (400) se l'email è già in `agency_ids` (`invites.py:60-61`). Documentato con soluzione.
+- **Sicurezza L5 · token nel fragment**: il magic-link `#token=...` viaggia nel **fragment** dell'URL per non finire nei log server (`AcceptInvitePage.jsx:16-18`). Documentato come scelta D-051 sicurezza.
+- **Ruoli non invitabili** (D-051 stretto): `super_admin` (riservato team OMNIA, auto-seedato), `client` (profilo B2C), `group_admin/branch_admin/branch_agent` (bloccati da `POST /agencies` con `franchising_roles_use_group_flow` a 403). Documentati.
+- **Regola upgrade role solo se `client`** (`invites.py:246-253`): documentata come tabella `pre-invito × ruolo-invito → post-accept`. Nessun downgrade, nessun upgrade laterale `agent → agency_admin` via invito.
+- **Endpoints pubblici** (no auth): `GET /invites/verify?token=...` + `POST /invites/accept`. La sicurezza è garantita dal token nel link. Documentato.
+- **Auto-login post-accept**: cookies `access_token` + `refresh_token` (httpOnly, secure, sameSite=none) impostati server-side (`invites.py:278-283`). Frontend chiama `refresh()` e redirect a `/{lang}/app/dashboard` dopo 1,5 sec. Documentato 1:1.
+- **Password minima 8 caratteri** su form accept (`AcceptInvitePage.jsx:144` `minLength={8}`) + bcrypt hashing server-side. Documentato.
+- **Elenco membri**: `GET /agencies/me/members` senza `require_roles` (solo `get_current_user`), quindi **anche `agent` vede l'elenco**. Cap max 200 membri (`agencies.py:178`). Documentato onestamente ("anche gli agent vedono chi è chi").
+- **Tab Inviti**: `list_invites` (`GET /agencies/me/invites`) protetta da `require_roles("agency_admin", "super_admin")` (`invites.py:131`). Non ritorna mai il `token` in risposta (`{"_id": 0, "token": 0}` proiezione `invites.py:139`). Documentato.
+- **Revoca invito**: `DELETE /agencies/me/invites/{invite_id}` (`invites.py:147-163`). Cambia status a `revoked`. **Non è retroattiva** su invite già `accepted` — se il collega è dentro, la revoca dell'invito non lo rimuove. Documentato esplicitamente.
+- **4 stati invito** (`pending`, `accepted`, `revoked`, `expired`) con colori badge UI esatti (`MembersPage.jsx:212-216`) documentati 1:1.
+- **`POST /agencies` promuove server-side a `agency_admin`** (`agencies.py:94-99`) — sicurezza S2 (nessun ruolo privilegiato in signup). Documentato come "Percorso A · Titolare".
+- **Vincolo one-owner**: un `agency_admin` può possedere solo 1 agenzia (`agency_already_exists` = 400, `agencies.py:63-69`). Documentato con workaround (secondo account, email diversa).
+- **NO endpoint remove/change role**: `agencies.py` + `invites.py` non espongono `DELETE /agencies/me/members/{id}` né `PATCH` sul role di un user. Documentato esplicitamente in §13.12.
+- **Cross-ref**: Cap. 1 (Primo accesso), Cap. 3 (privacy L4 = team agenzia via `agency_ids`), Cap. 10 (HAL Agent CRM multi-tenant), Cap. 12 (HAL Knowledge legge Cap. 13 come corpus).
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).
