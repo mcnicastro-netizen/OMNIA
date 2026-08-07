@@ -2,7 +2,9 @@
 
 > File di appoggio per **temi strategici/tecnici** che il Founder ha esplicitamente segnalato come "da rivedere più avanti", **senza essere ancora decisioni**. Ogni voce va promossa in `DECISIONS.md` o `ROADMAP.md` quando si decide di procedere.
 
-**Ultimo aggiornamento**: 06 Agosto 2026
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 15 · Social Publisher)
+
+> **Backlog qualità prodotto (A-006+)**: voci tracciate durante lo sprint manuale Cap. 1-15. Priorità assegnata da Cursor (P1=alto ROI/costo basso, P3=futuro). Decisione Founder post-manuale — **NON implementare senza "vai" esplicito**.
 
 ---
 
@@ -382,3 +384,504 @@ ImmoWeb è **SaaS browser-based**. I ticket tipici si risolvono **in cloud** (sy
 - Apertura canale supporto ufficiale (post-M6 o post-primi Founders)
 - Manuale + GAP coprono moduli ad alto volume ticket (Portali, Fascicolo, Staging, Billing)
 - Richiesta esplicita cliente Agency di SLA / assistenza proattiva
+
+---
+
+# 📋 Backlog qualità prodotto (A-006 → A-016)
+
+Voci **tracciate durante lo sprint manuale Cap. 1-15** (Feb 2026).
+Origine: **Cursor review** dei moduli documentati + **Emergent Spark** filtrati.
+Priorità assegnata da Cursor. **Nessuna decisione Founder presa** — attende review post-manuale.
+
+**Voce già chiusa** ✅ (non elencata):
+- `chunk_id` in `/ask` sources[] — fix applicato Feb 2026, in `main` su GitHub. Non serve tracking.
+
+---
+
+## 🟢 A-006 — Tooltip badge confidence su HalKnowledgePage
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Emergent Spark Cap. 12 (HAL Knowledge)
+**Contesto**: Il badge di confidence (verde/ambra/rosso) mostra colori senza spiegazione inline in UI. Il Cap. 12 del manuale spiega le soglie 0.08/0.20, ma l'utente medio non le conosce.
+
+### Perché ha senso (pro)
+- Chiude cerchio *"HAL spiega HAL"* — riduce ticket ricorrenti tipo *"cosa significa il colore?"*
+- Effort ~15 min (tooltip Shadcn/UI già disponibile in codebase)
+- Zero rischio regressione — additivo puro
+
+### Contro / complessità
+- Zero revenue diretto — solo qualità supporto
+
+### Priorità
+**P1** · effort molto basso · ROI supporto alto
+
+### Timing consigliato
+Post-manuale (dopo primi 5-10 utenti che hanno chiesto info sui colori)
+
+### File coinvolti
+- `frontend/src/apps/immoweb/HalKnowledgePage.jsx` — aggiungere `<Tooltip>` inline al badge
+
+### Aggiornamento manuale post-ship
+- Cap. 12 § *"12.3 Come leggere la risposta"* — aggiungere nota *"il tooltip UI ripete la definizione"* (D-051)
+
+### Domande aperte per il Founder
+Nessuna — decisione autonoma implementazione se il Founder dice "vai".
+
+### Stato
+🟢 **DA APPROFONDIRE** — attende OK Founder
+
+---
+
+## 🟢 A-007 — Rimozione membro agenzia (endpoint + UI minima)
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Emergent Spark Cap. 13 (Team & Ruoli)
+**Contesto**: Cap. 13 §13.12 dichiara onestamente *"NO rimozione membro in UI"* come limite v1. È il primo gap che i titolari incontreranno appena un collaboratore lascia l'agenzia.
+
+### Perché ha senso (pro)
+- **Primo pain reale** dei titolari dopo l'invito (ciclo vita completo)
+- Piccolo endpoint + un bottone conferma sulla pagina Collaboratori
+- Onestà D-051 già scritta nel manuale — colmando il gap chiudi l'anello
+
+### Contro / complessità
+- **Vincoli anti-lock obbligatori** (spec di sicurezza):
+  - No `self-remove` (agency_admin non può rimuovere se stesso)
+  - No `last-owner-remove` (non si può rimuovere l'ultimo `agency_admin` di un'agenzia)
+  - No rimozione di `owner_id` dell'agenzia (transfer ownership è flusso separato)
+- Distinzione tra *"remove from agency"* (unlink `agency_ids`) vs *"delete user"* (mai fare)
+
+### Spec minima
+- `DELETE /api/app/agencies/me/members/{user_id}` · `require_roles("agency_admin", "super_admin")`
+- Errori espliciti: `403 self_remove_forbidden`, `400 last_owner_forbidden`, `404 member_not_found`
+- Behavior: `$pull` da `users.agency_ids`, no cancellazione utente
+
+### Priorità
+**P1** · effort medio (2-3h backend + 1h UI) · pain concreto documentato
+
+### Timing consigliato
+Post-manuale (Founder ha detto che discuterà tutto a fine manuale)
+
+### File coinvolti
+- `backend/apps/immoweb/agencies.py` — nuovo endpoint DELETE
+- `frontend/src/apps/immoweb/MembersPage.jsx` — bottone Rimuovi con `AlertDialog` conferma
+
+### Aggiornamento manuale post-ship
+- Cap. 13 §13.7 — aggiungere sezione *"Rimuovere un membro"* con 3 vincoli
+- Cap. 13 §13.12 — spostare la voce da "limiti v1" a "risolto post-v1.0"
+- YAML: aggiornare `team.limitazioni-v1` (rimuovere "NO rimozione membro") + nuova voce `team.rimuovere-membro`
+
+### Domande aperte per il Founder
+1. Confermi i 3 vincoli anti-lock (self, last-owner, owner_id) o vuoi variarli?
+2. Cosa vede il membro rimosso al login successivo — pagina *"Nessuna agenzia collegata"* o auto-logout?
+
+### Stato
+🟢 **DA APPROFONDIRE** — attende OK Founder
+
+---
+
+## 🟡 A-008 — Cambio ruolo membro post-join (estensione A-007)
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Cursor (gap manuale Cap. 13, non Spark ma correlato ad A-007)
+**Contesto**: Cap. 13 §13.10 documenta onestamente che un `agent` non può essere promosso a `agency_admin` post-accept via invito (upgrade role solo se pre-role era `client`). Workaround attuale: revoke+re-invite via super_admin backend.
+
+### Perché ha senso (pro)
+- Spesso richiesto **insieme ad A-007** (rimozione = caso limite di gestione membri)
+- Evita workaround revoke+re-invite che perde storico
+- Onestà D-051 già scritta nel manuale
+
+### Contro / complessità
+- **Audit trail obbligatorio**: chi ha promosso chi, quando (nuova collezione `member_role_changes` o campo su `users`)
+- **Edge case**: `agent → agency_admin` OK; `agency_admin → agent` = degradazione (attenzione al vincolo *"almeno un agency_admin per agenzia"*, cfr. A-007)
+- **Permessi**: solo `agency_admin` può promuovere, solo `super_admin` può degradare (o entrambi possono fare entrambe?)
+
+### Spec minima (alternativa)
+Due alternative da valutare:
+- **A**: `PATCH /api/app/agencies/me/members/{user_id}/role` con body `{"role": "agent"|"agency_admin"}`
+- **B**: Documentare formalmente il flusso re-invite (più semplice ma perde continuity utente)
+
+### Priorità
+**P2** · effort medio-alto se `A` scelto, minimo se `B` scelto
+
+### Timing consigliato
+Post-manuale, insieme ad A-007 (stessa pagina UI = stesso rilascio)
+
+### File coinvolti
+- `backend/apps/immoweb/agencies.py` — nuovo endpoint PATCH (se A)
+- `frontend/src/apps/immoweb/MembersPage.jsx` — select ruolo inline sulla riga membro
+- Nuova collezione `member_role_changes` (audit) — opzionale ma consigliato
+
+### Aggiornamento manuale post-ship
+- Cap. 13 §13.3 — aggiungere sezione *"Cambiare ruolo a un membro esistente"*
+- Cap. 13 §13.12 — rimuovere "NO cambio ruolo post-join" dai limiti v1
+- YAML: aggiornare `team.ruoli-disponibili` + `team.limitazioni-v1`
+
+### Domande aperte per il Founder
+1. Scegli A (endpoint dedicato) o B (documenta re-invite)?
+2. Se A: chi può degradare `agency_admin → agent` — solo `super_admin` o anche altri `agency_admin`?
+3. Audit visibile in UI o solo server-side?
+
+### Stato
+🟡 **DA APPROFONDIRE** — attende decisione Founder A vs B
+
+---
+
+## 🟡 A-009 — Bulk-assign agente post-import XML
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Emergent Spark Cap. 14 (Import XML)
+**Contesto**: Cap. 14 §14.10 documenta che gli immobili importati **non hanno `agent_id`** — vanno assegnati manualmente. Su import da 100+ immobili questo diventa un pain significativo.
+
+### Perché ha senso (pro)
+- Post-migrazione il titolare risparmia 5-10 minuti di ricerca manuale
+- Sfrutta i metadati `_import_source` e `_import_reference` già in DB (documentati Cap. 14)
+- Post-import è un "momento naturale" per fare bulk assign
+
+### Contro / complessità
+- **NON è "30 secondi"** come dichiarato inizialmente. Serve:
+  - Filtro `_import_reference` (o timestamp import) nell'endpoint list `properties`
+  - Nuovo endpoint `POST /properties/bulk-update-agent` (o estendere bulk-edit esistente Cap. 3)
+  - UI: bottone post-commit *"Assegna agente a questi X immobili"* → apre modal con select agente
+- **Distinzione tra "appena importati"** e **"già assegnati"** — meglio non sovrascrivere se già assegnato
+- Nessun endpoint bulk-update-agent esiste oggi (da verificare)
+
+### Priorità
+**P2** · effort medio-alto · dipendenze non triviali
+
+### Timing consigliato
+Post-manuale, con priorità sotto A-006/A-007 (che coprono casi più frequenti)
+
+### File coinvolti
+- `frontend/src/apps/immoweb/pages/ImportXmlPage.jsx` — bottone post-commit
+- `backend/apps/immoweb/xml_import.py` — restituire lista `inserted_ids` nel commit response
+- `backend/apps/immoweb/properties.py` (o simile) — endpoint bulk-update-agent + filtro `_import_reference`
+
+### Aggiornamento manuale post-ship
+- Cap. 14 §14.10 — rimuovere "no assegnazione automatica agente"
+- Cap. 14 §14.12 checklist — aggiornare step 10 *"Assegna agente"* con la nuova UI
+- YAML: aggiornare `import.limitazioni-v1` + nuova voce `import.bulk-assign-agente`
+
+### Domande aperte per il Founder
+1. Il bottone deve essere **subito post-commit** (nel result) o come sezione separata *"Ultimi immobili importati"* nella pagina Import?
+2. Assegnare un solo agente a tutti, o ripartizione round-robin fra N agenti?
+
+### Stato
+🟡 **DA APPROFONDIRE** — attende decisione UX Founder
+
+---
+
+## 🟡 A-010 — Storico import XML lato UI
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Cursor (gap manuale Cap. 14, non Spark)
+**Contesto**: Cap. 14 §14.10 documenta *"NO storico import UI"*. Oggi i metadati `_import_source` e `_import_reference` sono per-immobile in `properties`, ma non c'è un pannello aggregato *"cosa ho importato e quando"*.
+
+### Perché ha senso (pro)
+- Audit/trust per migrazioni ripetute
+- Titolare vuole sapere *"quel batch di 50 immobili l'ho importato a Novembre o Ottobre?"*
+- Utile a super_admin per debug problemi post-import
+- Base per futuro rollback batch (A-xxx futuro)
+
+### Contro / complessità
+- **Struttura dati da decidere**: nuova collezione `import_batches` (id, agency_id, user_id, filename, count, timestamp, `_import_reference` shared) o aggregate query on-the-fly
+- Ritenzione: da definire (per sempre, 90gg, 1 anno?)
+- Modifica `xml_import.py` per creare record batch a ogni commit
+
+### Priorità
+**P2** · audit-driven · non blocca operatività
+
+### Timing consigliato
+Dopo primi clienti che hanno fatto migrazione (feedback reale)
+
+### File coinvolti
+- Nuova collezione `import_batches` (o simile)
+- `backend/apps/immoweb/xml_import.py` — creare record batch nel commit
+- Nuova rotta `/it/app/import/history` o tab nella pagina Import esistente
+
+### Aggiornamento manuale post-ship
+- Cap. 14 §14.10 — rimuovere "no storico UI"
+- YAML: aggiornare `import.limitazioni-v1` + nuova voce `import.storico-batch`
+
+### Domande aperte per il Founder
+1. Nuova collezione o aggregate su properties?
+2. Retention log (90gg, 1y, per sempre)?
+3. Anche stats aggregate (X immobili importati totali, ultimo import quando)?
+
+### Stato
+🟡 **DA APPROFONDIRE** — attende decisione Founder
+
+---
+
+## 🟠 A-011 — Social Publisher · scheduling minimal
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Emergent Spark Cap. 15 (Social Publisher)
+**Contesto**: Cap. 15 §15.11 documenta *"NO scheduling"* come primo limite v1. È il pain più cliccato dei concorrenti (Meta Business Suite, Hootsuite, Buffer vendono scheduling a €10-50/mese).
+
+### Perché ha senso (pro)
+- Differenziazione vs concorrenti social scheduling a €50/mese
+- Sfrutta caption default + audit `social_posts` già presenti
+- Possibile upsell in pricing
+
+### Contro / complessità
+- **Effort ALTO** (10-20h di sviluppo):
+  - Cron/scheduler background (APScheduler o simile) — nuovo componente nel backend
+  - Campo `scheduled_at` in `social_posts` + status `scheduled`
+  - Retry logic (token scaduto al momento programmato)
+  - Timezone handling (agenzia italiana, ma anche gestione UTC)
+  - UI: calendar picker + gestione coda + cancellazione post schedulati
+- **Prematuro prima di ≥5 agenzie attive su Social Publisher** (feedback reale > speculazione)
+- Rate limit Meta post-schedule da testare
+
+### Priorità
+**P3** · alto effort · attendere validation
+
+### Timing consigliato
+Dopo ≥5 agenzie attive su Social Publisher (validation reale della domanda)
+
+### File coinvolti
+- `backend/apps/immoweb/social_publisher.py` — nuovo endpoint POST `/schedule`
+- Nuovo modulo `backend/apps/immoweb/social_scheduler.py` (cron job)
+- Frontend `SocialPublisherPage.jsx` — vista calendario/coda scheduled
+
+### Aggiornamento manuale post-ship
+- Cap. 15 §15.11 — rimuovere "NO scheduling" dai limiti
+- Cap. 15 §15.7 — aggiungere sezione *"Programmare una pubblicazione"*
+- YAML: aggiornare `social.limitazioni-v1` + nuova voce `social.scheduling`
+
+### Domande aperte per il Founder
+1. Vale sviluppare senza validation dei primi 5 clienti, o aspettiamo?
+2. Se sviluppiamo: massima orizzonte scheduling (24h, 7g, 30g)?
+3. Pricing: incluso nel piano base o add-on premium?
+
+### Stato
+🟠 **DA APPROFONDIRE** — attendere validation da primi utenti Social
+
+---
+
+## 🟠 A-012 — Social Publisher · metrics/insights post-pubblicazione
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Emergent Spark Cap. 15 (Social Publisher)
+**Contesto**: Cap. 15 §15.11 documenta *"NO analytics engagement"*. Oggi sappiamo solo `success/failed` + `external_id`.
+
+### Perché ha senso (pro)
+- Trasforma modulo da *utility "push"* a *strumento marketing con feedback loop*
+- Meta Graph API + Telegram Bot API espongono insights (limite: solo IG/FB, non Telegram)
+- Complementare ad A-011 (scheduling)
+
+### Contro / complessità
+- **Effort ALTO** (15-25h):
+  - Fetch `GET /{external_id}/insights` per FB/IG (con Page Access Token)
+  - Token refresh proattivo (long-lived scadono a 60g, insights arrivano dopo)
+  - Storage: nuova collezione `social_post_metrics` con snapshot a T+24h, T+72h, T+7g
+  - Rate limit Meta (200 chiamate/ora — attenzione al fanout)
+  - Telegram: no insights nativi, solo view count sul messaggio (parziale)
+- **Dipendenza da A-011** o demand esplicito (senza scheduling, le metriche di 1-2 post/mese hanno poco valore)
+
+### Priorità
+**P3** · alto effort · dipendenze significative
+
+### Timing consigliato
+Dopo A-011 (o insieme, se il Founder decide di andare full-marketing su Social)
+
+### File coinvolti
+- `backend/apps/immoweb/social_publisher.py` — nuovo endpoint GET `/posts/{id}/metrics`
+- Nuovo modulo `backend/apps/immoweb/social_metrics_fetcher.py` (cron)
+- Nuova collezione `social_post_metrics`
+- Frontend `SocialPublisherPage.jsx` — colonna metrics sulla lista post
+
+### Aggiornamento manuale post-ship
+- Cap. 15 §15.11 — rimuovere "NO analytics engagement"
+- YAML: aggiornare `social.limitazioni-v1`
+
+### Domande aperte per il Founder
+1. Priorità metrics vs scheduling — quale prima?
+2. Metrics visibili solo al titolare o anche agli agenti (per KPI personali)?
+
+### Stato
+🟠 **DA APPROFONDIRE** — bassa priorità v1, alta priorità v2
+
+---
+
+## 🟢 A-013 — Hard-gate crediti Virtual Staging (pre-check saldo)
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: SPRINT_STATUS backlog + Cursor
+**Contesto**: Cap. 9 documenta il flusso staging + costo crediti. Oggi il pre-check saldo avviene solo al momento del render (SAM2 + Flux) — se il saldo è insufficiente, l'utente scopre il problema DOPO aver atteso l'AI.
+
+### Perché ha senso (pro)
+- **Qualità UX critica**: l'agente scopre il saldo insufficiente **prima** del render costoso
+- Evita "debito crediti" (partial charge se render inizia ma fallisce a metà)
+- Bassa complessità: il saldo è già disponibile via `/credits/balance`
+
+### Contro / complessità
+- Messaggio errore chiaro da localizzare (it/en/es)
+- Timing: pre-check al click di *"Genera"* o inline nella pagina staging?
+
+### Priorità
+**P1** · già in SPRINT_STATUS backlog · quality UX + revenue protection
+
+### Timing consigliato
+Post-manuale (parte del batch task tecnici backlog)
+
+### File coinvolti
+- `backend/apps/immoweb/virtual_staging.py` — pre-check saldo prima di innescare Flux
+- `frontend/src/apps/immoweb/pages/VirtualStagingPage.jsx` — check preventivo al click
+
+### Aggiornamento manuale post-ship
+- Cap. 9 §crediti — flusso errore migliorato
+- YAML: aggiornare `staging.crediti-costo` (o creare `staging.pre-check-saldo`)
+
+### Domande aperte per il Founder
+Nessuna — implementazione autonoma se dà "vai".
+
+### Stato
+🟢 **DA APPROFONDIRE** — pronto per implementazione post-manuale
+
+---
+
+## 🟢 A-014 — Billing UI listino Founder + B2C Stripe checkout live
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: SPRINT_STATUS backlog
+**Contesto**: PRICING_B2B (€49/€99/€249 Founder) e PRICING_B2C sono approvati. Backend stub `b2c_products.py` esiste. Ma UI + checkout live NON sono attivi.
+
+### Perché ha senso (pro)
+- **REVENUE-CRITICAL** — è il modulo che monetizza OMNIA
+- Founder 50 waitlist attende attivazione checkout
+- Backend stub già presente, serve completare + UI
+
+### Contro / complessità
+- `STRIPE_ENABLED` env variable (test/live switch)
+- Webhook Stripe (signature verify, retry logic)
+- Test sandbox obbligatorio prima di live
+- Manuale: **NON documentare finché non live** (D-051 · onestà)
+
+### Priorità
+**P1** · revenue-critical · founder ha listino approvato
+
+### Timing consigliato
+Prossimo sprint tecnico (post-manuale)
+
+### File coinvolti
+- `backend/apps/immoweb/billing/routes.py` — completare endpoint
+- `backend/apps/immoweb/billing/b2c_products.py` — attivare stub
+- `frontend/src/apps/immoweb/BillingPage.jsx` — UI listino Founder + checkout
+- Frontend B2C landing — CTA checkout
+
+### Aggiornamento manuale post-ship
+- Cap. futuro Billing (Cap. 24?) — **da scrivere SOLO post-ship** (D-051)
+- Cap. 1 §pricing — aggiornare quando checkout live
+
+### Domande aperte per il Founder
+1. Test sandbox prima → conferma flusso → poi live?
+2. Rollout graduale (prima Founder 50, poi Agency generale)?
+
+### Stato
+🟢 **DA APPROFONDIRE** — pronto, revenue-blocker
+
+---
+
+## 🟡 A-015 — Sito Web v2 · scope P0 (Hero + Chi Siamo + Contatti + Footer + extractor esteso)
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: SPRINT + conversazione Founder (task aperto)
+**Contesto**: Cap. 8 documenta il sito agenzia v1 (basic template). Il Founder ha discusso in passato un upgrade major con Hero + Chi Siamo + Contatti + Footer + estensione brand extractor.
+
+### Perché ha senso (pro)
+- Sito agenzia = vetrina commerciale primaria per lead gen
+- Cap. 8 documenta v1 con menzione template *"in arrivo"* (D-051)
+- Brand extractor esistente parziale — estenderlo è naturale
+
+### Contro / complessità
+- **Scope ampio** — serve separare P0 (essenziale) da P1 (nice-to-have)
+- Modifiche non triviali a `themes.py` + `site.py` + landing components
+- Testing SEO + performance su domini custom (Cap. 8 Domain Vault)
+
+### Priorità
+**P2** · task aperto Founder · alto valore commerciale ma effort significativo
+
+### Timing consigliato
+Post-manuale, dopo review scope con Founder (Cap. 16 potrebbe essere HAL Legal o Domain Vault prima di v2 sito)
+
+### File coinvolti
+- `backend/apps/immoweb/site.py` — endpoint modelli sezioni
+- `backend/apps/immoweb/themes.py` — nuove varianti tema
+- `backend/apps/immoweb/brand_extractor.py` — estensioni ai selettori
+- Frontend `landing/` — nuovi componenti Hero, ChiSiamo, Contatti, Footer
+
+### Aggiornamento manuale post-ship
+- Cap. 8 aggiornamento **major v2.0** SOLO post-ship (D-051)
+- YAML: aggiornare tutte le voci `sito.*` o creare `sito-v2.*`
+
+### Domande aperte per il Founder
+1. Scope P0 confermato? (Hero + Chi Siamo + Contatti + Footer + extractor esteso)
+2. Timing rispetto a Cap. 16-26 manuale — prima o dopo?
+3. Design-driven (mockup Founder) o code-first (poi UI polish)?
+
+### Stato
+🟡 **DA APPROFONDIRE** — scope confermato ma timing da decidere
+
+---
+
+## 🟡 A-016 — Micro-fix retrieval HAL · boost tag mutui "banche"
+
+**Data inserimento**: Feb-2026
+**Segnalato da**: Cursor (gap iter.35 post H-bis)
+**Contesto**: Durante il testing_agent H-bis (Cap. 11), query *"quante banche ci sono?"* ha restituito sim `0.142` — sotto la soglia HIGH (0.20) e sotto il min ideale (0.15) documentato in `IMPORT_HAL.md` Smoke expectations.
+
+### Perché ha senso (pro)
+- Top-1 `mutui.offerte-14-banche-8` diventerebbe più stabile
+- Riduce rischio *insufficient_context* su domanda molto frequente
+- Semplice ottimizzazione tag YAML — nessun cambio codice
+
+### Contro / complessità
+- Retrieval già **PASS** iter.35 (con confidence media) — non è blocker
+- Boost YAML opzionale (D-061 dice "premiare i tag" — ma sono già tunati)
+
+### Priorità
+**P3** · nice-to-have · non blocker
+
+### Timing consigliato
+Solo se emergono altri gap retrieval simili (raggruppare i micro-fix in un batch)
+
+### File coinvolti
+- `memory/manuale/hal/11-mutui-comparatore.yaml` — potenziare tags della voce `mutui.offerte-14-banche-8` con parole tipo *"quante banche"*, *"totale banche"*
+- (Solo se non basta) `backend/apps/immoweb/hal_knowledge.py` — non toccare senza motivo
+
+### Aggiornamento manuale post-ship
+Nessuno — è un micro-fix retrieval, non un cambio funzionalità.
+
+### Domande aperte per il Founder
+Nessuna — decisione tecnica autonoma se conveniente.
+
+### Stato
+🟡 **DA APPROFONDIRE** — nice-to-have, priorità sotto A-006/A-007
+
+---
+
+# 📊 Tabella riepilogo Backlog qualità (A-006 → A-016)
+
+| ID | Titolo | P | Effort | Origine | Timing |
+|----|--------|:-:|:-:|---------|:-:|
+| A-006 | Tooltip badge confidence HAL | **P1** | XS (~15min) | Spark Cap.12 | Post-manuale |
+| A-007 | Rimozione membro agenzia | **P1** | M (2-3h) | Spark Cap.13 | Post-manuale |
+| A-008 | Cambio ruolo membro post-join | P2 | M-L | Cursor gap Cap.13 | Post-A-007 |
+| A-009 | Bulk-assign agente post-import | P2 | M-L | Spark Cap.14 | Post-A-007 |
+| A-010 | Storico import XML UI | P2 | M | Cursor gap Cap.14 | Post-primi clienti |
+| A-011 | Social scheduling minimal | P3 | L (10-20h) | Spark Cap.15 | Post ≥5 utenti Social |
+| A-012 | Social metrics/insights | P3 | L (15-25h) | Spark Cap.15 | Post-A-011 |
+| A-013 | Hard-gate crediti Staging | **P1** | S | SPRINT + Cursor | Post-manuale |
+| A-014 | Billing UI + B2C Stripe live | **P1** | L | SPRINT (revenue) | Prossimo sprint |
+| A-015 | Sito Web v2 (Hero, Chi Siamo, ...) | P2 | XL | SPRINT + Founder | Da decidere con Founder |
+| A-016 | Boost tag mutui "banche" | P3 | XS | Cursor gap iter.35 | Raggruppare micro-fix |
+
+**Legenda priorità**: **P1** alta (ROI alto/effort basso o revenue-critical) · P2 media · P3 futuro (validation-gated)
+**Legenda effort**: XS <30min · S 30min-2h · M 2-6h · L 6-20h · XL >20h
+
+---
+
+## Voci già chiuse (non attive)
+
+- ✅ **`chunk_id` in `/ask` sources[]** — fix applicato Feb 2026 (`hal_knowledge.py:~580`) + test regression aggiornati. Su GitHub `main`. Non serve tracking A-xxx.

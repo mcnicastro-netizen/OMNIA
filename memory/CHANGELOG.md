@@ -1,5 +1,48 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📋 Backlog qualità A-006 → A-016 tracciato in ASPETTI
+
+**Tipo**: Docs / product tracking — nessuna implementazione codice.
+
+### Cosa è cambiato
+- **`memory/ASPETTI_DA_APPROFONDIRE.md`**: aggiunte **11 voci** di backlog qualità (A-006 → A-016) tracciate durante lo sprint manuale Cap. 1-15 (Feb 2026). Header *"Ultimo aggiornamento"* aggiornato a Feb 2026. Aggiunto paragrafo introduttivo su cosa sia il backlog qualità prodotto.
+- **`memory/SPRINT_STATUS.md`**: aggiunta riga in fondo *"Backlog qualità prodotto: 11 voci in ASPETTI A-006→A-016 · review Founder post-manuale"*.
+- **Formato**: ogni voce con stesso stile A-001…A-005 (Data, Segnalato da, Contesto, Pro, Contro, Priorità P1/P2/P3, Timing, File, Manuale post-ship, Domande Founder, Stato).
+- **Tabella riepilogo** in fondo al file con priorità/effort/origine/timing per una vista d'insieme.
+
+### Elenco voci aggiunte
+| ID | Titolo | P | Origine |
+|----|--------|:-:|---------|
+| A-006 | Tooltip badge confidence HAL | P1 | Spark Cap.12 |
+| A-007 | Rimozione membro agenzia | P1 | Spark Cap.13 |
+| A-008 | Cambio ruolo membro post-join | P2 | Cursor gap Cap.13 |
+| A-009 | Bulk-assign agente post-import | P2 | Spark Cap.14 |
+| A-010 | Storico import XML UI | P2 | Cursor gap Cap.14 |
+| A-011 | Social scheduling minimal | P3 | Spark Cap.15 |
+| A-012 | Social metrics/insights | P3 | Spark Cap.15 |
+| A-013 | Hard-gate crediti Staging | P1 | SPRINT + Cursor |
+| A-014 | Billing UI + B2C Stripe live | P1 | SPRINT backlog |
+| A-015 | Sito Web v2 scope P0 | P2 | SPRINT + Founder |
+| A-016 | Boost tag mutui "banche" | P3 | Cursor gap iter.35 |
+
+### Note importanti
+- **Nessuna decisione Founder presa** — le 11 voci attendono review post-manuale.
+- **ZERO implementazione codice** in questo commit — solo tracciamento strutturato.
+- **Onestà D-051 rispettata**: aggiornamento manuale post-ship documentato per ogni voce (quale Cap. § modificare quando l'aspetto verrà implementato).
+- **Voce già chiusa**: `chunk_id` fix — nota di chiusura in fondo ad ASPETTI, nessun A-xxx assegnato.
+
+### Commit message consigliato
+```
+docs(aspetti): traccia backlog qualità A-006→A-016 (post Cap. 1-15 review Cursor)
+```
+
+### File modificati
+- `memory/ASPETTI_DA_APPROFONDIRE.md` (+11 voci · +tabella riepilogo · header aggiornato)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (riga backlog qualità)
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK L · Cap. 15 · Social Publisher (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — quindicesimo capitolo del Manuale Operativo.

@@ -106,5 +106,20 @@
 ## Micro-fix aperti
 _Tutti chiusi. G-bis retrieval Cap. 9 applicato (Feb 2026)._
 _**Rate limit HAL chat vs improve = SEPARATI CONFERMATO** (60/h ciascuno, no change al_agent.py — decisione Founder Feb 2026)._
+_**`chunk_id` in `/ask` sources[]** = fix applicato + test aggiornati + su GitHub `main` (Feb 2026)._
+
 ---
+
+## Backlog qualità prodotto
+
+**11 voci tracciate in `ASPETTI_DA_APPROFONDIRE.md` (A-006 → A-016)** — review Founder post-manuale.
+- **P1 (4 voci)**: A-006 Tooltip confidence · A-007 Rimozione membro · A-013 Hard-gate crediti Staging · A-014 Billing UI + B2C Stripe live
+- **P2 (4 voci)**: A-008 Cambio ruolo · A-009 Bulk-assign agent post-import · A-010 Storico import UI · A-015 Sito Web v2 scope P0
+- **P3 (3 voci)**: A-011 Social scheduling · A-012 Social metrics · A-016 Boost tag mutui
+
+Vedi tabella riepilogo in fondo ad `ASPETTI_DA_APPROFONDIRE.md`.
+Nessuna implementazione senza *"vai"* esplicito del Founder.
+
+---
+
 ## Handoff nuova sessione
