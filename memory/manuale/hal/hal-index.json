@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-16T08:29:18.998737+00:00",
-  "version": "v0.12-cap16",
+  "generated_at": "2026-08-16T08:54:47.365519+00:00",
+  "version": "v0.13-cap17",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -81,6 +81,11 @@
       "file": "16-compliance-portali.yaml",
       "md5": "5d066f2fdc18cce9dab031a05d1ebcf2",
       "voci_count": 14
+    },
+    {
+      "file": "17-domain-vault.yaml",
+      "md5": "c85caa2830a0e0bd24f5dff3685b86b0",
+      "voci_count": 15
     }
   ],
   "voci": [
@@ -6692,10 +6697,531 @@
         "errori_comuni": 1
       },
       "content_md5": "e959d85b54203976344925c5f9f23552"
+    },
+    {
+      "id": "domain.cos-e",
+      "titolo": "Cos'è il Domain Vault (sovranità digitale)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "vault",
+        "sovranita",
+        "d-054",
+        "panoramica",
+        "promise",
+        "dominio",
+        "registrar"
+      ],
+      "correlati": [
+        "domain.d-054-promise",
+        "domain.componenti",
+        "domain.dove-trovarlo"
+      ],
+      "domanda_naturale": "Cos'è il Domain Vault? A cosa serve?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 1
+      },
+      "content_md5": "67e17d44ca7c0c447d16a08ec0320926"
+    },
+    {
+      "id": "domain.d-054-promise",
+      "titolo": "La promessa D-054 · OMNIA non registra mai domini a nome suo",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "d-054",
+        "promise",
+        "sovranita",
+        "contrattuale",
+        "lock-in",
+        "portabilita",
+        "gdpr",
+        "icann"
+      ],
+      "correlati": [
+        "domain.cos-e",
+        "domain.help-to-connect"
+      ],
+      "domanda_naturale": "OMNIA registra il mio dominio? Chi ne è proprietario?",
+      "screenshot": [
+        "[SCREEN: domain-sovereignty-policy]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "c4fe5011e2cb3373341df8f7f72308f7"
+    },
+    {
+      "id": "domain.componenti",
+      "titolo": "I 3 componenti del Domain Vault (Confirm, Custom Domain, Checker)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "componenti",
+        "architettura",
+        "domain-vault",
+        "custom-domain",
+        "domain-check",
+        "rdap",
+        "dns"
+      ],
+      "correlati": [
+        "domain.sovereignty-confirm",
+        "domain.custom-domain-flow",
+        "domain.domain-checker-pubblico"
+      ],
+      "domanda_naturale": "Da cosa è composto il Domain Vault backend?",
+      "screenshot": [],
+      "counts": {
+        "passi": 3,
+        "errori_comuni": 0
+      },
+      "content_md5": "7d620d2e65fe85122b2c0f4346b9e42b"
+    },
+    {
+      "id": "domain.dove-trovarlo",
+      "titolo": "Dove trovare il Domain Vault in ImmoWeb",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "dove-si-trova",
+        "sidebar",
+        "impostazioni",
+        "navigazione"
+      ],
+      "correlati": [
+        "domain.sovereignty-confirm",
+        "domain.custom-domain-flow"
+      ],
+      "domanda_naturale": "Dove trovo il Domain Vault? Come ci accedo?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "b1fdcfc1179ad4750e473eb27fc0d8c9"
+    },
+    {
+      "id": "domain.sovereignty-confirm",
+      "titolo": "Confermare la Domain Sovereignty (POST /me/domain-sovereignty)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "sovereignty",
+        "confirm",
+        "idempotente",
+        "existing-domain",
+        "audit",
+        "timestamp"
+      ],
+      "correlati": [
+        "domain.help-to-connect",
+        "domain.audit-trail"
+      ],
+      "domanda_naturale": "Come confermo la Domain Sovereignty Policy?",
+      "screenshot": [
+        "[SCREEN: domain-vault-confirm]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "6e9aef11d70e919080b6bf4923241672"
+    },
+    {
+      "id": "domain.help-to-connect",
+      "titolo": "Help-to-connect è NON è un transfer di ownership",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "help-to-connect",
+        "transfer",
+        "ownership",
+        "registrar",
+        "credenziali",
+        "lock-in",
+        "d-054",
+        "onestà"
+      ],
+      "correlati": [
+        "domain.d-054-promise",
+        "domain.custom-domain-flow"
+      ],
+      "domanda_naturale": "Se dichiaro il mio dominio, OMNIA ne diventa proprietaria?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 0
+      },
+      "content_md5": "485f6f979be106aed966e69d4b048de6"
+    },
+    {
+      "id": "domain.custom-domain-flow",
+      "titolo": "Custom Domain · flusso DNS verification (TXT + CNAME)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "custom-domain",
+        "dns",
+        "txt",
+        "cname",
+        "verification",
+        "pending",
+        "verified",
+        "apex",
+        "alias",
+        "aname"
+      ],
+      "correlati": [
+        "domain.txt-record-anti-takeover",
+        "domain.cname-target",
+        "domain.errori-comuni"
+      ],
+      "domanda_naturale": "Come collego il mio dominio al sito OMNIA?",
+      "screenshot": [
+        "[SCREEN: domain-dns-instructions]"
+      ],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "2fa9d7af2322f574cefd1653ab7676a0"
+    },
+    {
+      "id": "domain.txt-record-anti-takeover",
+      "titolo": "Perché il record TXT (_omnia-challenge) previene i takeover",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "txt",
+        "anti-takeover",
+        "ownership",
+        "challenge",
+        "dns",
+        "sicurezza"
+      ],
+      "correlati": [
+        "domain.custom-domain-flow",
+        "domain.cname-target"
+      ],
+      "domanda_naturale": "A cosa serve il record TXT _omnia-challenge?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 0
+      },
+      "content_md5": "caa9a9763e612d12070b465518d4bcff"
+    },
+    {
+      "id": "domain.cname-target",
+      "titolo": "CNAME target OMNIA · dove punto il mio dominio",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "cname",
+        "target",
+        "env",
+        "edge",
+        "alias",
+        "aname",
+        "apex",
+        "www"
+      ],
+      "correlati": [
+        "domain.custom-domain-flow"
+      ],
+      "domanda_naturale": "Qual è il CNAME target di OMNIA a cui devo puntare?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 0
+      },
+      "content_md5": "48c6414456ed8515e0267596c9bb6a65"
+    },
+    {
+      "id": "domain.domain-checker-pubblico",
+      "titolo": "Domain Checker pubblico (RDAP pre-signup)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin",
+        "prospect"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "checker",
+        "rdap",
+        "pubblico",
+        "pre-signup",
+        "verifica-dominio",
+        "no-login",
+        "lead"
+      ],
+      "correlati": [
+        "domain.rdap-vs-whois",
+        "domain.d-054-promise"
+      ],
+      "domanda_naturale": "Come verifico chi possiede un dominio prima di iscrivermi a OMNIA?",
+      "screenshot": [
+        "[SCREEN: domain-checker-pubblico]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 0
+      },
+      "content_md5": "f6c335b57c082eb4272e4545faafa503"
+    },
+    {
+      "id": "domain.rdap-vs-whois",
+      "titolo": "RDAP vs WHOIS · perché OMNIA usa RDAP",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "rdap",
+        "whois",
+        "gdpr",
+        "redacted",
+        "privacy-proxy",
+        "registrant",
+        "protocol"
+      ],
+      "correlati": [
+        "domain.domain-checker-pubblico"
+      ],
+      "domanda_naturale": "Che differenza c'è fra RDAP e WHOIS?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "7c72f14b94aed6cf2e223ba02ed7be0a"
+    },
+    {
+      "id": "domain.audit-trail",
+      "titolo": "Audit trail append-only (domain_vault_events)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "audit",
+        "trail",
+        "append-only",
+        "domain-vault-events",
+        "sicurezza",
+        "dispute",
+        "gdpr"
+      ],
+      "correlati": [
+        "domain.sovereignty-confirm"
+      ],
+      "domanda_naturale": "Dove sono registrate le conferme Domain Vault?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 0
+      },
+      "content_md5": "dc0c1555c4b27b623e9c4fc1ac1329b9"
+    },
+    {
+      "id": "domain.errori-comuni",
+      "titolo": "Errori comuni Domain Vault",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "errori",
+        "troubleshooting",
+        "invalid-domain",
+        "no-agency",
+        "dns",
+        "rate-limit",
+        "txt",
+        "cname"
+      ],
+      "correlati": [
+        "domain.sovereignty-confirm",
+        "domain.custom-domain-flow"
+      ],
+      "domanda_naturale": "Perché il collegamento del dominio non funziona?",
+      "screenshot": [],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 0
+      },
+      "content_md5": "6eb171bcd0df6e3a6ec0ee90e451efe0"
+    },
+    {
+      "id": "domain.limitazioni-v1",
+      "titolo": "Limiti v1 Domain Vault (D-051 onesto)",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "domain",
+        "limiti",
+        "cosa-non-fa",
+        "registrar",
+        "whois",
+        "multi-dominio",
+        "ssl",
+        "notifiche",
+        "cname-target",
+        "d-051"
+      ],
+      "correlati": [
+        "domain.cos-e",
+        "domain.d-054-promise"
+      ],
+      "domanda_naturale": "Cosa NON fa il Domain Vault in v1?",
+      "screenshot": [],
+      "counts": {
+        "passi": 11,
+        "errori_comuni": 0
+      },
+      "content_md5": "564f8ea03580bf861921ccb8aff5a605"
+    },
+    {
+      "id": "domain.collegamenti",
+      "titolo": "Collegamenti fra Domain Vault e altri moduli",
+      "modulo": "Domain Vault",
+      "widget": null,
+      "capitolo": "17",
+      "source_file": "17-domain-vault.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "domain",
+        "cross-ref",
+        "portali",
+        "sito",
+        "team",
+        "hal-knowledge",
+        "social"
+      ],
+      "correlati": [
+        "domain.cos-e"
+      ],
+      "domanda_naturale": "Come si intreccia il Domain Vault con gli altri moduli?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 0
+      },
+      "content_md5": "2ed7c3cb181d9374e4ac1558fcbb38c5"
     }
   ],
   "stats": {
-    "totale_voci": 196,
+    "totale_voci": 211,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -6712,37 +7238,8 @@
       "13": 13,
       "14": 13,
       "15": 14,
-      "16": 14
-    },
-    "per_modulo": {
-      "Primo accesso": 10,
-      "Dashboard": 8,
-      "Immobili": 15,
-      "Clienti": 12,
-      "Match": 11,
-      "Portali": 12,
-      "Fascicolo": 12,
-      "Sito web": 12,
-      "Virtual Staging": 12,
-      "HAL Agent": 13,
-      "Mutui": 12,
-      "HAL Knowledge": 13,
-      "Collaboratori": 13,
-      "Import XML": 13,
-      "Social Publisher": 14,
-      "Compliance Portali": 14
-    },
-    "per_livello": {
-      "base": 133,
-      "intermedio": 63
-    },
-    "per_pubblico": {
-      "titolare": 195,
-      "agente": 146,
-      "segreteria": 92,
-      "super_admin": 53
-    },
-    "totale_correlati": 463,
-    "totale_tags_unici": 636
+      "16": 14,
+      "17": 15
+    }
   }
 }

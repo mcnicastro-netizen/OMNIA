@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.12)
+# 📚 HAL Knowledge — Import & Cold Start (v0.13)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 16 · Compliance Portali)
-**Corpus attuale**: **196 voci HAL YAML** su **16 capitoli** (Cap. 1-16)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 17 · Domain Vault)
+**Corpus attuale**: **211 voci HAL YAML** su **17 capitoli** (Cap. 1-17)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 16 e verifica 3 query smoke (vedi §"Smoke Cap. 16").
+**Prossimo passo**: reindex live post-Cap. 17 e verifica 3 query smoke (vedi §"Smoke Cap. 17").
 
 ---
 
@@ -283,6 +283,17 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 14) | **v0.10-cap14** | Cap. 14 Import XML / Migrazione da altro gestionale aggiunto (+13 voci → 168). Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe): flusso 2 fasi Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (TYPE_CODE_MAP 18 codici, ENERGY_CODE_MAP 19, OPERATION_CODE_MAP 6, FEATURE_KEYWORDS 25), zero riferimenti a competitor, limiti v1 esplicit (no CSV, no sync, no rollback batch). |
 | Feb-2026 (Cap. 15) | **v0.11-cap15** | Cap. 15 Social Publisher (FB Page + IG Business + Telegram) aggiunto (+14 voci → 182). Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe): white label D-041 (ogni post sotto la Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), Meta Graph v20 + Telegram Bot API, caption default 5-righe con emoji, audit `social_posts`, limiti v1 (no X/LinkedIn/TikTok, no carosello/video, no analytics engagement, no bulk publish). |
 | Feb-2026 (Cap. 16) | **v0.12-cap16** | Cap. 16 Compliance Portali (validatore HARD/SOFT deep-dive normativo) aggiunto (+14 voci → 196). Copertura `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline: 5 regole HARD → 7 codici, 4 SOFT, 14 classi APE ammesse, feed vs sync, ghost label `missing_rent` documentata onestamente, distinzione da Cap. 6 operativo. |
+| Feb-2026 (Cap. 17) | **v0.13-cap17** | Cap. 17 Domain Vault (sovranità digitale D-054) aggiunto (+15 voci → 211). Copertura `domain_vault.py` (155 righe) + `custom_domain.py` (454 righe) + `domain_check.py` (359 righe): promessa D-054 (OMNIA never registers a domain), 3 componenti (sovereignty confirm + custom domain DNS TXT+CNAME + RDAP checker pubblico), audit trail append-only `domain_vault_events`, help-to-connect NON transfer. |
+
+---
+
+## 🚦 Smoke Cap. 17 — 3 query attese dopo reindex
+
+1. **"OMNIA registra il mio dominio a nome suo?"** → `17-domain-vault.yaml::domain.d-054-promise`
+2. **"Come collego il mio dominio al sito OMNIA?"** → `17-domain-vault.yaml::domain.custom-domain-flow`
+3. **"Come verifico chi possiede un dominio prima di iscrivermi?"** → `17-domain-vault.yaml::domain.domain-checker-pubblico`
+
+Criterio: top-1 chunk_id atteso OR **stesso file** `17-domain-vault.yaml` · sim ≥ 0.08.
 
 ---
 
