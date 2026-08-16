@@ -2,9 +2,9 @@
 
 > File di appoggio per **temi strategici/tecnici** che il Founder ha esplicitamente segnalato come "da rivedere più avanti", **senza essere ancora decisioni**. Ogni voce va promossa in `DECISIONS.md` o `ROADMAP.md` quando si decide di procedere.
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 15 · Social Publisher)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 18 · Notifiche e attività · +A-017 → A-023)
 
-> **Backlog qualità prodotto (A-006+)**: voci tracciate durante lo sprint manuale Cap. 1-15. Priorità assegnata da Cursor (P1=alto ROI/costo basso, P3=futuro). Decisione Founder post-manuale — **NON implementare senza "vai" esplicito**.
+> **Backlog qualità prodotto (A-006+)**: voci tracciate durante lo sprint manuale Cap. 1-18. Priorità assegnata da Cursor (P1=alto ROI/costo basso, P3=futuro). Decisione Founder post-manuale — **NON implementare senza "vai" esplicito**.
 
 ---
 
@@ -861,7 +861,146 @@ Nessuna — decisione tecnica autonoma se conveniente.
 
 ---
 
-# 📊 Tabella riepilogo Backlog qualità (A-006 → A-016)
+## 🟡 A-017 — Notification center in-app (Bell icon + inbox + unread badge)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18 Notifiche e attività)
+**Segnalato da**: Cursor (redazione Cap. 18 D-051)
+**Contesto**: Cap. 18 documenta onestamente che OMNIA v1 NON ha una pagina Notifiche. Backlog per v1.1.
+
+**Idea**: aggiungere una Bell icon nella navbar ImmoWeb + ImmobilCloud, con dropdown "Ultime N notifiche" cliccabili, contatore unread, mark-as-read persistente. Backend: nuovo router `/notifications` + collezione Mongo `notifications` (record per evento con status read/unread).
+
+**Sorgenti candidate per unificare in inbox**:
+- Match nuovi (Cap. 5) → notifica al titolare
+- Lead nuovi (Cap. 6 portale pubblico) → notifica all'agente owner
+- Invito accettato/rifiutato (Cap. 13) → notifica al titolare
+- Import XML completato (Cap. 14) → notifica al titolare
+- Social post pubblicato/fallito (Cap. 15) → notifica all'agente
+- Compliance HARD violation (Cap. 16) → notifica al titolare
+- DNS verify domain (Cap. 17) → notifica al titolare
+
+**Effort stimato**: L (15-25h) · nuovo router + collezione + UI navbar Bell + polling/SSE per real-time.
+
+### Stato
+🟡 **P1** — alto valore percepito, elemento cardine di completezza CRM
+
+---
+
+## 🟡 A-018 — Activity feed dashboard (timeline aggregato audit collections)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18)
+**Segnalato da**: Cursor (redazione Cap. 18 § 18.13)
+**Contesto**: la Dashboard ImmoWeb v1 mostra 6 KPI counter ma NON un activity feed. Cap. 18 documenta esplicitamente questa mancanza.
+
+**Idea**: aggiungere sotto la Dashboard KPI una sezione "Ultime attività della tua agenzia" che aggrega:
+- `al_audit` (chat HAL)
+- `match_audit` (nuovi match)
+- `publishing_events` (sync portali)
+- `social_posts` (post social)
+- `calendar_events` (visite)
+- `domain_vault_events` (DNS)
+- `privacy_audit_events` (cambio privacy immobile)
+- `hal_knowledge_sessions` (domande HAL)
+
+**Rendering**: timeline con timestamp, attore (nome utente), azione (i18n label), link al dettaglio se disponibile. Filtri per tipo/utente/data.
+
+**Effort stimato**: M-L (8-15h) · backend aggregation + UI timeline + i18n label per evento.
+
+### Stato
+🟡 **P2** — utile ma dipende da A-017 (notification center) per architettura eventi condivisa
+
+---
+
+## 🟡 A-019 — Frequency-aware saved-search cron (rispetta instant/daily/weekly)
+
+**Data inserimento**: Feb 2026 (bug D-051 documentato Cap. 18 § 18.8)
+**Segnalato da**: Cursor (bug funzionale trovato in `saved_searches.py:271`)
+**Contesto**: la collezione `saved_searches` salva `frequency: instant|daily|weekly` MA il cron `run_all_active_saved_searches()` IGNORA il valore e processa TUTTE le active ricerche ad ogni chiamata. Documentato onestamente in Cap. 18.
+
+**Idea**: filtrare il cron per rispettare la frequenza:
+- `instant`: processa sempre
+- `daily`: processa solo se `last_run_at < now - 24h`
+- `weekly`: processa solo se `last_run_at < now - 7d`
+
+**Effort stimato**: XS (~30min) · aggiungere clausola time-based nel filtro Mongo. Test regression con fixtures date-mocked.
+
+### Stato
+🟢 **P2** — bug funzionale ma workaround (super_admin lancia manualmente) è accettabile v1
+
+---
+
+## 🟡 A-020 — Internal APScheduler per saved-search cron (no dipendenza esterna)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18 § 18.9)
+**Segnalato da**: Cursor (redazione Cap. 18)
+**Contesto**: `apps/immoweb/cron.py` espone `POST /api/app/cron/saved-searches/run-all` (super_admin only) ma nessuno scheduler interno lo chiama. C'è già un APScheduler attivo per publishing sync (06:00 UTC) — si può estendere.
+
+**Idea**: aggiungere un job APScheduler dedicato a saved-search che parte 3× al giorno (es. 08:00, 14:00, 20:00 UTC) e chiama `run_all_active_saved_searches()`. Prerequisito: implementare A-019 (frequency-aware) per non spammare i daily/weekly.
+
+**Effort stimato**: S (~2h) · nuovo job + logging + toggle env `SAVED_SEARCH_SCHEDULER_ENABLED`.
+
+### Stato
+🟡 **P2** — dipende da A-019, priorità post-primi clienti B2C ImmobilCloud
+
+---
+
+## 🟡 A-021 — UI notification preferences (toggle canale + tipo email)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18 § 18.10)
+**Segnalato da**: Cursor (redazione Cap. 18)
+**Contesto**: `User.notification_channels` esiste in schema (default `["email"]`) ma non c'è UI per modificarlo post-registrazione né granularità per tipo email.
+
+**Idea**: aggiungere in ImmoWeb `SettingsPage.jsx` e ImmobilCloud `AccountDashboard.jsx` un pannello "Notifiche" con:
+- Toggle canale (email/push — push disabilitato v1 con tooltip "In arrivo v1.1")
+- Toggle per tipo (welcome/agency_invite/lead_notification/saved_search_alert) — con nota "Le email di password_reset sono sempre inviate per sicurezza account"
+- Frequency picker per digest (saved-search: instant/daily/weekly — visibile solo B2C)
+
+**Effort stimato**: M (~4h) · backend PATCH `/api/me/notification-preferences` + UI form + tests.
+
+### Stato
+🟡 **P1** — GDPR-friendly (utente controlla i propri canali) + requisito per Notification Directive UE
+
+---
+
+## 🟡 A-022 — Retention policy audit collections (archivio dopo 90 giorni)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18 § 18.12)
+**Segnalato da**: Cursor (redazione Cap. 18)
+**Contesto**: le 10 audit collections (`al_audit`, `match_audit`, `publishing_events`, ecc.) crescono indefinitamente in Mongo. Nessuna policy retention v1 → rischio di crescita disco su lungo periodo.
+
+**Idea**: definire retention per collezione:
+- `al_audit`, `al_legal_audit`, `hal_knowledge_sessions`: 90gg (poi archivio S3 o eliminazione)
+- `match_audit`, `publishing_events`, `social_posts`, `domain_vault_events`: 365gg (auditability GDPR)
+- `privacy_audit_events`, `legal_kit_events`: 5 anni (compliance normativa)
+- `calendar_events`: no retention (sono operativi, non log)
+
+Implementazione: TTL index Mongo dove semantica lo consente + job archivio S3 mensile.
+
+**Effort stimato**: M (~4h) · index TTL + job archive + policy documentata in DECISIONS.md.
+
+### Stato
+🟢 **P3** — post-primi clienti (rischio disco basso v1)
+
+---
+
+## 🟢 A-023 — Toast duration tuning (config per toast singolo)
+
+**Data inserimento**: Feb 2026 (Spark Cap. 18 § 18.11)
+**Segnalato da**: Cursor (redazione Cap. 18)
+**Contesto**: i toast sonner hanno durata default ~4-5s. Alcuni feedback critici (es. "Pagamento fallito, contatta il supporto") potrebbero necessitare durata più lunga o dismissal manuale.
+
+**Idea**: nel wrapper `components/ui/sonner.jsx` esporre un preset:
+- `toast.success(msg)` → 4s (default)
+- `toast.error(msg)` → 6s
+- `toast.critical(msg, { duration: Infinity })` → richiede dismissal manuale (es. errori pagamento)
+
+**Effort stimato**: XS (~15min) · configurazione wrapper + eventualmente 1-2 refactor di call site.
+
+### Stato
+🟢 **P3** — nice-to-have, priorità bassa
+
+---
+
+# 📊 Tabella riepilogo Backlog qualità (A-006 → A-023)
 
 | ID | Titolo | P | Effort | Origine | Timing |
 |----|--------|:-:|:-:|---------|:-:|
@@ -876,6 +1015,13 @@ Nessuna — decisione tecnica autonoma se conveniente.
 | A-014 | Billing UI + B2C Stripe live | **P1** | L | SPRINT (revenue) | Prossimo sprint |
 | A-015 | Sito Web v2 (Hero, Chi Siamo, ...) | P2 | XL | SPRINT + Founder | Da decidere con Founder |
 | A-016 | Boost tag mutui "banche" | P3 | XS | Cursor gap iter.35 | Raggruppare micro-fix |
+| A-017 | Notification center in-app | **P1** | L (15-25h) | Spark Cap.18 | Post v1.0 lancio |
+| A-018 | Activity feed dashboard | P2 | M-L (8-15h) | Spark Cap.18 | Post-A-017 |
+| A-019 | Frequency-aware saved-search cron | P2 | XS (~30min) | Bug D-051 Cap.18 | Raggruppare micro-fix |
+| A-020 | Internal APScheduler saved-search | P2 | S (~2h) | Spark Cap.18 | Post-A-019 |
+| A-021 | UI notification preferences | **P1** | M (~4h) | Spark Cap.18 | Prossimo sprint |
+| A-022 | Retention policy audit collections | P3 | M (~4h) | Spark Cap.18 | Post-primi clienti |
+| A-023 | Toast duration tuning | P3 | XS (~15min) | Spark Cap.18 | Raggruppare micro-fix |
 
 **Legenda priorità**: **P1** alta (ROI alto/effort basso o revenue-critical) · P2 media · P3 futuro (validation-gated)
 **Legenda effort**: XS <30min · S 30min-2h · M 2-6h · L 6-20h · XL >20h

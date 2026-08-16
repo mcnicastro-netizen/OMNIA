@@ -1,10 +1,19 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Fix RAG Pattern A/B + Micro YAML)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 18 · Notifiche e attività)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (Feb 2026 — 🔧 FIX RAG · Pattern A + Pattern B + Micro YAML)**:
+- **Ultimo update (Feb 2026 — 📖 TASK O · Cap. 18 · Notifiche e attività · D-051 estremo)**:
+  - ✅ **Cap. 18 · Notifiche e attività**: 18 sottocapitoli + **16 voci HAL YAML** (`notifiche.cos-e`, `notifiche.dove-trovarlo`, `notifiche.canali-attivi`, `notifiche.email-panoramica`, `notifiche.template-welcome-password`, `notifiche.template-agency-invite`, `notifiche.template-lead-notification`, `notifiche.template-saved-search-alert`, `notifiche.toast-in-app`, `notifiche.cron-saved-searches`, `notifiche.preferenze-utente`, `notifiche.audit-trail-interno`, `notifiche.dashboard-vs-activity-feed`, `notifiche.errori-comuni`, `notifiche.limitazioni-v1`, `notifiche.collegamenti`).
+  - ✅ **Onestà D-051 estrema**: Cap. 18 documenta un modulo che v1 **NON esiste**. Il capitolo elenca esaustivamente cosa NON c'è (no router `/notifications`, no Bell icon, no activity feed, no push/SMS/WhatsApp, no retry queue, no webhook Resend, no UI preferenze) e documenta invece cosa esiste: 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + toast sonner (~4-5s ephemera) + cron saved-search super_admin (frequency flag ignorato v1) + 10 audit collections Mongo non-UI + Dashboard 6 KPI counter (che NON è activity feed).
+  - ✅ **Dead code documentato**: schema `User.notification_channels: List[Literal["email", "push"]]` accetta `"push"` ma nessun sender push implementato. `saved_search.frequency` (instant/daily/weekly) salvato ma cron ignora il valore.
+  - ✅ **`hal-index.json` rigenerato**: v0.14-cap18, **227 voci totali** (Cap. 1-18), 18 source files.
+  - 📸 Screenshots-index: +7 righe Cap. 18 (email-welcome/agency-invite/lead-notification/saved-search/toast-success/toast-error/dashboard-kpi). Totale **79 screenshot**.
+  - 📈 **Progresso manuale**: 18/26 capitoli (69%). Totale voci HAL: **227**.
+  - 📋 **Backlog qualità prodotto proposti**: A-017 Notification center in-app · A-018 Activity feed dashboard · A-019 Frequency-aware cron · A-020 Internal APScheduler saved-searches · A-021 UI notification preferences · A-022 Retention policy audit collections · A-023 Toast duration tuning.
+
+- **Ultimo update precedente (Feb 2026 — 🔧 FIX RAG · Pattern A + Pattern B + Micro YAML)**:
   - ✅ **Pattern A**: escluso `memory/manuale/*.md` dall'ingest RAG in `hal_knowledge.py`. Solo i chunk atomici YAML (`memory/manuale/hal/*.yaml`) sono la sorgente retrieval per il manuale. I `.md` restano lettura umana. Aggiunto cleanup orfani in `ingest_corpus()` con rebuild TF-IDF su rimozioni.
   - ✅ **Pattern B**: deprecati/retagged 2 chunk legacy in `03-immobili.yaml` (`immobili.importare-xml`, `immobili.importare-xml-universale`) → tags `[deprecato-cap14, redirect]`, puntatori a Cap. 14. Nessun id rimosso (compat correlati esterni).
   - ✅ **Micro YAML**: arricchite `domanda_naturale` + `a_cosa_serve` di `team.limitazioni-v1` (Cap. 13) e `social.limitazioni-v1` (Cap. 15) per battere collisioni con `ASPETTI_DA_APPROFONDIRE.md` e altri chunk stesso file.

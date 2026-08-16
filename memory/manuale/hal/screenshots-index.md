@@ -232,6 +232,38 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Cap. 17 · Domain Vault
+
+Riferimento: `memory/manuale/17-domain-vault.md`
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap17-domain-verify` | Pagina DomainVerifyPage: TXT record + CNAME_TARGET evidenziati, stato pending → verified con timestamp. | 🔴 | — |
+| 2 | `cap17-domain-sovereignty-policy` | Pagina DomainSovereigntyPolicyPage con la promessa D-054 ("OMNIA never registers a domain"), lista dei registrar consigliati indipendenti. | 🔴 | — |
+| 3 | `cap17-rdap-checker` | Pagina domain-check pubblica con risultato RDAP (owner, registrar, expiry date). | 🟡 | Utile ma opzionale. |
+
+**Totale Cap. 17**: 3 screenshot (2 essenziali, 1 utile).
+
+---
+
+## Cap. 18 · Notifiche e attività
+
+Riferimento: `memory/manuale/18-notifiche-attivita.md`
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap18-email-welcome` | Email `welcome.it.html` renderizzata in client email (Gmail/Outlook): logo OMNIA, saluto `{{user_name}}`, CTA "Vai alla dashboard". | 🔴 | — |
+| 2 | `cap18-email-agency-invite` | Email `agency_invite.it.html`: subject "Sei stato invitato...", nome invitatore, ruolo assegnato, magic-link. | 🔴 | — |
+| 3 | `cap18-email-lead-notification` | Email `lead_notification.it.html`: dettagli lead (nome/email/telefono/messaggio) + link scheda immobile. | 🔴 | — |
+| 4 | `cap18-email-saved-search` | Email `saved_search_alert.it.html`: digest HTML con tabella max 6 righe immobili + CTA "Vai al mio account". | 🔴 | — |
+| 5 | `cap18-toast-success` | Toast sonner verde in ImmoWeb dopo creazione immobile riuscita ("Immobile creato ✓"). | 🟡 | Utile ma opzionale. |
+| 6 | `cap18-toast-error` | Toast sonner rosso in BillingPage.jsx dopo checkout fallito ("Pagamento fallito"). | 🟡 | Utile ma opzionale. |
+| 7 | `cap18-dashboard-kpi` | Dashboard ImmoWeb con i 6 KPI counter (Immobili attivi, Lead aperti, Nuovi match 7gg, Visite 7gg, Collaboratori, Inviti pendenti) — a evidenziare che NON è un activity feed. | 🔴 | Chiave per D-051. |
+
+**Totale Cap. 18**: 7 screenshot (5 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -277,3 +309,5 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 14) | Aggiunte 3 righe Cap. 14 · Import XML (upload + preview + commit-result — 2 essenziali + 1 utile). Totale index = **66 screenshot** catalogati. |
 | Feb 2026 (Cap. 15) | Aggiunte 3 righe Cap. 15 · Social Publisher (panoramica + config-modal + publish-multichannel — tutte essenziali). Totale index = **69 screenshot** catalogati. |
 | Feb 2026 (Cap. 16) | Aggiunte 3 righe Cap. 16 · Compliance Portali (modale-hard + mapping-campi + soft-warnings — 2 essenziali + 1 utile). Totale index = **72 screenshot** catalogati. |
+| Feb 2026 (Cap. 17) | Aggiunte 3 righe Cap. 17 · Domain Vault (domain-verify + sovereignty-policy + rdap-checker — 2 essenziali + 1 utile). Totale index = **75 screenshot** catalogati. |
+| Feb 2026 (Cap. 18) | Aggiunte 7 righe Cap. 18 · Notifiche e attività (email-welcome/agency-invite/lead-notification/saved-search/toast-success/toast-error/dashboard-kpi — 5 essenziali + 2 utili). Totale index = **82 screenshot** catalogati. |

@@ -37,6 +37,8 @@
 | **L** Manuale Cap. 15 Social Publisher | ✅ | `15-social-publisher.md` + 14 voci YAML · index **182 voci** · v0.11-cap15 · white label D-041 (post sotto Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), 3 canali (FB Page/IG Business/Telegram), caption default 5-righe con emoji fisse, audit `social_posts`. Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe). |
 | **M** Manuale Cap. 16 Compliance Portali (deep-dive normativo) | ✅ | `16-compliance-portali.md` + 14 voci YAML · index **196 voci** · v0.12-cap16 · 5 regole HARD → 7 codici, 4 SOFT, 14 classi APE ammesse, ghost label `missing_rent` documentata, feed vs sync, api_push=simulated_push, D.Lgs 192/2005 + AGCM contesto. Copertura `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline. Distinto da Cap. 6 (operativo). |
 | **N** Manuale Cap. 17 Domain Vault (sovranità digitale D-054) | ✅ | `17-domain-vault.md` + 15 voci YAML · index **211 voci** · v0.13-cap17 · promessa D-054, 3 componenti (sovereignty confirm + custom domain DNS + RDAP checker pubblico), TXT anti-takeover + CNAME_TARGET, audit trail append-only, help-to-connect NON transfer. Copertura `domain_vault.py` (155 righe) + `custom_domain.py` (454 righe) + `domain_check.py` (359 righe) + `DomainVerifyPage.jsx` + `DomainSovereigntyPolicyPage.jsx`. |
+| **N-post** Fix RAG Pattern A + B + Micro YAML | ✅ | Escluso `manuale/*.md` da ingest, deprecato `immobili.importare-xml` (Cap. 3 → Cap. 14), arricchite `domanda_naturale` `team.limitazioni-v1` + `social.limitazioni-v1`. Smoke ristampato **14/15 PASS** (9/9 Cap. 13/14/15 · 3/3 Cap. 16 · 2/3 Cap. 17 · 1 collision Cap.8 vs Cap.17 pre-esistente). |
+| **O** Manuale Cap. 18 Notifiche e attività | ✅ | `18-notifiche-attivita.md` + 16 voci YAML · index **227 voci** · v0.14-cap18 · **capitolo D-051 estremo**: 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + toast in-app sonner + cron saved-search super_admin (frequency flag ignorato v1) + audit trail 10 collezioni Mongo non-UI + Dashboard 6 KPI counter. Documenta NO modulo dedicato / NO Bell icon / NO activity feed / NO push/SMS/WhatsApp / NO retry queue / NO webhook Resend / NO UI preferenze. `push` in schema utente = dead code. Copertura `shared/email/client.py` (117 righe) + `apps/immoweb/cron.py` + `apps/immocloud/saved_searches.py` + `sonner.jsx`. Backlog A-017 → A-023 (7 voci qualità prodotto proposte). |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -57,10 +59,12 @@
 | 14 | Import XML (Migrazione) | 13 | ✅ v1.0 (flusso Preview→Commit, session 10min, dedupe reference_code, dry-run, tabelle mapping 18 tipi/19 energetiche/6 contratti/25 features, zero riferimenti competitor) |
 | 15 | Social Publisher | 14 | ✅ v1.0 (FB Page/IG Business/Telegram, white label D-041, credenziali AES-GCM, on-demand push, caption default 5-righe, audit social_posts, no scheduling/analytics/carosello v1) |
 | 16 | Compliance Portali (deep-dive) | 14 | ✅ v1.0 (5 HARD → 7 codici, 4 SOFT, 14 classi APE, ghost label missing_rent, feed vs sync, D.Lgs 192/2005 + AGCM contesto, distinto da Cap. 6 operativo) |
-| 17–26 | — | — | ⏳ |
+| 17 | Domain Vault (sovranità digitale) | 15 | ✅ v1.0 (D-054 promise, sovereignty confirm + custom domain DNS + RDAP checker, TXT anti-takeover, audit `domain_vault_events`, help-to-connect NON transfer) |
+| 18 | Notifiche e attività (D-051 estremo) | 16 | ✅ v1.0 (7 template Resend + toast sonner + cron saved-search super_admin + 10 audit collections non-UI + Dashboard 6 KPI · NO Bell / NO activity feed / NO push/SMS/WhatsApp / NO retry queue / `push` dead code) |
+| 19–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **16/26 capitoli (62%)** · **196 voci HAL** · **72 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **18/26 capitoli (69%)** · **227 voci HAL** · **79 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -81,7 +85,14 @@
 | Post Cap. 14 | 168 voci ⏳ reindex live pending (super_admin) |
 | Post Cap. 15 | 182 voci ✅ reindex live confermato (già indexed al restart backend) |
 | Post Cap. 16 | **196 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 17 | **211 voci** ✅ reindex live confermato (Fix RAG · smoke 14/15 PASS) |
+| Post Cap. 18 | **227 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
+**Smoke Cap. 18** (dopo reindex Founder):
+1. *Esiste una pagina Notifiche o una Bell icon in OMNIA?* → `notifiche.cos-e` (o `notifiche.limitazioni-v1`)
+2. *Quali email invia OMNIA automaticamente?* → `notifiche.email-panoramica`
+3. *C'è un feed attività recenti nella dashboard?* → `notifiche.dashboard-vs-activity-feed`
+
 **Smoke Cap. 16**:
 1. *Quali campi devo compilare per passare compliance HARD?* → `compliance.mapping-campi-immobile`
 2. *Perché un affitto risulta prezzo mancante?* → `compliance.hard-prezzo-canone` (o `compliance.affitto-vs-vendita`)

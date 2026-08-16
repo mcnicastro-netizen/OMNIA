@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.13.1)
+# 📚 HAL Knowledge — Import & Cold Start (v0.14)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 17 + Fix RAG Pattern A/B/Micro YAML)
-**Corpus attuale**: **211 voci HAL YAML** su **17 capitoli** (Cap. 1-17)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 18 · Notifiche e attività)
+**Corpus attuale**: **227 voci HAL YAML** su **18 capitoli** (Cap. 1-18)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026) · **Fix Feb 2026**: `memory/manuale/*.md` **escluso** dal RAG ingest (chunk atomici YAML = sola sorgente retrieval per il manuale).
-**Prossimo passo**: reindex live post-Cap. 17 e verifica 3 query smoke (vedi §"Smoke Cap. 17"). Vedi anche §"Smoke Cap. 13/14/15" per validazione fix RAG.
+**Prossimo passo**: reindex live post-Cap. 18 e verifica 3 query smoke (vedi §"Smoke Cap. 18"). Vedi anche §"Smoke Cap. 13/14/15" per validazione fix RAG.
 
 ---
 
@@ -284,6 +284,17 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 15) | **v0.11-cap15** | Cap. 15 Social Publisher (FB Page + IG Business + Telegram) aggiunto (+14 voci → 182). Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe): white label D-041 (ogni post sotto la Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), Meta Graph v20 + Telegram Bot API, caption default 5-righe con emoji, audit `social_posts`, limiti v1 (no X/LinkedIn/TikTok, no carosello/video, no analytics engagement, no bulk publish). |
 | Feb-2026 (Cap. 16) | **v0.12-cap16** | Cap. 16 Compliance Portali (validatore HARD/SOFT deep-dive normativo) aggiunto (+14 voci → 196). Copertura `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline: 5 regole HARD → 7 codici, 4 SOFT, 14 classi APE ammesse, feed vs sync, ghost label `missing_rent` documentata onestamente, distinzione da Cap. 6 operativo. |
 | Feb-2026 (Cap. 17) | **v0.13-cap17** | Cap. 17 Domain Vault (sovranità digitale D-054) aggiunto (+15 voci → 211). Copertura `domain_vault.py` (155 righe) + `custom_domain.py` (454 righe) + `domain_check.py` (359 righe): promessa D-054 (OMNIA never registers a domain), 3 componenti (sovereignty confirm + custom domain DNS TXT+CNAME + RDAP checker pubblico), audit trail append-only `domain_vault_events`, help-to-connect NON transfer. |
+| Feb-2026 (Cap. 18) | **v0.14-cap18** | Cap. 18 Notifiche e attività aggiunto (+16 voci → 227). Copertura `shared/email/client.py` (117 righe · Resend + mock mode) + 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + `apps/immoweb/cron.py` (saved-search trigger super_admin) + `apps/immocloud/saved_searches.py` (cron logic + digest HTML max 6 righe) + `frontend/src/components/ui/sonner.jsx` (toast). **Onestà D-051 estrema**: NO router `/notifications`, NO Bell icon, NO activity feed, NO push/SMS/WhatsApp, NO retry queue, NO webhook Resend, NO UI preferenze, `frequency` saved-search flag salvato ma cron ignora, `push` in schema `User.notification_channels` = dead code. 16 chunk YAML documentano email transazionali + toast + cron + audit trail interno (~10 collezioni non-UI) + limitazioni v1 esaustive. |
+
+---
+
+## 🚦 Smoke Cap. 18 — 3 query attese dopo reindex
+
+1. **"Esiste una pagina Notifiche o una Bell icon in OMNIA?"** → top-1 atteso `18-notifiche-attivita.yaml::notifiche.cos-e` (o `notifiche.limitazioni-v1`)
+2. **"Quali email invia OMNIA automaticamente?"** → top-1 atteso `18-notifiche-attivita.yaml::notifiche.email-panoramica`
+3. **"C'è un feed attività recenti nella dashboard?"** → top-1 atteso `18-notifiche-attivita.yaml::notifiche.dashboard-vs-activity-feed`
+
+Criteri smoke: top-1 chunk_id atteso OR **stesso file** `18-notifiche-attivita.yaml` · sim ≥ 0.08.
 
 ---
 

@@ -1,5 +1,86 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK N · Cap. 18 · Notifiche e attività (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — diciottesimo capitolo del manuale operativo, focus onestà su modulo NON esistente.
+**Fonte**: Founder Feb 2026 · Post-Fix RAG (Pattern A/B/Micro YAML) approvato · Cap. 18 = Notifiche e attività (documentazione onesta di quello che ESISTE e ciò che NON esiste v1).
+
+### Cosa è cambiato
+
+- **Nuovo capitolo** `memory/manuale/18-notifiche-attivita.md` (~500 righe, 18 sottocapitoli): panoramica onesta D-051, dove trovare notifiche (spoiler: nessuna pagina dedicata), canali attivi (email + toast) vs non-attivi (push/SMS/WhatsApp/Slack), 7 template Resend documentati (welcome, password_reset, agency_invite, lead_notification, saved_search_alert, founders_welcome, founders_admin_notification), toast in-app sonner, cron saved-search super_admin, preferenze utente (schema vs realtà · `push` dead code), audit trail interno 10 collezioni Mongo (non-UI), dashboard KPI vs activity feed, errori comuni, limitazioni v1 esaustive, collegamenti Cap. 1/3/5/6/10/12/13/15/17.
+- **Nuovo YAML HAL** `memory/manuale/hal/18-notifiche-attivita.yaml` (~700 righe, **16 voci**): `notifiche.cos-e`, `notifiche.dove-trovarlo`, `notifiche.canali-attivi`, `notifiche.email-panoramica`, `notifiche.template-welcome-password`, `notifiche.template-agency-invite`, `notifiche.template-lead-notification`, `notifiche.template-saved-search-alert`, `notifiche.toast-in-app`, `notifiche.cron-saved-searches`, `notifiche.preferenze-utente`, `notifiche.audit-trail-interno`, `notifiche.dashboard-vs-activity-feed`, `notifiche.errori-comuni`, `notifiche.limitazioni-v1`, `notifiche.collegamenti`. Parser HAL RAG: 16/16 chunk OK.
+- **`hal-index.json`** rigenerato: v0.14-cap18 · **227 voci totali** (Cap. 1-18) · 18 source files con MD5.
+- **`IMPORT_HAL.md`** v0.14 · nuova sezione Smoke Cap. 18 con 3 query attese e criterio sim ≥ 0.08.
+- **`CHANGELOG.md`**: questa entry.
+- **`SPRINT_STATUS.md`**: TASK N aggiunto · progresso 18/26 (69%) · 227 voci HAL.
+- **`PRD.md`**: entry Feb 2026 TASK N in cima.
+
+### Onestà documentale (D-051) — Cap. 18 = capitolo D-051 estremo
+
+**Il capitolo documenta principalmente cosa NON esiste v1**, in modo trasparente:
+
+**Backend mancante**:
+- NO router `/notifications` (nessun GET/PATCH/DELETE)
+- NO router `/activity` o `/activity-feed`
+- NO collezione Mongo `notifications` o `activity_feed`
+- NO servizio push sender (`push` in schema `User.notification_channels` è dead code)
+- NO coda retry email fallite (fire-and-forget)
+- NO tracking delivery Resend (no webhook delivered/bounced/opened)
+- NO digest email quotidiana per titolare
+- NO scheduler interno per saved-search cron (deve essere triggerato manualmente)
+- NO rate limit su send_email
+
+**Frontend mancante**:
+- NO Bell icon nella navbar
+- NO contatore unread
+- NO pagina "Notifiche" o "Attività"
+- NO preferenza UI per canale o per tipo
+- NO mute/snooze
+- NO moderazione admin
+
+**Channels non supportati**:
+- NO SMS (Twilio), NO WhatsApp Business, NO Push web/mobile, NO Slack/Teams/Discord webhook, NO Voice call
+
+**Cosa ESISTE (documentato in modo preciso)**:
+- 7 template email Resend con lingua fallback + mock mode se `RESEND_API_KEY` non configurata
+- Toast in-app sonner (~4-5s, ephemera)
+- Cron saved-search super_admin (POST `/api/app/cron/saved-searches/run-all`) con `frequency` flag salvato MA ignorato v1 (bug documentato, backlog A-019)
+- Audit trail interno append-only in 10 collezioni Mongo: `al_audit`, `al_legal_audit`, `match_audit`, `calendar_events`, `domain_vault_events`, `privacy_audit_events`, `legal_kit_events`, `social_posts`, `hal_knowledge_sessions`, `publishing_events` — **nessuna UI centralizzata**
+- Dashboard KPI 6 counter (Immobili attivi / Lead aperti / Match 7gg / Visite 7gg / Collaboratori / Inviti pendenti) — **NON è activity feed**
+
+**Backlog qualità prodotto proposti** (7 nuove voci per `ASPETTI_DA_APPROFONDIRE.md`):
+- **A-017** Notification center in-app (Bell icon + unread badge + inbox)
+- **A-018** Activity feed dashboard (aggrega audit collections in timeline)
+- **A-019** Frequency-aware saved-search cron (instant/daily/weekly effettivo)
+- **A-020** Internal APScheduler saved-searches (no dipendenza da trigger esterno)
+- **A-021** UI notification preferences (toggle per canale + per tipo)
+- **A-022** Retention policy audit collections (archivio dopo 90gg)
+- **A-023** Toast duration tuning (config per toast singolo)
+
+### Commit message suggerito
+
+```
+docs(cap18): Notifiche e attività · onestà D-051 estrema (NO modulo dedicato v1)
+
+- Cap. 18 Notifiche e attività: MD (18 sottocapitoli) + YAML HAL (16 voci)
+- Documenta cosa ESISTE: 7 template email Resend (welcome, password_reset,
+  agency_invite, lead_notification, saved_search_alert, founders_*),
+  toast in-app sonner, cron saved-search super_admin, audit trail interno
+  Mongo (10 collezioni non-UI), Dashboard KPI (6 counter)
+- Documenta cosa NON ESISTE v1: no router /notifications, no Bell icon,
+  no activity feed, no push/SMS/WhatsApp, no retry queue, no webhook,
+  no UI preferenze, push dead code in schema utente, frequency
+  saved-search ignorata dal cron (bug documentato)
+- hal-index.json v0.14-cap18 (227 voci, 18 file)
+- IMPORT_HAL.md v0.14 + Smoke Cap. 18 (3 query)
+- Backlog A-017 … A-023 (7 voci qualità prodotto per v1.1)
+
+Ref: D-051 Onestà documentale · direttiva Founder Feb 2026 "Cap. 18".
+```
+
+---
+
+
 ## 2026-02-XX (Feb 2026) — 🔧 FIX RAG · Pattern A + Pattern B + Micro YAML domanda_naturale
 
 **Tipo**: Fix retrieval quality — post-smoke Cap. 13/14/15 (3/9 PASS pre-fix → 9/9 PASS post-fix).

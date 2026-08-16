@@ -321,6 +321,40 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 
 **⚠️ Nota conflitto planning**: nei documenti precedenti "Cap. 16 Domain Vault" era menzionato come candidato futuro. Sostituito da "Cap. 16 Compliance Portali" (deep-dive normativo del validatore, priorità Founder Feb 2026). Domain Vault spostato a Cap. futuro.
 
+### Cap. 17 · Domain Vault (sovranità digitale D-054) — Feb 2026
+- **Documentato onestamente** in Cap. 17 v1.0 (15 voci HAL).
+- **D-054 promise**: OMNIA non registra domini a proprio nome. Documentato in `DomainSovereigntyPolicyPage.jsx`.
+- **3 componenti**: sovereignty confirm (signup B2B) + custom domain flow (TXT + CNAME_TARGET) + RDAP checker pubblico.
+- **Audit trail append-only** `domain_vault_events` (Mongo, non-UI): sovereignty confirm, DNS verify, connect.
+- **Help-to-connect ≠ transfer**: OMNIA guida il collegamento DNS ma NON prende ownership del dominio.
+
+### Cap. 18 · Notifiche e attività (D-051 estremo) — Feb 2026
+- **Capitolo documentazionale D-051 estremo**: il modulo Notifiche v1 NON esiste. Il capitolo documenta trasparentemente 16 voci HAL su cosa esiste vs cosa non esiste.
+- **Cosa esiste**:
+  - **7 template Resend** (`shared/email/client.py:44-70`): welcome, password_reset, agency_invite, lead_notification, saved_search_alert, founders_welcome, founders_admin_notification. Multi-lingua it/en/es (tranne `founders_*` solo it).
+  - **Mock mode**: se `RESEND_API_KEY` non configurata → log `[EMAIL MOCK]`, nessuna email spedita.
+  - **Toast in-app sonner** in `components/ui/sonner.jsx` (~4-5s, non persistenti).
+  - **Cron saved-search** super_admin: `POST /api/app/cron/saved-searches/run-all` (`cron.py:15`). Digest HTML max 6 righe.
+  - **10 collezioni audit Mongo** append-only (non-UI): `al_audit`, `al_legal_audit`, `match_audit`, `calendar_events`, `domain_vault_events`, `privacy_audit_events`, `legal_kit_events`, `social_posts`, `hal_knowledge_sessions`, `publishing_events`.
+  - **Dashboard 6 KPI counter** (`dashboard.py:60-97`): properties_active, leads_open, matches_week, visits_week, members_active, invites_pending. NON è activity feed.
+- **Cosa NON esiste v1** (documentato per D-051):
+  - NO router `/notifications` o `/activity` backend
+  - NO Bell icon, unread badge, notification center UI
+  - NO pagina "Notifiche" o "Attività"
+  - NO push (web/mobile), SMS, WhatsApp, Slack/Teams webhook, Voice call
+  - NO retry queue email fallite (fire-and-forget)
+  - NO tracking delivery Resend (no webhook delivered/bounced/opened)
+  - NO digest quotidiana per titolare
+  - NO scheduler interno saved-search (deve essere triggerato super_admin)
+  - NO rate limit su `send_email`
+  - NO UI preferenze utente (canale + tipo email + digest frequency)
+  - NO moderazione admin
+  - NO analytics open/click/A-B test/preview UI
+- **Dead code documentato**:
+  - `User.notification_channels: List[Literal["email", "push"]]` (`shared/models/user.py:50`): il valore `"push"` è accettato in registrazione MA nessun sender push implementato v1.
+  - `saved_search.frequency: instant|daily|weekly` salvato MA il cron IGNORA il valore e processa tutte le active ricerche ad ogni chiamata. Bug funzionale v1 documentato (backlog A-019).
+- **Backlog qualità prodotto Cap. 18**: A-017, A-018, A-019, A-020, A-021, A-022, A-023 (vedi ASPETTI_DA_APPROFONDIRE.md sezione Cap. 18).
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).
