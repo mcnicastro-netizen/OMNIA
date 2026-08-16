@@ -1,5 +1,62 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK P · Cap. 20 · API Keys e integrazioni (Track B / API Gateway)
+
+**Tipo**: Feature docs — ventesimo capitolo del manuale operativo.
+**Fonte**: Founder Feb 2026 · "vai — Cap. 20 API Keys e integrazioni · Recon: ApiKeysPage.jsx + backend routes · D-051 · STOP dopo task".
+
+### Cosa è cambiato
+
+- **Nuovo capitolo** `memory/manuale/20-api-keys-integrazioni.md` (~250 righe, 15 sottocapitoli): copertura completa Track B API Gateway.
+- **Nuovo YAML HAL** `memory/manuale/hal/20-api-keys-integrazioni.yaml` (~360 righe, **14 voci**): `api-keys.cos-e`, `dove-trovarlo`, `emissione-show-once`, `credit-wallet`, `allowed-origins`, `revoca-key`, `usage-log`, `api-v1-endpoints`, `pricing-track-b`, `widget-embed-loader`, `partner-id`, `errori-comuni`, `limitazioni-v1`, `collegamenti`. Parser HAL: 14/14 chunk OK.
+- **`hal-index.json`** v0.16-cap20 · **255 voci totali** (20 source files).
+- **Aggiornati**: `IMPORT_HAL.md` v0.16 (Smoke Cap. 20 con 3 query), `CHANGELOG.md` (questa entry), `SPRINT_STATUS.md` (TASK P · 20/26 · 77%), `PRD.md` (Feb 2026 top), `GAP.md` (§Cap. 20), `screenshots-index.md` (+5 righe Cap. 20 · totale 95).
+
+### Onestà documentale D-051 chiave (dual-track pricing)
+
+- **Pricing Track A vs Track B documentato onestamente**:
+  - **Track A** (piani B2B + credit packages BillingPage Cap. 19 §19.10): 1 credito = **€0,05** (20 cred/€)
+  - **Track B** (API Gateway ApiKeysPage Cap. 20): 1 credito = **€0,03**
+  - I due wallet sono **contabilmente separati** v1
+- **Formato chiave**: `omk_live_<28 base32>` · plaintext show-once · hash SHA-256 · prefix 12 char visibile
+- **Endpoint `/api/v1/*` documentati con costi**: valuator (5cr), mortgages/compare (1cr), legal/ask (3cr), feed/properties (0), me (0), health (no-auth), widgets/lead (0), staging (~15cr async)
+- **Ledger append-only**: `api_credit_ledger` (top-up/deduct) + `api_usage_log` (billing audit)
+- **Cosa NON esiste v1**: no auto-ricarica Stripe (top-up manuale), no UI usage detail (endpoint /usage esiste ma nessun button v1), no reportistica per-partner (D-046 tracciato, no rollup UI), no rotazione automatica, no scoping per endpoint, no rate limit per-chiave, no IP whitelist, no webhook eventi, no modale custom (usa prompt()/confirm() browser), pricing Track B non esposto in BillingPage
+- **Widget disponibili v1**: solo `valuator`/`mortgages`/`lead-capture`. Altri TBD
+
+### Backlog qualità prodotto proposti Cap. 20
+
+- **A-026** UI usage detail per chiave (drilldown storico chiamate)
+- **A-027** Reportistica per-partner (rollup crediti spesi per partner_id)
+
+### Commit message suggerito
+
+```
+docs(cap20): API Keys e integrazioni (Track B / API Gateway) · D-051 dual-track pricing
+
+- Cap. 20 API Keys e integrazioni: MD (15 sottocapitoli) + YAML HAL (14 voci)
+- Copertura ApiKeysPage.jsx (351 righe) + apps/immoweb/api_keys.py (199) +
+  apps/v1/gateway.py + shared/auth/api_key.py + shared/models/api_key.py
+- Onesta' D-051 pricing dual-track: Track A €0,05/cred (Cap.19 BillingPage) vs
+  Track B €0,03/cred (Cap.20 ApiKeysPage) · wallet contabilmente separati
+- Endpoint /api/v1/* con costi: valuator=5, mortgages/compare=1, legal/ask=3,
+  feed/properties=0, me=0, health=0, widgets/lead=0, staging=~15
+- Formato omk_live_<28chars> · plaintext show-once · hash SHA-256
+- Ledger append-only api_credit_ledger + api_usage_log
+- NO auto-ricarica Stripe, NO UI usage detail, NO reportistica per-partner,
+  NO rotazione, NO scoping endpoint, NO rate limit, NO IP whitelist, NO webhook
+- Widget v1: valuator/mortgages/lead-capture. Altri TBD
+- hal-index.json v0.16-cap20 (255 voci, 20 file)
+- IMPORT_HAL.md v0.16 + Smoke Cap. 20 (3 query)
+- screenshots-index.md +5 righe (95 tot)
+- Backlog A-026 UI usage detail · A-027 reportistica per-partner
+
+Ref: D-051 · direttiva Founder "vai — Cap. 20 API Keys e integrazioni".
+```
+
+---
+
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK O · Cap. 19 · Impostazioni agenzia (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — diciannovesimo capitolo del manuale operativo.

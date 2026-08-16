@@ -397,6 +397,40 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
   - Log audit settings → non esiste UI v1
   - Cambio password/MFA/sessioni → pagina auth separata
 
+### Cap. 20 · API Keys e integrazioni (Track B / API Gateway) — Feb 2026
+- **Copertura codice** 1:1:
+  - `ApiKeysPage.jsx` (351 righe): form emissione + tabella chiavi + docs box embed snippet
+  - `apps/immoweb/api_keys.py` (199 righe · router `/api/app/api-keys`): 6 endpoint (list/create/revoke/origins/credits/usage) protetti JWT `agency_admin`/`super_admin`
+  - `apps/v1/gateway.py` (router `/api/v1/*`): 6+ endpoint consumer Bearer
+  - `shared/auth/api_key.py`: `generate_plaintext_key` (`omk_live_<28chars>`), `hash_key` (SHA-256), `require_api_key` con check `allowed_origins`, `charge_and_log`
+  - `shared/models/api_key.py`: `ApiKeyInDB`, `ApiKeyPublic`, `ApiKeyCreate`, `ApiKeyIssueResponse`, `CreditAdjustment`, `ApiUsageLogInDB`
+- **Pricing dual-track (D-051)**:
+  - Track A (piani B2B + credit packages BillingPage Cap. 19): 1 credito = €0,05
+  - Track B (API Gateway ApiKeysPage): 1 credito = €0,03
+  - Wallet contabilmente separati (`sub.wallet.balance` != `api_key.credits_balance`)
+- **Endpoint `/api/v1/*` con costi**:
+  - `GET /api/v1/health` (0 · no-auth)
+  - `GET /api/v1/me` (0)
+  - `POST /api/v1/valuator` (5cr)
+  - `POST /api/v1/mortgages/compare` (1cr)
+  - `POST /api/v1/legal/ask` (3cr)
+  - `GET /api/v1/feed/properties` (0)
+  - `POST /api/v1/widgets/lead` (0)
+  - `POST /api/v1/staging/*` (~15cr async)
+- **Widget embed loader**: `<script src="/api/widgets/v1/loader.js" data-key="omk_live_..." data-widget="valuator" data-primary="#0b1e3f" data-lang="it"></script>`. Widget v1: `valuator`/`mortgages`/`lead-capture`.
+- **Cosa NON esiste v1 (D-051)**:
+  - NO auto-ricarica Stripe (top-up manuale via `POST /credits`)
+  - NO UI usage detail per chiave (endpoint `/usage` esiste, no button)
+  - NO reportistica per-partner (`partner_id` D-046 tracciato ma no rollup UI)
+  - NO rotazione automatica chiavi (no cron scadenza)
+  - NO scoping per endpoint (chiave con crediti chiama TUTTI gli endpoint `/api/v1/*`)
+  - NO rate limit per-chiave (solo check saldo)
+  - NO IP whitelist (solo Origin/Referer per widget)
+  - NO webhook eventi (issued/revoked/depleted)
+  - NO modale custom top-up/revoca (usa `prompt()`/`confirm()` browser nativi)
+  - Pricing Track B (€0,03) NON esposto in BillingPage (solo subtitle ApiKeysPage)
+- **Backlog qualità prodotto Cap. 20**: A-026 UI usage detail per chiave · A-027 reportistica per-partner.
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-16T10:02:38.845687+00:00",
-  "version": "v0.15-cap19",
+  "generated_at": "2026-08-16T10:22:09.879345+00:00",
+  "version": "v0.16-cap20",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -95,6 +95,11 @@
     {
       "file": "19-impostazioni-agenzia.yaml",
       "md5": "5c2d44823b6eb9061622a88a87c31564",
+      "voci_count": 14
+    },
+    {
+      "file": "20-api-keys-integrazioni.yaml",
+      "md5": "9fed60baf766a6442a1a62845d1d998d",
       "voci_count": 14
     }
   ],
@@ -4088,6 +4093,267 @@
         "cap18"
       ],
       "domanda_naturale": "Come si integra la Settings con gli altri moduli di OMNIA?"
+    },
+    {
+      "id": "api-keys.cos-e",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Cos'è API Keys / Track B / API Gateway",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "track-b",
+        "api-gateway",
+        "partner",
+        "integrazione",
+        "d-041",
+        "d-046"
+      ],
+      "domanda_naturale": "Cos'è Track B / API Gateway di OMNIA? A cosa servono le chiavi API?"
+    },
+    {
+      "id": "api-keys.dove-trovarlo",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Dove trovo ApiKeysPage (/app/api-keys)",
+      "modulo": "API Keys",
+      "livello": "base",
+      "tags": [
+        "api-keys",
+        "dove-trovarlo",
+        "route",
+        "sidebar",
+        "permessi",
+        "agency-admin",
+        "group-admin"
+      ],
+      "domanda_naturale": "Dove trovo la pagina per gestire le API Keys?"
+    },
+    {
+      "id": "api-keys.emissione-show-once",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Emissione chiave · formato omk_live_ + plaintext show-once + hash SHA-256",
+      "modulo": "API Keys",
+      "livello": "avanzato",
+      "tags": [
+        "api-keys",
+        "emissione",
+        "plaintext",
+        "show-once",
+        "hash",
+        "sha-256",
+        "prefix",
+        "formato",
+        "omk-live"
+      ],
+      "domanda_naturale": "Come emetto una nuova API key? La chiave si può recuperare dopo?"
+    },
+    {
+      "id": "api-keys.credit-wallet",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Credit wallet Track B · top-up manuale + api_credit_ledger",
+      "modulo": "API Keys",
+      "livello": "avanzato",
+      "tags": [
+        "api-keys",
+        "crediti",
+        "wallet",
+        "top-up",
+        "ledger",
+        "api-credit-ledger",
+        "manuale",
+        "stripe-no"
+      ],
+      "domanda_naturale": "Come carico crediti su una chiave API? Posso fare auto-ricarica Stripe?"
+    },
+    {
+      "id": "api-keys.allowed-origins",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Allowed origins · CORS whitelist widget (M2.5.3)",
+      "modulo": "API Keys",
+      "livello": "avanzato",
+      "tags": [
+        "api-keys",
+        "allowed-origins",
+        "cors",
+        "widget-security",
+        "origin",
+        "referer",
+        "wildcard",
+        "m2-5-3"
+      ],
+      "domanda_naturale": "Come limito una API key ai widget su un dominio specifico?"
+    },
+    {
+      "id": "api-keys.revoca-key",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Revoca chiave · no undo · emetti nuova invece",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "revoca",
+        "is-active",
+        "revoked-at",
+        "no-undo",
+        "security"
+      ],
+      "domanda_naturale": "Come revoco una API key compromessa? Posso riattivarla?"
+    },
+    {
+      "id": "api-keys.usage-log",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Usage log audit · endpoint /usage · NO UI detail v1",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "usage-log",
+        "audit",
+        "api-usage-log",
+        "billing",
+        "credits-spent",
+        "no-ui"
+      ],
+      "domanda_naturale": "Come vedo l'utilizzo dettagliato di una API key? Storico endpoint chiamati?"
+    },
+    {
+      "id": "api-keys.api-v1-endpoints",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "API Gateway /api/v1/* · 6 endpoint consumer Bearer",
+      "modulo": "API Keys",
+      "livello": "avanzato",
+      "tags": [
+        "api-keys",
+        "api-v1",
+        "gateway",
+        "endpoints",
+        "valuator",
+        "mortgages",
+        "legal",
+        "feed",
+        "health",
+        "me",
+        "widgets-lead",
+        "staging",
+        "bearer"
+      ],
+      "domanda_naturale": "Quali endpoint /api/v1 esistono? Quanto costa ogni chiamata? Come autentico?"
+    },
+    {
+      "id": "api-keys.pricing-track-b",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Pricing Track B · 1 credito = €0,03 (vs Track A €0,05 · wallet separati)",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "pricing",
+        "crediti",
+        "0-03-euro",
+        "track-a",
+        "track-b",
+        "wallet-separati",
+        "differenza",
+        "cap19-billing"
+      ],
+      "domanda_naturale": "Quanto costa un credito Track B? È diverso da quello dei piani B2B?"
+    },
+    {
+      "id": "api-keys.widget-embed-loader",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Widget embed · loader script /api/widgets/v1/loader.js",
+      "modulo": "API Keys",
+      "livello": "avanzato",
+      "tags": [
+        "api-keys",
+        "widget",
+        "embed",
+        "loader",
+        "script",
+        "valuator",
+        "mortgages",
+        "lead-capture",
+        "showcase",
+        "iframe"
+      ],
+      "domanda_naturale": "Come embed di un widget OMNIA sul sito del cliente?"
+    },
+    {
+      "id": "api-keys.partner-id",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Partner ID (D-046) · white-label attribuzione multi-partner",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "partner-id",
+        "d-046",
+        "white-label",
+        "attribuzione",
+        "multi-partner",
+        "reportistica-no"
+      ],
+      "domanda_naturale": "Cos'è il campo Partner ID? Come traccio più partner tech per la mia agenzia?"
+    },
+    {
+      "id": "api-keys.errori-comuni",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Errori comuni API Keys (401/402/403/404 + plaintext perso)",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "errori",
+        "401",
+        "402",
+        "403",
+        "404",
+        "troubleshooting",
+        "plaintext-perso",
+        "insufficient-credits",
+        "origin-not-allowed"
+      ],
+      "domanda_naturale": "Perché la mia chiave API non funziona? Errori comuni?"
+    },
+    {
+      "id": "api-keys.limitazioni-v1",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Limiti v1 API Keys / Track B (D-051 · elenco esaustivo)",
+      "modulo": "API Keys",
+      "livello": "intermedio",
+      "tags": [
+        "api-keys",
+        "limiti",
+        "cosa-non-fa",
+        "auto-ricarica-no",
+        "usage-ui-no",
+        "rate-limit-no",
+        "scoping-no",
+        "ip-whitelist-no",
+        "webhook-no",
+        "rotazione-no",
+        "d-051"
+      ],
+      "domanda_naturale": "Cosa NON fa API Keys v1? Ha auto-ricarica, rate limit, scoping endpoint, IP whitelist, webhook, rotazione automatica?"
+    },
+    {
+      "id": "api-keys.collegamenti",
+      "file": "20-api-keys-integrazioni.yaml",
+      "titolo": "Collegamenti API Keys → altri capitoli (Cap. 6/10/11/13/18/19)",
+      "modulo": "API Keys",
+      "livello": "base",
+      "tags": [
+        "api-keys",
+        "collegamenti",
+        "cross-ref",
+        "cap6",
+        "cap10",
+        "cap11",
+        "cap13",
+        "cap18",
+        "cap19"
+      ],
+      "domanda_naturale": "Come si integra Track B con gli altri moduli di OMNIA?"
     }
   ],
   "stats": {
@@ -4112,5 +4378,5 @@
       "17": 15
     }
   },
-  "total_voci": 241
+  "total_voci": 255
 }

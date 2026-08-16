@@ -1,10 +1,20 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 19 · Impostazioni agenzia)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 20 · API Keys e integrazioni)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (Feb 2026 — 📖 TASK O · Cap. 19 · Impostazioni agenzia · v1 onesta)**:
+- **Ultimo update (Feb 2026 — 📖 TASK Q · Cap. 20 · API Keys e integrazioni · Track B API Gateway)**:
+  - ✅ **Cap. 20 · API Keys e integrazioni**: 15 sottocapitoli + **14 voci HAL YAML** (`api-keys.cos-e`, `dove-trovarlo`, `emissione-show-once`, `credit-wallet`, `allowed-origins`, `revoca-key`, `usage-log`, `api-v1-endpoints`, `pricing-track-b`, `widget-embed-loader`, `partner-id`, `errori-comuni`, `limitazioni-v1`, `collegamenti`).
+  - ✅ **Onestà D-051 pricing dual-track**: Track A (piani B2B + credit packages BillingPage Cap. 19) = **€0,05/cred** vs Track B (API Gateway ApiKeysPage Cap. 20) = **€0,03/cred**. Wallet contabilmente separati.
+  - ✅ **Endpoint `/api/v1/*` documentati con costi**: valuator (5cr), mortgages/compare (1cr), legal/ask (3cr), feed/properties (0), me (0), health (no-auth), widgets/lead (0), staging (~15cr async).
+  - ✅ **Formato chiave**: `omk_live_<28 base32>` plaintext show-once + hash SHA-256 + prefix 12ch visibile. Ledger `api_credit_ledger` + `api_usage_log`.
+  - ✅ **`hal-index.json` rigenerato**: v0.16-cap20, **255 voci totali** (Cap. 1-20), 20 source files.
+  - 📸 Screenshots-index: +5 righe Cap. 20. Totale **95 screenshot**.
+  - 📈 **Progresso manuale**: 20/26 capitoli (77%). Totale voci HAL: **255**.
+  - 📋 Backlog: A-026 UI usage detail per chiave · A-027 reportistica per-partner.
+
+- **Ultimo update precedente (Feb 2026 — 📖 TASK O · Cap. 19 · Impostazioni agenzia · v1 onesta)**:
   - ✅ **Cap. 19 · Impostazioni agenzia**: 15 sottocapitoli + **14 voci HAL YAML** (`settings.cos-e`, `settings.dove-trovarlo`, `settings.sezione-identita`, `settings.sezione-fiscali`, `settings.sezione-indirizzo`, `settings.sezione-contatti`, `settings.sezione-sito-web`, `settings.permessi-ownership`, `settings.endpoint-patch`, `settings.billing-pagina-separata`, `settings.chi-non-e-coperto`, `settings.errori-comuni`, `settings.limitazioni-v1`, `settings.collegamenti`).
   - ✅ **Onestà D-051**: la SettingsPage v1 copre **solo 5 sezioni anagrafica** (identità/fiscale/indirizzo/contatti/modalità sito). Template omnia (minimal/elegant/bold) TUTTI stub "presto disponibile" inattivi. Nessuna UI per logo/colori/REA/FIAIP/plan_type. Nessuna validazione P.IVA/CF/CAP/telefono. Owner-only PATCH (agency_admin invitato → 403 not_owner). Toast success = banner emerald embedded (NON sonner Cap. 18). Team/API Keys/Domain/Notifiche/Billing = pagine separate.
   - ✅ **Billing pagina separata** (`/app/settings/billing`, `BillingPage.jsx` 235 righe): piani Founders €49/€99/€249/€299 + 6 credit packages (€0,05/cred, ratio 20 cred/€, no sconto volume) + Stripe checkout/portal. Feature flag `STRIPE_ENABLED != "true"` → HTTP 503 "Billing è in preparazione".

@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.15)
+# 📚 HAL Knowledge — Import & Cold Start (v0.16)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 19 · Impostazioni agenzia)
-**Corpus attuale**: **241 voci HAL YAML** su **19 capitoli** (Cap. 1-19)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 20 · API Keys e integrazioni)
+**Corpus attuale**: **255 voci HAL YAML** su **20 capitoli** (Cap. 1-20)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026) · **Fix Feb 2026**: `memory/manuale/*.md` **escluso** dal RAG ingest (chunk atomici YAML = sola sorgente retrieval per il manuale).
-**Prossimo passo**: reindex live post-Cap. 19 e verifica 3 query smoke (vedi §"Smoke Cap. 19"). Vedi anche §"Smoke Cap. 13/14/15" per validazione fix RAG.
+**Prossimo passo**: reindex live post-Cap. 20 e verifica 3 query smoke (vedi §"Smoke Cap. 20").
 
 ---
 
@@ -286,6 +286,17 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 17) | **v0.13-cap17** | Cap. 17 Domain Vault (sovranità digitale D-054) aggiunto (+15 voci → 211). Copertura `domain_vault.py` (155 righe) + `custom_domain.py` (454 righe) + `domain_check.py` (359 righe): promessa D-054 (OMNIA never registers a domain), 3 componenti (sovereignty confirm + custom domain DNS TXT+CNAME + RDAP checker pubblico), audit trail append-only `domain_vault_events`, help-to-connect NON transfer. |
 | Feb-2026 (Cap. 18) | **v0.14-cap18** | Cap. 18 Notifiche e attività aggiunto (+16 voci → 227). Copertura `shared/email/client.py` (117 righe · Resend + mock mode) + 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + `apps/immoweb/cron.py` (saved-search trigger super_admin) + `apps/immocloud/saved_searches.py` (cron logic + digest HTML max 6 righe) + `frontend/src/components/ui/sonner.jsx` (toast). **Onestà D-051 estrema**: NO router `/notifications`, NO Bell icon, NO activity feed, NO push/SMS/WhatsApp, NO retry queue, NO webhook Resend, NO UI preferenze, `frequency` saved-search flag salvato ma cron ignora, `push` in schema `User.notification_channels` = dead code. 16 chunk YAML documentano email transazionali + toast + cron + audit trail interno (~10 collezioni non-UI) + limitazioni v1 esaustive. |
 | Feb-2026 (Cap. 19) | **v0.15-cap19** | Cap. 19 Impostazioni agenzia aggiunto (+14 voci → 241). Copertura `SettingsPage.jsx` (358 righe) + `apps/immoweb/agencies.py` (180 righe · GET/PATCH `/agencies/me`) + `shared/models/agency.py` (305 righe · AgencyInDB/AgencyUpdate + 5 sotto-schemi) + `BillingPage.jsx` (235 righe) + `apps/billing/routes.py` (473 righe) + `apps/billing/plans.py` (LAUNCH Founders €49/€99/€249/€299 + POST_TRACTION €79/€179/€349/€499 + 6 credit packages €0,05/cred). **Onestà D-051**: v1 solo 5 sezioni anagrafica (identità/fiscale/indirizzo/contatti/modalità sito), 3 template omnia stub "presto disponibile", NO uploader logo/color picker, campi schema-only (logo_url/primary_color/accent_color/REA/FIAIP/contact.website/country/plan_type/group_id/branch_code), NO validazione P.IVA/CF/CAP/telefono/geocoding, NO transfer ownership (owner_id immutabile), NO audit trail settings, toast success = banner embedded (NON sonner Cap. 18). Team/API Keys/Domain/Notifiche/Billing = pagine SEPARATE. |
+| Feb-2026 (Cap. 20) | **v0.16-cap20** | Cap. 20 API Keys e integrazioni (Track B / API Gateway) aggiunto (+14 voci → 255). Copertura `ApiKeysPage.jsx` (351 righe) + `apps/immoweb/api_keys.py` (199 righe · router `/api/app/api-keys`) + `apps/v1/gateway.py` (Bearer consumer `/api/v1/*`) + `shared/auth/api_key.py` (issuance/hash/require_api_key) + `shared/models/api_key.py` (ApiKeyInDB/Public/Create/IssueResponse). **Onestà D-051 pricing dual-track**: Track B = €0,03/cred vs Track A = €0,05/cred (wallet contabilmente separati). Endpoint `/api/v1/*` documentati con costi (valuator 5, mortgages 1, legal 3, feed/me/health 0, staging ~15). Plaintext `omk_live_<28chars>` show-once + hash SHA-256. NO auto-ricarica Stripe (top-up manuale), NO UI usage detail, NO reportistica per-partner, NO rate limit, NO scoping endpoint, NO IP whitelist, NO webhook, NO rotazione. Widget embed via `<script data-key data-widget>`. |
+
+---
+
+## 🚦 Smoke Cap. 20 — 3 query attese dopo reindex
+
+1. **"Come emetto una nuova API key OMNIA? Posso rileggerla dopo?"** → top-1 atteso `20-api-keys-integrazioni.yaml::api-keys.emissione-show-once`
+2. **"Quanto costa un credito Track B? È diverso dai piani B2B?"** → top-1 atteso `20-api-keys-integrazioni.yaml::api-keys.pricing-track-b`
+3. **"Quali endpoint /api/v1 esistono? Come autentico?"** → top-1 atteso `20-api-keys-integrazioni.yaml::api-keys.api-v1-endpoints`
+
+Criteri smoke: top-1 chunk_id atteso OR **stesso file** `20-api-keys-integrazioni.yaml` · sim ≥ 0.08.
 
 ---
 

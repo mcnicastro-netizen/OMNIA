@@ -283,6 +283,22 @@ Riferimento: `memory/manuale/19-impostazioni-agenzia.md`
 
 ---
 
+## Cap. 20 · API Keys e integrazioni (Track B)
+
+Riferimento: `memory/manuale/20-api-keys-integrazioni.md`
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap20-apikeys-empty` | ApiKeysPage stato empty (message "Nessuna chiave attiva. Emetti la prima con il form sopra."). | 🟡 | Utile ma opzionale. |
+| 2 | `cap20-apikeys-create-form` | Form emissione con 4 input (name/initial_credits/partner_id/allowed_origins textarea) + bottone "Emetti chiave". | 🔴 | — |
+| 3 | `cap20-apikeys-issued-box` | Box verde plaintext show-once con `omk_live_...` in font monospace + bottone Copia. | 🔴 | Chiave per D-051 (mostra "one-time"). |
+| 4 | `cap20-apikeys-list` | Tabella chiavi attive con colonne Nome/Prefix/Partner/Saldo/Spesi/Stato/Azioni (top-up + revoca). | 🔴 | — |
+| 5 | `cap20-apikeys-docs` | Box grigio "Come si usa" con Authorization header + endpoint `/api/v1/*` + widget snippet HTML. | 🟡 | Utile ma opzionale. |
+
+**Totale Cap. 20**: 5 screenshot (3 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -331,3 +347,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 17) | Aggiunte 3 righe Cap. 17 · Domain Vault (domain-verify + sovereignty-policy + rdap-checker — 2 essenziali + 1 utile). Totale index = **75 screenshot** catalogati. |
 | Feb 2026 (Cap. 18) | Aggiunte 7 righe Cap. 18 · Notifiche e attività (email-welcome/agency-invite/lead-notification/saved-search/toast-success/toast-error/dashboard-kpi — 5 essenziali + 2 utili). Totale index = **82 screenshot** catalogati. |
 | Feb 2026 (Cap. 19) | Aggiunte 8 righe Cap. 19 · Impostazioni agenzia (settings-identity/fiscal/address/contact/website-external/website-template/billing-plans/billing-credits — 5 essenziali + 3 utili). Totale index = **90 screenshot** catalogati. |
+| Feb 2026 (Cap. 20) | Aggiunte 5 righe Cap. 20 · API Keys e integrazioni (apikeys-empty/create-form/issued-box/list/docs — 3 essenziali + 2 utili). Totale index = **95 screenshot** catalogati. |
