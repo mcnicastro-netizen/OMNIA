@@ -1,5 +1,72 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK O · Cap. 19 · Impostazioni agenzia (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — diciannovesimo capitolo del manuale operativo.
+**Fonte**: Founder Feb 2026 · "vai — Cap. 19 Impostazioni agenzia (v1 onesta · solo SettingsPage + billing stub esistenti)".
+
+### Cosa è cambiato
+
+- **Nuovo capitolo** `memory/manuale/19-impostazioni-agenzia.md` (~600 righe, 15 sottocapitoli): panoramica onesta della SettingsPage v1 (solo 5 sezioni anagrafica) + billing separato + tutti i limiti v1 documentati esplicitamente.
+- **Nuovo YAML HAL** `memory/manuale/hal/19-impostazioni-agenzia.yaml` (~630 righe, **14 voci**): `settings.cos-e`, `settings.dove-trovarlo`, `settings.sezione-identita`, `settings.sezione-fiscali`, `settings.sezione-indirizzo`, `settings.sezione-contatti`, `settings.sezione-sito-web`, `settings.permessi-ownership`, `settings.endpoint-patch`, `settings.billing-pagina-separata`, `settings.chi-non-e-coperto`, `settings.errori-comuni`, `settings.limitazioni-v1`, `settings.collegamenti`. Parser HAL: 14/14 chunk OK.
+- **`hal-index.json`** rigenerato: v0.15-cap19 · **241 voci totali** (Cap. 1-19) · 19 source files con MD5.
+- **`IMPORT_HAL.md`** v0.15 · nuova sezione Smoke Cap. 19 con 3 query attese e criterio sim ≥ 0.08.
+- **`CHANGELOG.md`**: questa entry.
+- **`SPRINT_STATUS.md`**: TASK O Cap. 19 aggiunto · progresso 19/26 (73%) · 241 voci HAL.
+- **`PRD.md`**: entry Feb 2026 TASK O in cima.
+- **`GAP.md`**: sezione Cap. 19 con ~15 punti onestà 1:1 al codice.
+- **`screenshots-index.md`**: +8 righe Cap. 19 (settings-identity/fiscal/address/contact/website-external/website-template/billing-plans/billing-credits). Totale **90 screenshot** catalogati.
+
+### Onestà documentale (D-051) — punti chiave Cap. 19
+
+**Cosa esiste v1**:
+- 5 sezioni SettingsPage (identità/fiscale/indirizzo/contatti/sito web mode) + endpoint `PATCH /api/app/agencies/me` owner-only
+- Sotto-schemi `AgencyFiscal`/`AgencyAddress`/`AgencyContact`/`AgencyBranding`/`AgencyWebsite` con validazione Pydantic
+- Modalità sito web: `external` (URL sito esistente + feed XML OMNIA) vs `omnia_template` (3 preview stub inattivi)
+- Billing separato in `/app/settings/billing`: piani Founders €49/€99/€249/€299 + 6 credit packages (€0,05/cred) + checkout Stripe + customer portal
+- Feature flag `STRIPE_ENABLED`: se `!= "true"` → HTTP 503 "Billing è in preparazione"
+
+**Cosa NON esiste v1**:
+- Campi schema-only senza UI: `branding.logo_url` (no uploader), `primary_color`/`accent_color` (no color picker), `fiscal.rea`, `fiscal.fiaip_code`, `contact.website` (duplicato), `address.country` (default IT hard-coded), `plan_type` (turnkey/whitelabel/hybrid — decisione backend), `group_id`/`branch_code` (M2.5.1 franchising)
+- Template omnia (minimal/elegant/bold) TUTTI marcati "presto disponibile" v1 senza click handler
+- Validazioni mancanti: formato P.IVA IT (11 cifre), formato CF IT (16 char), unicità VAT, autocomplete Google Places, geocoding lat/lng, validazione CAP, telefono
+- Operazioni non supportate: trasferimento ownership (`owner_id` immutabile), rinomina slug, import/export JSON, storico modifiche audit, rollback undo, preview render
+- Sezioni NON in Settings: Team (Cap. 13, pagina separata `/members`), Billing (§19.10 pagina separata), Domain (Cap. 17 pagina separata), API Keys (pagina separata), Notifiche preferenze (Cap. 18 NO UI v1)
+- Toast success = banner emerald embedded 2500ms (NON usa sonner Cap. 18)
+
+**Guardie ownership `PATCH /agencies/me`**:
+1. `require_roles("agency_admin", "super_admin")` decorator
+2. `agency_ids` non vuoto → altrimenti 404 `no_agency`
+3. `existing.owner_id == user.id` OR super_admin → altrimenti 403 `not_owner`
+4. Conseguenza: agency_admin **invitato** via magic-link (Cap. 13) NON può modificare Settings
+
+### Commit message suggerito
+
+```
+docs(cap19): Impostazioni agenzia · v1 onesta 5 sezioni + billing separato
+
+- Cap. 19 Impostazioni agenzia: MD (15 sottocapitoli) + YAML HAL (14 voci)
+- Copertura SettingsPage.jsx (358 righe) + agencies.py PATCH /me +
+  AgencyInDB + AgencyUpdate + BillingPage.jsx + billing/routes.py +
+  plans.py (LAUNCH Founders + POST_TRACTION + 6 credit packages)
+- Onesta' D-051: 5 sezioni UI (identità/fiscale/indirizzo/contatti/
+  sito web mode), 3 template omnia stub 'presto disponibile' inattivi,
+  campi schema-only senza UI (logo/colori/REA/FIAIP/country/plan_type/
+  group_id), NO validazione P.IVA/CF, NO transfer ownership, NO audit
+  settings, toast embedded (non sonner)
+- Billing separato /app/settings/billing: Founders €49/€99/€249/€299 +
+  crediti €0,05/cad + Stripe checkout/portal, STRIPE_ENABLED flag → 503
+- Team/Domini/API Keys/Notifiche = pagine SEPARATE
+- hal-index.json v0.15-cap19 (241 voci, 19 file)
+- IMPORT_HAL.md v0.15 + Smoke Cap. 19 (3 query)
+- screenshots-index.md +8 righe (90 tot)
+
+Ref: D-051 · direttiva Founder "vai — Cap. 19 Impostazioni agenzia".
+```
+
+---
+
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK N · Cap. 18 · Notifiche e attività (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — diciottesimo capitolo del manuale operativo, focus onestà su modulo NON esistente.

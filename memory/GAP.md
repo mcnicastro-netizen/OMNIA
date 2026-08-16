@@ -355,6 +355,48 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
   - `saved_search.frequency: instant|daily|weekly` salvato MA il cron IGNORA il valore e processa tutte le active ricerche ad ogni chiamata. Bug funzionale v1 documentato (backlog A-019).
 - **Backlog qualità prodotto Cap. 18**: A-017, A-018, A-019, A-020, A-021, A-022, A-023 (vedi ASPETTI_DA_APPROFONDIRE.md sezione Cap. 18).
 
+### Cap. 19 · Impostazioni agenzia (v1 onesta) — Feb 2026
+- **Copertura codice** 1:1:
+  - `SettingsPage.jsx` (358 righe): form 5 sezioni + save PATCH unico
+  - `agencies.py` (180 righe): `GET /me` (agency_admin+), `PATCH /me` (owner only + `require_roles("agency_admin", "super_admin")`)
+  - `shared/models/agency.py` (305 righe): `AgencyInDB`, `AgencyPublic`, `AgencyUpdate` + 5 sotto-schemi (`AgencyFiscal`, `AgencyAddress`, `AgencyContact`, `AgencyBranding`, `AgencyWebsite`)
+  - `BillingPage.jsx` (235 righe): piani + credit packages + polling status + toast sonner post-checkout
+  - `apps/billing/routes.py` (473 righe): 9 endpoints (`/plans`, `/subscription`, `/checkout`, `/credits/purchase`, `/status/{id}`, `/portal`, `/webhook`, `debit_credits` helper)
+  - `apps/billing/plans.py` (164 righe): `LAUNCH_PLANS` Founders (€49/€99/€249/€299) + `POST_TRACTION_PLANS` (€79/€179/€349/€499) + 6 credit packages (€0,05/cred hard-coded, no sconto volume)
+- **5 sezioni UI SettingsPage**:
+  1. Identità: `display_name` (obbligatorio 2-120) + `branding.tagline` (opzionale)
+  2. Fiscali: `fiscal.legal_name` + `vat_number` + `fiscal_code` (opzionali, nessuna validazione formato)
+  3. Indirizzo: `street` + `city` + `province` (uppercase auto 2 char) + `postal_code`
+  4. Contatti: `email` + `phone`
+  5. Sito web: 2 modalità mutually exclusive (external URL vs omnia_template stub)
+- **Onestà D-051 chiave**:
+  - 3 template omnia (minimal/elegant/bold) TUTTI marcati `settings.website_template_soon` "presto disponibile", NESSUN click handler funzionante
+  - Campi schema-only senza UI: `logo_url`, `primary_color`, `accent_color`, `rea`, `fiaip_code`, `contact.website`, `address.country` (IT hard-coded), `plan_type`, `group_id`, `branch_code`
+  - Nessuna validazione formato P.IVA IT (11 cifre), CF IT (16 char), CAP, telefono
+  - Nessun controllo unicità VAT tra agenzie
+  - Nessun geocoding lat/lng, nessun autocomplete Google Places
+  - Toast success = banner emerald embedded 2500ms (NON usa sonner Cap. 18)
+- **Guardie ownership** `PATCH /agencies/me`:
+  1. `require_roles("agency_admin", "super_admin")` decorator
+  2. `agency_ids` non vuoto → 404 `no_agency`
+  3. `owner_id == user.id` OR super_admin → altrimenti 403 `not_owner`
+  4. Conseguenza: **agency_admin invitato via magic-link (Cap. 13) NON può modificare Settings**. Solo il titolare fondatore. `owner_id` immutabile v1 (no transfer ownership).
+- **Billing pagina separata** (`/app/settings/billing`):
+  - Feature flag `STRIPE_ENABLED != "true"` → HTTP 503 `stripe_not_configured` "Billing è in preparazione"
+  - Piani Founders (LAUNCH default): Starter €49/€490, Pro €99/€990, Agency €249/€2490, Enterprise €299/€2990
+  - Fase POST_TRACTION: €79/€179/€349/€499
+  - 6 credit packages: pkg_400 (€20), pkg_1000 (€50), pkg_2000 (€100), pkg_5000 (€250), pkg_10000 (€500), pkg_20000 (€1000) — ratio €0,05/cred
+  - Checkout Stripe hosted + Customer portal Stripe
+  - Polling `GET /billing/status/{session_id}` post-redirect
+- **Chi NON è coperto in Settings v1** (pagine separate documentate onestamente):
+  - Team → Cap. 13 `/app/settings/members` (MembersPage)
+  - Billing → §19.10 `/app/settings/billing` (BillingPage)
+  - Custom Domain → Cap. 17 `/app/settings/domain-verify` (DomainVerifyPage)
+  - API Keys → `/app/api-keys` (ApiKeysPage, non ancora documentata)
+  - Notifiche preferenze → Cap. 18 (NO UI v1)
+  - Log audit settings → non esiste UI v1
+  - Cambio password/MFA/sessioni → pagina auth separata
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).

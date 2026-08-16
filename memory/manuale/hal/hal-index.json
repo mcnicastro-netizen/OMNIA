@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-16T09:35:39.654599+00:00",
-  "version": "v0.14-cap18",
+  "generated_at": "2026-08-16T10:02:38.845687+00:00",
+  "version": "v0.15-cap19",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -91,6 +91,11 @@
       "file": "18-notifiche-attivita.yaml",
       "md5": "e9b094b5fce65e983ba4957463e55716",
       "voci_count": 16
+    },
+    {
+      "file": "19-impostazioni-agenzia.yaml",
+      "md5": "5c2d44823b6eb9061622a88a87c31564",
+      "voci_count": 14
     }
   ],
   "voci": [
@@ -3830,6 +3835,259 @@
         "cap17"
       ],
       "domanda_naturale": "Come si integrano le notifiche con gli altri moduli di OMNIA?"
+    },
+    {
+      "id": "settings.cos-e",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Cos'è \"Impostazioni agenzia\" in OMNIA v1",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "settings",
+        "anagrafica",
+        "agenzia",
+        "panoramica",
+        "d-051"
+      ],
+      "domanda_naturale": "Cos'è il modulo Impostazioni di OMNIA? Cosa posso modificare della mia agenzia?"
+    },
+    {
+      "id": "settings.dove-trovarlo",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Dove trovo la Settings in OMNIA",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "settings",
+        "dove-trovarlo",
+        "ui",
+        "sidebar",
+        "route"
+      ],
+      "domanda_naturale": "Dove trovo la pagina Impostazioni? Come ci accedo?"
+    },
+    {
+      "id": "settings.sezione-identita",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Sezione 1 · Identità agenzia (display_name + tagline)",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "identita",
+        "display-name",
+        "tagline",
+        "branding",
+        "logo-mancante"
+      ],
+      "domanda_naturale": "Come cambio il nome della mia agenzia? Dove metto lo slogan?"
+    },
+    {
+      "id": "settings.sezione-fiscali",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Sezione 2 · Dati fiscali (legal_name + VAT + CF · REA/FIAIP schema-only)",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "fiscali",
+        "partita-iva",
+        "codice-fiscale",
+        "rea",
+        "fiaip",
+        "validazione"
+      ],
+      "domanda_naturale": "Come inserisco la Partita IVA della mia agenzia? Dove va il Codice Fiscale?"
+    },
+    {
+      "id": "settings.sezione-indirizzo",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Sezione 3 · Indirizzo agenzia (street/city/province/CAP · country IT default)",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "indirizzo",
+        "address",
+        "cap",
+        "provincia",
+        "portale-pubblico",
+        "geocoding-no"
+      ],
+      "domanda_naturale": "Come metto l'indirizzo della mia agenzia? La provincia va in due lettere?"
+    },
+    {
+      "id": "settings.sezione-contatti",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Sezione 4 · Contatti pubblici (email + telefono agenzia)",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "contatti",
+        "email",
+        "telefono",
+        "portale-pubblico",
+        "contact-website-schema-only"
+      ],
+      "domanda_naturale": "Dove metto l'email di contatto della mia agenzia visibile ai clienti?"
+    },
+    {
+      "id": "settings.sezione-sito-web",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Sezione 5 · Sito web · external URL vs omnia_template (3 stub inattivi v1)",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "sito-web",
+        "website-mode",
+        "external",
+        "omnia-template",
+        "template-stub",
+        "feed-xml",
+        "presto-disponibile"
+      ],
+      "domanda_naturale": "Come scelgo se usare il mio sito esistente o farmi un template OMNIA?"
+    },
+    {
+      "id": "settings.permessi-ownership",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Permessi Settings · solo owner puo' salvare (agency_admin invitato NO)",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "permessi",
+        "ownership",
+        "owner-id",
+        "403-not-owner",
+        "agency-admin",
+        "invitato",
+        "transfer-ownership-no"
+      ],
+      "domanda_naturale": "Perché non riesco a salvare le impostazioni? Chi puo' modificarle?"
+    },
+    {
+      "id": "settings.endpoint-patch",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Endpoint PATCH /api/app/agencies/me · save unico + toast embedded",
+      "modulo": "Impostazioni",
+      "livello": "avanzato",
+      "tags": [
+        "impostazioni",
+        "api",
+        "patch",
+        "agencies-me",
+        "agency-update",
+        "cleanGroup",
+        "model-dump",
+        "toast-embedded"
+      ],
+      "domanda_naturale": "Come funziona tecnicamente il salvataggio delle Impostazioni? Che endpoint chiama?"
+    },
+    {
+      "id": "settings.billing-pagina-separata",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Billing · pagina separata (/app/settings/billing) piani Founders + credit packages + Stripe",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "billing",
+        "stripe",
+        "piani",
+        "founders",
+        "credit-packages",
+        "checkout",
+        "customer-portal",
+        "stripe-enabled",
+        "503"
+      ],
+      "domanda_naturale": "Dove attivo un piano OMNIA? Come compro crediti? Come funzionano i Founders €49/€99/€249?"
+    },
+    {
+      "id": "settings.chi-non-e-coperto",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Cosa NON è in Settings v1 (Team/Domini/Notifiche/API Keys stanno in pagine separate)",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "cosa-non-copre",
+        "pagine-separate",
+        "team",
+        "api-keys",
+        "domain",
+        "notifiche",
+        "membri",
+        "custom-domain"
+      ],
+      "domanda_naturale": "Perché nella Settings non trovo la gestione team, il dominio custom, le notifiche o le API keys?"
+    },
+    {
+      "id": "settings.errori-comuni",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Errori comuni Settings (403 not_owner, 404 no_agency, template stub, logo mancante)",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "errori",
+        "403",
+        "404",
+        "not-owner",
+        "no-agency",
+        "template-stub",
+        "logo-mancante",
+        "validazione"
+      ],
+      "domanda_naturale": "Perché non riesco a salvare le Settings? Perche' i template non funzionano? Come faccio il logo?"
+    },
+    {
+      "id": "settings.limitazioni-v1",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Limiti v1 Impostazioni agenzia (D-051 onesto · elenco esaustivo)",
+      "modulo": "Impostazioni",
+      "livello": "intermedio",
+      "tags": [
+        "impostazioni",
+        "limiti",
+        "cosa-non-fa",
+        "no-uploader-logo",
+        "no-color-picker",
+        "no-rea",
+        "no-fiaip",
+        "no-country-selector",
+        "no-geocoding",
+        "no-validazione-vat",
+        "no-transfer-ownership",
+        "no-audit-settings",
+        "template-stub",
+        "d-051"
+      ],
+      "domanda_naturale": "Cosa NON fa la Settings v1? Ha uploader logo, color picker, validazione VAT, transfer ownership, geocoding indirizzo, audit trail modifiche, rollback?"
+    },
+    {
+      "id": "settings.collegamenti",
+      "file": "19-impostazioni-agenzia.yaml",
+      "titolo": "Collegamenti Settings → altri capitoli (Cap. 1/6/8/13/17/18)",
+      "modulo": "Impostazioni",
+      "livello": "base",
+      "tags": [
+        "impostazioni",
+        "collegamenti",
+        "cross-ref",
+        "cap1",
+        "cap6",
+        "cap8",
+        "cap13",
+        "cap17",
+        "cap18"
+      ],
+      "domanda_naturale": "Come si integra la Settings con gli altri moduli di OMNIA?"
     }
   ],
   "stats": {
@@ -3854,5 +4112,5 @@
       "17": 15
     }
   },
-  "total_voci": 227
+  "total_voci": 241
 }

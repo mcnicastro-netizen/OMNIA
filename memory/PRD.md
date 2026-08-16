@@ -1,10 +1,18 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 18 · Notifiche e attività)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 19 · Impostazioni agenzia)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (Feb 2026 — 📖 TASK O · Cap. 18 · Notifiche e attività · D-051 estremo)**:
+- **Ultimo update (Feb 2026 — 📖 TASK O · Cap. 19 · Impostazioni agenzia · v1 onesta)**:
+  - ✅ **Cap. 19 · Impostazioni agenzia**: 15 sottocapitoli + **14 voci HAL YAML** (`settings.cos-e`, `settings.dove-trovarlo`, `settings.sezione-identita`, `settings.sezione-fiscali`, `settings.sezione-indirizzo`, `settings.sezione-contatti`, `settings.sezione-sito-web`, `settings.permessi-ownership`, `settings.endpoint-patch`, `settings.billing-pagina-separata`, `settings.chi-non-e-coperto`, `settings.errori-comuni`, `settings.limitazioni-v1`, `settings.collegamenti`).
+  - ✅ **Onestà D-051**: la SettingsPage v1 copre **solo 5 sezioni anagrafica** (identità/fiscale/indirizzo/contatti/modalità sito). Template omnia (minimal/elegant/bold) TUTTI stub "presto disponibile" inattivi. Nessuna UI per logo/colori/REA/FIAIP/plan_type. Nessuna validazione P.IVA/CF/CAP/telefono. Owner-only PATCH (agency_admin invitato → 403 not_owner). Toast success = banner emerald embedded (NON sonner Cap. 18). Team/API Keys/Domain/Notifiche/Billing = pagine separate.
+  - ✅ **Billing pagina separata** (`/app/settings/billing`, `BillingPage.jsx` 235 righe): piani Founders €49/€99/€249/€299 + 6 credit packages (€0,05/cred, ratio 20 cred/€, no sconto volume) + Stripe checkout/portal. Feature flag `STRIPE_ENABLED != "true"` → HTTP 503 "Billing è in preparazione".
+  - ✅ **`hal-index.json` rigenerato**: v0.15-cap19, **241 voci totali** (Cap. 1-19), 19 source files.
+  - 📸 Screenshots-index: +8 righe Cap. 19. Totale **90 screenshot**.
+  - 📈 **Progresso manuale**: 19/26 capitoli (73%). Totale voci HAL: **241**.
+
+- **Ultimo update precedente (Feb 2026 — 📖 TASK O · Cap. 18 · Notifiche e attività · D-051 estremo)**:
   - ✅ **Cap. 18 · Notifiche e attività**: 18 sottocapitoli + **16 voci HAL YAML** (`notifiche.cos-e`, `notifiche.dove-trovarlo`, `notifiche.canali-attivi`, `notifiche.email-panoramica`, `notifiche.template-welcome-password`, `notifiche.template-agency-invite`, `notifiche.template-lead-notification`, `notifiche.template-saved-search-alert`, `notifiche.toast-in-app`, `notifiche.cron-saved-searches`, `notifiche.preferenze-utente`, `notifiche.audit-trail-interno`, `notifiche.dashboard-vs-activity-feed`, `notifiche.errori-comuni`, `notifiche.limitazioni-v1`, `notifiche.collegamenti`).
   - ✅ **Onestà D-051 estrema**: Cap. 18 documenta un modulo che v1 **NON esiste**. Il capitolo elenca esaustivamente cosa NON c'è (no router `/notifications`, no Bell icon, no activity feed, no push/SMS/WhatsApp, no retry queue, no webhook Resend, no UI preferenze) e documenta invece cosa esiste: 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + toast sonner (~4-5s ephemera) + cron saved-search super_admin (frequency flag ignorato v1) + 10 audit collections Mongo non-UI + Dashboard 6 KPI counter (che NON è activity feed).
   - ✅ **Dead code documentato**: schema `User.notification_channels: List[Literal["email", "push"]]` accetta `"push"` ma nessun sender push implementato. `saved_search.frequency` (instant/daily/weekly) salvato ma cron ignora il valore.

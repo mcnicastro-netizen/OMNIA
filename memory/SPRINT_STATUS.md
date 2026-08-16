@@ -39,6 +39,7 @@
 | **N** Manuale Cap. 17 Domain Vault (sovranità digitale D-054) | ✅ | `17-domain-vault.md` + 15 voci YAML · index **211 voci** · v0.13-cap17 · promessa D-054, 3 componenti (sovereignty confirm + custom domain DNS + RDAP checker pubblico), TXT anti-takeover + CNAME_TARGET, audit trail append-only, help-to-connect NON transfer. Copertura `domain_vault.py` (155 righe) + `custom_domain.py` (454 righe) + `domain_check.py` (359 righe) + `DomainVerifyPage.jsx` + `DomainSovereigntyPolicyPage.jsx`. |
 | **N-post** Fix RAG Pattern A + B + Micro YAML | ✅ | Escluso `manuale/*.md` da ingest, deprecato `immobili.importare-xml` (Cap. 3 → Cap. 14), arricchite `domanda_naturale` `team.limitazioni-v1` + `social.limitazioni-v1`. Smoke ristampato **14/15 PASS** (9/9 Cap. 13/14/15 · 3/3 Cap. 16 · 2/3 Cap. 17 · 1 collision Cap.8 vs Cap.17 pre-esistente). |
 | **O** Manuale Cap. 18 Notifiche e attività | ✅ | `18-notifiche-attivita.md` + 16 voci YAML · index **227 voci** · v0.14-cap18 · **capitolo D-051 estremo**: 7 template Resend (`welcome`, `password_reset`, `agency_invite`, `lead_notification`, `saved_search_alert`, `founders_welcome`, `founders_admin_notification`) + toast in-app sonner + cron saved-search super_admin (frequency flag ignorato v1) + audit trail 10 collezioni Mongo non-UI + Dashboard 6 KPI counter. Documenta NO modulo dedicato / NO Bell icon / NO activity feed / NO push/SMS/WhatsApp / NO retry queue / NO webhook Resend / NO UI preferenze. `push` in schema utente = dead code. Copertura `shared/email/client.py` (117 righe) + `apps/immoweb/cron.py` + `apps/immocloud/saved_searches.py` + `sonner.jsx`. Backlog A-017 → A-023 (7 voci qualità prodotto proposte). |
+| **P** Manuale Cap. 19 Impostazioni agenzia | ✅ | `19-impostazioni-agenzia.md` + 14 voci YAML · index **241 voci** · v0.15-cap19 · 5 sezioni SettingsPage (identità/fiscale/indirizzo/contatti/modalità sito) + PATCH `/agencies/me` owner-only + billing SEPARATO (piani Founders €49/€99/€249/€299 + 6 credit packages €0,05/cred + Stripe checkout/portal + STRIPE_ENABLED flag → 503). **Onestà D-051**: 3 template omnia stub "presto disponibile" inattivi, NO uploader logo/color picker, campi schema-only (logo_url/primary_color/REA/FIAIP/contact.website/country/plan_type), NO validazione P.IVA/CF, NO transfer ownership (owner_id immutabile), NO audit settings, toast embedded (NON sonner). Team/Domini/API Keys/Notifiche = pagine separate. Copertura `SettingsPage.jsx` (358 righe) + `agencies.py` + `AgencyInDB` + `BillingPage.jsx` (235 righe) + `plans.py`. |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -61,10 +62,11 @@
 | 16 | Compliance Portali (deep-dive) | 14 | ✅ v1.0 (5 HARD → 7 codici, 4 SOFT, 14 classi APE, ghost label missing_rent, feed vs sync, D.Lgs 192/2005 + AGCM contesto, distinto da Cap. 6 operativo) |
 | 17 | Domain Vault (sovranità digitale) | 15 | ✅ v1.0 (D-054 promise, sovereignty confirm + custom domain DNS + RDAP checker, TXT anti-takeover, audit `domain_vault_events`, help-to-connect NON transfer) |
 | 18 | Notifiche e attività (D-051 estremo) | 16 | ✅ v1.0 (7 template Resend + toast sonner + cron saved-search super_admin + 10 audit collections non-UI + Dashboard 6 KPI · NO Bell / NO activity feed / NO push/SMS/WhatsApp / NO retry queue / `push` dead code) |
-| 19–26 | — | — | ⏳ |
+| 19 | Impostazioni agenzia (v1 onesta) | 14 | ✅ v1.0 (SettingsPage 5 sezioni identità/fiscale/indirizzo/contatti/sito mode · owner-only PATCH · 3 template omnia stub inattivi · NO logo/color/REA/FIAIP UI · billing separato Founders €49/€99/€249 + crediti €0,05 + Stripe) |
+| 20–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **18/26 capitoli (69%)** · **227 voci HAL** · **79 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **19/26 capitoli (73%)** · **241 voci HAL** · **90 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -87,7 +89,13 @@
 | Post Cap. 16 | **196 voci** ⏳ reindex live pending (super_admin) |
 | Post Cap. 17 | **211 voci** ✅ reindex live confermato (Fix RAG · smoke 14/15 PASS) |
 | Post Cap. 18 | **227 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 19 | **241 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
+**Smoke Cap. 19** (dopo reindex Founder):
+1. *Come cambio il nome della mia agenzia in OMNIA?* → `settings.sezione-identita` (o `settings.cos-e`)
+2. *Perché non riesco a modificare le impostazioni? Sono agency_admin invitato.* → `settings.permessi-ownership` (o `settings.errori-comuni`)
+3. *Dove attivo un piano OMNIA? Come funzionano i Founders?* → `settings.billing-pagina-separata`
+
 **Smoke Cap. 18** (dopo reindex Founder):
 1. *Esiste una pagina Notifiche o una Bell icon in OMNIA?* → `notifiche.cos-e` (o `notifiche.limitazioni-v1`)
 2. *Quali email invia OMNIA automaticamente?* → `notifiche.email-panoramica`
