@@ -299,6 +299,22 @@ Riferimento: `memory/manuale/20-api-keys-integrazioni.md`
 
 ---
 
+## Cap. 21 · Valutatore immobiliare (dual-tier B2C · post B2C-VAL-01)
+
+Riferimento: `memory/manuale/21-valutatore-immobiliare.md`
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `cap21-valuator-two-tier-cards` | ValuatorPage con le 2 card side-by-side (BASE GRATIS attiva · UNI 10750+PDF €2,99) + banner anonimo ambra. | 🔴 | Chiave per D-051 (mostra il gate commerciale). |
+| 2 | `cap21-valuator-base-result-upsell` | Risultato stima base (valore + range + €/m²) + banner emerald upsell "Passa a UNI · €2,99" · NESSUN bottone PDF visibile. | 🔴 | — |
+| 3 | `cap21-valuator-uni-form-pro-section` | Tab UNI attivo con sezione superfici commerciali + coefficienti merito espansi + bottone verde "Calcola UNI · €2,99". | 🔴 | — |
+| 4 | `cap21-property-detail-cta-box` | PropertyDetailPage con box dual-CTA "Quanto vale questo immobile? [Stima gratuita] [Report UNI €2,99]" sotto il box mutui. | 🟡 | Utile ma opzionale. |
+| 5 | `cap21-checkout-success` | Pagina `/it/cloud/checkout/success` con emoji ✅ + polling status Stripe + CTA "Torna al valutatore". | 🟡 | Utile ma opzionale. |
+
+**Totale Cap. 21**: 5 screenshot (3 essenziali, 2 utili).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -348,3 +364,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 18) | Aggiunte 7 righe Cap. 18 · Notifiche e attività (email-welcome/agency-invite/lead-notification/saved-search/toast-success/toast-error/dashboard-kpi — 5 essenziali + 2 utili). Totale index = **82 screenshot** catalogati. |
 | Feb 2026 (Cap. 19) | Aggiunte 8 righe Cap. 19 · Impostazioni agenzia (settings-identity/fiscal/address/contact/website-external/website-template/billing-plans/billing-credits — 5 essenziali + 3 utili). Totale index = **90 screenshot** catalogati. |
 | Feb 2026 (Cap. 20) | Aggiunte 5 righe Cap. 20 · API Keys e integrazioni (apikeys-empty/create-form/issued-box/list/docs — 3 essenziali + 2 utili). Totale index = **95 screenshot** catalogati. |
+| 16 Ago 2026 (Cap. 21) | Aggiunte 5 righe Cap. 21 · Valutatore immobiliare (two-tier-cards / base-result-upsell / uni-form-pro / property-detail-cta / checkout-success — 3 essenziali + 2 utili). Totale index = **100 screenshot** catalogati. |

@@ -1,5 +1,43 @@
 # OMNIA — Changelog
 
+## 2026-08-16 — 📖 Cap. 21 · Valutatore immobiliare (Manuale + HAL YAML · post B2C-VAL-01)
+
+**Tipo**: Feature docs — ventunesimo capitolo del manuale operativo, redazione post-merge del codice B2C-VAL-01.
+**Fonte**: Founder task SYNC-01 · Cursor redige il capitolo + Founder allega i 3 file · Emergent copia verbatim e valida.
+**Regola operativa**: Emergent = fonte di verità per codice + docs → tutti i commit su GitHub `main` partono da qui via "Save to GitHub".
+
+### Cosa è cambiato
+
+- **Nuovo capitolo** `memory/manuale/21-valutatore-immobiliare.md` (297 righe · 12 sezioni)
+- **Nuovo outline** `memory/manuale/21-valutatore-OUTLINE.md` (114 righe · mappa struttura + rationale)
+- **Nuovo YAML HAL** `memory/manuale/hal/21-valutatore-immobiliare.yaml` (376 righe · **12 voci `valutatore.*`**):
+  `cos-e`, `tier-base-gratis`, `tier-uni-pdf`, `differenza-base-uni`, `passi-stima-base`, `passi-report-uni`, `agenzie-crediti`, `affidabilita-dati`, `limitazioni`, `errori-comuni`, `privacy-lead`, `collegamenti`. Parser HAL: **12/12 chunk OK**.
+- **Micro-fix voce** `valutatore.errori-comuni`: quotate le tag `"401"`, `"402"`, `"403"`, `"429"` per compatibilità parser YAML (rilevato da sanity check).
+- **Pytest regression B2C-VAL-01**: **10/10 verdi** (nessuna regressione dopo Cap. 21).
+- **NO reindex** `hal-index.json` (regola Founder: batch a fine manuale, Cap. 26).
+- **Aggiornati**: `IMPORT_HAL.md` v0.17 header (267 voci · 21 file), `SPRINT_STATUS.md` (21/26 · 267 voci · B2C-VAL-01 ✅ · Cap. 21 ✅), `GAP.md` sezione Pricing B2C, `screenshots-index.md` +5 righe Cap. 21 (totale 100).
+
+### Commit message suggerito
+
+```
+docs(manuale): Cap. 21 Valutatore immobiliare + 12 voci HAL (post B2C-VAL-01)
+
+- 21-valutatore-immobiliare.md (297 righe · 12 sezioni)
+- hal/21-valutatore-immobiliare.yaml (12 voci valutatore.* · parser 12/12)
+- 21-valutatore-OUTLINE.md (mappa struttura)
+- IMPORT_HAL.md v0.17 (267 voci · 21 file · reindex batch a fine manuale)
+- SPRINT_STATUS.md → 21/26 · 267 voci · Cap. 21 ✅
+- GAP.md → sezione Cap. 21 sotto Pricing B2C
+- CHANGELOG.md → questa entry
+- screenshots-index.md +5 righe Cap. 21 (100 tot)
+- NO reindex hal-index.json (regola Founder: batch a fine manuale)
+
+Ref: task SYNC-01 · Cursor bozza + Founder allega + Emergent commit.
+```
+
+---
+
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK P · Cap. 20 · API Keys e integrazioni (Track B / API Gateway)
 
 **Tipo**: Feature docs — ventesimo capitolo del manuale operativo.

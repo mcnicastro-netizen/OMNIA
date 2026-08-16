@@ -65,10 +65,14 @@
 | 18 | Notifiche e attività (D-051 estremo) | 16 | ✅ v1.0 (7 template Resend + toast sonner + cron saved-search super_admin + 10 audit collections non-UI + Dashboard 6 KPI · NO Bell / NO activity feed / NO push/SMS/WhatsApp / NO retry queue / `push` dead code) |
 | 19 | Impostazioni agenzia (v1 onesta) | 14 | ✅ v1.0 (SettingsPage 5 sezioni identità/fiscale/indirizzo/contatti/sito mode · owner-only PATCH · 3 template omnia stub inattivi · NO logo/color/REA/FIAIP UI · billing separato Founders €49/€99/€249 + crediti €0,05 + Stripe) |
 | 20 | API Keys e integrazioni (Track B / API Gateway) | 14 | ✅ v1.0 (dual-track pricing €0,03 vs €0,05 · plaintext omk_live_ show-once · endpoint `/api/v1/*` valuator 5cr/mortgages 1cr/legal 3cr/feed 0 · widget embed script · NO auto-ricarica/UI usage detail/rate limit/webhook/rotazione) |
-| 21–26 | — | — | ⏳ |
+| 21 | Valutatore immobiliare (dual-tier B2C · post B2C-VAL-01) | 12 | ✅ v1.0 (BASE 1×/12mo gratis + UNI €2,99 Stripe + PDF · paywall server-side · upsell CTA · agent pass-through crediti agenzia · fascicolo bypass) |
+| 22–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **20/26 capitoli (77%)** · **255 voci HAL** · **95 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **21/26 capitoli (81%)** · **267 voci HAL** · **100 screenshot placeholder** in `screenshots-index.md`
+**Task recenti chiusi**:
+- ✅ **B2C-VAL-01** (16-Ago-2026): gate valutatore dual-tier + Stripe checkout €2,99 + paywall PDF + pytest 10/10 verdi
+- ✅ **Cap. 21 Manuale** (16-Ago-2026): 12 voci `valutatore.*` post-merge B2C-VAL-01
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -93,6 +97,7 @@
 | Post Cap. 18 | **227 voci** ⏳ reindex live pending (super_admin) |
 | Post Cap. 19 | **241 voci** ⏳ reindex live pending (super_admin) |
 | Post Cap. 20 | **255 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 21 | **267 voci** ⏳ reindex live pending (batch a fine manuale) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
 **Smoke Cap. 20** (dopo reindex Founder):
 1. *Come emetto una nuova API key OMNIA? Posso rileggerla dopo?* → `api-keys.emissione-show-once`
