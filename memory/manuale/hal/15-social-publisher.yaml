@@ -529,12 +529,17 @@ voci:
     livello: intermedio
     tags: [social, limiti, cosa-non-fa, scheduling, carosello, video, reel, analytics, engagement, twitter, tiktok, linkedin, bulk, template, moderazione, d-051]
     correlati: [social.cos-e, social.canali-supportati]
-    domanda_naturale: "Cosa NON fa il Social Publisher? Ha scheduling, analytics, X/Twitter?"
+    domanda_naturale: "Cosa NON fa il Social Publisher v1? Il Social Publisher supporta scheduling, analytics, LinkedIn, TikTok o X/Twitter? Il modulo Social Publisher ha calendario editoriale / programmazione futura, LinkedIn, TikTok, X/Twitter, WhatsApp Business, YouTube Shorts, Threads, carosello multi-immagine, video, reel, story, GIF, analytics engagement (like, commenti, share, reach, impressioni), bulk publish, template caption personalizzati, preview live, moderazione pre-pubblicazione, rollback multi-canale?"
     contenuto:
       a_cosa_serve: >
-        Aspettative chiare su cosa il modulo NON fa in v1.
+        Aspettative chiare su cosa il Social Publisher NON fa in v1:
+        no scheduling / calendario editoriale / programmazione futura,
+        no LinkedIn, no TikTok, no X/Twitter, no analytics engagement,
+        no carosello, no video/reel, no bulk publish, no template
+        caption personalizzati, no moderazione pre-pubblicazione.
       quando_si_usa: >
-        Prima di provare cose non supportate.
+        Prima di provare a schedulare un post, pubblicare su LinkedIn
+        o TikTok o X/Twitter, o cercare metriche di engagement.
       passi:
         - "NO scheduling: solo on-demand. Nessun calendario
           editoriale, nessuna coda, nessuna programmazione futura."

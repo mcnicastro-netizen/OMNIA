@@ -107,86 +107,57 @@ voci:
       - "[SCREEN: cap3-import-csv-flow]"
 
   - id: immobili.importare-xml
-    titolo: Importare immobili da XML (rapido)
+    titolo: Import XML rapido (deprecato, vedi Cap. 14)
     modulo: Immobili
     widget: null
     pubblico: [titolare, agente, segreteria]
     livello: intermedio
-    tags: [immobili, import, xml, migrazione, feed]
+    tags: [immobili, deprecato-cap14, redirect]
     correlati:
       - immobili.importare-csv
-      - immobili.importare-xml-universale
-    domanda_naturale: "Come importo immobili da un file o feed XML?"
+    domanda_naturale: "Riferimento storico: puntatore a Cap. 14 Import XML."
     contenuto:
       a_cosa_serve: >
-        Caricare immobili quando hai già un feed XML dal vecchio
-        gestionale o un file XML esportato.
+        Voce di puntamento. Il flusso operativo Import XML è descritto
+        in dettaglio nel Cap. 14 Import XML (Migrazione): vedi
+        import.cos-e, import.dove-trovarlo, import.flusso-preview-commit,
+        import.file-xml-requisiti.
       quando_si_usa: >
-        Piccole/medie migrazioni. Per file molto grandi o migrazioni
-        con controlli usa invece immobili.importare-xml-universale.
+        Per chi cerca "import xml rapido" nella documentazione storica:
+        seguire i puntatori Cap. 14 sopra.
       passi:
-        - Clicca "Immobili → ↓ Importa" e apri la scheda "XML".
-        - Scegli "Da URL" (incolla l'indirizzo del feed pubblico)
-          oppure "Incolla contenuto" (incolla il testo XML).
-        - Clicca "Importa".
-        - Rivedi il risultato.
-      errori_comuni:
-        - problema: "L'URL non è pubblico"
-          soluzione: >
-            Il feed deve essere raggiungibile da internet senza login.
-            Se il vecchio gestionale espone il feed con autenticazione,
-            usa la modalità "Incolla contenuto" salvando prima l'XML
-            in locale.
+        - Vedi Cap. 14 Import XML per il flusso Preview → Commit
+          completo (session TTL 10 minuti, dedupe per reference_code,
+          dry-run, tabelle mapping).
+      errori_comuni: []
       permessi:
-        - Titolare, agente, segreteria (come agente)
+        - Rimando Cap. 14 (permessi definiti in import.dove-trovarlo)
     screenshot: []
 
   - id: immobili.importare-xml-universale
-    titolo: Import XML universale con analisi (Menu Importa)
+    titolo: Import XML universale (deprecato, vedi Cap. 14)
     modulo: Immobili
     widget: null
     pubblico: [titolare]
     livello: intermedio
-    tags: [immobili, import, xml, migrazione, universal-importer]
+    tags: [immobili, deprecato-cap14, redirect]
     correlati:
-      - immobili.importare-xml
       - immobili.importare-csv
-    domanda_naturale: "Devo migrare molti immobili da un altro
-      gestionale, come faccio?"
+    domanda_naturale: "Riferimento storico: puntatore a Cap. 14 Import XML universale."
     contenuto:
       a_cosa_serve: >
-        Migrazioni grosse (fino a 50 MB per file) con report preliminare
-        di analisi: quanti immobili, per tipologia, per contratto, per
-        città, con warning su foto e prezzo mancanti.
+        Voce di puntamento. Il flusso Import XML universale (analisi
+        Preview + Commit, dedupe, tabelle mapping) è documentato nel
+        Cap. 14 Import XML (Migrazione).
       quando_si_usa: >
-        Al primo import da un vecchio gestionale, o quando vuoi vedere
-        cosa c'è nel file prima di scriverlo in ImmoWeb.
+        Per chi cerca la voce storica: seguire import.cos-e (Cap. 14)
+        e correlati.
       passi:
-        - Dalla barra a sinistra clicca "Importa" (visibile solo al
-          titolare).
-        - Trascina il file .xml (max 50 MB) o cliccalo per sceglierlo.
-        - Clicca "Analizza contenuto".
-        - Rivedi il report ripartizioni per tipologia, contratto,
-          città, warning immobili senza foto o senza prezzo,
-          anteprima primi 5.
-        - Attiva "Salta immobili già presenti" (consigliato, usa il
-          codice di riferimento).
-        - Opzionalmente attiva "Simulazione" per un dry-run.
-        - Clicca "Importa in OMNIA" e conferma.
-      errori_comuni:
-        - problema: "File troppo grande (max 50 MB)"
-          soluzione: >
-            Chiedi al vecchio gestionale di esportare per zona o per
-            agente in file più piccoli.
-        - problema: "Divergenze rilevate nel report"
-          soluzione: >
-            Non è bloccante. Sono campi non standard che potrai
-            completare dopo l'import. Se il fornitore XML può fornire
-            uno schema standard (OSF) è meglio.
+        - Vedi Cap. 14 Import XML per il flusso completo.
+      errori_comuni: []
       permessi:
-        - Solo titolare (agency_admin)
-    screenshot:
-      - "[SCREEN: cap3-xml-import-preview]"
+        - Rimando Cap. 14 (permessi definiti in import.dove-trovarlo)
+    screenshot: []
 
   # ---------- 3.3 · Foto ----------
 

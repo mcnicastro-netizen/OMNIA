@@ -252,10 +252,13 @@ async def _list_corpus_files() -> List[Path]:
         p = MEMORY_ROOT / name
         if p.exists():
             files.append(p)
-    if MANUAL_DIR.exists():
-        # Solo i .md del manuale (prosa). I .yaml sono gestiti da _list_hal_yaml_files.
-        for f in sorted(MANUAL_DIR.glob("*.md")):
-            files.append(f)
+    # NOTA (Feb 2026 · Fix RAG Pattern A):
+    # I file .md del manuale (memory/manuale/*.md) NON vengono più indicizzati.
+    # I chunk atomici YAML (memory/manuale/hal/*.yaml) sono la SOLA sorgente
+    # di retrieval per il manuale. I .md restano documenti di lettura umana.
+    # Motivazione: il chunker word-window sulle prose markdown produceva
+    # blocchi da ~500 parole che vincevano contro i chunk atomici YAML in
+    # cosine similarity, degradando la precisione retrieval (Pattern A).
     return files
 
 
@@ -281,7 +284,21 @@ async def ingest_corpus(force: bool = False) -> Dict[str, Any]:
     - .yaml del manuale HAL: 1 voce = 1 chunk atomico (chunk_id = v["id"]).
     """
     db = Database.get()
-    report = {"scanned": 0, "reingested": [], "skipped": [], "total_chunks": 0}
+    report = {"scanned": 0, "reingested": [], "skipped": [], "removed": [], "total_chunks": 0}
+
+    # --- 0. Cleanup: rimuovi chunk di file non più nel corpus attivo -----
+    # Fix Pattern A (Feb 2026): dopo l'esclusione di memory/manuale/*.md
+    # dal corpus RAG, i chunk .md del manuale eventualmente presenti in DB
+    # da vecchi reindex vanno eliminati per evitare che continuino a essere
+    # recuperati come fonti dominanti.
+    active_files = {p.name for p in await _list_corpus_files()}
+    active_files.update(p.name for p in _list_hal_yaml_files())
+    orphan_files = await db.hal_knowledge_chunks.distinct("file")
+    for fname in orphan_files:
+        if fname not in active_files:
+            res = await db.hal_knowledge_chunks.delete_many({"file": fname})
+            if res.deleted_count:
+                report["removed"].append({"file": fname, "chunks": res.deleted_count})
 
     # --- 1. Corpus .md tradizionale ------------------------------------
     for path in await _list_corpus_files():
@@ -328,7 +345,7 @@ async def ingest_corpus(force: bool = False) -> Dict[str, Any]:
         report["total_chunks"] += len(chunks)
 
     # Rebuild TF-IDF index only if something actually changed
-    if report["reingested"] or force:
+    if report["reingested"] or report["removed"] or force:
         await _rebuild_tfidf_index()
     return report
 

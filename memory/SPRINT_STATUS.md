@@ -108,7 +108,8 @@
 | 6 | Cap. 13+ manuale (candidati: HAL Legal · Team & Ruoli · Impostazioni · Domain Vault) | 🟢 |
 ---
 ## Micro-fix aperti
-_Tutti chiusi. G-bis retrieval Cap. 9 applicato (Feb 2026)._
+_**Fix RAG Pattern A + B + Micro YAML applicato Feb 2026**: escluso `manuale/*.md` da ingest, deprecato `immobili.importare-xml` (Cap. 3 → Cap. 14), arricchite `domanda_naturale` `team.limitazioni-v1` + `social.limitazioni-v1`. Smoke ristampato: **14/15 PASS** (9/9 Cap. 13/14/15 · 3/3 Cap. 16 · 2/3 Cap. 17 · 1 collision Cap.8 vs Cap.17 pre-esistente)._
+_G-bis retrieval Cap. 9 applicato (Feb 2026)._
 _**Rate limit HAL chat vs improve = SEPARATI CONFERMATO** (60/h ciascuno, no change al_agent.py — decisione Founder Feb 2026)._
 _**`chunk_id` in `/ask` sources[]** = fix applicato + test aggiornati + su GitHub `main` (Feb 2026)._
 

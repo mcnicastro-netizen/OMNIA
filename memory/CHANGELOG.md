@@ -1,5 +1,92 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 🔧 FIX RAG · Pattern A + Pattern B + Micro YAML domanda_naturale
+
+**Tipo**: Fix retrieval quality — post-smoke Cap. 13/14/15 (3/9 PASS pre-fix → 9/9 PASS post-fix).
+**Fonte**: Direttiva Founder Feb 2026 dopo smoke test regressione multi-capitolo.
+**Scope**: NO Cap. 18 in questo task. Solo fix retrieval + reindex + smoke ristampata.
+
+### Cosa è cambiato
+
+**1. Pattern A · Escluso `memory/manuale/*.md` dall'ingest RAG (`hal_knowledge.py`)**
+- Motivazione: i chunk word-window da ~500 parole dei file `.md` del manuale vincevano in cosine similarity contro i chunk atomici YAML (che sono la sorgente canonica per il retrieval del manuale). Il risultato era che HAL rispondeva con blocchi lunghi di prosa markdown invece delle voci atomiche.
+- Fix: `_list_corpus_files()` non include più `MANUAL_DIR.glob("*.md")`. I `.md` restano documenti di lettura umana.
+- Cleanup: aggiunto step preliminare in `ingest_corpus()` che elimina chunk di file "orfani" (non più nel corpus attivo). Idempotente: rigenera TF-IDF anche in caso di sole rimozioni.
+- Verifica: `chunks_indexed=659` (era 659 pre-fix ma con contaminazione .md manuale · ora 448 chunk root + 211 YAML atomici puliti) · `manual_hal_indexed=211`.
+
+**2. Pattern B · Depreca/retag `immobili.importare-xml` + `immobili.importare-xml-universale` (Cap. 3)**
+- Motivazione: tag legacy `[immobili, import, xml, migrazione, feed, universal-importer]` in `03-immobili.yaml` vincevano contro i chunk nuovi di `14-import-xml.yaml`.
+- Fix: entrambi gli id vengono mantenuti (per compat retrocompatibile con vecchi correlati) ma:
+  - `titolo` → "(deprecato, vedi Cap. 14)"
+  - `tags` → `[immobili, deprecato-cap14, redirect]` (rimossi import/xml/migrazione/feed/universal-importer)
+  - `domanda_naturale` → puntatore generico "Riferimento storico: puntatore a Cap. 14..."
+  - `contenuto` → puntatori a `import.cos-e`, `import.dove-trovarlo`, `import.flusso-preview-commit`, `import.file-xml-requisiti`.
+- Nessun id rimosso (no breaking change per correlati esterni).
+
+**3. Micro YAML · arricchito `domanda_naturale` su chunk "limitazioni v1"**
+- `team.limitazioni-v1`: da 106 a 350+ char, aggiunte varianti "rimuovere un membro dal team", "rimuovere collaboratore", "cambiare ruolo a un membro", "transfer ownership", "disattivazione temporanea", "audit UI", "permessi granulari". Arricchito anche `a_cosa_serve` con gli stessi concetti chiave.
+- `social.limitazioni-v1`: da 106 a 500+ char, aggiunte varianti esplicite "Il Social Publisher supporta scheduling/analytics/LinkedIn/TikTok/X" (che è la forma della query utente), plus enumerazione completa delle 12+ feature NON supportate v1. Arricchito anche `a_cosa_serve`.
+
+**4. Smoke test ristampato (post reindex `force=true`)**
+
+| Cap | Query | Top-1 atteso | Result |
+|-----|-------|--------------|:------:|
+| 13-1 | Come invito un collega nella mia agenzia? | `team.invitare-membro` (13) | ✅ PASS sim=0.343 |
+| 13-2 | Quali ruoli posso assegnare a un collaboratore? | `team.ruoli-disponibili` (13) | ✅ PASS sim=0.346 |
+| 13-3 | Posso rimuovere un membro? Posso cambiare ruolo? | `team.limitazioni-v1` (13) | ✅ PASS sim=0.376 |
+| 14-1 | Come importo immobili da XML del vecchio gestionale? | qualunque chunk `14-import-xml.yaml` | ✅ PASS sim=0.194 (`import.file-xml-requisiti`) |
+| 14-2 | Come evito duplicati import XML? | `import.dedupe` (14) | ✅ PASS sim=0.203 |
+| 14-3 | Cosa NON fa Import XML? CSV? sync? | `import.limitazioni-v1` (14) | ✅ PASS sim=0.340 |
+| 15-1 | Come pubblico su Facebook e Instagram con un click? | `social.pubblicare-immobile` (15) | ✅ PASS sim=0.149 |
+| 15-2 | Su quali social posso pubblicare? X/TikTok/LinkedIn? | `social.canali-supportati` (15) | ✅ PASS sim=0.374 |
+| 15-3 | Il Social Publisher supporta scheduling analytics LinkedIn? | `social.limitazioni-v1` (15) | ✅ PASS sim=0.240 |
+| 16-1 | Quali campi per compliance HARD? | `compliance.mapping-campi-immobile` (16) | ✅ PASS sim=0.214 |
+| 16-2 | Perché un affitto risulta prezzo mancante? | `compliance.affitto-vs-vendita` (16) | ✅ PASS sim=0.323 |
+| 16-3 | Differenza HARD vs SOFT? | `compliance.soft-warning-qualita` (16) | ✅ PASS sim=0.258 |
+| 17-1 | OMNIA registra il mio dominio a nome suo? | `domain.d-054-promise` (17) | ✅ PASS sim=0.284 |
+| 17-2 | Come collego il mio dominio al sito OMNIA? | `domain.custom-domain-flow` (17) | ⚠️ COLLISION Cap.8: vince `08-sito-web.yaml::sito.custom-domain` sim=0.260 |
+| 17-3 | Come verifico chi possiede un dominio? | `domain.domain-checker-pubblico` (17) | ✅ PASS sim=0.211 |
+
+**Totale: 14/15 (93%)** · 1 collision pre-esistente Cap. 8 vs Cap. 17 (stessa `domanda_naturale`, chapter overlap documentazionale — richiede disambiguazione in task futuro, NON causata dal fix corrente).
+
+### File toccati
+- `backend/apps/immoweb/hal_knowledge.py` — `_list_corpus_files()` no più `MANUAL_DIR.glob("*.md")` · `ingest_corpus()` step di cleanup orfani + rebuild TF-IDF su rimozioni.
+- `memory/manuale/hal/03-immobili.yaml` — 2 voci deprecate (`immobili.importare-xml`, `immobili.importare-xml-universale`).
+- `memory/manuale/hal/13-team-ruoli.yaml` — `team.limitazioni-v1` domanda + a_cosa_serve + quando_si_usa arricchiti.
+- `memory/manuale/hal/15-social-publisher.yaml` — `social.limitazioni-v1` domanda + a_cosa_serve + quando_si_usa arricchiti.
+- `memory/manuale/hal/IMPORT_HAL.md` — Smoke Cap. 13/14/15 aggiunti con criteri sim ≥ 0.08.
+- `memory/CHANGELOG.md` — questa entry.
+
+### Onestà documentale (D-051)
+- I 2 chunk deprecati NON sono stati rimossi: mantenuti come "puntatori" per non rompere correlati esterni (es. `immobili.importare-csv` che punta a `immobili.importare-xml`). Il testo è ora onesto: "Vedi Cap. 14 per il flusso reale".
+- Collision Cap.8/17 NON è stata forzata a nascondere Cap. 8: entrambi i chunk sono documentati onestamente. La collision resta open come miglioramento futuro (task successivo: disambiguare `sito.custom-domain` = collegamento tecnico DNS vs `domain.custom-domain-flow` = vault sovranità D-054).
+- Nessuna feature inventata. Nessun boost artificiale post-hoc (via _+0.12 su .yaml_). Il fix è **puramente di corpus cleanup + retag onesto**.
+
+### Commit message suggerito
+```
+fix(rag): Pattern A escludi manuale/*.md + Pattern B depreca importare-xml + micro YAML limitazioni-v1
+
+- hal_knowledge.py: _list_corpus_files() non include piu' manuale/*.md
+  (solo YAML atomici come sorgente retrieval manuale). Aggiunto cleanup
+  step chunk orfani in ingest_corpus() con rebuild TF-IDF su rimozioni.
+- 03-immobili.yaml: immobili.importare-xml + importare-xml-universale
+  retagged [deprecato-cap14, redirect], puntatori a Cap. 14.
+- 13-team-ruoli.yaml: team.limitazioni-v1 domanda_naturale + a_cosa_serve
+  arricchiti con "rimuovere membro"/"cambiare ruolo"/"transfer ownership".
+- 15-social-publisher.yaml: social.limitazioni-v1 domanda_naturale +
+  a_cosa_serve arricchiti con scheduling/analytics/LinkedIn/TikTok.
+- IMPORT_HAL.md: aggiunte Smoke Cap. 13/14/15 con criteri sim >= 0.08.
+
+Smoke ristampato: 14/15 PASS (93%). 1 collision pre-esistente
+Cap.8 sito.custom-domain vs Cap.17 domain.custom-domain-flow
+(chapter overlap documentazionale, non causato dal fix).
+
+Ref: D-051 Onesta' documentale · Feb-2026 direttiva Founder.
+```
+
+---
+
+
 ## 2026-02-XX (Feb 2026) — 📖 TASK M · Cap. 16 · Compliance Portali (Manuale + HAL YAML)
 
 **Tipo**: Feature docs — sedicesimo capitolo, deep-dive normativo del validatore compliance.

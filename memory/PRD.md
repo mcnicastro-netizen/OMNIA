@@ -1,10 +1,18 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 16 · Compliance Portali)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Fix RAG Pattern A/B + Micro YAML)
 **Founder**: mcnicastro-netizen
 
-- **Ultimo update (Feb 2026 — TASK M · Cap. 16 · Compliance Portali deep-dive normativo)**:
+- **Ultimo update (Feb 2026 — 🔧 FIX RAG · Pattern A + Pattern B + Micro YAML)**:
+  - ✅ **Pattern A**: escluso `memory/manuale/*.md` dall'ingest RAG in `hal_knowledge.py`. Solo i chunk atomici YAML (`memory/manuale/hal/*.yaml`) sono la sorgente retrieval per il manuale. I `.md` restano lettura umana. Aggiunto cleanup orfani in `ingest_corpus()` con rebuild TF-IDF su rimozioni.
+  - ✅ **Pattern B**: deprecati/retagged 2 chunk legacy in `03-immobili.yaml` (`immobili.importare-xml`, `immobili.importare-xml-universale`) → tags `[deprecato-cap14, redirect]`, puntatori a Cap. 14. Nessun id rimosso (compat correlati esterni).
+  - ✅ **Micro YAML**: arricchite `domanda_naturale` + `a_cosa_serve` di `team.limitazioni-v1` (Cap. 13) e `social.limitazioni-v1` (Cap. 15) per battere collisioni con `ASPETTI_DA_APPROFONDIRE.md` e altri chunk stesso file.
+  - ✅ **Smoke test ristampato**: 14/15 PASS (93%) su Cap. 13/14/15 (9/9) + Cap. 16 (3/3) + Cap. 17 (2/3). 1 collision pre-esistente Cap. 8 vs Cap. 17 (`custom-domain` chapter overlap, non causata dal fix).
+  - ✅ **Reindex live**: `chunks_indexed=659` (448 root md + 211 YAML) · `manual_hal_indexed=211` invariato.
+  - 📋 Nota: NO Cap. 18 in questo task. Solo fix retrieval quality per direttiva Founder.
+
+- **Ultimo update precedente (Feb 2026 — TASK M · Cap. 16 · Compliance Portali deep-dive normativo)**:
   - ✅ **Cap. 16 · Compliance Portali** (deep-dive normativo del validatore HARD/SOFT): 14 sottocapitoli + **14 voci HAL YAML** (`compliance.panoramica-validatore`, `compliance.hard-prezzo-canone`, `compliance.hard-superficie`, `compliance.hard-ape-classi-ammesse`, `compliance.hard-foto-minimo`, `compliance.hard-indirizzo`, `compliance.soft-warning-qualita`, `compliance.mapping-campi-immobile`, `compliance.feed-vs-sync`, `compliance.privacy-non-in-feed`, `compliance.affitto-vs-vendita`, `compliance.codici-violazione`, `compliance.correggere-da-modale`, `compliance.limitazioni-v1`). Copertura 1:1 con `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline.
   - ✅ **Distinto da Cap. 6**: Cap. 6 = **operativo** (attiva portale, sync, wizard); Cap. 16 = **riferimento normativo/tecnico** (perché, quali campi, contesto legale, mapping). Cross-ref aggiunto in Cap. 6 §6.5.
   - ✅ **Onestà D-051 chiave**: 5 regole HARD → 7 codici precisi, 4 SOFT, 14 classi APE ammesse esatte, cornice normativa italiana (D.Lgs 192/2005 APE + AGCM trasparenza prezzi) come contesto (no consulenza legale), architettura funzioni pure senza DB, ghost label `missing_rent` documentata onestamente (frontend orfana, backend emette sempre `missing_price`), api_push=simulated_push, feed vs sync 1:1, privacy L3/L4 esclusa a monte.

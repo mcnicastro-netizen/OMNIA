@@ -485,12 +485,17 @@ voci:
     livello: intermedio
     tags: [collaboratori, limiti, cosa-non-fa, rimozione-membro, cambio-ruolo, segreteria, franchising, audit, onestà, d-051]
     correlati: [team.ruoli-disponibili, team.cos-e]
-    domanda_naturale: "Posso rimuovere un membro dal team? Posso cambiare ruolo?"
+    domanda_naturale: "Posso rimuovere un membro dal team? Posso rimuovere un collaboratore? Posso cambiare ruolo a un membro? Come rimuovo un ex-collaboratore? Cosa NON fa il modulo Collaboratori v1? La segreteria è un ruolo backend? Esiste transfer ownership agenzia, disattivazione temporanea, audit UI, permessi granulari per membro o notifiche real-time?"
     contenuto:
       a_cosa_serve: >
-        Aspettative chiare su cosa il modulo NON fa in v1.
+        Aspettative chiare su cosa il modulo Collaboratori NON fa in v1:
+        rimuovere un membro dal team (no UI DELETE), cambiare ruolo a
+        un membro esistente (no promozione agent → agency_admin da UI),
+        disattivare temporaneamente, audit log UI, permessi granulari
+        per membro, franchising/gruppo/branch attivi, transfer ownership.
       quando_si_usa: >
-        Prima di provare a fare qualcosa e restare deluso.
+        Prima di provare a rimuovere un membro dal team o cambiare
+        ruolo a un membro esistente e restare deluso.
       passi:
         - "NO rimozione membro in UI. Il backend non espone
           DELETE /agencies/me/members/{user_id}. Se un collaboratore

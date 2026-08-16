@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.13)
+# 📚 HAL Knowledge — Import & Cold Start (v0.13.1)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 17 · Domain Vault)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 17 + Fix RAG Pattern A/B/Micro YAML)
 **Corpus attuale**: **211 voci HAL YAML** su **17 capitoli** (Cap. 1-17)
-**Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 17 e verifica 3 query smoke (vedi §"Smoke Cap. 17").
+**Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026) · **Fix Feb 2026**: `memory/manuale/*.md` **escluso** dal RAG ingest (chunk atomici YAML = sola sorgente retrieval per il manuale).
+**Prossimo passo**: reindex live post-Cap. 17 e verifica 3 query smoke (vedi §"Smoke Cap. 17"). Vedi anche §"Smoke Cap. 13/14/15" per validazione fix RAG.
 
 ---
 
@@ -290,10 +290,40 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 ## 🚦 Smoke Cap. 17 — 3 query attese dopo reindex
 
 1. **"OMNIA registra il mio dominio a nome suo?"** → `17-domain-vault.yaml::domain.d-054-promise`
-2. **"Come collego il mio dominio al sito OMNIA?"** → `17-domain-vault.yaml::domain.custom-domain-flow`
+2. **"Come collego il mio dominio al sito OMNIA?"** → `17-domain-vault.yaml::domain.custom-domain-flow` ⚠️ **collision Cap. 8**: `sito.custom-domain` vince (stessa `domanda_naturale`, chapter overlap). Da disambiguare in task futuro.
 3. **"Come verifico chi possiede un dominio prima di iscrivermi?"** → `17-domain-vault.yaml::domain.domain-checker-pubblico`
 
 Criterio: top-1 chunk_id atteso OR **stesso file** `17-domain-vault.yaml` · sim ≥ 0.08.
+
+---
+
+## 🚦 Smoke Cap. 13 — 3 query attese dopo reindex (Fix RAG Feb 2026)
+
+1. **"Come invito un collega nella mia agenzia?"** → top-1 atteso `13-team-ruoli.yaml::team.invitare-membro`
+2. **"Quali ruoli posso assegnare a un collaboratore quando lo invito?"** → top-1 atteso `13-team-ruoli.yaml::team.ruoli-disponibili`
+3. **"Posso rimuovere un membro dal team? Posso cambiare ruolo?"** → top-1 atteso `13-team-ruoli.yaml::team.limitazioni-v1` (dopo micro-fix Feb 2026 · pre-fix vinceva `ASPETTI_DA_APPROFONDIRE.md::71`)
+
+Criteri smoke: top-1 chunk_id atteso OR **stesso file** `13-team-ruoli.yaml` · sim ≥ 0.08.
+
+---
+
+## 🚦 Smoke Cap. 14 — 3 query attese dopo reindex (Fix RAG Feb 2026)
+
+1. **"Come importo immobili da un file XML del vecchio gestionale?"** → top-1 atteso qualunque chunk di `14-import-xml.yaml` (post fix Pattern B: `immobili.importare-xml` di Cap. 3 depreca)
+2. **"Come evito di importare due volte lo stesso immobile via XML?"** → top-1 atteso `14-import-xml.yaml::import.dedupe`
+3. **"Cosa NON fa Import XML? Posso usarlo per CSV o sync automatica?"** → top-1 atteso `14-import-xml.yaml::import.limitazioni-v1`
+
+Criteri smoke: top-1 chunk_id atteso OR **stesso file** `14-import-xml.yaml` · sim ≥ 0.08.
+
+---
+
+## 🚦 Smoke Cap. 15 — 3 query attese dopo reindex (Fix RAG Feb 2026)
+
+1. **"Come pubblico un immobile su Facebook e Instagram con un click?"** → top-1 atteso `15-social-publisher.yaml::social.pubblicare-immobile`
+2. **"Su quali social posso pubblicare? Ci sono X/Twitter, TikTok o LinkedIn?"** → top-1 atteso `15-social-publisher.yaml::social.canali-supportati`
+3. **"Il Social Publisher supporta scheduling analytics o LinkedIn?"** → top-1 atteso `15-social-publisher.yaml::social.limitazioni-v1` (dopo micro-fix Feb 2026 · pre-fix vinceva `social.collegamenti`)
+
+Criteri smoke: top-1 chunk_id atteso OR **stesso file** `15-social-publisher.yaml` · sim ≥ 0.08.
 
 ---
 
