@@ -431,10 +431,16 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
   - Pricing Track B (€0,03) NON esposto in BillingPage (solo subtitle ApiKeysPage)
 - **Backlog qualità prodotto Cap. 20**: A-026 UI usage detail per chiave · A-027 reportistica per-partner.
 
-### Pricing B2C — 6-Ago-2026
-- **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
+### Pricing B2C — 6-Ago-2026 · aggiornato 16-Ago-2026 (B2C-VAL-01)
+- **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.1) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).
-- **Checkout Stripe B2C one-shot** = sprint successivo (endpoint `POST /api/billing/b2c/checkout` da implementare).
+- ✅ **Valutatore dual-tier COMPLETO (task B2C-VAL-01 · 16-Ago-2026)**:
+  - Backend: `b2c_entitlements.py` (rate-limit 1×/12mo, entitlement 24h payload-hash) + `b2c_checkout.py` (Stripe hosted checkout €2,99 + webhook + status polling)
+  - Gate `POST /api/cloud/valuator`: anonimo 401 · B2C non-verified 403 · quota esaurita 429 · payload UNI senza pagamento 402 · fascicolo agenzia bypass
+  - Gate `POST /api/cloud/valuator/report-pdf`: SEMPRE UNI + entitlement (payload_hash match)
+  - Frontend: refactor completo `ValuatorPage.jsx` (dual-tier UI · no più Pro gratis · upsell CTA · pre-fill query params · checkout success/cancel pages) + CTA su `PropertyDetailPage.jsx` + ActionCard su `CloudHomePage.jsx`
+  - Test: `tests/test_b2c_valuator_gates.py` 10/10 verdi (rate-limit, gate, entitlement, PDF paywall, agent pass-through, fascicolo regression)
+- **Checkout staging €0,90 + HAL Legal €1,00** = task futuro B2C-CHECKOUT-02.
 - **Regola operativa cardine**: nessun servizio B2C sotto €0,99 (tranne lead magnet espliciti).
 - **B2B esclusivo** (non esposto lato /cloud): crediti, pacchetti ricarica, widget & API mensili, multiposting, CRM, Match, MLS.
 

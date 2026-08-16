@@ -206,6 +206,8 @@ api_router.include_router(v1_widgets_router)
 # M4 (scaffold) — Billing (Stripe subscriptions + credits) — endpoints 503 finché non attivato
 from apps.billing.routes import router as billing_router  # noqa: E402
 api_router.include_router(billing_router)
+from apps.billing.b2c_checkout import router as b2c_checkout_router  # noqa: E402
+api_router.include_router(b2c_checkout_router)
 
 # M4 (scaffold) — Docs search (APE via SIAPE + visure OpenAI) — endpoints 503 finché non attivato
 from apps.docs_search import router as docs_search_router  # noqa: E402

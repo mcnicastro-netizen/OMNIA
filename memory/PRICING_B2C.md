@@ -149,18 +149,30 @@ Molti servizi esistono **sia lato agenzia (a crediti)** sia **lato privato (a ca
 
 ---
 
-## 7️⃣ Stato implementazione (backend)
+## 7️⃣ Stato implementazione (backend + frontend)
 
 | Componente | Stato | Sprint |
 |-----------|:-:|:-:|
 | Prodotti B2C definiti in `b2c_products.py` | ✅ (stub 6-Ago-2026) | Attuale |
-| Stripe Product+Price creati per prodotti B2C one-shot | ❌ | Prossimo |
-| Endpoint `POST /api/billing/b2c/checkout` (Stripe one-shot) | ❌ | Prossimo |
-| Rate limit lato server per lead magnet | ❌ | Prossimo |
-| Pagina `/cloud/checkout/success` + `/cancel` | ❌ | Prossimo |
-| UI acquisto sul portale B2C | ❌ | Prossimo |
+| Stripe Product+Price creati per `b2c_valuator_uni_pdf` (lookup key + lazy-create) | ✅ (16-Ago-2026 · B2C-VAL-01) | Attuale |
+| Endpoint `POST /api/billing/b2c/checkout` (Stripe one-shot) | ✅ (16-Ago-2026) | Attuale |
+| Endpoint `GET /api/billing/b2c/valuator-status` (UI status) | ✅ (16-Ago-2026) | Attuale |
+| Endpoint `GET /api/billing/b2c/status/{session_id}` (polling) | ✅ (16-Ago-2026) | Attuale |
+| Webhook `checkout.session.completed` → `apply_b2c_purchase_side_effects` | ✅ (16-Ago-2026) | Attuale |
+| Rate limit lato server per lead magnet Valutatore base (1×/12mo su `b2c_valuation_usage`) | ✅ (16-Ago-2026) | Attuale |
+| Gate `commercial_surfaces`/`merit` in `POST /api/cloud/valuator` (402 payment_required) | ✅ (16-Ago-2026) | Attuale |
+| Gate PDF `POST /api/cloud/valuator/report-pdf` (402 senza entitlement UNI) | ✅ (16-Ago-2026) | Attuale |
+| Bypass fascicolo agenzia (`_estimate_value_core` diretto, no HTTP gate) | ✅ (16-Ago-2026) | Attuale |
+| Pagina `/it/cloud/checkout/success` + `/cancel` | ✅ (16-Ago-2026) | Attuale |
+| UI dual-tier `ValuatorPage.jsx` (BASE gratis + UNI €2,99, upsell, no PDF su base) | ✅ (16-Ago-2026) | Attuale |
+| CTA Valutatore su `PropertyDetailPage.jsx` (base + UNI) | ✅ (16-Ago-2026) | Attuale |
+| ActionCard "Valutatore immobiliare" su `CloudHomePage.jsx` | ✅ (16-Ago-2026) | Attuale |
+| Pytest `test_b2c_valuator_gates.py` (10/10 verdi) | ✅ (16-Ago-2026) | Attuale |
+| Checkout staging €0,90 (B2C-CHECKOUT-02) | ❌ | Prossimo |
+| Checkout HAL Legal €1,00 (B2C-CHECKOUT-02) | ❌ | Prossimo |
+| Cap. 21 manuale HAL YAML | ❌ (post-merge · Cursor) | Prossimo |
 
-**Nulla di quello che è ❌ blocca il TASK A-bis**: il listino è deciso e documentato. L'implementazione tecnica arriva nello sprint successivo.
+**Task B2C-VAL-01 chiuso il 16-Ago-2026**: dual-tier valuator con gate €2,99 Stripe, rate limit 1×/12mo, paywall PDF, refactor UX, CTA su scheda annuncio, pytest 10/10.
 
 ---
 
@@ -169,3 +181,4 @@ Molti servizi esistono **sia lato agenzia (a crediti)** sia **lato privato (a ca
 | Data | Versione | Note |
 |------|:-:|------|
 | 06-Ago-2026 | **v1.0** | Prima stesura ufficiale. Numeri annunci privati ripristinati da PRICING_OMNIA v2.0. Tabella strumenti self-service con margini validati. Stub backend in `b2c_products.py`. |
+| 16-Ago-2026 | **v1.1** | Task B2C-VAL-01 completato. §7 aggiornato: gate valutatore dual-tier + Stripe checkout €2,99 + paywall PDF + rate limit 1×/12mo + refactor UX + CTA scheda annuncio + pytest 10/10. |

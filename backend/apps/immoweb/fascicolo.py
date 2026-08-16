@@ -98,7 +98,7 @@ async def _compute_valuation(prop: dict) -> Optional[Dict[str, Any]]:
     if not prop.get("city") or not prop.get("surface_sqm"):
         return None
     try:
-        from apps.immocloud.valuator import ValuationPayload, estimate_value
+        from apps.immocloud.valuator import ValuationPayload, _estimate_value_core
 
         cond = prop.get("condition")
         eclass = (prop.get("energy") or {}).get("energy_class") or prop.get("energy_class")
@@ -112,7 +112,7 @@ async def _compute_valuation(prop: dict) -> Optional[Dict[str, Any]]:
             energy_class=eclass,
             floor=int(prop["floor"]) if prop.get("floor") is not None else None,
         )
-        result = await estimate_value(payload)
+        result = await _estimate_value_core(payload)
         return {
             "estimated_value": result.get("estimated_value"),
             "price_per_sqm": result.get("price_per_sqm"),

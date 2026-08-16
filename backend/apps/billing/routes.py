@@ -387,6 +387,11 @@ async def stripe_webhook(request: Request):
                       "updated_at": now}},
         )
         await _apply_session_side_effects(session_id)
+        # Cap. 21 · B2C one-shot (valuator UNI PDF, staging, legal — future)
+        md = obj.get("metadata") or {}
+        if md.get("b2c_product_key"):
+            from apps.billing.b2c_checkout import apply_b2c_purchase_side_effects
+            await apply_b2c_purchase_side_effects(obj)
 
     elif etype == "customer.subscription.updated":
         agency_id = (obj.get("metadata") or {}).get("agency_id")

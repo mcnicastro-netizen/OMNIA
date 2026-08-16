@@ -140,6 +140,24 @@ export default function PropertyDetailPage() {
               </span>
             </Link>
           )}
+          {/* Cap. 21 · Valutatore CTA speculare al box mutui */}
+          <div className="mt-3 flex flex-col md:flex-row gap-2 justify-end items-end text-sm" data-testid="detail-valuator-box">
+            <span className="text-stone-600">{t("valuator.detail_box_title", "Quanto vale questo immobile?")}</span>
+            <Link
+              to={`/${lang}/cloud/valutatore?tier=base&city=${encodeURIComponent(prop.city || "")}&property_type=${encodeURIComponent(prop.property_type || "appartamento")}&surface_sqm=${prop.surface_sqm || ""}`}
+              data-testid="detail-valuator-base-cta"
+              className="px-3 py-1.5 border border-stone-300 rounded text-stone-700 hover:bg-stone-100"
+            >
+              {t("valuator.detail_box_base_cta", "Stima gratuita")}
+            </Link>
+            <Link
+              to={`/${lang}/cloud/valutatore?tier=uni&city=${encodeURIComponent(prop.city || "")}&property_type=${encodeURIComponent(prop.property_type || "appartamento")}&surface_sqm=${prop.surface_sqm || ""}`}
+              data-testid="detail-valuator-uni-cta"
+              className="px-3 py-1.5 bg-emerald-700 text-white rounded hover:bg-emerald-800"
+            >
+              {t("valuator.detail_box_uni_cta", "Report UNI · €2,99")}
+            </Link>
+          </div>
         </div>
       </div>
 

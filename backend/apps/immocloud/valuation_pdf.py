@@ -11,7 +11,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -28,7 +28,13 @@ from reportlab.platypus import (
 from shared.auth.dependencies import get_optional_user
 from shared.db.connection import Database
 
-from .valuator import ValuationPayload, estimate_value
+from apps.billing.b2c_entitlements import (
+    check_uni_entitlement,
+    hash_valuation_payload,
+    is_uni_payload,
+)
+
+from .valuator import ValuationPayload, _estimate_value_core
 
 logger = logging.getLogger("omnia.valuation_pdf")
 router = APIRouter(prefix="/valuator", tags=["cloud-valuator"])
@@ -211,9 +217,35 @@ async def valuation_report_pdf(
     payload: ValuationPayload,
     user: Optional[dict] = Depends(get_optional_user),
 ) -> Response:
+    # --- Gate PDF (Cap. 21 · task B2C-VAL-01) ---
+    # Il PDF richiede SEMPRE tier UNI (payload con commercial_surfaces o merit).
+    if not is_uni_payload(payload):
+        raise HTTPException(status_code=402, detail={
+            "code": "payment_required",
+            "message": "Il report PDF richiede la valutazione UNI 10750 a €2,99.",
+            "product_key": "b2c_valuator_uni_pdf",
+            "price_eur": 2.99,
+        })
+    if not user:
+        raise HTTPException(status_code=401, detail={
+            "code": "login_required",
+            "message": "Accedi per scaricare il report PDF.",
+        })
+    is_agent = bool(user.get("agency_id") or user.get("agency_ids"))
+    if not is_agent:
+        payload_hash = hash_valuation_payload(payload.model_dump(exclude_none=True))
+        has_ent = await check_uni_entitlement(user["id"], payload_hash)
+        if not has_ent:
+            raise HTTPException(status_code=402, detail={
+                "code": "payment_required",
+                "message": "Report PDF: paga €2,99 per scaricare.",
+                "product_key": "b2c_valuator_uni_pdf",
+                "price_eur": 2.99,
+                "payload_hash": payload_hash,
+            })
     payload.email = None  # no lead double-capture from PDF generation
     payload.name = None
-    result = await estimate_value(payload)
+    result = await _estimate_value_core(payload)
 
     branding: Dict[str, Any] = {}
     if user:

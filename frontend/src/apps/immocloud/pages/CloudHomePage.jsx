@@ -98,6 +98,17 @@ export default function CloudHomePage() {
             accent="navy"
           />
         </div>
+        {/* Cap. 21 · Valutatore card (single row below the 3 core actions) */}
+        <div className="max-w-6xl mx-auto mt-5">
+          <ActionCard
+            id="valutatore" testid="card-valutatore" icon="📊"
+            title={t("cloud.card_valutatore_title", "Valuta il tuo immobile")}
+            text={t("cloud.card_valutatore_text", "Stima rapida gratis · report UNI 10750 professionale a €2,99")}
+            cta={t("cloud.card_valutatore_cta", "Apri il valutatore")}
+            to={`/${lang}/cloud/valutatore`}
+            accent="navy"
+          />
+        </div>
       </section>
 
       {/* ───────── Top cities ───────── */}

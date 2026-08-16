@@ -36,10 +36,18 @@ import re
 import unicodedata
 from typing import Any, Dict, List, Literal, Optional, Tuple
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from shared.auth.dependencies import get_optional_user
 from shared.db.connection import Database
+from apps.billing.b2c_entitlements import (
+    check_base_valuation_allowed,
+    check_uni_entitlement,
+    hash_valuation_payload,
+    is_uni_payload,
+    record_base_valuation,
+)
 from apps.immocloud.data.italy_real_estate_prices_2025 import (
     CITY_PRICES,
     REGION_TO_AREA,
@@ -262,7 +270,100 @@ class ValuationPayload(BaseModel):
 
 
 @router.post("")
-async def estimate_value(payload: ValuationPayload) -> Dict[str, Any]:
+async def estimate_value(
+    payload: ValuationPayload,
+    request: Request = None,
+    user: Optional[dict] = Depends(get_optional_user),
+    bypass_gate: bool = False,
+) -> Dict[str, Any]:
+    """Estimate the market value range for a residential property.
+
+    Pipeline (M3.S6-pro):
+      1. Resolve città → prezzo base (CITY_PRICES → PROVINCE_PRICES via Nominatim → regional fallback)
+      2. Risolvi zone tier (centro/semicentro/periferia)
+      3. Superficie commerciale UNI 10750 (se commercial_surfaces è passato)
+      4. Moltiplicatori: property_type · condition · energy_class · floor
+      5. Coefficienti di merito (esposizione, vista, riscaldamento, ascensore, età, vincoli)
+      6. Coefficienti regionali (liquidità + trend)
+      7. FOI ISTAT (rivalutazione FOI cumulato a oggi)
+      8. Comparables + lead capture
+
+    B2C gate (Cap. 21 · task B2C-VAL-01):
+    - Anonimo + base → 401
+    - B2C senza email verificata → 403
+    - B2C base, quota esaurita → 429
+    - Payload UNI (commercial_surfaces o merit) senza pagamento → 402
+    - Agente B2B → passa senza Stripe (crediti agenzia scalati altrove — TODO)
+    - Fascicolo agenzia → bypass tramite `bypass_gate=True` (chiamata Python interna)
+    - Header `X-Omnia-Caller: agency_fascicolo` bypass gate se agente
+    """
+    # Detect internal caller (fascicolo) via header o kwarg
+    header_caller = ""
+    if request is not None:
+        header_caller = (request.headers.get("x-omnia-caller") or "").lower().strip()
+    is_agency_fascicolo = bypass_gate or header_caller == "agency_fascicolo"
+
+    uni_requested = is_uni_payload(payload)
+    is_agent = bool(user and (user.get("agency_id") or user.get("agency_ids")))
+    is_b2c = bool(user and not is_agent)
+
+    if not is_agency_fascicolo:
+        # --- Gate BASE (no commercial_surfaces / merit) ---
+        if not uni_requested:
+            if not user:
+                raise HTTPException(status_code=401, detail={
+                    "code": "login_required",
+                    "message": "Accedi per la stima gratuita",
+                })
+            if is_b2c and not user.get("email_verified"):
+                raise HTTPException(status_code=403, detail={
+                    "code": "email_verification_required",
+                    "message": "Verifica l'email per usare la stima gratuita",
+                })
+            if is_b2c:
+                allowed, reset_at = await check_base_valuation_allowed(user["id"])
+                if not allowed:
+                    raise HTTPException(status_code=429, detail={
+                        "code": "base_limit_reached",
+                        "message": "Hai gia' usato la stima gratuita di quest'anno",
+                        "reset_at": reset_at,
+                        "upsell_product_key": "b2c_valuator_uni_pdf",
+                        "upsell_price_eur": 2.99,
+                    })
+            # agents: base senza gate (crediti B2B scalati dal caller applicativo, non qui)
+        # --- Gate UNI (commercial_surfaces or merit present) ---
+        else:
+            if not user:
+                raise HTTPException(status_code=401, detail={
+                    "code": "login_required",
+                    "message": "Accedi per la valutazione UNI 10750",
+                })
+            if is_b2c:
+                payload_hash = hash_valuation_payload(payload.model_dump(exclude_none=True))
+                has_ent = await check_uni_entitlement(user["id"], payload_hash)
+                if not has_ent:
+                    raise HTTPException(status_code=402, detail={
+                        "code": "payment_required",
+                        "message": "Valutazione UNI 10750 + PDF a €2,99",
+                        "product_key": "b2c_valuator_uni_pdf",
+                        "price_eur": 2.99,
+                        "payload_hash": payload_hash,
+                    })
+            # agents: crediti B2B scalati dal caller applicativo (out-of-scope questo endpoint)
+
+    result = await _estimate_value_core(payload)
+
+    # Track base usage only for B2C base tier (no fascicolo, no agent, no UNI)
+    if is_b2c and not uni_requested and not is_agency_fascicolo:
+        try:
+            await record_base_valuation(user["id"], result.get("valuation_id") or "-")
+        except Exception as e:
+            logger.warning("record_base_valuation failed: %s", e)
+
+    return result
+
+
+async def _estimate_value_core(payload: ValuationPayload) -> Dict[str, Any]:
     """Estimate the market value range for a residential property.
 
     Pipeline (M3.S6-pro):

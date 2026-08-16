@@ -9,6 +9,8 @@ import CloudRegisterPage from "./pages/CloudRegisterPage";
 import PropertyDetailPage from "./components/PropertyDetailPage";
 import SellPage from "./components/SellPage";
 import ValuatorPage from "./components/ValuatorPage";
+import CheckoutSuccessPage from "./components/CheckoutSuccessPage";
+import CheckoutCancelPage from "./components/CheckoutCancelPage";
 import MutuiPage from "./components/MutuiPage";
 import AccountDashboard from "./components/AccountDashboard";
 
@@ -25,6 +27,8 @@ export default function ImmocloudApp() {
         <Route path="account/sell" element={<SellPage />} />
         <Route path="account" element={<AccountDashboard />} />
         <Route path="valutatore" element={<ValuatorPage />} />
+        <Route path="checkout/success" element={<CheckoutSuccessPage />} />
+        <Route path="checkout/cancel" element={<CheckoutCancelPage />} />
         <Route path="mutui" element={<MutuiPage />} />
       </Routes>
       <FooterB2C />
