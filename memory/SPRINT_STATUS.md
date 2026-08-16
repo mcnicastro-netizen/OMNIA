@@ -35,6 +35,7 @@
 | **J** Manuale Cap. 13 Team & Ruoli (Collaboratori) | ✅ | `13-team-ruoli.md` + 13 voci YAML · index **155 voci** · v0.9-cap13 · magic-link invite 7gg, ruoli `agency_admin`/`agent` (segreteria = concetto operativo), 4 stati invito (pending/accepted/revoked/expired), upgrade role solo se client, token nel fragment (L5). Copertura `invites.py` + `agencies.py` + `MembersPage.jsx` + `InviteMemberModal.jsx` + `AcceptInvitePage.jsx`. |
 | **K** Manuale Cap. 14 Import XML (Migrazione) | ✅ | `14-import-xml.md` + 13 voci YAML · index **168 voci** · v0.10-cap14 · flusso Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (18 tipi + 19 energetiche + 6 contratti + 25 features), zero riferimenti competitor. Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe). |
 | **L** Manuale Cap. 15 Social Publisher | ✅ | `15-social-publisher.md` + 14 voci YAML · index **182 voci** · v0.11-cap15 · white label D-041 (post sotto Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), 3 canali (FB Page/IG Business/Telegram), caption default 5-righe con emoji fisse, audit `social_posts`. Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe). |
+| **M** Manuale Cap. 16 Compliance Portali (deep-dive normativo) | ✅ | `16-compliance-portali.md` + 14 voci YAML · index **196 voci** · v0.12-cap16 · 5 regole HARD → 7 codici, 4 SOFT, 14 classi APE ammesse, ghost label `missing_rent` documentata, feed vs sync, api_push=simulated_push, D.Lgs 192/2005 + AGCM contesto. Copertura `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline. Distinto da Cap. 6 (operativo). |
 ---
 ## Manuale operativo — progresso
 | Cap | Modulo | Voci HAL | Stato |
@@ -54,10 +55,11 @@
 | 13 | Team & Ruoli (Collaboratori) | 13 | ✅ v1.0 (magic-link 7gg, ruoli agency_admin/agent, 4 stati invito, upgrade role solo se client, segreteria = concetto operativo) |
 | 14 | Import XML (Migrazione) | 13 | ✅ v1.0 (flusso Preview→Commit, session 10min, dedupe reference_code, dry-run, tabelle mapping 18 tipi/19 energetiche/6 contratti/25 features, zero riferimenti competitor) |
 | 15 | Social Publisher | 14 | ✅ v1.0 (FB Page/IG Business/Telegram, white label D-041, credenziali AES-GCM, on-demand push, caption default 5-righe, audit social_posts, no scheduling/analytics/carosello v1) |
-| 16–26 | — | — | ⏳ |
+| 16 | Compliance Portali (deep-dive) | 14 | ✅ v1.0 (5 HARD → 7 codici, 4 SOFT, 14 classi APE, ghost label missing_rent, feed vs sync, D.Lgs 192/2005 + AGCM contesto, distinto da Cap. 6 operativo) |
+| 17–26 | — | — | ⏳ |
 | 27 | MLS Network | — | 🔒 placeholder |
 | 28 | Academy | — | 🔒 frozen |
-**Totale**: **15/26 capitoli (58%)** · **182 voci HAL** · **69 screenshot placeholder** in `screenshots-index.md`
+**Totale**: **16/26 capitoli (62%)** · **196 voci HAL** · **72 screenshot placeholder** in `screenshots-index.md`
 **Convenzioni**: `[SCREEN: id]` · aggiornare GAP.md + CHANGELOG · YAML = 1 voce = 1 chunk RAG.
 ---
 ## HAL Knowledge — stato tecnico
@@ -76,12 +78,13 @@
 | Post Cap. 12 | 142 voci ✅ reindex live + smoke 3/3 PASS (high: 0.293/0.217/0.478) |
 | Post Cap. 13 | 155 voci ⏳ reindex live pending (super_admin) |
 | Post Cap. 14 | 168 voci ⏳ reindex live pending (super_admin) |
-| Post Cap. 15 | **182 voci** ⏳ reindex live pending (super_admin) |
+| Post Cap. 15 | 182 voci ✅ reindex live confermato (già indexed al restart backend) |
+| Post Cap. 16 | **196 voci** ⏳ reindex live pending (super_admin) |
 **Reindex** (super_admin): `POST /api/app/hal/knowledge/reindex?force=true`
-**Smoke Cap. 15**:
-1. *Come pubblico un immobile su Facebook e Instagram?* → `social.pubblicare-immobile`
-2. *Come ottengo il bot token per Telegram?* → `social.credenziali-telegram`
-3. *Posso programmare la pubblicazione per domani?* → `social.limitazioni-v1` (risposta onesta: **no**, solo on-demand v1)
+**Smoke Cap. 16**:
+1. *Quali campi devo compilare per passare compliance HARD?* → `compliance.mapping-campi-immobile`
+2. *Perché un affitto risulta prezzo mancante?* → `compliance.hard-prezzo-canone` (o `compliance.affitto-vs-vendita`)
+3. *Differenza fra violazione HARD e warning SOFT?* → `compliance.soft-warning-qualita` (o `compliance.panoramica-validatore`)
 ---
 ## Pricing (Founder approvato)
 - **B2B** v3.0: Founders €49/€99/€249 · standard €79/€179/€349 · 1 cr = €0.05

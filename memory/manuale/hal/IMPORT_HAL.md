@@ -1,9 +1,9 @@
-# 📚 HAL Knowledge — Import & Cold Start (v0.11)
+# 📚 HAL Knowledge — Import & Cold Start (v0.12)
 
-**Ultimo aggiornamento**: Feb 2026 (post-Cap. 15 · Social Publisher)
-**Corpus attuale**: **182 voci HAL YAML** su **15 capitoli** (Cap. 1-15)
+**Ultimo aggiornamento**: Feb 2026 (post-Cap. 16 · Compliance Portali)
+**Corpus attuale**: **196 voci HAL YAML** su **16 capitoli** (Cap. 1-16)
 **Motore**: `hal_knowledge.py` con loader YAML **attivo** (Opzione A applicata in TASK B-bis · 6 Ago 2026)
-**Prossimo passo**: reindex live post-Cap. 15 e verifica 3 query smoke (vedi §"Smoke Cap. 15").
+**Prossimo passo**: reindex live post-Cap. 16 e verifica 3 query smoke (vedi §"Smoke Cap. 16").
 
 ---
 
@@ -282,16 +282,17 @@ Prima di dichiarare il cold start "attivo", eseguire manualmente queste 5 query 
 | Feb-2026 (Cap. 13) | **v0.9-cap13** | Cap. 13 Team & Ruoli / Collaboratori aggiunto (+13 voci → 155). Copertura `invites.py` (286 righe) + `agencies.py` (180 righe) + `MembersPage.jsx` (225 righe) + `InviteMemberModal.jsx` (134 righe) + `AcceptInvitePage.jsx` (186 righe): magic-link invite 7gg, ruoli agency_admin/agent (segreteria = concetto operativo), stati pending/accepted/revoked/expired, upgrade role solo se client. |
 | Feb-2026 (Cap. 14) | **v0.10-cap14** | Cap. 14 Import XML / Migrazione da altro gestionale aggiunto (+13 voci → 168). Copertura `xml_import.py` (192 righe) + `universal_xml.py` (546 righe) + `ImportXmlPage.jsx` (341 righe): flusso 2 fasi Preview→Commit, session TTL 10min in-memory, dedupe per reference_code, dry-run, tabelle mapping (TYPE_CODE_MAP 18 codici, ENERGY_CODE_MAP 19, OPERATION_CODE_MAP 6, FEATURE_KEYWORDS 25), zero riferimenti a competitor, limiti v1 esplicit (no CSV, no sync, no rollback batch). |
 | Feb-2026 (Cap. 15) | **v0.11-cap15** | Cap. 15 Social Publisher (FB Page + IG Business + Telegram) aggiunto (+14 voci → 182). Copertura `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe): white label D-041 (ogni post sotto la Pagina/Bot dell'agenzia), credenziali AES-GCM cifrate, on-demand push (no scheduling), Meta Graph v20 + Telegram Bot API, caption default 5-righe con emoji, audit `social_posts`, limiti v1 (no X/LinkedIn/TikTok, no carosello/video, no analytics engagement, no bulk publish). |
+| Feb-2026 (Cap. 16) | **v0.12-cap16** | Cap. 16 Compliance Portali (validatore HARD/SOFT deep-dive normativo) aggiunto (+14 voci → 196). Copertura `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline: 5 regole HARD → 7 codici, 4 SOFT, 14 classi APE ammesse, feed vs sync, ghost label `missing_rent` documentata onestamente, distinzione da Cap. 6 operativo. |
 
 ---
 
-## 🚦 Smoke Cap. 15 — 3 query attese dopo reindex
+## 🚦 Smoke Cap. 16 — 3 query attese dopo reindex
 
-1. **"Come pubblico un immobile su Facebook e Instagram?"** → top-1 atteso `15-social-publisher.yaml::social.pubblicare-immobile`
-2. **"Come ottengo il bot token per Telegram?"** → top-1 atteso `15-social-publisher.yaml::social.credenziali-telegram`
-3. **"Posso programmare la pubblicazione per domani?"** → top-1 atteso `15-social-publisher.yaml::social.limitazioni-v1` (risposta onesta: **no**, solo on-demand v1)
+1. **"Quali campi devo compilare per passare compliance HARD?"** → top-1 atteso `16-compliance-portali.yaml::compliance.mapping-campi-immobile`
+2. **"Perché un affitto risulta prezzo mancante?"** → top-1 atteso `16-compliance-portali.yaml::compliance.hard-prezzo-canone` (o `compliance.affitto-vs-vendita`)
+3. **"Differenza fra violazione HARD e warning SOFT?"** → top-1 atteso `16-compliance-portali.yaml::compliance.soft-warning-qualita` (o `compliance.panoramica-validatore`)
 
-Confidence attesa ≥ 0.15 su tutte e 3.
+Criteri smoke (post reindex Founder): top-1 chunk_id atteso OR **stesso file** `16-compliance-portali.yaml` · sim ≥ 0.08 (`CONFIDENCE_MIN`).
 
 ---
 

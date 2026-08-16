@@ -1,8 +1,18 @@
 # OMNIA Real Estate — Product Requirements Document
 
 **Versione**: 1.1
-**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 15 · Social Publisher)
+**Data**: Gennaio 2026 (ultimo update: Feb 2026 — Cap. 16 · Compliance Portali)
 **Founder**: mcnicastro-netizen
+
+- **Ultimo update (Feb 2026 — TASK M · Cap. 16 · Compliance Portali deep-dive normativo)**:
+  - ✅ **Cap. 16 · Compliance Portali** (deep-dive normativo del validatore HARD/SOFT): 14 sottocapitoli + **14 voci HAL YAML** (`compliance.panoramica-validatore`, `compliance.hard-prezzo-canone`, `compliance.hard-superficie`, `compliance.hard-ape-classi-ammesse`, `compliance.hard-foto-minimo`, `compliance.hard-indirizzo`, `compliance.soft-warning-qualita`, `compliance.mapping-campi-immobile`, `compliance.feed-vs-sync`, `compliance.privacy-non-in-feed`, `compliance.affitto-vs-vendita`, `compliance.codici-violazione`, `compliance.correggere-da-modale`, `compliance.limitazioni-v1`). Copertura 1:1 con `shared/validators/compliance.py` (171 righe) + `publishing.py` compliance endpoint + `sync_engine.py` filter + `PublishingPage.jsx` modale inline.
+  - ✅ **Distinto da Cap. 6**: Cap. 6 = **operativo** (attiva portale, sync, wizard); Cap. 16 = **riferimento normativo/tecnico** (perché, quali campi, contesto legale, mapping). Cross-ref aggiunto in Cap. 6 §6.5.
+  - ✅ **Onestà D-051 chiave**: 5 regole HARD → 7 codici precisi, 4 SOFT, 14 classi APE ammesse esatte, cornice normativa italiana (D.Lgs 192/2005 APE + AGCM trasparenza prezzi) come contesto (no consulenza legale), architettura funzioni pure senza DB, ghost label `missing_rent` documentata onestamente (frontend orfana, backend emette sempre `missing_price`), api_push=simulated_push, feed vs sync 1:1, privacy L3/L4 esclusa a monte.
+  - ✅ **Limiti v1 espliciti**: NO CompliancePage.jsx standalone (modale inline), api_push simulated, no sync-log UI, ghost label missing_rent, no bottone Sospendi sync, legacy PORTAL_CATALOG (Idealista NON v1), no trend storico, no promemoria APE, no bottone Correggi dalla modale, soglie hardcoded (MIN_PHOTOS=3, MIN_TITLE_CHARS=10, MIN_DESCRIPTION_CHARS=50), no controllo semantico, no audit trail correzioni.
+  - ✅ **`hal-index.json` rigenerato**: v0.12-cap16, **196 voci totali** (Cap. 1-16), 16 source files.
+  - 📸 Screenshots-index: +3 righe Cap. 16. Totale 72 screenshot.
+  - 📋 **Nota conflitto planning**: "Cap. 16 Domain Vault" (menzionato in docs precedenti) → spostato a Cap. futuro. Cap. 16 è Compliance Portali (priorità Founder).
+  - 📈 **Progresso manuale**: 16/26 capitoli (62%). Totale voci HAL: **196**. Prossimo: batch reindex Cap. 13/14/15/16 + smoke, poi Cap. 17+ (HAL Legal, Domain Vault, Impostazioni, Billing, Universal Portal Wizard M2.6d).
 
 - **Ultimo update (Feb 2026 — TASK L · Cap. 15 · Social Publisher)**:
   - ✅ **Cap. 15 · Social Publisher** (Facebook, Instagram, Telegram): 12 sottocapitoli + **14 voci HAL YAML** (`social.cos-e`, `social.dove-trovarlo`, `social.canali-supportati`, `social.credenziali-facebook`, `social.credenziali-instagram`, `social.credenziali-telegram`, `social.configurare-canale`, `social.validare-canale`, `social.pubblicare-immobile`, `social.caption-default`, `social.audit-log`, `social.errori`, `social.limitazioni-v1`, `social.collegamenti`). Copertura 1:1 con `social_publisher.py` (578 righe) + `SocialPublisherPage.jsx` (470 righe).

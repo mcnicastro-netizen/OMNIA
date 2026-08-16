@@ -140,6 +140,9 @@ Serve quando: hai appena aggiunto un immobile importante, hai corretto un errore
 
 ## 6.5 · Compliance HARD — perché un annuncio viene escluso
 
+> 📖 **Deep-dive normativo → Cap. 16 · Compliance Portali**
+> Questo paragrafo elenca le regole a livello operativo. Per il **contesto normativo** (D.Lgs 192/2005 APE, AGCM trasparenza prezzi), il **mapping campo-per-campo** su come correggere, la **logica esatta prezzo sale/rent/auction**, le **14 classi APE ammesse** e la **ghost label `missing_rent`** documentata onestamente → vedi **Cap. 16 · Compliance Portali**.
+
 Prima di pubblicare un immobile su qualsiasi portale, OMNIA esegue un controllo. Le regole si dividono in due gruppi:
 
 ### 6.5.1 · Regole HARD (bloccano la pubblicazione)

@@ -1,5 +1,70 @@
 # OMNIA — Changelog
 
+## 2026-02-XX (Feb 2026) — 📖 TASK M · Cap. 16 · Compliance Portali (Manuale + HAL YAML)
+
+**Tipo**: Feature docs — sedicesimo capitolo, deep-dive normativo del validatore compliance.
+**Fonte**: Founder Feb 2026 · Post-Cap. 15 approvato · Cap. 16 = Compliance Portali (validatore HARD/SOFT).
+**Distinto da Cap. 6**: Cap. 6 = **operativo** (attiva portale, sync, wizard); Cap. 16 = **riferimento normativo/tecnico** (perché, quali campi, contesto legale).
+
+### Cosa è cambiato
+- **Nuovo capitolo** `memory/manuale/16-compliance-portali.md` (~500 righe, 14 sottocapitoli): contesto normativo (D.Lgs 192/2005 APE, AGCM), architettura pure functions, 5 regole HARD → 7 codici documentati field-level, 4 SOFT qualità, 14 classi APE ammesse, mapping immobile → codice → sezione scheda, feed pubblico PULL vs sync PUSH, privacy L3/L4 escluse a monte, ghost label `missing_rent` documentata onestamente, modale UI inline (NO CompliancePage.jsx), limiti v1 espliciti.
+- **Nuovo YAML HAL** `memory/manuale/hal/16-compliance-portali.yaml` (~450 righe, **14 voci**): `compliance.panoramica-validatore`, `compliance.hard-prezzo-canone`, `compliance.hard-superficie`, `compliance.hard-ape-classi-ammesse`, `compliance.hard-foto-minimo`, `compliance.hard-indirizzo`, `compliance.soft-warning-qualita`, `compliance.mapping-campi-immobile`, `compliance.feed-vs-sync`, `compliance.privacy-non-in-feed`, `compliance.affitto-vs-vendita`, `compliance.codici-violazione`, `compliance.correggere-da-modale`, `compliance.limitazioni-v1`. Parser HAL RAG: 14/14 chunk OK.
+- **`hal-index.json`** rigenerato: v0.12-cap16 · **196 voci totali** (Cap. 1-16) · 16 source files con MD5.
+- **`IMPORT_HAL.md`** v0.12 · nuova sezione Smoke Cap. 16 con 3 query attese e criterio sim ≥ 0.08 (CONFIDENCE_MIN sistema).
+- **`screenshots-index.md`**: +3 righe Cap. 16 (compliance-modale-hard, compliance-mapping-campi, compliance-soft-warnings). Totale **72 screenshot** catalogati.
+- **`GAP.md`**: sezione Cap. 16 con **20+ punti onestà 1:1** al codice + nota conflitto planning (Cap. 16 Domain Vault → spostato a Cap. futuro).
+- **Cross-ref Cap. 6 §6.5**: aggiunto blocco quote *"Deep-dive normativo → Cap. 16"* per non duplicare contenuto.
+- **`SPRINT_STATUS.md`**: TASK M aggiunto · progresso 16/26 (62%) · 196 voci HAL.
+- **`PRD.md`**: entry Feb 2026 TASK M in cima.
+
+### Onestà documentale (D-051)
+
+**Punti onestà principali**
+- **Architettura 1:1**: funzioni pure, no DB, ricalcolo on-the-fly per ogni chiamata. Documentata onestamente come "no trend storico v1".
+- **5 regole → 7 codici**: numero preciso derivato dal codice. Non "circa 6-8".
+- **Logica prezzo affitto/vendita 1:1** con `_has_price`: emette `missing_price` anche per gli affitti (non `missing_rent`). Documentato come *ghost label* con la label frontend orfana `REASON_LABELS.missing_rent`.
+- **14 classi APE esatte** con i due EXEMPT_* (`VALID_ENERGY_CLASSES`). Nessuna invenzione.
+- **Costanti hardcoded**: MIN_PHOTOS=3, MIN_TITLE_CHARS=10, MIN_DESCRIPTION_CHARS=50. Documentate come non-configurabili v1.
+- **api_push = simulated_push** (M2.6c/d wizard non attivo): documentato onestamente.
+- **NO CompliancePage.jsx standalone**: modulo inline in PublishingPage come modale.
+- **Privacy L3/L4 esclusa da feed a monte** (prima della compliance): filtro cascata documentato.
+- **Cornice normativa citata come contesto**: D.Lgs 192/2005, AGCM. Documentato onestamente come "non consulenza legale".
+- **Limiti v1 espliciti**: no pagina dedicata, api_push simulated, no sync-log UI, ghost label missing_rent, no bottone Sospendi sync, legacy PORTAL_CATALOG vs CATALOG_SEED (Idealista NON v1), no trend storico, no promemoria APE, no bottone Correggi dalla modale, soglie hardcoded, no controllo semantico, no audit trail correzioni.
+
+### Verifiche post-scrittura (Founder super_admin)
+1. `POST /api/app/hal/knowledge/reindex?force=true`
+2. Verifica `manual_hal_indexed >= 196`
+3. Smoke Cap. 16 (criterio: top-1 chunk_id atteso OR stesso file `16-compliance-portali.yaml` · sim ≥ 0.08):
+   - *"Quali campi devo compilare per passare compliance HARD?"* → `compliance.mapping-campi-immobile`
+   - *"Perché un affitto risulta prezzo mancante?"* → `compliance.hard-prezzo-canone` (o `compliance.affitto-vs-vendita`)
+   - *"Differenza fra violazione HARD e warning SOFT?"* → `compliance.soft-warning-qualita` (o `compliance.panoramica-validatore`)
+
+### File modificati
+- `memory/manuale/16-compliance-portali.md` (nuovo, ~500 righe)
+- `memory/manuale/hal/16-compliance-portali.yaml` (nuovo, ~450 righe, 14 voci)
+- `memory/manuale/hal/hal-index.json` (rigenerato, v0.12-cap16, 196 voci)
+- `memory/manuale/hal/IMPORT_HAL.md` (v0.12, Smoke Cap. 16)
+- `memory/manuale/hal/screenshots-index.md` (+3 righe → 72 totali)
+- `memory/manuale/06-portali-publishing.md` (§6.5 cross-ref → Cap. 16)
+- `memory/GAP.md` (sezione Cap. 16 · 20+ punti onestà · nota conflitto Domain Vault)
+- `memory/CHANGELOG.md` (questo entry)
+- `memory/SPRINT_STATUS.md` (TASK M · 16/26 · 62%)
+- `memory/PRD.md` (entry Feb 2026 TASK M)
+
+### Commit message
+```
+feat(docs): TASK M · Cap. 16 Compliance Portali (Manual + HAL YAML)
+```
+
+### Prossimi passi
+- Founder: batch reindex prod + 3 smoke Cap. 16 (post Cap. 13/14/15/16 in un colpo)
+- Cap. 17+ manuale (candidati onesti: HAL Legal se attivato · Domain Vault · Impostazioni · Billing UI · Universal Portal Wizard M2.6d)
+- Backlog qualità A-006-A-016 attende review post-manuale
+
+**Progresso manuale**: 16/26 capitoli (62%). Totale voci HAL: **196**.
+
+---
+
 ## 2026-02-XX (Feb 2026) — 📋 Backlog qualità A-006 → A-016 tracciato in ASPETTI
 
 **Tipo**: Docs / product tracking — nessuna implementazione codice.

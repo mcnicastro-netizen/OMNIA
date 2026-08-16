@@ -220,6 +220,18 @@ Ogni id è unico e riutilizzabile: se lo screenshot è già stato prodotto, rife
 
 ---
 
+## Capitolo 16 · Compliance Portali (deep-dive normativo)
+
+| # | ID | Cosa mostrare | Priorità | Fatto |
+|---|----|---------------|:-:|:-:|
+| 1 | `compliance-modale-hard` | Modale compliance aperta dalla card portale in PublishingPage: header con nome portale, 4 box metriche (Totale/Pubblicabili/Bloccati/Con warning), elenco top-5 motivi HARD con etichette in italiano (*"Prezzo mancante"*, *"Meno di 3 foto"*, ecc.). | 🔴 | — |
+| 2 | `compliance-mapping-campi` | Scheda immobile con evidenziate le 4 sezioni chiave per compliance: **Prezzo**, **Caratteristiche** (superficie + locali), **Efficienza energetica** (classe APE dropdown + IPE), **Localizzazione** (city + province), **Foto** (upload area). | 🔴 | — |
+| 3 | `compliance-soft-warnings` | Modale compliance con card *"Con warning"* espansa che mostra 3-4 SOFT (title_too_short, description_too_short, rooms_not_specified, ipe_missing) — badge ambra vs badge rosso HARD. | 🟡 | Utile ma opzionale. |
+
+**Totale Cap. 16**: 3 screenshot (2 essenziali, 1 utile).
+
+---
+
 ## Regole generali
 
 **Ambiente**
@@ -264,3 +276,4 @@ Da creare al momento del primo screenshot: `/app/memory/manuale/screenshots/`.
 | Feb 2026 (Cap. 13) | Aggiunte 3 righe Cap. 13 · Team & Ruoli / Collaboratori (members-list + invite-modal + accept-invite — tutte essenziali). Totale index = **63 screenshot** catalogati. |
 | Feb 2026 (Cap. 14) | Aggiunte 3 righe Cap. 14 · Import XML (upload + preview + commit-result — 2 essenziali + 1 utile). Totale index = **66 screenshot** catalogati. |
 | Feb 2026 (Cap. 15) | Aggiunte 3 righe Cap. 15 · Social Publisher (panoramica + config-modal + publish-multichannel — tutte essenziali). Totale index = **69 screenshot** catalogati. |
+| Feb 2026 (Cap. 16) | Aggiunte 3 righe Cap. 16 · Compliance Portali (modale-hard + mapping-campi + soft-warnings — 2 essenziali + 1 utile). Totale index = **72 screenshot** catalogati. |

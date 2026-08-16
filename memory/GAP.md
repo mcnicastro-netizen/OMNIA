@@ -292,6 +292,35 @@ Elementi che ESISTONO ma per decisione del Founder o per regola redazionale NON 
 - **Limiti v1 espliciti in `social.limitazioni-v1`**: no scheduling, no X/LinkedIn/TikTok/YouTube/WhatsApp/Threads, no carosello, no video/reel/story, no editor caption, no template caption, no analytics engagement, no auto-refresh token, no bulk publish, no rollback multi-canale, no preview finale, no moderazione pre-pubblicazione.
 - **Cross-ref**: Cap. 3 (bottone "Pubblica sui social" parte da scheda immobile), Cap. 6 (sync engine portali = feed pull, distinto da social = push), Cap. 8 (listing_url = URL sito agenzia), Cap. 12 (HAL Knowledge legge Cap. 15), Cap. 13 (ruoli richiesti).
 
+### Cap. 16 · Compliance Portali (validatore HARD/SOFT) — Feb 2026
+- **Architettura pure functions 1:1** con `shared/validators/compliance.py` (~171 righe): `validate_property`, `is_publishable`, `summarize_agency_compliance`. Nessun DB, ricalcolo on-the-fly. Documentato onestamente.
+- **5 regole HARD business → 7 codici**:
+  - `_has_price` (`compliance.py:52-63`) → `missing_price` — logica sale/rent/auction documentata 1:1
+  - `_has_surface` → `missing_surface`
+  - `_has_energy` (2 codici) → `missing_energy_class` + `invalid_energy_class`
+  - `_photos_count` + `_first_photo_ok` (2 codici) → `less_than_3_photos` + `no_valid_photo_url`
+  - `_has_address` → `missing_address`
+- **4 regole SOFT**: `title_too_short`, `description_too_short`, `rooms_not_specified`, `ipe_missing`. Non bloccanti (publishable resta true).
+- **14 classi APE ammesse** (`VALID_ENERGY_CLASSES` a `compliance.py:20-24`): A4/A3/A2/A1/A/B/C/D/E/F/G + EXEMPT_IN_PROGRESS + EXEMPT_NOT_APPLICABLE. Documentate 1:1.
+- **Costanti hardcoded**: `MIN_PHOTOS=3`, `MIN_TITLE_CHARS=10`, `MIN_DESCRIPTION_CHARS=50` (`compliance.py:27-29`). Documentati come non-configurabili v1.
+- **Cornice normativa**: D.Lgs 192/2005 APE, AGCM trasparenza prezzi, standard portali IT. Documentata come contesto (non consulenza legale).
+- **Ghost label `missing_rent` D-051 esplicito**: `PublishingPage.jsx:410` ha `REASON_LABELS.missing_rent = "Canone mensile mancante"` MA il backend `compliance.py:99-100` emette **sempre** `missing_price` (anche per affitti). Documentato onestamente come *imprecisione UX v1*.
+- **Feed vs sync 1:1**:
+  - Feed pubblico (PULL, `publishing.py:553`): filtra con `is_publishable(p)[0]` prima di comporre XML. Immobili bloccati spariscono silenziosamente.
+  - Sync engine (`sync_engine.py:165-175`): filtra prima di chiamate portali, `error_message="blocked_by_compliance:{count}"`.
+  - Modale UI (`GET /connections/{id}/compliance`): non filtra, solo mostra summary.
+- **api_push = simulated_push** (`sync_engine.py:162-164`): portali M2.6c/d wizard restituiscono `action_status='simulated_push'`, nessuna vera chiamata. Documentato.
+- **Privacy L3/L4 esclusi da feed** documentata come primo filtro (prima della compliance).
+- **Modale inline `PublishingPage.jsx`** (linee 281-340): NON esiste `CompliancePage.jsx` standalone. Documentato onestamente.
+- **`REASON_LABELS` mapping** italiano documentato 1:1 (13 label per 7 HARD + 4 SOFT + 2 ghost).
+- **Blocked_details cap 20**: la modale mostra al massimo 20 immobili bloccati con motivi.
+- **Nessuna persistenza risultati**: no `compliance_snapshots` collection. Ricalcolo ogni chiamata. Documentato come "no trend storico v1".
+- **Legacy PORTAL_CATALOG vs CATALOG_SEED**: convivenza documentata (M2.6a legacy vs M2.6d) — Idealista NON in v1.
+- **Limiti v1 espliciti in `compliance.limitazioni-v1`**: no pagina UI dedicata, api_push simulated, no sync-log UI, ghost label missing_rent, no bottone Sospendi sync, legacy catalog, no trend storico, no promemoria APE, no bottone Correggi dalla modale, soglie hardcoded, no controllo semantico, no audit trail correzioni.
+- **Cross-ref**: Cap. 3 (correzione via scheda immobile), Cap. 6 (operativo attivazione/sync — Cap. 16 è deep-dive normativo), Cap. 10 (HAL Agent "Migliora descrizione" risolve SOFT), Cap. 12 (HAL Knowledge legge Cap. 16), Cap. 14 (import può creare non-compliant).
+
+**⚠️ Nota conflitto planning**: nei documenti precedenti "Cap. 16 Domain Vault" era menzionato come candidato futuro. Sostituito da "Cap. 16 Compliance Portali" (deep-dive normativo del validatore, priorità Founder Feb 2026). Domain Vault spostato a Cap. futuro.
+
 ### Pricing B2C — 6-Ago-2026
 - **Listino B2C separato creato** (`memory/PRICING_B2C.md` v1.0) su rail carta one-shot.
 - **Backend stub** in `backend/apps/billing/b2c_products.py` — 3 prodotti attivi (Valutatore UNI+PDF €2,99 · Virtual Staging €0,90 · HAL Legal €1,00), 2 lead magnet gratuiti (Valutatore base 1×/12m · Comparatore mutui), 2 "in arrivo" (Visura ~€0,40 costo, Planimetria ~€6,90 costo — sospesi in attesa validazione margini fase 2).

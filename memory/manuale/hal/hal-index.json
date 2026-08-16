@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-07T11:20:38.189670+00:00",
-  "version": "v0.11-cap15",
+  "generated_at": "2026-08-16T08:29:18.998737+00:00",
+  "version": "v0.12-cap16",
   "source_files": [
     {
       "file": "01-primo-accesso.yaml",
@@ -75,6 +75,11 @@
     {
       "file": "15-social-publisher.yaml",
       "md5": "2e32f21ff7952d4aa1bbaa63eda486bb",
+      "voci_count": 14
+    },
+    {
+      "file": "16-compliance-portali.yaml",
+      "md5": "5d066f2fdc18cce9dab031a05d1ebcf2",
       "voci_count": 14
     }
   ],
@@ -6173,10 +6178,524 @@
         "errori_comuni": 1
       },
       "content_md5": "021eb0de237472b67bd232e3569e5a4e"
+    },
+    {
+      "id": "compliance.panoramica-validatore",
+      "titolo": "Cos'è il Compliance Validator (HARD e SOFT)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "validatore",
+        "hard",
+        "soft",
+        "portali",
+        "normativa",
+        "ape",
+        "agcm",
+        "publishable",
+        "panoramica"
+      ],
+      "correlati": [
+        "compliance.hard-prezzo-canone",
+        "compliance.soft-warning-qualita",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Cos'è il Compliance Validator? A cosa serve?",
+      "screenshot": [
+        "[SCREEN: compliance-modale-hard]"
+      ],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "30d7db42b0c677f591df6e1d0e302789"
+    },
+    {
+      "id": "compliance.hard-prezzo-canone",
+      "titolo": "HARD prezzo/canone - sale vs rent vs prezzo su richiesta",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "hard",
+        "prezzo",
+        "canone",
+        "missing-price",
+        "missing-rent",
+        "sale",
+        "rent",
+        "auction",
+        "price-on-request",
+        "affitto",
+        "vendita",
+        "agcm"
+      ],
+      "correlati": [
+        "compliance.affitto-vs-vendita",
+        "compliance.codici-violazione",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Perché il mio immobile in affitto risulta 'prezzo mancante'?",
+      "screenshot": [],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "3e7c0de3c81f031ad5d8c077ccce2a7a"
+    },
+    {
+      "id": "compliance.hard-superficie",
+      "titolo": "HARD superficie - missing_surface",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "hard",
+        "superficie",
+        "mq",
+        "surface-sqm",
+        "missing-surface"
+      ],
+      "correlati": [
+        "compliance.codici-violazione",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Come indico la superficie in mq per la compliance?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "127146b9097497c7d252b0bfe365bed1"
+    },
+    {
+      "id": "compliance.hard-ape-classi-ammesse",
+      "titolo": "HARD APE - le 14 classi energetiche ammesse",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "hard",
+        "ape",
+        "energy",
+        "classe-energetica",
+        "missing-energy-class",
+        "invalid-energy-class",
+        "d-lgs-192-2005",
+        "esente",
+        "exempt"
+      ],
+      "correlati": [
+        "compliance.codici-violazione",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Quali classi energetiche APE sono accettate?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "9270dc4349eef06a8d7587a7b0bdc9ff"
+    },
+    {
+      "id": "compliance.hard-foto-minimo",
+      "titolo": "HARD foto - less_than_3_photos e no_valid_photo_url",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "hard",
+        "foto",
+        "photos",
+        "less-than-3-photos",
+        "no-valid-photo-url",
+        "min-photos",
+        "standard-portali"
+      ],
+      "correlati": [
+        "compliance.codici-violazione",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Perché serve un minimo di 3 foto? Cosa differenzia i due codici foto?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "a50ae9ca447dae632371836ab4e3d583"
+    },
+    {
+      "id": "compliance.hard-indirizzo",
+      "titolo": "HARD indirizzo - missing_address (city + province)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "hard",
+        "indirizzo",
+        "address",
+        "city",
+        "province",
+        "missing-address"
+      ],
+      "correlati": [
+        "compliance.codici-violazione",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Quali dati indirizzo sono obbligatori per pubblicare?",
+      "screenshot": [],
+      "counts": {
+        "passi": 5,
+        "errori_comuni": 1
+      },
+      "content_md5": "258b5564a818d4df3774594f803a7cf0"
+    },
+    {
+      "id": "compliance.soft-warning-qualita",
+      "titolo": "Le 4 regole SOFT (warning di qualità, non bloccano)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "soft",
+        "warning",
+        "title-too-short",
+        "description-too-short",
+        "rooms-not-specified",
+        "ipe-missing",
+        "qualita"
+      ],
+      "correlati": [
+        "compliance.hard-prezzo-canone",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Differenza fra violazione HARD e warning SOFT?",
+      "screenshot": [
+        "[SCREEN: compliance-soft-warnings]"
+      ],
+      "counts": {
+        "passi": 7,
+        "errori_comuni": 1
+      },
+      "content_md5": "4da80ccc31a20d2a96912468d9ec715b"
+    },
+    {
+      "id": "compliance.mapping-campi-immobile",
+      "titolo": "Mapping campi immobile → regola compliance (dove correggere)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "mapping",
+        "campi",
+        "immobile",
+        "correggere",
+        "scheda-immobile",
+        "cross-ref-cap-3"
+      ],
+      "correlati": [
+        "compliance.codici-violazione",
+        "compliance.hard-prezzo-canone",
+        "compliance.correggere-da-modale"
+      ],
+      "domanda_naturale": "Quali campi devo compilare per passare compliance HARD?",
+      "screenshot": [
+        "[SCREEN: compliance-mapping-campi]"
+      ],
+      "counts": {
+        "passi": 9,
+        "errori_comuni": 1
+      },
+      "content_md5": "b8422342ffbed8d95d14d16afaf04e08"
+    },
+    {
+      "id": "compliance.feed-vs-sync",
+      "titolo": "Dove interviene il validatore - feed pubblico vs sync portale",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "feed",
+        "sync",
+        "publishing",
+        "sync-engine",
+        "pull",
+        "push",
+        "api-push",
+        "blocked-by-compliance",
+        "simulated-push"
+      ],
+      "correlati": [
+        "compliance.panoramica-validatore",
+        "compliance.privacy-non-in-feed"
+      ],
+      "domanda_naturale": "Il validatore filtra sul feed pubblico o sul sync ai portali?",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "a112d9611a29edca5186b98456173304"
+    },
+    {
+      "id": "compliance.privacy-non-in-feed",
+      "titolo": "Privacy L3/L4 esclusi dal feed pubblico (indipendentemente da compliance)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "privacy",
+        "l3",
+        "l4",
+        "riservato",
+        "off-market",
+        "is-private-listing",
+        "visibility",
+        "esclusione",
+        "cross-ref-cap-3"
+      ],
+      "correlati": [
+        "compliance.feed-vs-sync",
+        "compliance.panoramica-validatore"
+      ],
+      "domanda_naturale": "Un immobile compliance-clean può comunque non finire sui portali?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "5b1fa48820b78deb81356a7dbc9db124"
+    },
+    {
+      "id": "compliance.affitto-vs-vendita",
+      "titolo": "Perché un affitto risulta \"prezzo mancante\" (missing_price ghost label)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "affitto",
+        "rent",
+        "vendita",
+        "sale",
+        "missing-price",
+        "missing-rent",
+        "ghost-label",
+        "onestà",
+        "d-051"
+      ],
+      "correlati": [
+        "compliance.hard-prezzo-canone",
+        "compliance.limitazioni-v1"
+      ],
+      "domanda_naturale": "Ho un affitto senza canone e vedo 'Prezzo mancante' invece di 'Canone mensile mancante'",
+      "screenshot": [],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "7d569d06b31217ea8788b58fe31a99bb"
+    },
+    {
+      "id": "compliance.codici-violazione",
+      "titolo": "Elenco completo dei 7 codici HARD + 4 SOFT",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "codici",
+        "violazione",
+        "elenco",
+        "riferimento",
+        "hard",
+        "soft",
+        "cheatsheet"
+      ],
+      "correlati": [
+        "compliance.mapping-campi-immobile",
+        "compliance.panoramica-validatore"
+      ],
+      "domanda_naturale": "Quali sono tutti i codici di violazione compliance possibili?",
+      "screenshot": [],
+      "counts": {
+        "passi": 4,
+        "errori_comuni": 1
+      },
+      "content_md5": "a0bdaad79f6e8f525479c6ce3c8ebd66"
+    },
+    {
+      "id": "compliance.correggere-da-modale",
+      "titolo": "Come si legge e usa la modale compliance",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "base",
+      "tags": [
+        "compliance",
+        "modale",
+        "ui",
+        "publishing-page",
+        "portal-compliance-modal",
+        "immobili-bloccati",
+        "metrics"
+      ],
+      "correlati": [
+        "compliance.feed-vs-sync",
+        "compliance.mapping-campi-immobile"
+      ],
+      "domanda_naturale": "Come apro e leggo la modale compliance in UI?",
+      "screenshot": [
+        "[SCREEN: compliance-modale-hard]"
+      ],
+      "counts": {
+        "passi": 6,
+        "errori_comuni": 1
+      },
+      "content_md5": "c2abd9e6de8ca02e17526c6de0a93f5c"
+    },
+    {
+      "id": "compliance.limitazioni-v1",
+      "titolo": "Limiti v1 del Compliance Validator (D-051 onesto)",
+      "modulo": "Compliance Portali",
+      "widget": null,
+      "capitolo": "16",
+      "source_file": "16-compliance-portali.yaml",
+      "pubblico": [
+        "titolare",
+        "agente",
+        "super_admin"
+      ],
+      "livello": "intermedio",
+      "tags": [
+        "compliance",
+        "limiti",
+        "cosa-non-fa",
+        "ghost-label",
+        "sync-log",
+        "api-push",
+        "simulated",
+        "missing-rent",
+        "correggi",
+        "hardcoded",
+        "audit-trail",
+        "d-051"
+      ],
+      "correlati": [
+        "compliance.panoramica-validatore",
+        "compliance.affitto-vs-vendita"
+      ],
+      "domanda_naturale": "Cosa NON fa il Compliance Validator in v1?",
+      "screenshot": [],
+      "counts": {
+        "passi": 12,
+        "errori_comuni": 1
+      },
+      "content_md5": "e959d85b54203976344925c5f9f23552"
     }
   ],
   "stats": {
-    "totale_voci": 182,
+    "totale_voci": 196,
     "per_capitolo": {
       "01": 10,
       "02": 8,
@@ -6192,7 +6711,8 @@
       "12": 13,
       "13": 13,
       "14": 13,
-      "15": 14
+      "15": 14,
+      "16": 14
     },
     "per_modulo": {
       "Primo accesso": 10,
@@ -6209,19 +6729,20 @@
       "HAL Knowledge": 13,
       "Collaboratori": 13,
       "Import XML": 13,
-      "Social Publisher": 14
+      "Social Publisher": 14,
+      "Compliance Portali": 14
     },
     "per_livello": {
-      "base": 126,
-      "intermedio": 56
+      "base": 133,
+      "intermedio": 63
     },
     "per_pubblico": {
-      "titolare": 181,
-      "agente": 133,
+      "titolare": 195,
+      "agente": 146,
       "segreteria": 92,
-      "super_admin": 39
+      "super_admin": 53
     },
-    "totale_correlati": 432,
-    "totale_tags_unici": 571
+    "totale_correlati": 463,
+    "totale_tags_unici": 636
   }
 }
